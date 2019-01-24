@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1548359319377.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "68834978",
+    "lastKnownWriteTime" : 1548359688,
+    "last_content_update" : 1548359688515,
+    "path" : "~/GitHub/coqueret.github.io/teaching.Rmd",
+    "project_path" : "teaching.Rmd",
+    "properties" : {
+        "cursorPosition" : "10,110",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

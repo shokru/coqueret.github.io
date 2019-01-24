@@ -1,0 +1,20 @@
+name: "Guillaume Coqueret"
+output_dir: "."
+navbar:
+  title: "Guillaume Coqueret"
+  left:
+    - text: "Research"
+      href: research.html
+    - text: "Teaching"
+      href: teaching.html
+  right:
+    - icon: fa-github fa-lg
+      href: http://github.com/shokru
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/g_coqueret
+    - icon: fa-linkedin fa-lg
+      href: https://www.linkedin.com/in/guillaumecoqueret/
+output:
+  html_document:
+    theme: paper
+    css: 'styles.css'
