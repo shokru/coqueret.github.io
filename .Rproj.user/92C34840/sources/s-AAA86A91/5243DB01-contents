@@ -13,11 +13,11 @@ Courses
 
 The links below lead to html notebooks. The original Rmd files can be downloaded below.
 
-<a href="files/S1_tidyverse.nb.html" target="_blank">em**lyon business school**</a> 
+<a href="files/S2_Basics.nb.html" target="_blank">**Basic R instructions**</a> 
 
-1.  **Introduction to the tidyverse** [[notebook]](files/S1_tidyverse.nb.html): plotting, filtering, organising data.
+1.  <a href="files/S1_tidyverse.nb.html" target="_blank">**Introduction to the tidyverse**</a>: plotting, filtering, organising data.
 
-2.  **Basic R instructions** [[notebook]](files/S2_Basics.nb.html): package installation, data generation, matrix & dataframe manipulation, loops and simple functions.
+2.  <a href="files/S2_Basics.nb.html" target="_blank">**Basic R instructions**</a>: package installation, data generation, matrix & dataframe manipulation, loops and simple functions.
 
 3.  **Distributions** [[notebook]](files/S3_Distributions.nb.html): descriptive statistics, parametric distributions, plots, histograms, etc.
 
@@ -25,7 +25,7 @@ The links below lead to html notebooks. The original Rmd files can be downloaded
 
 5.  **Monte-Carlo simulations** [[notebook]](files/S5_MC.nb.html): random number generation with sequential tournaments as examples + cool exercises.
 
-6.  **Time-series analysis** [[notebook]](files/S6_TS.nb.html): AR, VAR fitting & predictions using **[French economic data](https://github.com/shokru/rstats/blob/master/data/economics.RData)**.
+6.  **Time-series analysis** [[notebook]](files/S6_TS.nb.html): AR, VAR fitting & predictions using [French economic data](https://github.com/shokru/rstats/blob/master/data/economics.RData).
 
 7.  **Bayesian inference** [[notebook]](files/S7_Bayes.nb.html): conjugate priors, grid approximation and a snapshot of Markov Chains (but no MCMC sadly).
 
