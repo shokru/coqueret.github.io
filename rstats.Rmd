@@ -1,11 +1,71 @@
----
----
 <br/>  
 
-### Teaching
-* Machine Learning for Factor Investing - emlyon business school, Master in Quantitative Finance (2018)   
-* Dynamic Dashboards with Shiny - emlyon business school, Master in Management (2018-)  
-* Introduction to Statistics with R - emlyon business school, Master in Management (2018-)   
-* Non-Gaussian processes in Finance - emlyon business school, Master in Quantitative Finance (2018)   
-* Introduction to Big Data and Business Analytics - Montpellier Business School, Master of Management (2015-2017)   
-* Numerical methods in Finance - Université Paris I Panthéon-Sorbonne, Master of Market Finance (2008-2010)   
+
+Introduction to statistical methods with R
+================
+This page contains teaching material for **introductory** courses of statistics in R.
+
+------------------------------------------------------------------------
+
+
+Courses
+----
+
+The links below lead to html notebooks. The original Rmd files can be downloaded below.
+
+<a href="files/S1_tidyverse.nb.html" target="_blank">em**lyon business school**</a> 
+
+1.  **Introduction to the tidyverse** [[notebook]](files/S1_tidyverse.nb.html): plotting, filtering, organising data.
+
+2.  **Basic R instructions** [[notebook]](files/S2_Basics.nb.html): package installation, data generation, matrix & dataframe manipulation, loops and simple functions.
+
+3.  **Distributions** [[notebook]](files/S3_Distributions.nb.html): descriptive statistics, parametric distributions, plots, histograms, etc.
+
+4.  **Maximum likelihood estimation** [[notebook]](files/S4_MLE.nb.html): moment matching versus the mle/mle2 functions.
+
+5.  **Monte-Carlo simulations** [[notebook]](files/S5_MC.nb.html): random number generation with sequential tournaments as examples + cool exercises.
+
+6.  **Time-series analysis** [[notebook]](files/S6_TS.nb.html): AR, VAR fitting & predictions using **[French economic data](https://github.com/shokru/rstats/blob/master/data/economics.RData)**.
+
+7.  **Bayesian inference** [[notebook]](files/S7_Bayes.nb.html): conjugate priors, grid approximation and a snapshot of Markov Chains (but no MCMC sadly).
+
+8.  **Statistical tests & regressions** [[notebook]](files/S8_Test.nb.html): one and two mean tests, basic regression analysis.
+
+
+Supplementary material:
+----------
+
+The original **[Rmd files](https://github.com/shokru/rstats/blob/master/material/all_Rmd.zip)** (.zip) as well as the correction of exercises: **[data + html and Rmd format](https://github.com/shokru/rstats/blob/master/material/Solution_files.zip)** (.zip also).
+
+**R memo [[notebook]](files/R_Memo.nb.html): a compilation of everything you need to know (survival toolkit).
+
+**Example on financial data** [[notebook]](files/Fin_solutions.nb.html): exercises on 30 large US firms; data **[here](https://github.com/shokru/rstats/blob/master/data/data.RData)**.
+
+**Links:** [R on the web](https://github.com/shokru/rstats/blob/master/material/R_links.md): a short list of links, sorted by themes.  
+
+------------------------------------------------------------------------
+
+
+Datasets:
+----------
+
+[ANES data: US political surveys (1990-2016)](https://github.com/shokru/rstats/blob/master/data/anes.RData) and in [Excel form](https://github.com/shokru/rstats/blob/master/data/anes.xlsx)  
+
+[French economic indicators](https://github.com/shokru/rstats/blob/master/data/economics.RData)  
+
+[Financial data on 30 large US firms](https://github.com/shokru/rstats/blob/master/data/data.RData)  
+
+You can download all files at once **[here](https://github.com/shokru/rstats/blob/master/data/all_files.zip)**.
+
+------------------------------------------------------------------------
+
+**DISCLAIMER**: the data and code are meant for pedagogical use only. 
+
+------------------------------------------------------------------------
+
+
+
+Maintainer
+----------
+
+Any questions / comments / requests can be sent to guillaume.coqueret"at"gmail.com. Errors are my own.

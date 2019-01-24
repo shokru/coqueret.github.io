@@ -226,7 +226,7 @@ $(document).ready(function () {
 </li>
 <li>Dynamic Dashboards with Shiny - emlyon business school, Master in Management (2018-)<br />
 </li>
-<li><a href="rstats.html">Introduction to statistics with R</a> - emlyon business school, Master in Management (2018-)<br />
+<li>Introduction to Statistics with R - emlyon business school, Master in Management (2018-)<br />
 </li>
 <li>Non-Gaussian processes in Finance - emlyon business school, Master in Quantitative Finance (2018)<br />
 </li>
