@@ -3,7 +3,7 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:30%; border:0px solid; margin-right: 20px" align="left">
+<img src="images/gcoq.jpg" style="width:30%; border:0px solid; margin-right: 20px" align="right">
 
 I am an associate professor of Finance & Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly).  
 
