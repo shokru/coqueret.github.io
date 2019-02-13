@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "693069133",
+    "hash" : "0",
     "id" : "FC59F7D7",
-    "lastKnownWriteTime" : 1550087218,
-    "last_content_update" : 1550087218230,
+    "lastKnownWriteTime" : 1550087500,
+    "last_content_update" : 1550087500087,
     "path" : "~/GitHub/coqueret.github.io/index.Rmd",
     "project_path" : "index.Rmd",
     "properties" : {
-        "cursorPosition" : "5,95",
+        "cursorPosition" : "24,8",
         "scrollLine" : "0",
         "tempName" : "Untitled1"
     },
