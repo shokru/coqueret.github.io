@@ -218,38 +218,28 @@ $(document).ready(function () {
 </div>
 
 
-<p><br/></p>
-<div id="supervised-learning-for-factor-investing" class="section level1">
-<h1>Supervised learning for factor investing</h1>
-<p>This page contains teaching material for <strong>introductory</strong> courses on supervised learning applied to factor investing. The slides are available upon request.</p>
+<p><link rel="stylesheet" href="styles.css" type="text/css"></p>
+<p><img src="images/gcoq.jpg" style="width:20%; border:0px solid; margin-right: 20px" align="right"></p>
+<p>I am an associate professor of Finance &amp; Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em<strong>lyon business school</strong></a>. My research interests revolve around applications of <strong>numerical methods</strong> in various fields (<strong>financial economics</strong> mostly).</p>
 <hr />
-<div id="courses" class="section level2">
-<h2>Courses</h2>
-<p>The links below lead to html notebooks. The original Rmd files can be downloaded below.</p>
-<ol style="list-style-type: decimal">
-<li><p><a href="files/S1_Foundations.nb.html" target="_blank"><strong>Economic foundations</strong></a>: asset pricing anomalies, characteristics-based investing.</p></li>
-<li><p><a href="files/S2_Portfolio.nb.html" target="_blank"><strong>Portfolio strategies</strong></a>: portfolio backtesting framework.</p></li>
-<li><p><a href="files/S3_Lasso.nb.html" target="_blank"><strong>LASSO &amp; Sparse portfolios</strong></a>: penalised regressions for minimumn variance portfolios and for robust predictive forecasts.</p></li>
-<li><p><a href="files/S4_Data.nb.html" target="_blank"><strong>Data preparation</strong></a>: Feature engineering and labelling with a focus on categorical data.</p></li>
-<li><p><a href="files/S5_Trees.nb.html" target="_blank"><strong>Decision trees</strong></a>: Simple trees, random forests and boosted trees.</p></li>
-<li><p><a href="files/S6_NN.nb.html" target="_blank"><strong>Neural networks</strong></a>: Multilayer perceptron and recurrent networks (Gated Recurrent Units). (FORTHCOMING)</p></li>
-<li><p><a href="files/S7_Validation.nb.html" target="_blank"><strong>Validating &amp; tuning</strong></a>: performance metrics and hyper-parameter adjustment. (FORTHCOMING)</p></li>
-<li><p><a href="files/S8_Extensions.nb.html" target="_blank"><strong>Extensions</strong></a> : ensemble learning and interpretability. (FORTHCOMING)</p></li>
-</ol>
+<div id="academic-positions" class="section level4">
+<h4><strong>Academic positions</strong></h4>
+<p>Associate Professor of Finance, em<strong>lyon business school</strong> (Sept. 2018 - Present)<br />
+Assistant Professor of Finance, <strong>Montpellier Business School</strong> (Aug. 2015 - Aug. 2018)<br />
+Senior Quantitative Researcher, <strong>EDHEC-Risk Institute</strong> (Apr. 2013 - Jul. 2015)</p>
 <hr />
 </div>
-<div id="datasets" class="section level2">
-<h2>Datasets:</h2>
-<p><a href="https://github.com/shokru/ml_factor/blob/master/data/data.RData">Simple</a>: 30 firms</p>
-<p><a href="https://github.com/shokru/ml_factor/blob/master/data/data_large.RData">Large</a>= 200+ firms</p>
-<hr />
-<p><strong>DISCLAIMER</strong>: the data and code are meant for pedagogical use only.</p>
+<div id="education" class="section level4">
+<h4><strong>Education</strong></h4>
+<p>NA NA NA Master of Science in Management, <strong>ESSEC Business School</strong> (2002-2007)</p>
 <hr />
 </div>
-<div id="maintainer" class="section level2">
-<h2>Maintainer</h2>
-<p>Any questions / comments / requests can be sent to guillaume.coqueret“at”gmail.com. Errors are my own.</p>
-</div>
+<div id="contact" class="section level4">
+<h4><strong>Contact</strong></h4>
+<p>em<strong>lyon business school</strong><br />
+23, avenue Guy de Collongue<br />
+69130 Ecully FRANCE<br />
+coqueret/at/em-lyon.com</p>
 </div>
 
 

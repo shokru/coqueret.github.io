@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1550092717858.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "B1786E2F",
+    "lastKnownWriteTime" : 1550092771,
+    "last_content_update" : 1550092771855,
+    "path" : "~/GitHub/coqueret.github.io/ml_factor.Rmd",
+    "project_path" : "ml_factor.Rmd",
+    "properties" : {
+        "cursorPosition" : "5,156",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
