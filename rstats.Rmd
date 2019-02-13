@@ -11,7 +11,7 @@ This page contains teaching material for **introductory** courses of statistics 
 Courses
 ----
 
-The links below lead to html notebooks. The original Rmd files can be downloaded below.
+The links below lead to html notebooks. The slides are available upon request. The original **Rmd** files can be downloaded further below.
 
 1.  <a href="files/S1_tidyverse.nb.html" target="_blank">**Introduction to the tidyverse**</a>: plotting, filtering, organising data.
 

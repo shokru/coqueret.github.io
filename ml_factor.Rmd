@@ -1,0 +1,57 @@
+<br/>  
+
+
+Supervised learning for factor investing
+================
+This page contains teaching material for **introductory** courses on supervised learning applied to factor investing.
+
+------------------------------------------------------------------------
+
+
+Courses
+----
+
+The links below lead to html notebooks. The original Rmd files can be downloaded below.
+
+1.  <a href="files/S1_Foundations.nb.html" target="_blank">**Economic foundations**</a>: asset pricing anomalies, characteristics-based investing.
+
+2.  <a href="files/S2_Portfolio.nb.html" target="_blank">**Portfolio strategies**</a>: portfolio backtesting framework.
+
+3.  <a href="files/S3_Lasso.nb.html" target="_blank">**LASSO & Sparse portfolios**</a>: penalised regressions for minimumn variance portfolios and for robust predictive forecasts.
+
+4.  <a href="files/S4_Data.nb.html" target="_blank">**Data preparation**</a>: Feature engineering and labelling with a focus on categorical data.
+
+5.  <a href="files/S5_Trees.nb.html" target="_blank">**Decision trees**</a>: Simple trees, random forests and boosted trees.
+
+6.  <a href="files/S6_NN.nb.html" target="_blank">**Neural networks**</a>: Multilayer perceptron and recurrent networks (Gated Recurrent Units). (FORTHCOMING)
+
+7.  <a href="files/S7_Validation.nb.html" target="_blank">**Validating & tuning**</a>: performance metrics and hyper-parameter adjustment. (FORTHCOMING)
+
+8.  <a href="files/S8_Extensions.nb.html" target="_blank">**Extensions**</a> : ensemble learning and interpretability. (FORTHCOMING)
+
+
+ 
+
+---------------------------------
+
+
+Datasets:
+----------
+
+[Simple](https://github.com/shokru/rstats/blob/master/data/anes.RData): 30 firms,  
+
+[Large](https://github.com/shokru/rstats/blob/master/data/economics.RData)  
+
+
+------------------------------------------------------------------------
+
+**DISCLAIMER**: the data and code are meant for pedagogical use only. 
+
+------------------------------------------------------------------------
+
+
+
+Maintainer
+----------
+
+Any questions / comments / requests can be sent to guillaume.coqueret"at"gmail.com. Errors are my own.
