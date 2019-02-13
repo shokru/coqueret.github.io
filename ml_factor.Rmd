@@ -3,7 +3,9 @@
 
 Supervised learning for factor investing
 ================
-This page contains teaching material for **introductory** courses on supervised learning applied to factor investing. The slides are available upon request.
+This page contains teaching material (code) for **introductory** courses on supervised learning applied to factor investing.   
+
+$\rightarrow$ The slides are available upon request.
 
 ------------------------------------------------------------------------
 
@@ -38,15 +40,14 @@ The links below lead to html notebooks. The original Rmd files can be downloaded
 Datasets:
 ----------
 
-[Simple](https://github.com/shokru/ml_factor/blob/master/data/data.RData): 30 firms;  [Large](https://github.com/shokru/ml_factor/blob/master/data/data_large.RData)= 200+ firms  
+[Simple](https://github.com/shokru/ml_factor/blob/master/data/data.RData): 30 firms, 6 features;  [Large](https://github.com/shokru/ml_factor/blob/master/data/data_large.RData)= 200+ firms, 10 features.  
 
 
 ------------------------------------------------------------------------
 
-**DISCLAIMER**: the data and code are meant for pedagogical use only. 
+**DISCLAIMER**: the **data** and **code** are meant for pedagogical use only. 
 
 ------------------------------------------------------------------------
-
 
 
 Maintainer
