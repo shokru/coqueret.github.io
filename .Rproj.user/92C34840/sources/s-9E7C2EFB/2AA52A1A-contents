@@ -1,3 +1,0 @@
-library(tidyverse)
-load("tp6.RData")
-tp7 <- mutate(tp6, Male = Gender == "1", Female = Gender == "0")
