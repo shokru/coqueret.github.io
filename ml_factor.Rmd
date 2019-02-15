@@ -40,7 +40,8 @@ The links below lead to **html** notebooks. The original **Rmd** files can be do
 Datasets (in R format):
 ----------
 
-<a href="https://github.com/shokru/ml_factor/blob/master/material/data.RData" download="Base">: 30 firms, 6 features;  [Large](https://github.com/shokru/ml_factor/blob/master/material/data_full.RData)= 200+ firms, 10 features.  
+<a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data.RData" target="_blank">**Base**</a>: 30 firms, 6 features;  
+<a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_full.RData" target="_blank">**Large**</a>: 200+ firms, 10 features.  
 
 
 ------------------------------------------------------------------------
