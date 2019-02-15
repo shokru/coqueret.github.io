@@ -37,10 +37,10 @@ The links below lead to **html** notebooks. The original **Rmd** files can be do
 ---------------------------------
 
 
-Datasets:
+Datasets (in R format):
 ----------
 
-[Simple](https://github.com/shokru/ml_factor/blob/master/material/data.RData): 30 firms, 6 features;  [Large](https://github.com/shokru/ml_factor/blob/master/material/data_full.RData)= 200+ firms, 10 features.  
+<a href="https://github.com/shokru/ml_factor/blob/master/material/data.RData" download="Base">: 30 firms, 6 features;  [Large](https://github.com/shokru/ml_factor/blob/master/material/data_full.RData)= 200+ firms, 10 features.  
 
 
 ------------------------------------------------------------------------
