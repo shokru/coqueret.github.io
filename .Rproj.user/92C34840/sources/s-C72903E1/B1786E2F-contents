@@ -25,11 +25,11 @@ The links below lead to **html** notebooks. The original **Rmd** files can be do
 
 5.  <a href="files/S5_Trees.nb.html" target="_blank">**Decision trees**</a>: Simple trees, random forests and boosted trees.
 
-6.  <a href="files/S6_NN.nb.html" target="_blank">**Neural networks**</a>: Multilayer perceptron and recurrent networks (Gated Recurrent Units). (FORTHCOMING)
+6.  <a href="files/S6_NN.nb.html" target="_blank">**Neural networks**</a>: Multilayer perceptron and recurrent networks (**G**ated **R**ecurrent **U**nits). 
 
-7.  <a href="files/S7_Validation.nb.html" target="_blank">**Validating & tuning**</a>: performance metrics and hyper-parameter adjustment. (FORTHCOMING)
+7.  <a href="files/S7_Validation.nb.html" target="_blank">**Validating & tuning**</a>: performance metrics and hyper-parameter adjustment. 
 
-8.  <a href="files/S8_Extensions.nb.html" target="_blank">**Extensions**</a> : ensemble learning and interpretability. (FORTHCOMING)
+8.  <a href="files/S8_Extensions.nb.html" target="_blank">**Extensions**</a> : SVMs, ensemble learning, interpretability and deflated Sharpe ratios. 
 
 
  
