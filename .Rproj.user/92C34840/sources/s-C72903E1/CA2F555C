@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1550250634927.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2398517431",
+    "id" : "CA2F555C",
+    "lastKnownWriteTime" : 1550250644,
+    "last_content_update" : 1550250644151,
+    "path" : "~/GitHub/coqueret.github.io/rstats.Rmd",
+    "project_path" : "rstats.Rmd",
+    "properties" : {
+        "cursorPosition" : "65,0",
+        "scrollLine" : "35",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}
