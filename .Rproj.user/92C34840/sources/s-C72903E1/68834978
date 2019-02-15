@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "3378334125",
     "id" : "68834978",
-    "lastKnownWriteTime" : 1550093116,
-    "last_content_update" : 1550093116915,
+    "lastKnownWriteTime" : 1550252301,
+    "last_content_update" : 1550252301327,
     "path" : "~/GitHub/coqueret.github.io/teaching.Rmd",
     "project_path" : "teaching.Rmd",
     "properties" : {
-        "cursorPosition" : "5,56",
+        "cursorPosition" : "11,0",
         "scrollLine" : "0"
     },
     "relative_order" : 4,
