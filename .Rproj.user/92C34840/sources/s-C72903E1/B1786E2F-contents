@@ -10,10 +10,10 @@ $\rightarrow$ The slides are available upon request.
 ------------------------------------------------------------------------
 
 
-Courses
+Sessions
 ----
 
-The links below lead to html notebooks. The original Rmd files can be downloaded below.
+The links below lead to **html** notebooks. The original **Rmd** files can be downloaded below.
 
 1.  <a href="files/S1_Foundations.nb.html" target="_blank">**Economic foundations**</a>: asset pricing anomalies, characteristics-based investing.
 
@@ -40,7 +40,7 @@ The links below lead to html notebooks. The original Rmd files can be downloaded
 Datasets:
 ----------
 
-[Simple](https://github.com/shokru/ml_factor/blob/master/data/data.RData): 30 firms, 6 features;  [Large](https://github.com/shokru/ml_factor/blob/master/data/data_large.RData)= 200+ firms, 10 features.  
+[Simple](https://github.com/shokru/ml_factor/blob/master/material/data.RData): 30 firms, 6 features;  [Large](https://github.com/shokru/ml_factor/blob/master/material/data_full.RData)= 200+ firms, 10 features.  
 
 
 ------------------------------------------------------------------------

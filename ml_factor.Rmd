@@ -10,7 +10,7 @@ $\rightarrow$ The slides are available upon request.
 ------------------------------------------------------------------------
 
 
-Courses
+Sessions
 ----
 
 The links below lead to **html** notebooks. The original **Rmd** files can be downloaded below.
