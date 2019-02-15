@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "322655096",
+    "hash" : "0",
     "id" : "B1786E2F",
-    "lastKnownWriteTime" : 1550250630,
-    "last_content_update" : 1550250630185,
+    "lastKnownWriteTime" : 1550250962,
+    "last_content_update" : 1550250962617,
     "path" : "~/GitHub/coqueret.github.io/ml_factor.Rmd",
     "project_path" : "ml_factor.Rmd",
     "properties" : {
-        "cursorPosition" : "56,0",
-        "scrollLine" : "24"
+        "cursorPosition" : "15,99",
+        "scrollLine" : "0"
     },
     "relative_order" : 6,
     "source_on_save" : false,
