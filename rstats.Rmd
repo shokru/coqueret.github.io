@@ -41,7 +41,7 @@ The original **[Rmd files](https://github.com/shokru/rstats/blob/master/material
 
 <a href="files/Fin_solutions.nb.html" target="_blank">**Example on financial data**</a>: exercises on 30 large US firms; data **[here](https://github.com/shokru/rstats/blob/master/data/data.RData)**.
 
-<a href="https://gcoqueret.shinyapps.io/Tidyverse-exercises/" target="_blank">**R Memo**</a>: online tutorial on the core functions of the tidyverse.
+<a href="https://gcoqueret.shinyapps.io/Tidyverse-exercises/" target="_blank">**Online tutorial**</a>: exercises & solutions on the core functions of the tidyverse.
 
 **Links:** [R on the web](https://github.com/shokru/rstats/blob/master/material/R_links.md): a short list of links, sorted by themes.  
 
