@@ -1,0 +1,34 @@
+<br/>  
+
+
+Training ML models on tails
+================
+This page contains research and presentation material on the topic of instance filtering in machine learning.
+
+
+
+
+------------------------------------------------------------------------
+
+
+Files
+----
+
+
+
+- <a href="files/formal_analysis_graphs.nb.html" target="_blank">**Formal analysis & graphs**</a>: some plots and the simple gain contest analysis between linear and quadratic generators. (<a href="files/formal_analysis_graphs.Rmd" target="_blank">original Rmd source code</a>)
+- **Toy model**
+- **Simulations** (Work in progress)
+- **Portfolio backtesting** (Work in progress)
+- **Data** (Work in progress)
+
+---------------------------------
+
+
+
+
+------------------------------------------------------------------------
+
+**DISCLAIMER**: the **data** and **code** are meant for research and pedagogical use only. 
+
+------------------------------------------------------------------------
