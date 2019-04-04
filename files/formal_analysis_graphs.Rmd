@@ -47,7 +47,7 @@ data.frame(x = c(0,0.49)) %>%                   # Plot
 
 Below, we define the families of generators that we work with in the simulations (the piecewise constant is nonetheless omitted in the paper).
 
-```{r graphs}
+```{r graphs, warning = F, message = F}
 generator <- function(x, type, c){
     if(type == "linear"){return(c*x)}
     if(type == "quad"){return((x-c)^2)}
