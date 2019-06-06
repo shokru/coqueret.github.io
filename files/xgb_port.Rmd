@@ -6,7 +6,7 @@ output: html_notebook
 ```{r, message = FALSE, warning = FALSE}
 library(xgboost)
 library(tidyverse)
-# LOAD DATA
+load("data_mat_rk.RData")
 
 tick <- levels(data_mat_rk$CompanyRelatedID)        # IDs of stocks
 dates <- levels(as.factor(data_mat_rk$DataDate))    # List of dates
@@ -19,26 +19,29 @@ nb_port <- 6                                        # Number of portfolios
 q_port <- 1 / nb_port                     
 q_port <- seq(0, 1, by  = q_port)                   # Quantiles for portfolio construction
 r_port <- matrix(0, ncol = nb_port, nrow = Tt)      # Portfolio returns
-offset_date <- 0                                    # 0 => 5 years
+offset_date <- 0                                    # 0 => is equivalent to 5 years
 max_depth <- 5                                      # Maximum nb of levels for the trees
-q <- 0.1                                            # Filtering intensity
+q <- 0.2                                            # Filtering intensity: be careful, inverses for bulk filter
 
 ptm <- proc.time()                                  # Initiate CPU time
 for(t in 1:Tt){
     if(t%%12==0){print(dates_oos[t])}
-    x <- filter(data_mat_rk, DataDate < dates_oos[t], DataDate > dates[t + offset_date])  # Rolling window
+    x <- filter(data_mat_rk, 
+                DataDate < as.Date(dates_oos[t],origin="1970-01-01")-365, 
+                DataDate > dates[t + offset_date])  # Rolling window
     # The line below determines the filtering intensity. Omit it to remove the filter.
-    x <- filter(x, R12M_F >= quantile(x$R12M_F,1-q) | R12M_F<=quantile(x$R12M_F,q))       # Filtered data
+    x <- filter(x, R12M_F >= quantile(x$R12M_F,1-q) | R12M_F<=quantile(x$R12M_F,q))       # Filtered data: extremes
+    # x <- filter(x, R12M_F >= quantile(x$R12M_F,q) & R12M_F <= quantile(x$R12M_F,1-q))       # Filtered data: bulk
     train_data <- dplyr::select(x,-CompanyRelatedID,-DataDate,-R1M_F,-R12M_F) %>% data.matrix()
     train_label <- dplyr::select(x, R12M_F) %>% data.matrix()                            # Training label
     train_matrix <- xgb.DMatrix(data = train_data, label = train_label)                  # Full training data
-    fit <- xgb.train(eta = 0.7,                    # Learning rate
+    fit <- xgb.train(eta = 0.7,                    # Learning rate, 0.7 for light, 0.5 for intermed. 0.3 for deep
                      max_depth = max_depth,        # Maximum depth
                      gamma = 0,                    # Penalization
                      lambda = 1,                   # Penalization
                      objective = "reg:linear",     # Objective function
                      data = train_matrix,          # Data source
-                     nrounds = 25)                # Number of trees
+                     nrounds = 25)                 # Number of trees, 25 for light, 50 for intermed., 100 for deep
     y <- filter(data_mat_rk, DataDate == dates_oos[t]) # Current values
     test_data <- dplyr::select(y,-CompanyRelatedID,-DataDate,-R1M_F,-R12M_F) %>% data.matrix()
     test_label <- dplyr::select(y, R1M_F) %>% data.matrix()          
@@ -60,4 +63,5 @@ ew <- data_mat_rk %>%                       # Benchmark: EW portfolio
     summarise(Ret = mean(R1M_F))
 mean(ew$Ret)                                # Average return of benchmark
 ```
+
 
