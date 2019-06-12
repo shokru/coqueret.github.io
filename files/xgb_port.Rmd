@@ -27,11 +27,11 @@ ptm <- proc.time()                                  # Initiate CPU time
 for(t in 1:Tt){
     if(t%%12==0){print(dates_oos[t])}
     x <- filter(data_mat_rk, 
-                DataDate < as.Date(dates_oos[t],origin="1970-01-01")-365, 
-                DataDate > dates[t + offset_date])  # Rolling window
+                DataDate < as.Date(dates_oos[t],origin="1970-01-01")-365,  # No forward-looking bias!
+                DataDate > dates[t + offset_date])                         # Rolling window
     # The line below determines the filtering intensity. Omit it to remove the filter.
     x <- filter(x, R12M_F >= quantile(x$R12M_F,1-q) | R12M_F<=quantile(x$R12M_F,q))       # Filtered data: extremes
-    # x <- filter(x, R12M_F >= quantile(x$R12M_F,q) & R12M_F <= quantile(x$R12M_F,1-q))       # Filtered data: bulk
+    # x <- filter(x, R12M_F >= quantile(x$R12M_F,q) & R12M_F <= quantile(x$R12M_F,1-q))   # Filtered data: bulk
     train_data <- dplyr::select(x,-CompanyRelatedID,-DataDate,-R1M_F,-R12M_F) %>% data.matrix()
     train_label <- dplyr::select(x, R12M_F) %>% data.matrix()                            # Training label
     train_matrix <- xgb.DMatrix(data = train_data, label = train_label)                  # Full training data
