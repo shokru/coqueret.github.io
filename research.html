@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
-<title></title>
+<title>research.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -22,7 +22,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -71,9 +72,7 @@ h6 {
 
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -87,13 +86,18 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
 }
 </style>
 
@@ -109,7 +113,6 @@ body {
   padding-top: 69px;
   margin-top: -69px;
 }
-
 .section h2 {
   padding-top: 69px;
   margin-top: -69px;
@@ -129,6 +132,43 @@ body {
 .section h6 {
   padding-top: 69px;
   margin-top: -69px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
@@ -150,19 +190,74 @@ $(document).ready(function () {
 });
 </script>
 
-
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -219,35 +314,37 @@ $(document).ready(function () {
 
 
 <p><br/></p>
-<div id="published-articles" class="section level3">
-<h3>Published Articles:</h3>
+<div id="published-academic-articles" class="section level3">
+<h3>Published Academic Articles:</h3>
 <div id="finance-economics" class="section level4">
 <h4><strong>FINANCE &amp; ECONOMICS</strong></h4>
 <ul>
-<li>Procedural Rationality, Asset Heterogeneity and Market Selection, <br/> <strong>Journal of Mathematical Economics</strong>, Vol. 82 (2019), pp. 125-149 (with B. Tavin) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank">[Link]</a><br /></li>
+<li>Procedural Rationality, Asset Heterogeneity and Market Selection, <br/> <strong>Journal of Mathematical Economics</strong>, Vol. 82 (2019), pp. 125-149 (2019) (with B. Tavin) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank">[Link]</a><br /></li>
 <li>Empirical properties of a heterogeneous agent model in large dimensions, <br/> <strong>Journal of Economic Dynamics &amp; Control</strong>, Vol. 77 (2017), pp. 180-201 <a href="https://www.sciencedirect.com/science/article/pii/S0165188917300386" target="_blank">[Link]</a><br />
 </li>
 <li>Characteristics-based portfolio choice with leverage constraints, <br/> <strong>Journal of Banking and Finance</strong>, Vol. 70 (2016), pp. 23-37 (with M. Ammann and J-P. Schade) <a href="https://www.sciencedirect.com/science/article/pii/S0378426616300516" target="_blank">[Link]</a><br />
 </li>
 <li>An investigation of model risk in a market with jumps and stochastic volatility, <br/> <strong>European Journal of Operational Research</strong>, Vol. 253 (2016), pp. 648-658 (with B. Tavin) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0377221716301461" target="_blank">[Link]</a><br />
 </li>
-<li>Diversified minimum-variance portfolios, <br/> <strong>Annals of Finance</strong>, Vol. 11, No. 2 (2015), pp. 221-241 <a href="https://link.springer.com/article/10.1007%2Fs10436-014-0253-x" target="_blank">[Link]</a><br />
+<li>Diversified minimum-variance portfolios, <br/> <strong>Annals of Finance</strong>, Vol. 11, No. 2 (2015), pp. 221-241 <a href="https://link.springer.com/article/10.1007%2Fs10436-014-0253-x" target="_blank">[Link]</a><br />
 </li>
-<li>Lookback option prices under a spectrally negative tempered-stable model, <br/> <strong>International Journal of Theoretical and Applied Finance</strong>, Vol. 16, No. 3 (2013) <a href="https://www.worldscientific.com/doi/abs/10.1142/S021902491350012X" target="_blank">[Link]</a></li>
+<li>Lookback option prices under a spectrally negative tempered-stable model, <br/> <strong>International Journal of Theoretical and Applied Finance</strong>, Vol. 16, No. 3 (2013) <a href="https://www.worldscientific.com/doi/abs/10.1142/S021902491350012X" target="_blank">[Link]</a></li>
 </ul>
 </div>
 <div id="data-science-probability-statistics" class="section level4">
 <h4><strong>DATA SCIENCE, PROBABILITY &amp; STATISTICS</strong></h4>
 <ul>
+<li>Training trees on tails with applications to portfolio choice, <br/> <strong>Annals of Operations Research</strong>, Forthcoming<br />
+</li>
 <li>Approximate NORTA simulations for virtual sample generation, <br/> <strong>Expert Systems With Applications</strong>, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a><br />
 </li>
 <li>On the distribution of the supremum of the spectrally negative stable process with drift, <br/> <strong>Statistics &amp; Probability Letters</strong>, Vol. 107 (2015), pp. 333-340 <a href="https://www.sciencedirect.com/science/article/pii/S0167715215003314" target="_blank">[Link]</a><br />
 </li>
 <li>Second order risk aggregation with the Bernstein copula, <br/> <strong>Insurance: Mathematics and Economics</strong>, Vol. 58 (2014), pp. 150-158 <a href="https://www.sciencedirect.com/science/article/pii/S0167668714000882" target="_blank">[Link]</a><br />
 </li>
-<li>Meromorphic Levy-Khintchine exponents with poles of order two, <br/> <strong>Communications on Stochastic Analysis</strong>, Vol. 7, No. 2 (2013), pp. 179-198 <a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank">[Link]</a><br />
+<li>Meromorphic Levy-Khintchine exponents with poles of order two, <br/> <strong>Communications on Stochastic Analysis</strong>, Vol. 7, No. 2 (2013), pp. 179-198 <a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank">[Link]</a><br />
 </li>
-<li>Approximation of probabilistic Laplace transforms and their inverses, <br/> <strong>Communications in Applied Mathematics and Computational Science</strong>, Vol. 7, No. 2 (2012), pp. 231-246 <a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a></li>
+<li>Approximation of probabilistic Laplace transforms and their inverses, <br/> <strong>Communications in Applied Mathematics and Computational Science</strong>, Vol. 7, No. 2 (2012), pp. 231-246 <a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a></li>
 </ul>
 </div>
 <div id="wine-business" class="section level4">
@@ -255,17 +352,19 @@ $(document).ready(function () {
 <ul>
 <li>Herding behavior among wine investors, <strong>Economic Modelling</strong>, Vol. 68 (2018), pp. 318-328 (with B. Aytac and C. Mandou) <a href="https://www.sciencedirect.com/science/article/pii/S0264999317301001" target="_blank">[Link]</a><br />
 </li>
-<li>Optimal wine pricing for restaurants, <strong>Journal of Wine Economics</strong>, Vol. 10, No. 2 (2015), pp. 204-224 <a href="https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E" target="_blank">[Link]</a></li>
+<li>Optimal wine pricing for restaurants, <strong>Journal of Wine Economics</strong>, Vol. 10, No. 2 (2015), pp. 204-224 <a href="https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E" target="_blank">[Link]</a></li>
 </ul>
 <hr />
 </div>
 </div>
-<div id="in-the-press" class="section level3">
+<div id="in-the-practitioner-press" class="section level3">
 <h3>In the Practitioner Press:</h3>
-<li>Machine learning in systematic equity allocation: a model comparison, <strong>Wilmott Magazine</strong>, Vol. 2018, Issue 98 (2018), pp. 24-33 <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a></p>
+<ul>
+<li>Equity portfolios with improved liability-hedging benefits, <br/> <strong>Journal of Portfolio Management</strong>, Vol. 43, No. 2 (Winter 2017), pp. 37-49 (with L. Martellini and V. Milhau) <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a><br />
 </li>
-<li>Equity portfolios with improved liability-hedging benefits, <br/> <strong>Journal of Portfolio Management</strong>, Vol. 43, No. 2 (Winter 2017), pp. 37-49 (with L. Martellini and V. Milhau) <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a><br />
-</li>
+<li>Machine learning in systematic equity allocation: a model comparison, <br/> <strong>Wilmott Magazine</strong>, Vol. 2018, Issue 98 (2018), pp. 24-33 <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a></li>
+</ul>
+<hr />
 </div>
 <div id="book-chapter" class="section level3">
 <h3>Book Chapter:</h3>
@@ -287,16 +386,6 @@ $(document).ready(function () {
 </ul>
 <hr />
 </div>
- 
-<div id="ongoing-research" class="section level3">
-<h3>Ongoing research:</h3>
-<ul>
-<li><a href="tot.html">Training models on tails</a> <br />
-</li>
-</ul>
-<hr />
-</div>
-  
 <div id="my-academic-profiles" class="section level3">
 <h3>My academic profiles:</h3>
 <p><a href="http://orcid.org/0000-0002-1596-4086" target="_blank">ORCID</a>   <a href="https://www.researchgate.net/profile/Guillaume_Coqueret" target="_blank">Researchgate</a>   <a href="https://publons.com/researcher/1352687/guillaume-coqueret" target="_blank">Publons</a></p>
@@ -319,6 +408,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
