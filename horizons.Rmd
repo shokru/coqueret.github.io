@@ -1,0 +1,32 @@
+<br/>  
+
+
+Persistence in factor-based supervised learning models
+================
+This page contains research and presentation material on the topic of using long term returns in machile learning models for factor investing.
+
+
+
+
+------------------------------------------------------------------------
+
+
+Files
+----
+
+All notebooks are available in original .Rmd format upon request.
+
+- The dataset can be found <a href="https://github.com/shokru/mlfactor.github.io/tree/master/material" target="_blank">**here**</a>.   
+- The notebooks for simulations can be found <a href="files/test_window.nb.html" target="_blank">**here for the sampling depth analysis**</a> and <a href="files/lessons_sim.nb.html" target="_blank">**here for the effect of autocorrelation levels**</a>.
+- The notebook for the <a href="files/predictions_share.nb.html" target="_blank">**baseline results**</a>.
+
+---------------------------------
+
+
+
+
+------------------------------------------------------------------------
+
+**DISCLAIMER**: the **data** and **code** are meant for research and pedagogical use only. 
+
+------------------------------------------------------------------------
