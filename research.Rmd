@@ -5,7 +5,7 @@
 ### Book
 #### **Machine learning for factor investing** (with T. Guida)
 CRC / Chapman Hall, expected September 2020   
-Preorder on <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon</a>   
+Preorder on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a> or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2?dchild=1&keywords=coqueret&qid=1587124521&sr=8-2" target="_blank">Amazon (UK)</a>  
 **Website**: http://www.mlfactor.com    
 **Material**: https://github.com/shokru/mlfactor.github.io/tree/master/material
 
@@ -24,7 +24,7 @@ _____
 
 #### **DATA SCIENCE, PROBABILITY & STATISTICS**
 
-* Training trees on tails with applications to portfolio choice, <br/>   **Annals of Operations Research**, Forthcoming (2020)  <a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank">[Working paper]</a> 
+* Training trees on tails with applications to portfolio choice, <br/>   **Annals of Operations Research**, Forthcoming (2020) (with T. Guida) <a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank">[Working paper]</a> 
 <a href="http://www.gcoqueret.com/tot.html" target="_blank">[Material]</a>
 * Approximate NORTA simulations for virtual sample generation, <br/>   **Expert Systems With Applications**, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
 * On the distribution of the supremum of the spectrally negative stable process with drift, <br/>   **Statistics & Probability Letters**, Vol. 107 (2015), pp. 333-340 <a href="https://www.sciencedirect.com/science/article/pii/S0167715215003314" target="_blank">[Link]</a>     
@@ -53,6 +53,11 @@ _____
 Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment**, 2018 (with T. Guida)  
 
  
+
+_____ 
+
+### Ongoing research
+<a href="http://www.gcoqueret.com/horizons.html" target="_blank">Persistence in factor-based supervised learning models</a>
 
 _____ 
 
