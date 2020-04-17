@@ -3,7 +3,7 @@
 
 Persistence in factor-based supervised learning models
 ================
-This page contains research and presentation material on the topic of using long term returns in machile learning models for factor investing.
+This page contains research material on the topic of using long term returns in machine learning models for factor investing.
 
 
 
