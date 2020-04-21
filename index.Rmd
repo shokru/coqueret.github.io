@@ -1,7 +1,11 @@
 
 <head>
 <meta charset="UTF-8">
+<title>Research</title>
+<meta name="Personal website of Guillaume Coqueret"/>
 </head>
+
+
 ---
 ---
 

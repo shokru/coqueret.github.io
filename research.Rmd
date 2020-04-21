@@ -1,6 +1,13 @@
+<head>
+<title>Research</title>
+<meta name="Research projects of Guillaume Coqueret"/>
+</head>
+
 ---
+description: "Research projects of Guillaume Coqueret"
 ---
 <br/>  
+
 
 ### Book
 #### **Machine learning for factor investing** (with T. Guida)
