@@ -3,9 +3,9 @@
 <br/>  
 
 ### Teaching
-* [Machine Learning for Factor Investing](ml_factor.html) - emlyon business school, MSc. in Finance (2018-) & Imperial College Business School, MSc. in Finance (2019)   
-* Dynamic Dashboards with Shiny - emlyon business school, Master in Management (2018-)  
-* [Introduction to statistics with R](rstats.html) - emlyon business school, Master in Management (2018-)   
+* [Machine Learning for Factor Investing](ml_factor.html) - emlyon business school, MSc. in Finance (2018-present) & Imperial College Business School, MSc. in Finance (2019)   
+* Dynamic Dashboards with Shiny - emlyon business school, Master in Management (2018-present)  
+* [Introduction to statistics with R](rstats.html) - emlyon business school, Master in Management (2018)   
 * Non-Gaussian processes in Finance - emlyon business school, Master in Quantitative Finance (2018)   
 * Introduction to Big Data and Business Analytics - Montpellier Business School, Master of Management (2015-2017)   
 * Numerical methods in Finance - Univ. Paris I Pantheon-Sorbonne, Master of Market Finance (2008-2010)   
