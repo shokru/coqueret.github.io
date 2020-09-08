@@ -1,0 +1,40 @@
+---
+title: Notebook example
+author: Mister X
+date: September 4, 2020
+output:
+  html_document:
+    theme: default
+    toc: true
+    number_sections: true
+    toc_float: 
+      collapsed: false
+---
+
+# Header example
+
+## Secondary header
+
+To check themes: https://www.datadreaming.org/post/r-markdown-theme-gallery/
+
+```{r}
+plot(cars)
+```
+
+
+# Other header
+
+You can write text here.
+
+```{r}
+# And then write code in code chunks. This is a comment.
+1+1
+```
+
+# First analysis
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+filter(diamonds, carat > 3.5)
+```
+
