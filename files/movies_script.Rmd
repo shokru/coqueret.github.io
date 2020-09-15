@@ -1,12 +1,15 @@
 ---
-title = "Formatting the movies database"
+title: "Formatting the movies database"
+output:
+  html_document:
+    df_print: paged
 ---
 
 First things first: load the libraries and the data.
 
-```{r}
+```{r, message = F, warning = F}
 library(tidyverse)                                    # Activates the tidyverse
-setwd("~/Documents/IT/COURS/1920/R4DS/Data/Movies")   # Changes the working directory
+setwd("~/Documents/IT/COURS/2021/R4DS/Data/Movies")   # Changes the working directory
 movies <- read_csv("movie_metadata.csv")              # Loads the data
 movies <- movies %>% na.omit()                        # Removes instances with missing points
 movies <- data.frame(movies)                          # (technical move)
