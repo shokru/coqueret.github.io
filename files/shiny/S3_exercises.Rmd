@@ -1,0 +1,106 @@
+---
+title: "Exercises on plots"
+output: html_notebook
+---
+
+**DISCLAIMER**: the graphs in this series of exercises are pretty ugly!
+
+
+# Setting the environment
+
+First, you need to install the packages seen in class. **AND DON'T FORGET TO SET YOUR WORKING DIRECTORY!**
+
+```{r install, message = FALSE, warning = FALSE}
+install.packages("plotly")
+install.packages("gganimate")
+install.packages("ggrepel")
+install.packages("cowplot")
+install.packages("gifski")
+install.packages("png")
+```
+
+Then, you need to activate them!
+
+```{r activate, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(plotly)
+library(gganimate)
+library(ggrepel)
+library(cowplot)
+library(gifski)
+library(png)
+```
+
+Finally, you need set **YOUR** working directory and load the datasets.  
+You can do that directly in the files pane in RStudio (e.g., click on the blue wheel!).
+
+```{r load}
+setwd("~/Documents/IT/COURS/2021/R4DS/S3_plots")  # That works only for me!!!
+load("movies.RData")
+load("songs.RData")
+```
+
+
+# The exercises
+
+## Songs dataset
+
+1. Plot the histogram of the **popularity** variable. **Hint**: it's geom_histogram().
+
+
+2. Create a pivot table that lists the top artists with more than 19 songs in the dataset and plot their number of songs with bars. **Hint**: it's geom_col().
+           
+           
+3. Create a scatter plot (with points) where the *x*-axis is the length of the song and the *y*-axis is the popularity. You can set the point size to 0.5. Add a geom_smooth.
+
+           
+4. 
+a) Filter the data to keep only songs from Lady Gaga, Drake and Kanye West.   
+b) Use geom_point to show the relationship between *speechiness* and *energy* and use color for artists.
+c) Use geom_smooth to detect the local patterns. If possible plot one line for each artist.
+
+           
+5. **Impact of energy & valence on top popular songs**.
+a) Filter songs with popularity above 60.
+b) On top of that, create a graph with points such that *x* = energy and *y* = valence.
+c) Add a layer with only the songs with popularity larger than 90, shown in red.
+d) Save this plot in a variable and enhance it with ggplotly().
+
+
+
+6. **Comparing artists on some key metrics**.
+a) Like in Q4, filter artists to keep data for Lady Gaga, Drake, Kanye West and Eminem.
+b) Create a pivot table over them that computes average popularity, average danceability and average speechiness.
+c) The output is not tidy! Transform it into tidy format (create an indicator variable that will encompass the averages). 
+d) Plot the values via geom_col() and facet_grid(). You can pick a color for each artist. 
+
+           
+           
+## Movies dataset
+
+1. Plot the histogram of the **imdb_score** variable. 
+
+2. Create a pivot table that lists the top directors with more than 15 films in the dataset and plot their number of movies with bars. 
+
+3. Create a scatter plot (with points) where the *x*-axis is the length of the movie and the *y*-axis is the imdb_score You can set the point size to 0.5. Add a geom_smooth.
+
+4. Create a pivot table which computes, for each year, the average popularity of the movies (of that year). Create an animation that displays the corresponding figures through time with bars. **Hint**: use the layers geom_col(), transition_time() - this one is new - and shadow_mark().
+
+5. 
+a) Filter the data to keep only films from Steven Spielberg, Woody Allen and Clint Eastwood.   
+b) Use geom_point to show the relationship between *budget* and *imdb_score* and use color for director.
+c) Use geom_smooth to detect the local patterns. If possible plot one line for each director.
+
+6. **Impact of nb_voters & earnings/budget on best rated films**.
+a) Filter movies with imdb_score above 5.5.
+b) On top of that, create a graph with points such that *x* = nb_voters and *y* = earnings/budget.
+c) Add a layer with only the films with imdb_score larger than 8, shown in red (add a label=director in the aes()).
+d) Change both axes into log10 scales.
+e) Save this plot in a variable and enhance it with ggplotly().
+
+7. **Comparing directors on some key metrics**.
+a) Like in Q5, filter directors to keep data for Steven Spielberg, Woody Allen, Clint Eastwood, Martin Scorsese and Ridley Scott
+b) Create a pivot table over them that computes average earnings/budget, average duration and average imdb_score.
+c) The output is not tidy! Transform it into tidy format (create an indicator variable that will encompass the averages) 
+d) Plot the values via geom_col() and facet_grid(). You can use an angle for the x-axis to ease readability.
+
