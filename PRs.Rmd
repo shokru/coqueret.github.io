@@ -1,0 +1,36 @@
+<br/>  
+
+
+Predictive regressions: a machine learning perspective
+================
+This page contains research and presentation material on the topic of quadratic errors in predictive regressions.     
+This is joint work with <a href="https://sites.google.com/site/romaindeguestsite/research" target="_blank">**Romain Deguest**</a>.
+
+
+
+
+------------------------------------------------------------------------
+
+
+Files
+----
+
+
+
+- <a href="files/PRs/comparison.nb.html" target="_blank">**Comparisons of methods**</a>: tests between integral formulae and Monte-Carlo simulations. This requires <a href="files/PRs/R_functions.R" target="_blank">**R functions**</a> and <a href="files/PRs/c_functions.cpp" target="_blank">**C functions**</a>.
+- <a href="files/PRs/sensitivity.nb.html" target="_blank">**Sensitivity analysis**</a>: impact of persistence, forecasting horizon and sample size on loss / R^2.  
+- <a href="files/PRs/univariate.nb.html" target="_blank">**Comparisons of methods**</a>: comparison between PRs and univariate learning, that is, regression on lagged values of the process.
+- <a href="files/ToT_slides.html" target="_blank"><strong>Slides</strong></a>
+- <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank"><strong>Working paper</strong></a>   
+
+
+---------------------------------
+
+
+
+
+------------------------------------------------------------------------
+
+**DISCLAIMER**: the **data** and **code** are meant for research and pedagogical use only. 
+
+------------------------------------------------------------------------
