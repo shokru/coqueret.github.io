@@ -1,0 +1,134 @@
+---
+title: "ToT Formal plots"
+output: html_notebook
+---
+
+
+# Gains: linear versus quadratic generators
+
+First, we defined a few functions we use to compare gains in simple cases. They are dedicated to the evaluation of gain in simple parametric models: linear and quadratic generators for the conditional average. At the end of the chunck, we compare the relative gains from one generator to another under an iso-variance constraint. To the left of the vertical dashed line, the quadratic generator wins the contest, to the right, it loses it.
+
+```{r functions}
+c_plus <- function(b){                          # Split point for quadratic generator (1)
+    return((1+6*b+sqrt(17-36*b+36*b^2))/8)
+}
+c_minus <- function(b){                         # Split point for quadratic generator (2)
+    return((1+6*b-sqrt(17-36*b+36*b^2))/8)
+}
+init_var_lin <- function(a){                    # Total variance from linear generator
+    return(a^2/12)
+}
+init_var_quad <- function(b){                   # Total variance from quadratic generator
+    return((15*b^2-15*b+4)/45)
+}
+V_quad <- function(c, b){                       # Post-split variance for the quadratic generator
+    return(  (4 - 15*b + 15*b^2 - 5*c + 30*b*c - 45*b^2*c - 5*c^2 + 45*b^2*c^2 + 5*c^3 - 30*b*c^3 + 5*c^4)/45)
+}
+gain_quad <- function(b){                       # Gain obtained by the quadratic generator
+    return(init_var_quad(b) - V_quad(c_plus(b),b))
+}
+gain_lin <- function(b){                        # Gain obtained by the linear generator under iso-variance
+    return((15*b^2-15*b+4)/60)
+}
+gain_diff <- function(b){                       # Difference between gains
+    gain_lin(b)- gain_quad(b)
+}
+
+data.frame(x = c(0,0.49)) %>%                   # Plot
+    ggplot(aes(x = x)) + 
+    stat_function(fun = gain_diff) +
+    geom_segment(aes(x = 0.383, y = -0.0024, xend = 0.383, yend = 0), linetype = 2) +
+    ylim(-0.0024,0.00215) 
+# ggsave("gain.pdf")
+```
+
+
+# Plots of parametric generators
+
+Below, we define the families of generators that we work with in the simulations (the piecewise constant is nonetheless omitted in the paper).
+
+```{r graphs, warning = F, message = F}
+generator <- function(x, type, c){
+    if(type == "linear"){return(c*x)}
+    if(type == "quad"){return((x-c)^2)}
+    if(type == "exp"){return(exp(-x*c))}
+    if(type == "log"){return(log(x+c))}
+    if(type == "sin"){return(sin(x*c)/c)}
+    if(type == "outlier"){return(c*(x-0.5)^3)}
+    if(type == "piece"){                            # Piecewise constant
+        weightz <- arima.sim(list(ar = c(0.99)), c)
+        div <- length(weightz)
+        weightz <- (weightz - mean(weightz)) / sd(weightz) / runif(1, min = 8, max = 13)
+        if(length(x) == 1){                         # Real input (dim = 1)
+            inter <- seq(0, 1-1/div, by = 1/div)    # Intervals
+            ind <-  sum(x > inter)
+            return(weightz[ind] - mean(weightz))
+        } else {                                    # Vector input
+            inter <- rep(seq(0, 1-1/div, by = 1/div), length(x)) %>%
+                matrix(ncol = div, byrow = T)
+            comp <- rep(x, div) %>%
+                matrix(ncol = div, byrow = F)
+            ind <- rowSums(x > inter)
+            return(weightz[ind])
+        }
+    }
+    if(type == "poly"){                              # Polynomial generator
+        pars <- rnorm(c) 
+        pars <- pars - mean(pars) # To make sure that the behavior is not too montonous
+        m <- sum(pars/(2:(c+1)))
+        x <- sapply(x, `^`, 1:c)
+        p <- matrix(rep(pars, ncol(x)), nrow = c, byrow = F)
+        out <- colSums(p*x) - m
+        return(out / sd(out) / runif(1, min = 12, max = 21))
+    }
+}
+
+m_gen <- function(type, c){                           # Average values
+    if(type == "linear") return(c/2) 
+    if(type == "quad") return(1/3-c+c^2)
+    if(type == "exp") return((1-exp(-c))/c)
+    if(type == "log") return(-1 - c*log(c)+(1+c)*log(1+c))
+    if(type == "sin") return((1-cos(c))/c^2)
+    if(type == "outlier"){return(0)}                  # A true zero
+    if(type == "piece") {return(0)}                   # Not defined (parameter dependent)
+    if(type == "poly") {return(0)}                    # Not defined (parameter dependent)
+}
+
+fin_gen2 <- function(x, type,cc){                     # Final generator: with mean retrieved
+    return(generator(x, type, cc) - m_gen(type, cc))
+}
+
+ggplot(data.frame(x = c(0.01,1)), aes(x = x)) +
+    stat_function(fun = fin_gen2, args = list(type = "linear", c = 0.1), aes(color = "linear")) +
+    stat_function(fun = fin_gen2, args = list(type = "linear", c = 0.2), aes(color = "linear")) +
+    stat_function(fun = fin_gen2, args = list(type = "linear", c = 0.3), aes(color = "linear")) +
+    stat_function(fun = fin_gen2, args = list(type = "quad", c = 0.51), aes(color = "quad")) +
+    stat_function(fun = fin_gen2, args = list(type = "quad", c = 0.55), aes(color = "quad")) +
+    stat_function(fun = fin_gen2, args = list(type = "quad", c = 0.59), aes(color = "quad")) +
+    stat_function(fun = fin_gen2, args = list(type = "exp", c = 0.1), aes(color = "exp")) +
+    stat_function(fun = fin_gen2, args = list(type = "exp", c = 0.2), aes(color = "exp")) +
+    stat_function(fun = fin_gen2, args = list(type = "exp", c = 0.3), aes(color = "exp")) +
+    stat_function(fun = fin_gen2, args = list(type = "log", c = 3), aes(color = "log")) +
+    stat_function(fun = fin_gen2, args = list(type = "log", c = 8), aes(color = "log")) +
+    stat_function(fun = fin_gen2, args = list(type = "log", c = 13), aes(color = "log")) +
+    stat_function(fun = fin_gen2, args = list(type = "sin", c = 7), aes(color = "sin")) +
+    stat_function(fun = fin_gen2, args = list(type = "sin", c = 10), aes(color = "sin")) +
+    stat_function(fun = fin_gen2, args = list(type = "sin", c = 14), aes(color = "sin")) +
+    stat_function(fun = fin_gen2, args = list(type = "poly", c = 6), aes(color = "poly")) +
+    stat_function(fun = fin_gen2, args = list(type = "poly", c = 6), aes(color = "poly")) +
+    stat_function(fun = fin_gen2, args = list(type = "poly", c = 6), aes(color = "poly")) 
+#ggsave("generators.pdf")
+```
+
+
+# Counterexamples
+
+Finally, some counterexamples. One is ok, the second is pathological.
+
+```{r counter, message = F, warning = F}
+library(gridExtra)
+g1 <- ggplot(data.frame(x = c(0,1)), aes(x = x)) + stat_function(fun = function(x) (x-0.5)^3) 
+g2 <- ggplot(data.frame(x=1:8, y = c(1,1,2,6,-5,-1,-2,-2))) + geom_bar(aes(x = x, y = y/10), stat = "identity")
+grid.arrange(g1, g2, ncol=2) #%>% ggsave(filename = "counter.pdf")
+```
+

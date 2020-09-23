@@ -1,0 +1,129 @@
+---
+title: "The toy example"
+output: 
+    html_notebook
+---
+
+# Packages: make sure they are installed
+
+```{r pack}
+library(tidyverse)
+library(rpart)
+library(rpart.plot)
+library(gridExtra)
+```
+
+
+# Toy example: setup
+
+We run simulations and create the first graph.
+
+```{r lin_quad, message = FALSE, warning = FALSE}
+sample <- 10^3                                                       # Sample size
+x1 <- runif(sample)                                                  # x1 variable
+x2 <- runif(sample)                                                  # x2 variable
+y <- x1/3 + sin(10*x2)/4 + x2/9 - 0.12 + rnorm(sample)/10
+data <- data.frame(y, x1, x2)                                        # Aggregate dataset
+data %>% ggplot() +                                                  # Plot
+    geom_point(aes(x = x1, y = y), color = "blue2", size = 0.3, alpha = 0.4) +
+    geom_point(aes(x = x2, y = y), color = "red2", size = 0.3, alpha = 0.4) +
+    stat_smooth(aes(x = x1, y = y), color = "blue2") +
+    stat_smooth(aes(x = x2, y = y), color = "red2") +
+    xlab("x1 (blue) or x2 (red)")
+```
+
+
+# Gain analysis (pre-filter)
+
+We compute the important indicators stemming from splits (the gains essentially).
+
+```{r gains, message = FALSE, warning = FALSE}
+sample <- 10^6                                                       # More points & then start again.
+x1 <- runif(sample)                                                  # x1 variable
+x2 <- runif(sample)                                                  # x2 variable
+y <- x1/3 + sin(10*x2)/4 + x2/9 - 0.12 + rnorm(sample)/10
+data <- data.frame(y, x1, x2) 
+
+gain <- function(fit){     # Simple function to extract the gains
+    out_fit <- fit$frame
+    var10 <- out_fit$dev[1]
+    var11 <- out_fit$dev[2]  
+    var12 <- out_fit$dev[3]
+    return((var10-var11-var12)/out_fit$n[1])
+}
+
+fit1 <- rpart(y ~ x1, data = data, maxdepth = 1)
+gain(fit1) # Gain realized by first variable
+fit2 <- rpart(y ~ x2, data = data, maxdepth = 1)
+gain(fit2) # Gain realized by second variable
+```
+
+The second variable leads to the highest gain: this is the one that would be chosen.
+
+And plot the corresponding trees.
+```{r tree_prefilter}
+layout(matrix(c(1,2), 1, 2, byrow = TRUE))
+rpart.plot(fit1)
+rpart.plot(fit2)
+```
+
+# Tree post-filter
+
+We show what happens if you filter the data upfront: the split changes.
+
+```{r tree_filter}
+q <- 0.15
+sample <- 10^4                                                       # Generate again.
+x1 <- runif(sample)                                                  # x1 variable
+x2 <- runif(sample)                                                  # x2 variable
+y <- x1/3 + sin(10*x2)/4 + x2/9 - 0.12 + rnorm(sample)/10
+data <- data.frame(y, x1, x2) 
+data_filter <- data %>% filter(y < quantile(y,q) | y > quantile(y, 1-q))
+fit <- rpart(y ~ x1 + x2, data = data_filter, maxdepth = 1)  
+rpart.plot(fit)
+```
+
+# Graphical explanation
+
+This one is a bit long, we keep a lot of information. We show the separations dictated by the splits via a vertical line.
+
+```{r filter, message = FALSE, warning = FALSE}
+fit1 <- rpart(y ~ x1, data = data_filter, maxdepth = 1)
+fit2 <- rpart(y ~ x2, data = data_filter, maxdepth = 1)
+split1 <- fit1$splits[fit1$splits[,3]==min(fit1$splits[,3]),4]
+split2 <- fit2$splits[fit2$splits[,3]==min(fit2$splits[,3]),4]
+data_filter <- data %>% filter(y < quantile(y,q) | y > quantile(y, 1-q))
+
+g1 <- data_filter %>% 
+    ggplot() +
+    geom_point(aes(x = x1, y = y), color = "blue", size = 0.3) +
+    stat_smooth(aes(x = x1, y = y)) +
+    annotate("segment", x = split1, xend = 1, 
+             y = mean(data_filter$y[data_filter$x1>split1]), 
+             yend = mean(data_filter$y[data_filter$x1>split1]), 
+             colour = "black", linetype = 2, size = 1.5) +
+    annotate("segment", x = 0, xend = split1, 
+             y = mean(data_filter$y[data_filter$x1<split1]), 
+             yend = mean(data_filter$y[data_filter$x1<split1]), 
+             colour = "black", linetype = 2, size = 1.5) +
+    annotate("text", x = split1-0.05, y = 0.6 , label = "split", color = "red") +
+    geom_vline(xintercept = split1, color = "red") +
+    ggtitle("First variable")
+
+g2 <- data_filter %>% 
+    ggplot() +
+    geom_point(aes(x = x2, y = y), color = "red", size = 0.3) +
+    stat_smooth(aes(x = x2, y = y)) +
+    annotate("segment", x = split2, xend = 1, 
+             y = mean(data_filter$y[data_filter$x2>split2]), 
+             yend = mean(data_filter$y[data_filter$x2>split2]), 
+             colour = "black", linetype = 2, size = 1.5) +
+    annotate("segment", x = 0, xend = split2, 
+             y = mean(data_filter$y[data_filter$x2<split2]), 
+             yend = mean(data_filter$y[data_filter$x2<split2]), 
+             colour = "black", linetype = 2, size = 1.5) +
+    annotate("text", x = split2-0.05, y = 0.6 , label = "split", color = "red") +
+    geom_vline(xintercept = split2, color = "red") +
+    ggtitle("Second variable")
+grid.arrange(g1,g2)
+```
