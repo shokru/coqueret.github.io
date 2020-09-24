@@ -1,0 +1,148 @@
+
+# For starters
+
+```{r, message = F, warning = F}
+library(tidyverse)
+library(lubridate)
+library(Rcpp)
+sourceCpp("c_functions.cpp")
+source("r_func.R")
+load("data_exp.RData")
+t_vec <- data_exp$date[25:1788]                    # vector of dates
+time <- as.Date("1982-06-15")                      # point in time
+y <- "r06m"                                        # name of dependent variable
+x <- "dp12"                                        # name of predictor 
+TT <- 12                                           # sample size
+y_mat <- as.numeric(substr(y, 2,3))                # y maturity
+#rolling(y, x, time, y_mat, TT, t_vec, data_exp)   # Just testing
+```
+
+The long list of parameters.
+
+```{r}
+TT <- c(6, 12, 24, 36, 60, 84, 120)                # Choices of sample size
+N_TT <- length(TT)                                 # Number of TTs
+y <- c("r01m", "r03m", "r06m", "r12m", "r24m")     # Dependent variables
+x <- colnames(data_exp)[2:(ncol(data_exp)-5)]                      # Name of predictors: BEWARE HARD CODED
+year <-  1884:2019                                 # All years for study
+month <- 1:12                                      # Months
+pars <- expand.grid(y, x, TT, year, month)         # ALL COMBINATIONS!
+y <- pars[,1]                                      # Retrieving x
+x <- pars[,2]                                      # Retrieving y
+TT <- pars[,3]                                     # Retrieving TT
+time <- make_date(year = pars[,4],                 # Making dates
+                  month = pars[,5], 
+                  day = 15)
+y_mat <- as.numeric(substr(y,2,3))                 # y, but in numerical format (for training sample selection)
+t_vec <- data_exp$date %>% unique()                # Vector of dates, also for the training sample selection
+```
+
+
+
+# The core task
+
+```{r}
+tictoc::tic()                         # To compute CPU time
+test <- pmap_df(list(y = y,           # This is the functional part
+                     x = x, 
+                     time = time,
+                     y_mat = y_mat,
+                     TT = TT), 
+                rolling,              # These arguments are outside the list!
+                t_vec = t_vec,
+                data = data_exp)
+tictoc::toc()
+#save(test, file = "test.RData")
+```
+
+And then a bit of formatting.
+
+```{r}
+source <- test %>%                # Order first according to TT, then the rest
+    arrange(TT, y, x, time)
+L <- nrow(source)/N_TT            # Number of rows for each value of TT
+colnums <- c(1,2,3,4,5,20,21,22)  # Be careful!!!
+for(j in 1:(N_TT-1)){             # Overwriting the columns to keep 120-point estimates only
+    source[((j-1)*L+1):(j*L), colnums] <- source[((N_TT-1)*L+1):(N_TT*L),colnums]
+}
+
+
+res <- source %>%                 
+    na.omit() %>%                 # Remove missing values
+    mutate(error = y_test - pred, # Add error
+           e2 = error^2)          # Add squared error
+# save(res, file = "res.RData")     # Save
+```
+
+
+
+
+# Studying the AR(1) errors
+
+```{r}
+TT <-  c(6, 12, 24, 36, 60, 84, 120)                # choices of sample size
+N_TT <- length(TT)
+y <- c("r01m", "r03m", "r06m", "r12m", "r24m")
+x <- colnames(data_exp)[2:18]
+year <-  1950:2019
+month <- 1:12
+pars <- expand.grid(y, x, TT, year, month)
+y <- pars[,1]
+x <- pars[,2]
+TT <- pars[,3]
+time <- make_date(year = pars[,4], 
+                  month = pars[,5], 
+                  day = 15)
+y_mat <- as.numeric(substr(y,2,3))
+t_vec <- data_exp$date %>% unique()
+tictoc::tic()
+err <- pmap(list(y = y, 
+                     x = x, 
+                     time = time,
+                     y_mat = y_mat,
+                     TT = TT), 
+                errors,
+                t_vec = t_vec,
+                data = data_exp)
+tictoc::toc()
+save(err, file = "err.RData")
+```
+
+
+
+
+```{r}
+library(reshape2)
+melt_err <- melt(err)
+save(melt_err, file = "melt_err.RData")
+```
+
+
+```{r}
+temp_err_nb <- melt_err %>% 
+    filter(L2 == "TT", value == 6) %>%
+    pull(L1)
+temp_err <- melt_err %>%
+    filter(L1 %in% temp_err_nb)
+temp_err %>%
+    filter(L2 %in% c("err_y", "err_x"),
+           abs(value) < 0.4) %>%
+    ggplot(aes(x = value, fill = L2)) + geom_histogram(bins = 100, position = "dodge")
+```
+
+Focus on one particular x, with all TTs:
+
+```{r}
+feat <- colnames(data_exp)[2:18]
+xx <- which(feat == "dp")
+temp_err_x_nb <- melt_err %>% 
+    filter(L2 == "x", value %in% xx) %>%
+    pull(L1)
+temp_err_x <- melt_err %>%
+    filter(L1 %in% temp_err_x_nb)
+temp_err_x %>%
+    filter( L2 %in% "err_x",
+           abs(value) < 0.4) %>%
+    ggplot(aes(x = value, fill = L2)) + geom_histogram(bins = 100, position = "dodge")
+```
+
