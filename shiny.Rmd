@@ -19,7 +19,9 @@ The links below lead to html slides.
 
 3. **Plots** (ggplot, gganimate, plotly): <a href="files/shiny/S3_plots.html" target="_blank">**slides**</a> and <a href="files/shiny/S3_exercises.html" target="_blank">**exercises**</a>
 
-4. **Shiny 1** (User Interface & Server dialog): <a href="files/shiny/S4_ui_server.html" target="_blank">**slides**</a> and <a href="files/shiny/S4_exercises.html" target="_blank">**exercises**</a>
+4. **Shiny 1** (User Interface & Server dialog): <a href="files/shiny/S4_ui_server.html" target="_blank">**slides**</a> and <a href="files/shiny/S4_exercises.html" target="_blank">**exercises**</a>. Most importantly: the <a href="files/shiny/steps4.zip" target="_blank">**examples**</a>.
+
+5. **Shiny 2** (User Interface layout): <a href="files/shiny/S5_Extensions.html" target="_blank">**slides**</a> and <a href="files/shiny/S5_exercises.nb.html" target="_blank">**exercises**</a>. Most importantly: the <a href="files/shiny/steps5.zip" target="_blank">**examples**</a>.
 
 ---------
 
