@@ -13,11 +13,13 @@ Sessions
 
 The links below lead to html slides.
 
-1. Introduction to R/RStudio and the tidyverse: <a href="files/shiny/S1_tidyverse.html" target="_blank">**slides**</a> and sample notebook in <a href="files/shiny/notebook_options.Rmd" target="_blank">**RMarkdown**</a> or in <a href="files/shiny/notebook_options.html" target="_blank">**html**</a>
+1. Introduction to **R/RStudio** and the **tidyverse** (tidying with tidyr, wrangling with dplyr): <a href="files/shiny/S1_tidyverse.html" target="_blank">**slides**</a> and sample notebook in <a href="files/shiny/notebook_options.Rmd" target="_blank">**RMarkdown**</a> or in <a href="files/shiny/notebook_options.html" target="_blank">**html**</a>
 
-2. Basic R instructions: <a href="files/shiny/S2_base.html" target="_blank">**slides**</a>, <a href="files/shiny/movies_script.Rmd" target="_blank">**sample notebook**</a> and <a href="files/shiny/Tidyverse_exercises_2.Rmd" target="_blank">**exercise notebook**</a>
+2. **Basic R instructions** (matrices, dataframes, indexing, data modes): <a href="files/shiny/S2_base.html" target="_blank">**slides**</a>, <a href="files/shiny/movies_script.Rmd" target="_blank">**sample notebook**</a> and <a href="files/shiny/Tidyverse_exercises_2.Rmd" target="_blank">**exercise notebook**</a>
 
-3. Plots: <a href="files/shiny/S3_plots.html" target="_blank">**slides**</a> and <a href="files/shiny/S3_exercises.html" target="_blank">**exercises**</a>
+3. **Plots** (ggplot, gganimate, plotly): <a href="files/shiny/S3_plots.html" target="_blank">**slides**</a> and <a href="files/shiny/S3_exercises.html" target="_blank">**exercises**</a>
+
+4. **Shiny 1** (User Interface & Server dialog): <a href="files/shiny/S4_ui_server.html" target="_blank">**slides**</a> and <a href="files/shiny/S4_exercises.html" target="_blank">**exercises**</a>
 
 ---------
 
