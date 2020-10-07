@@ -1,7 +1,7 @@
 <br/>  
 
 
-Coding dynamic dashboard applications (with R/Shiny)
+Coding dynamic dashboard applications (with R & Shiny)
 ================
 This page contains teaching material for a course on dynamic dashboards.
 
@@ -11,7 +11,7 @@ This page contains teaching material for a course on dynamic dashboards.
 Sessions
 ----
 
-The links below lead to html slides.
+The links below lead to html **slides** and course **material**.
 
 1. Introduction to **R/RStudio** and the **tidyverse** (tidying with tidyr, wrangling with dplyr): <a href="files/shiny/S1_tidyverse.html" target="_blank">**slides**</a> and sample notebook in <a href="files/shiny/notebook_options.Rmd" target="_blank">**RMarkdown**</a> or in <a href="files/shiny/notebook_options.html" target="_blank">**html**</a>
 
