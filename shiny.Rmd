@@ -37,6 +37,15 @@ Datasets
 
 The datasets used in the course: <a href="files/shiny/songs.RData" target="_blank">**songs**</a> and <a href="files/shiny/movies.RData" target="_blank">**movies**</a>.
 
+-----
+
+Resources
+----
+
+<a href="https://mastering-shiny.org" target="_blank">**Mastering shiny**</a>: Hadley Wickham's book.
+
+<a href="https://rstudio.github.io/shinydashboard/" target="_blank">**Shiny dashboard**</a>: the package's webpage.
+
 
 ------------------------------------------------------------------------
 
