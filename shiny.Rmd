@@ -44,7 +44,11 @@ Resources
 
 <a href="https://mastering-shiny.org" target="_blank">**Mastering shiny**</a>: Hadley Wickham's book.
 
+<a href="https://shiny.rstudio.com/tutorial/" target="_blank">**Shiny tutorials**</a>: efficient material (by RStudio).
+
 <a href="https://rstudio.github.io/shinydashboard/" target="_blank">**Shiny dashboard**</a>: the package's webpage.
+
+
 
 
 ------------------------------------------------------------------------
