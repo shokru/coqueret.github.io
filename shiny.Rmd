@@ -11,6 +11,8 @@ This page contains teaching material for a course on dynamic dashboards.
 Sessions
 ----
 
+<img src="files/shiny/ui_server_compact.png" style="width:23%; border:0px solid; margin-right: 20px" align="right">
+
 The links below lead to html slides.
 
 1. Introduction to **R/RStudio** and the **tidyverse** (tidying with tidyr, wrangling with dplyr): <a href="files/shiny/S1_tidyverse.html" target="_blank">**slides**</a> and sample notebook in <a href="files/shiny/notebook_options.Rmd" target="_blank">**RMarkdown**</a> or in <a href="files/shiny/notebook_options.html" target="_blank">**html**</a>
