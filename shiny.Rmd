@@ -34,7 +34,7 @@ The links below lead to html **slides** and course **material**.
 Datasets
 ----
 
-<img src="files/shiny/ui_server_compact.png" style="width:50%; border:0px solid; margin-right: 20px" align="right">
+<img src="files/shiny/ui_server_compact.png" style="width:55%; border:0px solid; margin-right: 20px" align="right">
 
 The datasets used in the course: <a href="files/shiny/songs.RData" target="_blank">**songs**</a>, <a href="files/shiny/movies.RData" target="_blank">**movies**</a> and <a href="files/shiny/olympics.RData" target="_blank">**olympics**</a>. Don't forget to locate them in the app/notebook directory.
 
