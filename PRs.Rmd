@@ -25,7 +25,7 @@ The source for the multiple analyses are the following:
     * value of <a href="files/PRs/constraints.nb.html" target="_blank">**economic constraints**</a>     
     * aggregate <a href="files/PRs/variance.nb.html" target="_blank">**variance forecasting**</a>   
 - Presentation <a href="files/PRs/slides.html" target="_blank"><strong>slides</strong></a>
-- <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank"><strong>Working paper</strong></a>   
+- Paper on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3709412" target="_blank"><strong>SSRN</strong></a>   
 
 **References**:   
 - Welch, I., & Goyal, A. (2008). A comprehensive look at the empirical performance of equity premium prediction. *Review of Financial Studies*, 21(4), 1455-1508.    
