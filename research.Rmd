@@ -19,6 +19,12 @@ Preorder on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Inves
 
 _____ 
 
+### Ongoing research
+<a href="http://www.gcoqueret.com/horizons.html" target="_blank">Persistence in factor-based supervised learning models</a>    
+<a href="http://www.gcoqueret.com/PRs.html" target="_blank">Predictive regressions: a machine learning perspective</a> (with R. Deguest)
+
+_____ 
+
 ### Published Academic Articles
 #### **FINANCE & ECONOMICS**
 
@@ -63,10 +69,6 @@ Ensemble learning applied to quant equity: gradient boosting in a multifactor fr
 
  
 
-_____ 
-
-### Ongoing research
-<a href="http://www.gcoqueret.com/horizons.html" target="_blank">Persistence in factor-based supervised learning models</a>
 
 _____ 
 
