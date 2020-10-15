@@ -68,7 +68,13 @@ _____
 Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment**, 2018 (with T. Guida)  
 
  
+_____ 
 
+
+### Book Review
+Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bilokon), **Quantitative Finance**, 2020  <a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1828609" target="_blank">[Link]</a>
+
+ 
 
 _____ 
 
@@ -85,7 +91,7 @@ _____
 
 ### Research presentations
 
-* Advances in asset pricing <a href="files/AAP/AAP.html" target="_blank">[html]</a>
+* Advances in asset pricing (2020) <a href="files/AAP/AAP.html" target="_blank">[html]</a>
 
 
 _____ 
