@@ -44,7 +44,7 @@ class: animated, fadeInRight
 
 # PRs: the traditional approach
 
-.font110[
+.font105[
 Given two processes `\(y_t\)` and `\(x_t\)`, we define as PR the following model:
 
 `$$y_{t+k} = a + b x_t + e_{t+k},$$`
@@ -55,14 +55,23 @@ where both `\(a\)` and `\(b\)` must be estimated (given some sample). We call `\
 ]
 
 ---
-# The ML question
+# The ML setting
 
-Once `\(b\)` has been estimated, the natural prediction for `\(y_{t+k}\)` is `\(\tilde{y}_{t+k} = \hat{a}+\hat{b}x_t\)` and the usual way to measure its **accuracy** is to compute the (out-of-sample) Mean Squared Error (MSE), or quadratic loss:
+Once `\((a,b)\)` has been estimated, the natural prediction for `\(y_{t+k}\)` is `\(\tilde{y}_{t+k} = \hat{a}+\hat{b}x_t\)` and the usual way to measure its **accuracy** is to compute the (out-of-sample) Mean Squared Error (MSE), or quadratic loss:
 
 `$$L = \mathbb{E}\left[(y_{t+k}-\tilde{y}_{t+k})^2\right].$$`
 
 Theoretically, this is a hard problem, because even in the simplest (**OLS**) case, the estimator `\(\hat{b}\)` has a pretty intractable expression:
 `$$\small \hat{b}=\frac{\sum_{s=0}^{T-1}(x_{t-k-s}-\bar{x})(y_{t-s}-\bar{y})}{\sum_{s=0}^{T-1}(x_{t-k-s}-\bar{x}^*)^2} \quad (\text{all terms are random})$$`
+
+---
+# The simple case
+
+If all parameters are **known**, then the loss is minimized by the **optimal slope**:
+`$$b_o=\frac{\text{cov}(x_t,y_{t+k})}{\text{var}(x_t)}=\rho_y^{k}\frac{\rho\sigma_x\sigma_y}{1-\rho_x\rho_y}\frac{1-\rho_x^2}{\sigma_x^2},$$`
+in which case `\(\small L_o=\frac{\sigma_y^2}{1-\rho_y^2}\,\left(1-\rho_y^{2k}\frac{\rho^2}{(1-\rho_x\rho_y)^2}(1-\rho_x^2)(1-\rho_y^2)\right)\)` and
+`$$R^2_o=\rho_y^{2k}\frac{\rho^2}{(1-\rho_x\rho_y)^2}(1-\rho_x^2)(1-\rho_y^2).$$`
+
 
 ---
 # The assumptions
@@ -77,6 +86,37 @@ y_{t+1} &amp;= \alpha_y + \rho_y y_t +e_{y,t+1},
 with constants `\(\alpha_x\)` and `\(\alpha_y\)`, autocorrelations `\(\rho_x\)` and `\(\rho_y\)` satisfying `\(|\rho_x|&lt;1\)` and `\(|\rho_y|&lt;1\)`, and **correlated Gaussian white noise processes** `\(e_{x}\)` and `\(e_{y}\)` with variances `\(\sigma_x^2\)` and `\(\sigma_y^2\)` and correlation `\(\rho\)` satisfying `\(|\rho|&lt;1\)`.
 
 These hypotheses are rather common in the literature.
+
+---
+# A few references on PRs
+
+In chronological order.
+.bib[
+.font80[
+- .bluep[**Stambaugh JFE 1999**]: sample estimates are biased when `\(x\)` is persistent   
+- .bluep[**Valkanov JFE 2003**]: long horizon estimates are skewed by construction (1/2)   
+- .bluep[**Amihud &amp; Hurvich JFQA 2004**]: extension to multivariate regressions (1/2)    
+- .bluep[**Campbell &amp; Yogo JFE 2006**]: efficient tests for inference (1/3)   
+- .bluep[**Boudoukh et al. RFS 2008**]: long horizon estimates are skewed by construction (2/2)     
+- .bluep[**Bandi et al. J. Econom 2019**]: predictability attains its peak around 12-15Y   
+- .bluep[**Jonhson RAPS 2019**]: efficient tests for inference (2/3)  
+- .bluep[**Andersen &amp; Varneskov J. Econom 2020**]: extension to multivariate regressions (2/2)  
+- .bluep[**Xu RFS 2020**]: efficient tests for inference (3/3)  
+]
+]
+
+
+---
+# Our research question
+
+.font120[**When is using the OLS estimator in predictive regressions a good idea?**] (i.e. when `\(R^2&gt;0\)`)
+
+The (complicated) answer depends on the **model parameters**:
+- *k*, the horizon of the forecast;   
+- *T*, the sample size;    
+- `\(\rho_x\)`, `\(\rho_y\)`: the autocorrelations;    
+- `\(\rho\)`: the (cross-)correlation in innovations.   
+- `\(\alpha_x\)`, `\(\alpha_y\)`, `\(\sigma_x^2\)`, `\(\sigma_y^2\)`... ?
 
 
 ---
@@ -98,7 +138,7 @@ class: inverse, center, middle, animated, fadeInRight
 ---
 # Simple facts
 
-The loss has the following properties:   
+The loss (mean squared error) has the following properties:   
 
 - it does not depend on the constants of the processes `\(\alpha_x\)` &amp; `\(\alpha_y\)`;   
 - it does not depend on the variance of innovations of `\(x\)`, `\(\sigma_x^2\)`;      
@@ -123,10 +163,10 @@ where `\(v_y\)` is a simple variance term related to `\(y_t\)`. The matrix `\(\b
 # Sensitivity: short term horizon ( `\(R^2\)` version)
 
    
-&lt;img src="sensi_k_01.svg" width="660px" style="display: block; margin: auto;" /&gt;
+&lt;img src="sensi_k_01.svg" width="680px" style="display: block; margin: auto;" /&gt;
 
 
-.font75[Big change for **high persistence** in *y* (right column).   
+.font70[Big change for **high persistence** in *y* (right column, `\(L_o\)` not the best!).   
 Persistence in *x* matters less.]
 
 
@@ -134,7 +174,7 @@ Persistence in *x* matters less.]
 
 
 ---
-# Sensitivity: short term horizon ( `\(R^2\)` version)
+# Sensitivity: long term horizon ( `\(R^2\)` version)
 
    
 &lt;img src="sensi_k_12.svg" width="700px" style="display: block; margin: auto;" /&gt;
@@ -156,7 +196,7 @@ Persistence in *x* matters less.]
 ---
 # The memory tradeoff (2/2)
 
-Illustration on the US **equity premium** (S&amp;P minus TBill).
+Illustration on the US **equity premium** (S&amp;P 500 minus TBill).
 
 &lt;img src="memory-trade_fit.svg" width="800px" style="display: block; margin: auto;" /&gt;
 
@@ -164,11 +204,11 @@ Illustration on the US **equity premium** (S&amp;P minus TBill).
 
 
 ---
-# Convergence
+# Convergence towards `\(b_o\)` and `\(R^2_o\)`
 
 As `\(T\)` increases, the loss/ `\(R^2\)` converges to some limiting value: it's the **theoretical optimum** (OLS)! Again, **persistence ** is key!
 
-&lt;img src="convergence.svg" width="800px" style="display: block; margin: auto;" /&gt;
+&lt;img src="convergence.svg" width="840px" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -191,7 +231,7 @@ class: inverse, center, middle, animated, fadeInRight
 
 We work on the *Welch &amp; Goyal* (2008) dataset (updated through Dec. 2019) + a temperature variable from *Novy-Marx* (2014).
 
-Predictors include aggregate **dividend-price** ratio, **book-to-market** ratio, **earnings-price** ratio, **stock variance**, etc. + sum variations thereof. We categorize them in 3 groups of **persistence** (low, medium, high).
+Predictors include aggregate **dividend-price** ratio, **book-to-market** ratio, **earnings-price** ratio, **stock variance**, etc. + some variations thereof. We categorize them in 3 groups of **persistence** (low, medium, high).
 
 The dependent variable is the US Equity premium, with **horizons** of 1, 3, 6, 12 and 24 months.
 
@@ -315,7 +355,7 @@ This is easier ( `\(R^2&gt;0\)`). Low samples work better.
 3. The best results are obtained for small k and high persistence (e.g.: short-term volatility).   
 4. If k is large, then the best hope is to reach the optimal loss, which is achieved with **very large samples**. 
 ]
-
+The paper's **webpage**: http://www.gcoqueret.com/PRs.html
 ---
 
 class: inverse, center, middle, animated, fadeInRight
