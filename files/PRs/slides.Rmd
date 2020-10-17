@@ -17,7 +17,7 @@ output:
         ratio: "16:9"
 ---
 
-
+<!-- xaringan::inf_mr() -->
 
 class: inverse, center, middle, animated, fadeInRight
 
@@ -50,7 +50,7 @@ where both $a$ and $b$ must be estimated (given some sample). We call $k$ the fo
 ---
 # The ML setting
 
-Once $(a,b)$ has been estimated, the natural prediction for $y_{t+k}$ is $\tilde{y}_{t+k} = \hat{a}+\hat{b}x_t$ and the usual way to measure its **accuracy** is to compute the (out-of-sample) Mean Squared Error (MSE), or quadratic loss:
+Once $(a,b)$ has been estimated, the natural prediction for $y_{t+k}$ is $\tilde{y}_{t+k} = \hat{a}+\hat{b}x_t$ and the usual way to measure its .bluep[**accuracy**] is to compute the (out-of-sample) .bluep[Mean Squared Error] (MSE), or quadratic loss:
 
 $$L = \mathbb{E}\left[(y_{t+k}-\tilde{y}_{t+k})^2\right].$$
 
@@ -60,11 +60,11 @@ $$\small \hat{b}=\frac{\sum_{s=0}^{T-1}(x_{t-k-s}-\bar{x})(y_{t-s}-\bar{y})}{\su
 ---
 # The simple case
 
-If all parameters are **known**, then the loss is minimized by the **optimal slope**:
+If all parameters are .bluep[**known**], then the loss is minimized by the **optimal slope**:
 $$b_o=\frac{\text{cov}(x_t,y_{t+k})}{\text{var}(x_t)}=\rho_y^{k}\frac{\rho\sigma_x\sigma_y}{1-\rho_x\rho_y}\frac{1-\rho_x^2}{\sigma_x^2},$$
 in which case $\small L_o=\frac{\sigma_y^2}{1-\rho_y^2}\,\left(1-\rho_y^{2k}\frac{\rho^2}{(1-\rho_x\rho_y)^2}(1-\rho_x^2)(1-\rho_y^2)\right)$ and
 $$R^2_o=\rho_y^{2k}\frac{\rho^2}{(1-\rho_x\rho_y)^2}(1-\rho_x^2)(1-\rho_y^2),$$
-which increases with $|\rho|$, and is always **nonnegative**.
+which increases with $|\rho|$, and is always .bluep[**nonnegative**].
 
 ---
 # The assumptions
@@ -78,7 +78,7 @@ y_{t+1} &= \alpha_y + \rho_y y_t +e_{y,t+1},
 \end{align}
 with constants $\alpha_x$ and $\alpha_y$, autocorrelations $\rho_x$ and $\rho_y$ satisfying $|\rho_x|<1$ and $|\rho_y|<1$, and **correlated Gaussian white noise processes** $e_{x}$ and $e_{y}$ with variances $\sigma_x^2$ and $\sigma_y^2$ and correlation $\rho$ satisfying $|\rho|<1$.
 
-These hypotheses are rather common in the literature.
+These hypotheses are .bluep[rather common] in the literature.
 
 ---
 # A few references on PRs
@@ -109,7 +109,7 @@ These hypotheses are rather common in the literature.
 
 .font120[**When is using the OLS estimator in predictive regressions a good idea?**] (i.e. when $R^2>0$)
 
-The (complicated) answer depends on the **model parameters**:
+The (complicated) answer depends on the .bluep[**model parameters**]:
 - *k*, the horizon of the forecast;   
 - *T*, the sample size;    
 - $\rho_x$, $\rho_y$: the autocorrelations;    
@@ -136,7 +136,7 @@ class: inverse, center, middle, animated, fadeInRight
 ---
 # Simple facts
 
-The loss (mean squared error) has the following properties:   
+The loss (mean squared error) has the following .bluep[**properties**]:   
 
 - it does not depend on the constants of the processes $\alpha_x$ & $\alpha_y$;   
 - it does not depend on $\sigma_x^2$, the variance of innovations of $x$;      
