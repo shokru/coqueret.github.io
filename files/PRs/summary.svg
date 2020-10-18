@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 482 227" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g transform="matrix(1,0,0,1,3.70182,-9.25391)">
+        <text x="2.555px" y="61.349px" style="font-family:'Avenir-Black', 'Avenir', sans-serif;font-weight:800;font-size:16px;">traditional</text>
+        <text x="2.555px" y="77.349px" style="font-family:'Avenir-Black', 'Avenir', sans-serif;font-weight:800;font-size:16px;">infer<tspan x="37.234px 46.419px " y="77.349px 77.349px ">en</tspan>ce</text>
+        <text x="2.555px" y="93.349px" style="font-family:'Avenir-Roman', 'Avenir', sans-serif;font-size:16px;">(many</text>
+        <text x="7.004px" y="109.349px" style="font-family:'Avenir-Roman', 'Avenir', sans-serif;font-size:16px;">papers)</text>
+    </g>
+    <g transform="matrix(1,0,0,1,3.70182,0.472656)">
+        <text x="2.555px" y="173.349px" style="font-family:'Avenir-Black', 'Avenir', sans-serif;font-weight:800;font-size:16px;">this</text>
+        <text x="2.555px" y="189.349px" style="font-family:'Avenir-Black', 'Avenir', sans-serif;font-weight:800;font-size:16px;">paper</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-6,0)">
+        <text x="122.989px" y="22.358px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:18px;">assumptions</text>
+        <text x="239.024px" y="22.358px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:18px;">on</text>
+        <text x="138.117px" y="55.038px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:18px;fill:rgb(25,90,170);">X,</text>
+        <text x="160.128px" y="55.038px" style="font-family:'Achilles';font-size:18px;fill:rgb(25,90,170);">e</text>
+        <text x="138.117px" y="73.038px" style="font-family:'Avenir-Book', 'Avenir';font-size:18px;fill:rgb(128,130,133);">+ for<tspan x="177.415px 192.752px " y="73.038px 73.038px ">m </tspan>of</text>
+        <text x="138.117px" y="91.198px" style="font-family:'Avenir-Book', 'Avenir';font-size:18px;fill:rgb(128,130,133);">estimator</text>
+        <text x="218.413px" y="91.198px" style="font-family:'Avenir-LightOblique', 'Avenir', sans-serif;font-weight:300;font-style:italic;font-size:18px;fill:rgb(128,130,133);">b</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-5.82856,0)">
+        <text x="135.554px" y="163.169px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:18px;fill:rgb(25,90,170);">y<tspan x="143.22px 148.222px " y="163.169px 163.169px ">, </tspan>X</text>
+        <text x="135.554px" y="181.169px" style="font-family:'Avenir-Book', 'Avenir';font-size:18px;fill:rgb(128,130,133);">+ for<tspan x="174.853px 190.189px " y="181.169px 181.169px ">m </tspan>of</text>
+        <text x="135.554px" y="199.329px" style="font-family:'Avenir-Book', 'Avenir';font-size:18px;fill:rgb(128,130,133);">estimator</text>
+        <text x="215.85px" y="199.329px" style="font-family:'Avenir-LightOblique', 'Avenir', sans-serif;font-weight:300;font-style:italic;font-size:18px;fill:rgb(128,130,133);">b</text>
+        <text x="165.578px" y="217.329px" style="font-family:'Avenir-Book', 'Avenir';font-size:18px;fill:rgb(128,130,133);">(OLS)</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-5,0.442146)">
+        <text x="286.514px" y="21.489px" style="font-family:'Arial-BoldMT', 'Arial', sans-serif;font-weight:700;font-size:18px;">results</text>
+        <text x="350.548px" y="21.489px" style="font-family:'ArialMT', 'Arial', sans-serif;font-size:18px;">on / properties of</text>
+        <text x="377.281px" y="77.899px" style="font-family:'Avenir-LightOblique', 'Avenir', sans-serif;font-weight:300;font-style:italic;font-size:30px;">b</text>
+        <text x="377.574px" y="183.819px" style="font-family:'Achilles';font-size:30px;">e</text>
+    </g>
+    <g transform="matrix(1,0,0,1,-4.60156,-1.38802)">
+        <path d="M217.824,78.075L221.965,75.298L226.276,77.885" style="fill:none;stroke:rgb(128,130,133);stroke-width:1px;"/>
+    </g>
+    <g transform="matrix(1.95181,0,0,1.95181,-50.6915,-100.215)">
+        <path d="M217.824,78.075L221.965,75.298L226.276,77.885" style="fill:none;stroke:rgb(35,31,32);stroke-width:0.51px;"/>
+    </g>
+    <g transform="matrix(1,0,0,1,-7.62804,107.506)">
+        <path d="M217.824,78.075L221.965,75.298L226.276,77.885" style="fill:none;stroke:rgb(128,130,133);stroke-width:1px;"/>
+    </g>
+</svg>

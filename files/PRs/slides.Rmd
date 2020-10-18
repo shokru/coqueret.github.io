@@ -66,6 +66,18 @@ in which case $\small L_o=\frac{\sigma_y^2}{1-\rho_y^2}\,\left(1-\rho_y^{2k}\fra
 $$R^2_o=\rho_y^{2k}\frac{\rho^2}{(1-\rho_x\rho_y)^2}(1-\rho_x^2)(1-\rho_y^2),$$
 which increases with $|\rho|$, and is always .bluep[**nonnegative**].
 
+
+---
+# But, in real life...
+
+.font110[Parameters are **unknown**!]
+
+
+$\rightarrow$ .font110[in practice, the easiest (most common) thing to do is to use the .bluep[**OLS estimator**]. It is the route we take.]    
+$\rightarrow$ .font110[however, it is far from obvious that this is an optimal choice.]   
+$\rightarrow$ .font110[in fact, extensive testing would show that it can lead to negative (out-of-sample)] $R^2$ !
+
+
 ---
 # The assumptions
 
@@ -103,11 +115,20 @@ These hypotheses are .bluep[rather common] in the literature.
 ]
 ]
 
+---
+# In short 
+
+    
+```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width="960px", fig.align='center'}
+knitr::include_graphics("summary.svg")
+```
+
+
 
 ---
 # Our research question
 
-.font120[**When is using the OLS estimator in predictive regressions a good idea?**] (i.e. when $R^2>0$)
+.font120[**When is it a good idea to use the OLS estimator in predictive regressions?**] (i.e. when is $R^2>0$?)
 
 The (complicated) answer depends on the .bluep[**model parameters**]:
 - *k*, the horizon of the forecast;   
@@ -143,7 +164,7 @@ The loss (mean squared error) has the following .bluep[**properties**]:
 - it is **proportional** to $\sigma_y^2$, the variance of innovations of $y$;    
 - it is **symmetric** in $\rho$, the correlation between the two innovation processes.
 
-Moreover, if means are known, $\rho=0$ and $\rho_x=\rho_y$, then we can show that short term forecasting is "easier", i.e., that
+Moreover, if means are known, $\rho=0$ and $\rho_x=\rho_y$, then we can show that **short term forecasting is more accurate**, i.e., that
 
 $$L(k+1) > L(k), \quad k \ge 1 .$$
 
@@ -158,7 +179,7 @@ where $v_y$ is a simple variance term related to $y_t$. The matrix $\boldsymbol{
 
 
 ---
-# Sensitivity: short term horizon ( $R^2$ version)
+# Sensitivity: 1 month horizon forecasting
 
    
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width="680px", fig.align='center'}
@@ -174,7 +195,7 @@ Persistence in *x* matters less.]
 
 
 ---
-# Sensitivity: long term horizon ( $R^2$ version)
+# Sensitivity: 12 month horizon forecasting
 
    
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width="700px", fig.align='center'}
