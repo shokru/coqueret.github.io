@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Supervised learning in Finance: an Overview</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Guillaume Coqueret" />
+    <link href="AII_files/remark-css/metropolis.css" rel="stylesheet" />
+    <link href="AII_files/remark-css/metropolis-fonts.css" rel="stylesheet" />
+    <link href="AII_files/remark-css/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="css/extra.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Supervised learning in Finance: an Overview
+### Guillaume Coqueret
+### .font80[<strong>AI Institute</strong> Presentation] 2020-10-19
+
+---
+
+
+&lt;!-- xaringan::inf_mr() --&gt;
+
+
+
+class: inverse, center, middle, animated, fadeInRight
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 32px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+# About
+
+---
+class: animated, fadeInRight
+
+
+# About - structure of the talk
+
+These slides take a partial hence biased tour across applications of AI in financial fields.    
+The presentation is split in two:
+
+- **overview by discipline** (credit scoring, fraud detection, asset management)*;   
+&lt;!-- - **focus on ML-guided investing**;  --&gt;
+- **required toolkit** (tips on where to focus &amp; what to learn) &amp; **illustrations**.
+
+
+
+*.font90[.grey[AI is also pervasive in fields related to finance (chatbots, clustering for CRM, etc. - for banks, insurances companies, funds).]]
+
+---
+
+class: inverse, center, middle, animated, fadeInRight
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 32px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+# Thematic overview: Credit Scoring
+
+---
+# ML for credit scoring: introduction
+
+.font90[The **context**: you are a financial institution and you want (need?) to lend money to an **individual** or a **company**.]
+
+.font90[The traditional method is to study the .red[**profile**] of the entity asking for the loan and to devise a procedure that determines the conditions (usually the **rate** - though it can be much more complicated)]
+
+.font90[The important word is .red[**profile**]. Why? Because this is where the data is.]   
+
+* .font80[For **individuals**: age, salary, wealth, other loans, default history, FICO score, etc.]   
+* .font80[For **companies**: all accounting data (revenue, debt, financial ratios, etc.)]
+
+
+
+
+---
+# ML for credit scoring: data
+
+The **idea**: process this data automatically to determine some key feature of the loan (ex: the rate).
+.font80[**Ex:** www.kaggle.com/c/GiveMeSomeCredit .grey[(**warning**: need to log to access data)]]
+
+.font80[**Sample criteria**:
+- Person experienced 90 days past due delinquency or worse   
+- Total balance on credit cards and personal lines of credit except real estate    
+- Age of borrower in years    
+- Number of times borrower has been 30-59 days past due but no worse in the last 2 years    
+- Monthly debt payments, alimony, living costs divided by monthy gross income   
+- Monthly income   
+- Number of times borrower has been 90 days or more past due
+]
+
+---
+# ML for credit scoring: data
+
+Roughly ~100K lines (not yet in big data territory!)
+
+&lt;img src="cred_score.png" width="770" style="display: block; margin: auto;" /&gt;
+
+.font90[=&gt; translate all of this in a **probability of default** (or other metric)!]
+
+
+---
+# ML for credit scoring: process
+
+
+&lt;img src="credit.png" width="770" style="display: block; margin: auto;" /&gt;
+
+=&gt; translate all of this in a **probability of default** (or other metric)!
+
+
+---
+# ML for credit scoring: issues &amp; challenges
+
+- **bias**: a major point of criticism comes from the possible unwanted (and unknown) biases that result from algorithmic recommendation. What if gender or race play a role when we would not want them to? .font90[.grey[Related example: Apple Pay gender scandal on credit limits.]]    
+- **interpretability** &amp; **explainability**: the black-boxing of the decision process is .red[scary]. An important question is: why did the algorithm take this decision? (e.g., what are the key criteria?) Luckily, more tools are available that "white-box" the results so that lay people can understand the groundings of ML outcomes. =&gt; ML must remain a decision **tool**, not a decision agent.
+
+
+
+---
+
+class: inverse, center, middle, animated, fadeInRight
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 32px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+# Thematic overview: Fraud Detection
+
+---
+# ML for fraud detection: introduction
+
+.font110[There are (at least) two types of financial frauds:]
+
+- Pretty obvious (&amp; common): you are a bank &amp; facing risk of fraudulent use of **credit cards** or **hacking**. This makes your customers unhappy 😡. So you try to fight against that.    
+- Less common: **reporting fraud**. Voluntarily or not, firms produce accounting/admin documents with errors. This is bad too, for other reasons. 
+
+
+---
+# ML for transaction fraud detection
+
+.font80[.grey[Kaggle also features these kinds of tasks:     
+https://www.kaggle.com/mlg-ulb/creditcardfraud
+]]
+
+
+.column[.font70[
+
+Again, the principle is the same: rely on **data**!    
+Each transaction has characteristics:     
+- **client info** (age, education, account balance, location, recent transaction history, etc.),   
+- **transaction type** (credit card, online purchase, etc.),    
+- **transation location** (obvious!),    
+- **transaction amount**,    
+- etc.
+
+]
+]
+
+.pull.right[ 
+&lt;img src="fraud.png" width="320" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+
+
+---
+# ML for reporting fraud detection
+
+In this case, the approach is slightly different.
+
+Of course, it is always possible to use .grey[past data] (i.e., previous reports) for comparison purposes.
+
+One other solution is to resort to **textual analysis** (simple text mining (like number frequencies), or more elaborate Natural Language Processing tools).
+
+
+---
+# Issues
+
+.font120[
+**Fewer ethical concerns** - because fighting against fraud seems .bluep[legit]!
+
+**Technical obstacles**: highly unbalanced data! Very few frauds overall, this makes them hard to spot. The interesting parts of datasets are highly concentrated.
+]
+
+
+---
+
+class: inverse, center, middle, animated, fadeInRight
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 32px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+# Thematic overview: Does AI help make money?
+
+---
+class: animated, fadeInRight
+
+# The big picture
+
+Nowadays, we have access to **lots** of information. Some is public, much is private.   
+
+Data is a **business** (=&gt; ex: data providers like Bloomberg or Thomson Reuters).    
+
+So again: is it possible to take advantage of large amounts of data &amp; make money out of it?
+
+Fama (2013 Nobel Prize recipient) says: nope because all information is already priced in the market. .red[The market is impossible to beat!]
+
+
+---
+# .font90[Data: what are we talking about? The playing field]
+
+.font110[
+- **firm-specific** traditional data: accounting ratios, price patterns, risk measurements, etc.     
+- **firm-specific** alternative data: sentiment (computed in real time via NLP / social media)  
+- **asset-specific** high frequency data (equities, FX, futures, cryptocurrencies)   
+- **macro-economic now-casting**: forecasting aggregate quantities before they are released (ex: credit card log analysis, satellite imagery)   
+]
+
+Some details in my book: www.mlfactor.com
+
+---
+# People like complexity
+
+&lt;img src="ml.png" width="990" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Issues
+
+.font140[
+- making money? .bluep[**ESG**] investing? Using ML towards .bluep[sustainable] finance?   
+- **time-varying** environments.    
+- backtest .red[**overfitting**].   
+- trust: again, people don't blindly give money to **black boxes**.
+
+]
+
+---
+
+class: inverse, center, middle, animated, fadeInRight
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 32px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+# Which skillset?
+
+---
+class: animated, fadeInRight
+
+# Domain expertise vs data science dichotomy
+
+Often, people view machine learning like a **philosopher's stone**: whatever is touched by it turns in gold.
+**Why**? Because **sophistication** impresses.
+
+But this is incredibly .red[**wrong**]. Give the best ML engineer in the world a problem he knows nothing about, and nothing magical will happen.
+
+**Expertise** in a domain is required to reach great results. Data science alone does not suffice.
+
+---
+# About sophistication
+
+.font110[
+It's only valuable if it makes **sense**.   
+
+In machine learning, people learn from the .bluep[**past**] to predict the .bluep[**future**].
+
+But of course, it's ** very very hard** to find out which part of the past (if any) is representative of the future.  
+
+Technically, ML is only useful when the testing set is "*close*" to the training set.
+]
+
+---
+# What is the minimum requirement?
+
+.font100[
+**Level 0**: simple stats .font90[(distributions)], Excel   
+**Level 1**: advanced stats .font90[(regression)], simple use R/Python, dataviz   
+**Level 2**: good notions in optim., penalized reg., simple NN, tree methods, intermediate R/Python   
+**Level 3**: Bayesian stats, causality, deep learning, adv. trees, simple NLP, interpretability   
+**Level 4**: Adv. NLP, production of ML pipeline, models trained on GPU/TPU 
+]
+.font90[More importantly: **practice** &amp; **communicate** (ex: on Kaggle competitions)]
+
+---
+# Programming libraries
+
+&lt;img src="libraries.svg" width="990px" style="display: block; margin: auto;" /&gt;
+
+`\(+\)` many **domain specific** packages! .font80[.grey[(sorry, Julia &amp; Matlab)]]   
+But again: coding blindly will only get you so far...
+
+
+
+
+---
+# AI &amp; asset management: illustration
+**Trees** are great for visualization. Below, we explain returns.    
+&lt;img src="trees.png" width="530px" style="display: block; margin: auto;" /&gt;
+
+.font70[The **best models** (random forests &amp; boosted trees) **aggregate** many trees (ensembles).]
+
+
+
+---
+# Credit scoring: a visual example
+
+Take the **credit scoring** database. We seek to explain the probability of default by customers' characteristics.  
+
+&lt;img src="AII_files/figure-html/unnamed-chunk-7-1.png" width="600px" height="490px" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Credit scoring: interpretability with breakdown
+
+&lt;img src="AII_files/figure-html/unnamed-chunk-8-1.png" width="600px" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+class: inverse, center, middle, animated, fadeInRight
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+    font-size: 32px;
+    padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+# Thank you for your attention!
+
+
+---
+
+# Q&amp;A
+  &lt;br&gt; &lt;br&gt; &lt;br&gt;
+.font180[  What are your questions? ]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
