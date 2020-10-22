@@ -58,6 +58,21 @@ Theoretically, this is a hard problem, because even in the simplest (**OLS**) ca
 $$\small \hat{b}=\frac{\sum_{s=0}^{T-1}(x_{t-k-s}-\bar{x})(y_{t-s}-\bar{y})}{\sum_{s=0}^{T-1}(x_{t-k-s}-\bar{x})^2} \quad (\text{all terms are random})$$
 
 ---
+# The assumptions
+
+In the paper, we assume that both $x$ and $y$ are **AR**(1) **processes**:
+\begin{align}
+x_{t+1} &= \alpha_x + \rho_x x_t +e_{x,t+1},
+\label{eq:ar_x}\\
+y_{t+1} &= \alpha_y + \rho_y y_t +e_{y,t+1},
+\label{eq:ar_y}     
+\end{align}
+with constants $\alpha_x$ and $\alpha_y$, autocorrelations $\rho_x$ and $\rho_y$ satisfying $|\rho_x|<1$ and $|\rho_y|<1$, and **correlated Gaussian white noise processes** $e_{x}$ and $e_{y}$ with variances $\sigma_x^2$ and $\sigma_y^2$ and correlation $\rho$ satisfying $|\rho|<1$.
+
+These hypotheses are .bluep[rather common] in the literature.
+
+
+---
 # The simple case
 
 If all parameters are .bluep[**known**], then the loss is minimized by the **optimal slope**:
@@ -78,19 +93,6 @@ $\rightarrow$ .font110[however, it is far from obvious that this is an optimal c
 $\rightarrow$ .font110[in fact, extensive testing would show that it can lead to negative (out-of-sample)] $R^2$ !
 
 
----
-# The assumptions
-
-In the paper, we assume that both $x$ and $y$ are **AR**(1) **processes**:
-\begin{align}
-x_{t+1} &= \alpha_x + \rho_x x_t +e_{x,t+1},
-\label{eq:ar_x}\\
-y_{t+1} &= \alpha_y + \rho_y y_t +e_{y,t+1},
-\label{eq:ar_y}     
-\end{align}
-with constants $\alpha_x$ and $\alpha_y$, autocorrelations $\rho_x$ and $\rho_y$ satisfying $|\rho_x|<1$ and $|\rho_y|<1$, and **correlated Gaussian white noise processes** $e_{x}$ and $e_{y}$ with variances $\sigma_x^2$ and $\sigma_y^2$ and correlation $\rho$ satisfying $|\rho|<1$.
-
-These hypotheses are .bluep[rather common] in the literature.
 
 ---
 # A few references on PRs
@@ -334,12 +336,14 @@ knitr::include_graphics("variance.svg")
 ---
 # Conclusion
 
-.font110[
+.font100[
 1. The OOS **accuracy** of predictive regressions depends on some key parameters.    
 2. The most important are sample size (T), forecasting horizon (k), and persistence of the dependent variable).   
 3. The best results are obtained for small k and high persistence (e.g.: short-term volatility).   
 4. If k is large, then the best hope is to reach the optimal loss, which is achieved with **very large samples**. 
 ]
+     
+=> Future research: what about more complex models?     
 The paper's **webpage**: http://www.gcoqueret.com/PRs.html
 ---
 
