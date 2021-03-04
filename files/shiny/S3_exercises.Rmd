@@ -35,7 +35,7 @@ Finally, you need set **YOUR** working directory and load the datasets.
 You can do that directly in the files pane in RStudio (e.g., click on the blue wheel!).
 
 ```{r load}
-setwd("~/Documents/IT/COURS/2021/R4DS/S3_plots")  # That works only for me!!!
+# setwd("~/Documents/IT/COURS/2021/R4DS/S3_plots")  # That works only for me!!!
 load("movies.RData")
 load("songs.RData")
 ```
@@ -57,7 +57,7 @@ load("songs.RData")
 4. 
 a) Filter the data to keep only songs from Lady Gaga, Drake and Kanye West.   
 b) Use geom_point to show the relationship between *speechiness* and *energy* and use color for artists.
-c) Use geom_smooth to detect the local patterns. If possible plot one line for each artist.
+c) Use geom_smooth to detect the local patterns. 
 
            
 5. **Impact of energy & valence on top popular songs**.
@@ -89,7 +89,7 @@ d) Plot the values via geom_col() and facet_grid(). You can pick a color for eac
 5. 
 a) Filter the data to keep only films from Steven Spielberg, Woody Allen and Clint Eastwood.   
 b) Use geom_point to show the relationship between *budget* and *imdb_score* and use color for director.
-c) Use geom_smooth to detect the local patterns. If possible plot one line for each director.
+c) Use geom_smooth to detect the local patterns. 
 
 6. **Impact of nb_voters & earnings/budget on best rated films**.
 a) Filter movies with imdb_score above 5.5.
