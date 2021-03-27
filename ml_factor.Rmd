@@ -15,21 +15,21 @@ Sessions
 
 The links below lead to **html** notebooks. The original **Rmd** files can be downloaded hereafter.
 
-1.  <a href="files/S1_Foundations.nb.html" target="_blank">**Economic foundations**</a>: asset pricing anomalies, characteristics-based investing.
+1.  <a href="files/ML_course/S1_Foundations.nb.html" target="_blank">**Economic foundations**</a>: asset pricing anomalies, characteristics-based investing.
 
-2.  <a href="files/S2_Portfolio.nb.html" target="_blank">**Portfolio strategies**</a>: portfolio backtesting framework.
+2.  <a href="files/ML_course/S2_Portfolio.nb.html" target="_blank">**Portfolio strategies**</a>: portfolio backtesting framework.
 
-3.  <a href="files/S3_Lasso.nb.html" target="_blank">**LASSO & Sparse portfolios**</a>: penalised regressions for minimumn variance portfolios and for robust predictive forecasts.
+3.  <a href="files/ML_course/S3_Lasso.nb.html" target="_blank">**LASSO & Sparse portfolios**</a>: penalised regressions for minimumn variance portfolios and for robust predictive forecasts.
 
-4.  <a href="files/S4_Data.nb.html" target="_blank">**Data preparation**</a>: Feature engineering and labelling with a focus on categorical data.
+4.  <a href="files/ML_course/S4_Data.nb.html" target="_blank">**Data preparation**</a>: Feature engineering and labelling with a focus on categorical data.
 
-5.  <a href="files/S5_Trees.nb.html" target="_blank">**Decision trees**</a>: Simple trees, random forests and boosted trees.
+5.  <a href="files/ML_course/S5_Trees.nb.html" target="_blank">**Decision trees**</a>: Simple trees, random forests and boosted trees.
 
-6.  <a href="files/S6_NN.nb.html" target="_blank">**Neural networks**</a>: Multilayer perceptron and recurrent networks (**G**ated **R**ecurrent **U**nits). 
+6.  <a href="files/ML_course/S6_NN.nb.html" target="_blank">**Neural networks**</a>: Multilayer perceptron and recurrent networks (**G**ated **R**ecurrent **U**nits). 
 
-7.  <a href="files/S7_Validation.nb.html" target="_blank">**Validating & tuning**</a>: performance metrics and hyper-parameter adjustment. 
+7.  <a href="files/ML_course/S7_Validation.nb.html" target="_blank">**Validating & tuning**</a>: performance metrics and hyper-parameter adjustment. 
 
-8.  <a href="files/S8_Extensions.nb.html" target="_blank">**Extensions**</a> : SVMs, ensemble learning, interpretability and deflated Sharpe ratios. 
+8.  <a href="files/ML_course/S8_Extensions.nb.html" target="_blank">**Extensions**</a> : SVMs, ensemble learning, interpretability and deflated Sharpe ratios. 
 
 
  
@@ -40,14 +40,15 @@ The links below lead to **html** notebooks. The original **Rmd** files can be do
 Material
 ----------
 
-Datasets (in R format):  
+Datasets (in R format - they end in February 2021):  
 
-- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data.RData" target="_blank">**Base**</a>: 30 firms, 6 features;  
-- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_full.RData" target="_blank">**Large**</a>: 200+ firms, 10 features;   
+- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ML_course/data.RData" target="_blank">**Base** (small)</a>: 30 firms, 7 features, year 2000 onwards;  
+- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_full.RData" target="_blank">**Large**</a>: 900+ firms, 5 features, year 1995 onwards;  
+- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_esg.RData" target="_blank">**ESG**</a>: 380+ firms, 6 features, year 2014 onwards.
 
-
+<!--
 <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ml_factor.zip" target="_blank">**All code**</a>: Rmd files + data.  
-
+-->
 
 ------------------------------------------------------------------------
 
