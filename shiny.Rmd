@@ -21,13 +21,13 @@ The links below lead to html **slides** and course **material**.
 
 4. **Shiny 1** (User Interface & Server dialog): <a href="files/shiny/S4_ui_server.html" target="_blank">**slides**</a> and <a href="files/shiny/S4_exercises.html" target="_blank">**exercises**</a>. More importantly: the <a href="files/shiny/steps4.zip" target="_blank">**examples**</a>.
 
-5. **Shiny 2** (User Interface layout): <a href="files/shiny/S5_Extensions.html" target="_blank">**slides**</a> and <a href="files/shiny/S5_exercises.html" target="_blank">**exercises**</a>. More importantly: the <a href="files/shiny/steps5.zip" target="_blank">**examples**</a>.
+5. **Shiny 2** (User Interface layout): <a href="files/shiny/S5_UI_layout.html" target="_blank">**slides**</a> and <a href="files/shiny/S5_exercises.html" target="_blank">**exercises**</a>. More importantly: the <a href="files/shiny/steps5.zip" target="_blank">**examples**</a>.
 
 6. **Shiny 3** (Further options & deployment): <a href="files/shiny/S6_deploy.html" target="_blank">**slides**</a> and more importantly: the <a href="files/shiny/steps6.zip" target="_blank">**examples**</a>.  
 
-7. **Geocomputing, Twitter data & simple text mining**: <a href="files/shiny/geocomputing.nb.html" target="_blank">**notebook for maps**</a> and <a href="files/shiny/APIs.nb.html" target="_blank">**notebook for Twitter text analysis**</a>.
+7. **Geocomputing, Twitter data & simple text mining**: <a href="files/shiny/geocomputing.nb.html" target="_blank">**notebook for maps**</a> and <a href="files/shiny/Twitter_text.nb.html" target="_blank">**notebook for Twitter text analysis**</a>.
 
-8. **Modelling** & **case study**:
+8. **Modelling** & **case study**: <a href="files/shiny/S8.zip" target="_blank">**all files (zipped)**</a>.
 
 ---------
 
