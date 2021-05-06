@@ -15,11 +15,11 @@ Sessions
 
 The links below lead to **html** notebooks. The original **Rmd** files can be downloaded hereafter.
 
-1.  <a href="files/ML_course/S1_Foundations.nb.html" target="_blank">**Economic foundations**</a>: asset pricing anomalies, characteristics-based investing.
+1.  **Economic foundations**: asset pricing anomalies, characteristics-based investing; <a href="files/ML_course/S1_Foundations.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S1_Foundations.pdf" target="_blank">**slides**</a>
 
-2.  <a href="files/ML_course/S2_Portfolio.nb.html" target="_blank">**Portfolio strategies**</a>: portfolio backtesting framework.
+2.  **Portfolio strategies**: portfolio back-testing framework; <a href="files/ML_course/S2_Portfolio.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S2_Portfolio.pdf" target="_blank">**slides**</a>
 
-3.  <a href="files/ML_course/S3_Lasso.nb.html" target="_blank">**LASSO & Sparse portfolios**</a>: penalised regressions for minimumn variance portfolios and for robust predictive forecasts.
+3.  **Penalized regressions & sparse portfolios**: penalised regressions for minimumn variance portfolios and for robust predictive forecasts; <a href="files/ML_course/S3_Lasso.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S3_LASSO.pdf" target="_blank">**slides**</a>
 
 4.  <a href="files/ML_course/S4_Data.nb.html" target="_blank">**Data preparation**</a>: Feature engineering and labelling with a focus on categorical data.
 
