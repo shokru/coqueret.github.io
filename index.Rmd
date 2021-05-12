@@ -13,7 +13,7 @@
 
 <img src="images/gcoq.jpg" style="width:23%; border:0px solid; margin-right: 20px" align="right">
 
-I am an associate professor of Finance & Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly). Some of my recent work focuses on **supervised learning** and **sustainable equity investing**. 
+I am an associate professor of Finance & Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly). Some of my recent work focuses on **supervised learning** and on **sustainable equity investing**. 
 
 ------  
 
@@ -55,4 +55,4 @@ coqueret/at/em-lyon.com
 
 
 ------  
-Updated in March 2021
+Updated in May 2021
