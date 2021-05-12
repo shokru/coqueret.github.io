@@ -9,7 +9,11 @@ description: "Research projects of Guillaume Coqueret"
 <br/>  
 
 
-### Book
+### Books
+
+#### **Perspectives in ESG equity investing**
+CRC / Chapman Hall - expected end of 2021  
+
 #### **Machine learning for factor investing** (with T. Guida)
 CRC / Chapman Hall, September 2020   
 Order on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon (US)</a>
@@ -24,7 +28,9 @@ _____
 <a href="http://www.gcoqueret.com/horizons.html" target="_blank">Persistence in factor-based supervised learning models</a>   
 <a href="http://www.gcoqueret.com/PRs.html" target="_blank">Predictive regressions: a machine learning perspective</a> (with R. Deguest)   
 Dirichlet policies for reinforced factor portfolios: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a> (with E. André)   
-Recent perspectives in sustainable equity investing: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>
+Recent perspectives in sustainable equity investing: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>   
+Tuning trend following strategies with macro ESG data: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3842029" target="_blank">SSRN</a> (with C. Morgenstern & J. Kelly)    
+Distribution shifts in predictive panels (with Bertrand Tavin): <a href=http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>  
 
 
 _____ 
