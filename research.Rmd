@@ -30,7 +30,7 @@ _____
 Dirichlet policies for reinforced factor portfolios: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a> (with E. André)   
 Recent perspectives in sustainable equity investing: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>   
 Tuning trend following strategies with macro ESG data: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3842029" target="_blank">SSRN</a> (with C. Morgenstern & J. Kelly)    
-Distribution shifts in predictive panels (with Bertrand Tavin): <a href=http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>  
+Distribution shifts in predictive panels (with Bertrand Tavin): <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>  
 
 
 _____ 
