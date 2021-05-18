@@ -5,15 +5,13 @@ Supervised learning for factor investing
 ================
 This page contains teaching material (**R** code) for **introductory** courses on supervised learning applied to factor investing.   
 
-$\rightarrow$ The slides are available upon request.
-
 ------------------------------------------------------------------------
 
 
 Sessions
 ----
 
-The links below lead to **html** notebooks. The original **Rmd** files can be downloaded hereafter.
+The links below lead to **html** notebooks and **pdf** slides. The original **Rmd** files can be downloaded hereafter.
 
 1.  **Economic foundations**: asset pricing anomalies, characteristics-based investing; <a href="files/ML_course/S1_Foundations.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S1_Foundations.pdf" target="_blank">**slides**</a>
 
@@ -21,15 +19,15 @@ The links below lead to **html** notebooks. The original **Rmd** files can be do
 
 3.  **Penalized regressions & sparse portfolios**: penalised regressions for minimumn variance portfolios and for robust predictive forecasts; <a href="files/ML_course/S3_Lasso.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S3_LASSO.pdf" target="_blank">**slides**</a>
 
-4.  **Data preparation**: Feature engineering and labelling with a focus on categorical data; <a href="files/ML_course/S4_Data.nb.html" target="_blank">**notebook**</a> - 
+4.  **Data preparation**: Feature engineering and labelling with a focus on categorical data; <a href="files/ML_course/S4_Data.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S4_Data.pdf" target="_blank">**slides**</a>
 
-5.  **Decision trees**: Simple trees, random forests and boosted trees; <a href="files/ML_course/S5_Trees.nb.html" target="_blank">**notebook**</a> -  
+5.  **Decision trees**: Simple trees, random forests and boosted trees; <a href="files/ML_course/S5_Trees.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S5_Trees.pdf" target="_blank">**slides**</a> 
 
-6.  **Neural networks**: Multilayer perceptron and recurrent networks (**G**ated **R**ecurrent **U**nits); <a href="files/ML_course/S6_NN.nb.html" target="_blank">**notebook**</a> -    
+6.  **Neural networks**: Multilayer perceptron and recurrent networks (**G**ated **R**ecurrent **U**nits); <a href="files/ML_course/S6_NN.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S6_NN.pdf" target="_blank">**slides**</a>   
 
-7.  **Validating & tuning**: Performance metrics and hyper-parameter adjustment; <a href="files/ML_course/S7_Validation.nb.html" target="_blank">**notebook**</a> - 
+7.  **Validating & tuning**: Performance metrics and hyper-parameter adjustment; <a href="files/ML_course/S7_Validation.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S7_Tuning.pdf" target="_blank">**slides**</a>
 
-8.  **Extensions**: SVMs, ensemble learning, interpretability and deflated Sharpe ratios; <a href="files/ML_course/S8_Extensions.nb.html" target="_blank">**notebook**</a> - 
+8.  **Extensions**: SVMs, ensemble learning, interpretability and deflated Sharpe ratios; <a href="files/ML_course/S8_Extensions.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S8_Extensions" target="_blank">**slides**</a>
 
 
  
