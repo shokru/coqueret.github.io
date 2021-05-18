@@ -27,7 +27,7 @@ The links below lead to **html** notebooks and **pdf** slides. The original **Rm
 
 7.  **Validating & tuning**: Performance metrics and hyper-parameter adjustment; <a href="files/ML_course/S7_Validation.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S7_Tuning.pdf" target="_blank">**slides**</a>
 
-8.  **Extensions**: SVMs, ensemble learning, interpretability and deflated Sharpe ratios; <a href="files/ML_course/S8_Extensions.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S8_Extensions" target="_blank">**slides**</a>
+8.  **Extensions**: SVMs, ensemble learning, interpretability and deflated Sharpe ratios; <a href="files/ML_course/S8_Extensions.nb.html" target="_blank">**notebook**</a> - <a href="files/ML_course/S8_Extensions.pdf" target="_blank">**slides**</a>
 
 
  
