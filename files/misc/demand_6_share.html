@@ -253,13 +253,14 @@ body{
 font-size: 10pt;
 }
 </style>
-<p>This notebook presents the code used for the paper“<em>Characteristics-driven returns in equilibrium</em>”.<br />
-The <strong>dataset</strong>, with anonymized tickers, is available upon request.</p>
+<p>This notebook presents the code used for the paper <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3924893">“<em>Characteristics-driven returns in equilibrium</em>”</a>.<br />
+Only the strict minimum of material is provided.<br />
+The <strong>dataset</strong>, with anonymized firm identifiers, is available <a href="https://drive.google.com/file/d/1n29qmIFHXMtJ4OVS-OsdHt5224j8tptP/view?usp=sharing">here</a>.</p>
 <div id="setup" class="section level1" number="1">
 <h1 number="1"><span class="header-section-number">1</span> Setup</h1>
 <p>First, we load packages &amp; import the data.<br />
 The comments, preceded by hashtags # allow to change the <strong>set of characteristics</strong> (e.g., from 3 to 6).<br />
-Below, we work with 6 characteristics, so the results will differ from those of the paper.</p>
+Below, we work with 6 characteristics, so the results will slightly differ from the original ones in the paper.</p>
 <pre class="r"><code>library(tidyverse)                                      # Data wrangling package
 library(lubridate)                                      # Date management
 library(ggallin)                                        # Addin to ggplot for negative log scales
@@ -277,7 +278,7 @@ D_features &lt;- c(&quot;D_Mkt_Cap&quot;, &quot;D_P2B&quot;, &quot;D_Mom&quot;, 
 <div id="initialization-of-variables" class="section level1" number="2">
 <h1 number="2"><span class="header-section-number">2</span> Initialization of variables</h1>
 <p>Below, we create the objects in which we will store some results.<br />
-Also, we fix the sample size of rolling windows used throughout the notebook! This is a critical choice.</p>
+Also, we fix the <strong>sample size</strong> of rolling windows used throughout the notebook! This is a critical choice.</p>
 <pre class="r"><code>sample &lt;- 60                                                                       # Sample size (in months)
 dates_oos &lt;- dates[sample:length(dates)]                                           # Out-of-sample dates
 coefs_1 &lt;- matrix(nrow = length(dates_oos) - 1, ncol = 2 * length(features) + 1)   # Initialize coefficients
@@ -299,7 +300,7 @@ avg_fe &lt;- matrix(0, ncol = length(features), nrow = length(dates_oos) - 1)</c
 <p>The code loops on the dates.<br />
 We could make do without a loop via the <strong>pmap</strong>() function.<br />
 But the complexity of the output is a bit deterring (this would generate a complex list).</p>
-<p><strong>NOTE</strong>: the inelegant code can take some time to run (5-30 minutes depending on the computer).</p>
+<p><strong>NOTE</strong>: the heavy code can take some time to run (5-30 minutes depending on the computer).</p>
 <p>We define a custom function below that calculates weighted average indicators for sorted portfolios.</p>
 <pre class="r"><code>sorted_metric &lt;- function(data, var, metric){ 
   # This function computes the average metric of sorted portfolios for a given sample &amp; char
