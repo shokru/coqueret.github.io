@@ -79,8 +79,8 @@ _____
 
 
 ### Book Chapters
-Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)  
-Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2022, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)
+- Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)    
+- Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2022, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)
  
 _____ 
 
