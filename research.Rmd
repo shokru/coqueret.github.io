@@ -12,7 +12,9 @@ description: "Research projects of Guillaume Coqueret"
 ### Books
 
 #### **Perspectives in ESG equity investing**
-CRC / Chapman Hall - expected end of 2021  
+CRC / Chapman Hall - expected end of 2021   
+**Website**: http://www.esgperspectives.com  
+Early working paper version on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>
 
 #### **Machine learning for factor investing** (with T. Guida)
 CRC / Chapman Hall, September 2020   
@@ -25,13 +27,10 @@ or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathem
 _____ 
 
 ### Ongoing research
-<a href="http://www.gcoqueret.com/horizons.html" target="_blank">Persistence in factor-based supervised learning models</a>   
 <a href="http://www.gcoqueret.com/PRs.html" target="_blank">Spurious accuracy in predictive regressions</a> (with R. Deguest)      
 Dirichlet policies for reinforced factor portfolios (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
-Recent perspectives in sustainable equity investing: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>    
-Tuning trend following strategies with macro ESG data (with C. Morgenstern & J. Kelly): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3842029" target="_blank">SSRN</a>     
-Distribution shifts in predictive panels (with B. Tavin): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>  
-
+Distribution shifts in predictive panels (with B. Tavin): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>     
+Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3924893" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">Sample notebook</a>  
 
 _____ 
 
@@ -49,6 +48,7 @@ _____
 
 #### **DATA SCIENCE, PROBABILITY & STATISTICS**
 
+* Persistence in factor-based supervised learning models <br/>  **Journal of Finance & Data Science**, Forthcoming (2021) <a href="http://www.gcoqueret.com/horizons.html" target="_blank">material</a>   
 * Training trees on tails with applications to portfolio choice, <br/>   **Annals of Operations Research**, Vol. 288 (2020), pp. 181-221 (with T. Guida) <a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank">[Working paper]</a> 
 <a href="http://www.gcoqueret.com/tot.html" target="_blank">[Material]</a>
 * Approximate NORTA simulations for virtual sample generation, <br/>   **Expert Systems With Applications**, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
@@ -68,15 +68,16 @@ _____
 
 ### In the Practitioner Press
 
+* Tuning trend following strategies with macro ESG data, <br/> **Journal of Impact & ESG Investing**, Forthcoming (2021) (with C. Morgenstern & J. Kelly): <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
 * Machine learning in systematic equity allocation: a model comparison, <br/> **Wilmott Magazine**, Vol. 2018, Issue 98 (2018), pp. 24-33 <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a>      
 * Equity portfolios with improved liability-hedging benefits, <br/>   **Journal of Portfolio Management**, Vol. 43, No. 2 (Winter 2017), pp. 37-49 (with L. Martellini and V. Milhau) <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a>    
 
 _____ 
 
 
-### Book Chapter
-Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment**, 2018 (with T. Guida)  
-
+### Book Chapters
+Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)  
+Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2022, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)
  
 _____ 
 
@@ -91,6 +92,7 @@ _____
 
 ### Permanent Working Papers
 * Stock returns and the cross-section of characteristics: a tree-based approach (with T. Guida)  <a href="files/TAPA.pdf" target="_blank">[PDF]</a>    
+* Active allocation to smart factor indices (with N. Amenc and L. Martellini) - Scientific Beta Research Paper <a href="files/active_allocation_timing.pdf" target="_blank">[PDF]</a>     
 * Estimation of covariance matrices for portfolio optimization (with V. Milhau) - Scientific Beta Research Paper <a href="files/Estim_cov.pdf" target="_blank">[PDF]</a>    
 * Equity portfolios with improved liability-hedging benefits - Long Version  (with R. Deguest, L. Martellini and V. Milhau)  <a href="files/OTPP.pdf" target="_blank">[PDF]</a>    
 * Risk aggregation with the generalized logistic distribution <a href="files/Logistic.pdf" target="_blank">[PDF]</a>  
