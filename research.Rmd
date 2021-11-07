@@ -30,7 +30,7 @@ _____
 <a href="http://www.gcoqueret.com/PRs.html" target="_blank">Spurious accuracy in predictive regressions</a> (with R. Deguest)      
 Dirichlet policies for reinforced factor portfolios (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
 Distribution shifts in predictive panels (with B. Tavin): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>     
-Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3924893" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">Sample notebook</a>   
+Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">Sample notebook</a>   
 Supervised portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">SSRN</a>
 
 
@@ -51,7 +51,7 @@ _____
 
 #### **DATA SCIENCE, PROBABILITY & STATISTICS**
 
-* Persistence in factor-based supervised learning models <br/>  **Journal of Finance & Data Science**, Forthcoming (2021) <a href="http://www.gcoqueret.com/horizons.html" target="_blank">material</a>   
+* Persistence in factor-based supervised learning models <br/>  **Journal of Finance & Data Science**, Forthcoming (2021) <a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a>   
 * Training trees on tails with applications to portfolio choice, <br/>   **Annals of Operations Research**, Vol. 288 (2020), pp. 181-221 (with T. Guida) <a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank">[Working paper]</a> 
 <a href="http://www.gcoqueret.com/tot.html" target="_blank">[Material]</a>
 * Approximate NORTA simulations for virtual sample generation, <br/>   **Expert Systems With Applications**, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
@@ -71,7 +71,7 @@ _____
 
 ### In the Practitioner Press
 
-* Tuning trend following strategies with macro ESG data, <br/> **Journal of Impact & ESG Investing**, Forthcoming (2021) (with C. Morgenstern & J. Kelly): <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
+* Tuning trend following strategies with macro ESG data, <br/> **Journal of Impact & ESG Investing**, Forthcoming (2021) (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
 * Machine learning in systematic equity allocation: a model comparison, <br/> **Wilmott Magazine**, Vol. 2018, Issue 98 (2018), pp. 24-33 <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a>      
 * Equity portfolios with improved liability-hedging benefits, <br/>   **Journal of Portfolio Management**, Vol. 43, No. 2 (Winter 2017), pp. 37-49 (with L. Martellini and V. Milhau) <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a>    
 
@@ -79,8 +79,9 @@ _____
 
 
 ### Book Chapters
+- Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2022, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)   
 - Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)    
-- Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2022, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)
+
  
 _____ 
 
