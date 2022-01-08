@@ -12,7 +12,7 @@ description: "Research projects of Guillaume Coqueret"
 ### Books
 
 #### **Perspectives in ESG equity investing**
-CRC / Chapman Hall - expected December 2021   
+CRC / Chapman Hall - expected 2022   
 **Website**: http://www.esgperspectives.com  
 Early working paper version on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>
 
@@ -26,14 +26,14 @@ or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathem
 
 _____ 
 
-### Ongoing research
-<a href="http://www.gcoqueret.com/PRs.html" target="_blank">Spurious accuracy in predictive regressions</a> (with R. Deguest)      
-Dirichlet policies for reinforced factor portfolios (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
-Distribution shifts in predictive panels (with B. Tavin): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">Sample notebook</a>     
-Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">Sample notebook</a>   
-Supervised portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">SSRN</a> - <a href="https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k" target="_blank">Colab notebook</a>
-
-
+### Ongoing research (working papers)
+- Spurious accuracy in predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
+- Dirichlet policies for reinforced factor portfolios (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
+- Distribution shifts in predictive panels (with B. Tavin): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">R notebook</a>     
+- Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
+- Supervised portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">SSRN</a> - <a href="https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k" target="_blank">Colab (python) notebook</a>   
+- ESG news spillovers to (and from) the supply chain (with V. Le Tran): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">SSRN</a>   
+- Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a>
 
 _____ 
 
