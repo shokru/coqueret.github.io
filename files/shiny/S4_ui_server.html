@@ -218,8 +218,8 @@ slide:not(.current) .plotly.html-widget{
 <p>In Python:</p>
 
 <ul>
-<li><a href='https://dashr.plotly.com' title=''>https://dashr.plotly.com</a>: the plotly alternative (DASH)<br/></li>
-<li><a href='Flask' title=''>https://flask.palletsprojects.com/en/1.1.x/quickstart/</a>: simples apps in Python<br/></li>
+<li><a href='https://dashr.plotly.com' title=''>https://dash.plotly.com/r</a>: the plotly alternative (DASH)<br/></li>
+<li><a href='Flask' title=''>https://flask.palletsprojects.com/en/2.0.x/</a>: simples apps in Python<br/></li>
 <li><a href='https://www.streamlit.io' title=''>https://www.streamlit.io</a>: other apps in Python</li>
 </ul>
 
@@ -258,9 +258,9 @@ slide:not(.current) .plotly.html-widget{
 <p>Just like before (teaching = repeating!):</p>
 
 <ol>
-<li><strong>inputs</strong> are defined by the control widgets in the sidebar (<strong>UI</strong>)</li>
+<li><strong>inputs</strong> (input$blabla) are defined by the control widgets in the sidebar (<strong>UI</strong>)</li>
 <li>given these inputs, the server reactively creates the output in proper format (<strong>Server</strong>)</li>
-<li>the <strong>output</strong> is displayed in the body of the dashboard (back to <strong>UI</strong>)</li>
+<li>the <strong>output</strong> (output$blabla) is displayed in the body of the dashboard (back to <strong>UI</strong>)</li>
 </ol>
 
 The flow is <font size="6">
@@ -348,7 +348,7 @@ UI (sidebar) \(\rightarrow\) Server \(\rightarrow\) UI (body)
 <li>in the sidebar, each widget will be associated to a name, e.g., &ldquo;year&rdquo; or &ldquo;gender&rdquo; or &ldquo;continent&rdquo;, etc.<br/></li>
 <li>in the server, the corresponding values will be <strong>input</strong>$year or <strong>input</strong>$gender or <strong>input</strong>$continent and can be used in the computation;<br/></li>
 <li>in return, the server will build output objects, like <strong>output</strong>$table1 or <strong>output</strong>$plot2 which will then be displayed in the body of the UI<br/></li>
-<li>then, in the UI Body: dataTableOutput(&ldquo;table1), plotOutput(&rdquo;plot2&quot;).</li>
+<li>then, in the UI Body: dataTableOutput(&ldquo;table1), plotOutput(&rdquo;plot2”).</li>
 </ul>
 
 <p>In short, this gives (I repeat!): \[\text{UI sidebar} \overset{input}{\rightarrow} \text{Server} \overset{output}{\rightarrow} \text{UI body}\]</p>
