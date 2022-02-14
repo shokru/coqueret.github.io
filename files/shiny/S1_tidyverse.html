@@ -242,7 +242,7 @@ working hard early.</span></p>
 </article></slide><slide class=""><hgroup><h2>The philosophy of the course</h2></hgroup><article  id="the-philosophy-of-the-course">
 
 <p><span style="color:#29B950">
-Knowledge is not free: you have to <strong>pay attention</strong>.</span><br/><br></p>
+Knowledge is <strong>not free</strong>: you have to <strong>pay attention</strong>.</span><br/><br></p>
 
 <ul>
 <li>Learning comes from YOU! More than 80% of what you will get from the course will come from <span style="color:#0E68FC">
@@ -288,10 +288,10 @@ always be there to help</span>. Google &amp; stackoverflow are your best friends
 <ul>
 <li>A short presentation of the project + dataset search &amp; formatting (<span style="color:#F21E01">
 ~10h work</span>), due <span style="color:#F21E01">
-<strong>25/03/2021</strong></span>;<br/></li>
+<strong>2022-02-06</strong></span>;<br/></li>
 <li>The full report, code &amp; deployment (<span style="color:#F21E01">
 ~20-50h work</span>), due <span style="color:#F21E01">
-<strong>05/05/2021</strong></span>;<br/></li>
+<strong>2022-03-20</strong></span>;<br/></li>
 <li>Please do not ask for adjournments (the deadlines are comfortable).</li>
 </ul>
 
@@ -351,7 +351,7 @@ The most important one is in fact a <strong>collection</strong> of packages call
 
 </article></slide><slide class=""><hgroup><h2>Install packages</h2></hgroup><article  id="install-packages">
 
-<p>There are two steps: first you need to download the package (only once). The packages are downloaded from servers all around the world. So we start by choosing one.</p>
+<p>There are two steps: first you need to download the package (only once, like pip in Python). The packages are downloaded from servers all around the world. So we start by choosing one.</p>
 
 <pre class = 'prettyprint lang-r'># chooseCRANmirror() to set downloading location,
 chooseCRANmirror(ind = 1)    #  see getCRANmirrors() for geographical details</pre>
@@ -362,7 +362,15 @@ chooseCRANmirror(ind = 1)    #  see getCRANmirrors() for geographical details</p
 
 <p>Then, if you want to work with it, you need to load/activate it (for every session).</p>
 
-<pre class = 'prettyprint lang-r'>library(tidyverse)            # Activate: each time you launch RStudio</pre>
+<pre class = 'prettyprint lang-r'>library(tidyverse)            # Loading, like &quot;import...&quot; in Python</pre>
+
+</article></slide><slide class=""><hgroup><h2>&ldquo;Unofficial&rdquo; packages</h2></hgroup><article  id="unofficial-packages">
+
+<p>Sometimes, packages are not verified by the <strong>CRAN</strong> (Comprehensive R Archive Network).<br/>They are simply hosted on Github.<br/>To install them, use use the <strong>devtools</strong> package:</p>
+
+<pre class = 'prettyprint lang-r'>devtools::install_github(&quot;xvrdm/ggrough&quot;)</pre>
+
+<p>But you have to install devtools first!</p>
 
 </article></slide><slide class=""><hgroup><h2>Comments and output</h2></hgroup><article  id="comments-and-output">
 
@@ -392,7 +400,7 @@ b          # If you want to see it, ask for it!</pre>
 <pre >##  [1] 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35
 ## [26] 36 37 38 39 40 41 42</pre>
 
-<p>The brackets (ex: [25]) indicate positions.</p>
+<p>The brackets (ex: [26]) indicate the position of the first element in the row.</p>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Tidy data via the package <em>tidyr</em></h2></hgroup><article  id="tidy-data-via-the-package-tidyr">
 
@@ -590,11 +598,11 @@ head(gapminder, 3)            # Have a look!</pre>
 <p>The tidyverse has two functions that switch from matrix/excel format to tidy data and back:</p>
 
 <ul>
-<li><strong>pivot_longer</strong>(): from matrix/excel to tidy data</li>
-<li><strong>pivot_wider</strong>(): from tidy data to matrix/excel</li>
+<li><strong>pivot_longer</strong>(): from matrix/excel to tidy data (wide_to_long/melt in pandas)</li>
+<li><strong>pivot_wider</strong>(): from tidy data to matrix/excel (pivot in pandas)</li>
 </ul>
 
-Below, one example of data (called &ldquo;not_tidy_pop&rdquo;&quot;) in &lsquo;excel&rsquo; format.
+Below, one example of data (called &ldquo;not_tidy_pop&rdquo;“) in &lsquo;excel&rsquo; format.
 
 <div class="columns-2">
 <div class="kable-table">
@@ -741,7 +749,7 @@ Below, one example of data (called &ldquo;not_tidy_pop&rdquo;&quot;) in &lsquo;e
 
 </article></slide><slide class=""><hgroup><h2>filter() rows - Part I</h2></hgroup><article  id="filter-rows---part-i">
 
-<p>Often, analyses are performed on subsets of data.</p>
+<p>Often, analyses are performed on subsets of data (query in Python).</p>
 
 <pre class = 'prettyprint lang-r'>filter(gapminder, lifeExp &gt; 81.5) # Countries where people live long lives on average</pre>
 
@@ -879,7 +887,7 @@ Below, one example of data (called &ldquo;not_tidy_pop&rdquo;&quot;) in &lsquo;e
 
 </article></slide><slide class=""><hgroup><h2>Sort via arrange()</h2></hgroup><article  id="sort-via-arrange" class="smaller">
 
-<p>This is when you want to <strong>order</strong> your data. Here, from smallest pop to largest.</p>
+<p>This is when you want to <strong>order</strong> your data (sort_values in pandas). Here, from smallest pop to largest.</p>
 
 <pre class = 'prettyprint lang-r'>head(arrange(gapminder, pop)) # Alternative: arrange(gapminder, desc(lifeExp)); desc() is for descending</pre>
 
@@ -1024,7 +1032,7 @@ Below, one example of data (called &ldquo;not_tidy_pop&rdquo;&quot;) in &lsquo;e
 
 <p>A fake sequence:</p>
 
-<p><strong>me</strong> %&gt;%<br/>\(\quad\) <strong>wake_up</strong>(time = &ldquo;06:20&rdquo;) %&gt;%<br/>\(\quad\) <strong>shower</strong>(temp = 40) %&gt;%<br/>\(\quad\) <strong>go_to</strong>(place = &ldquo;baker&rdquo;, with = &ldquo;scooter&rdquo;) %&gt;%<br/>\(\quad\) <strong>go_to</strong>(place = &ldquo;home&rdquo;, with = &ldquo;scooter&rdquo;) %&gt;%<br/>\(\quad\) <strong>breakfast</strong>(drink = &ldquo;hot_chocolate&rdquo;, eat = &ldquo;toast&rdquo;, eat = &ldquo;kiwi&rdquo;) %&gt;%<br/>\(\quad\) <strong>toothbrush</strong>(duration = 2)</p>
+<p><strong>me</strong> %&gt;%<br/>\(\quad\) <strong>wake_up</strong>(time = &ldquo;06:20&rdquo;) %&gt;%<br/>\(\quad\) <strong>shower</strong>(temp = 40) %&gt;%<br/>\(\quad\) <strong>go_to</strong>(place = &ldquo;baker&rdquo;, with = &ldquo;scooter&rdquo;) %&gt;%<br/>\(\quad\) <strong>buy</strong>(item = &ldquo;bread&rdquo;) %&gt;%<br/>\(\quad\) <strong>go_to</strong>(place = &ldquo;home&rdquo;, with = &ldquo;scooter&rdquo;) %&gt;%<br/>\(\quad\) <strong>breakfast</strong>(drink = &ldquo;hot_chocolate&rdquo;, eat = &ldquo;toast&rdquo;, eat = &ldquo;kiwi&rdquo;) %&gt;%<br/>\(\quad\) <strong>toothbrush</strong>(duration = 2)</p>
 
 </article></slide><slide class=""><hgroup><h2>Example (short)</h2></hgroup><article  id="example-short">
 
@@ -1225,6 +1233,13 @@ Below, one example of data (called &ldquo;not_tidy_pop&rdquo;&quot;) in &lsquo;e
 
 <p>The <strong>round</strong>() function rounds numbers up to some decimals.</p>
 
+</article></slide><slide class=""><hgroup><h2>Bonus: tutors!</h2></hgroup><article  id="bonus-tutors">
+
+<ul>
+<li>visualize tidyverse code: <a href='https://tidydatatutor.com' title=''>https://tidydatatutor.com</a><br/></li>
+<li>equivalent for <strong>pandas</strong>: <a href='https://pandastutor.com' title=''>https://pandastutor.com</a></li>
+</ul>
+
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Takeaway</h2></hgroup><article  id="takeaway">
 
 </article></slide><slide class=""><hgroup><h2>Summary</h2></hgroup><article  id="summary">
@@ -1240,10 +1255,9 @@ Below, one example of data (called &ldquo;not_tidy_pop&rdquo;&quot;) in &lsquo;e
 
 <ul>
 <li>an online series of exercises with solutions!:<br/><a href='https://gcoqueret.shinyapps.io/Exercises/' title=''>https://gcoqueret.shinyapps.io/Exercises/</a></li>
-<li>the Bible of Data Science with R:<br/><a href='https://r4ds.had.co.nz' title=''>https://r4ds.had.co.nz</a></li>
-<li>my course on statistics in R (and the many links therein!):<br/><a href='https://github.com/shokru/rstats' title=''>https://github.com/shokru/rstats</a><br/></li>
+<li>the Bible of Data Science with R:<br/><a href='https://r4ds.had.co.nz' title=''>https://r4ds.had.co.nz</a><br/></li>
+<li>Two great books on data science:<br/><a href='https://ubc-dsci.github.io/introduction-to-datascience/' title=''>https://ubc-dsci.github.io/introduction-to-datascience/</a><br/><a href='https://rafalab.github.io/dsbook/' title=''>https://rafalab.github.io/dsbook/</a></li>
 <li>Shiny use cases:<br/><a href='https://shiny.rstudio.com/gallery/' title=''>https://shiny.rstudio.com/gallery/</a><br/></li>
-<li>My simple example of dynamic dashboard:<br/><a href='https://gcoqueret.shinyapps.io/olympics/' title=''>https://gcoqueret.shinyapps.io/olympics/</a></li>
 <li>One other app (marketing):<br/><a href='https://mdancho84.shinyapps.io/shiny-app/' title=''>https://mdancho84.shinyapps.io/shiny-app/</a></li>
 </ul>
 
