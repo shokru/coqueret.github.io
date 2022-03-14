@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Portfolios with climate risk measures</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Guillaume Coqueret .font90[.grey[(EMLYON Business School)]]" />
+    <script src="risk_climate_files/header-attrs-2.11/header-attrs.js"></script>
+    <link href="risk_climate_files/remark-css-0.0.1/metropolis.css" rel="stylesheet" />
+    <link href="risk_climate_files/remark-css-0.0.1/metropolis-fonts.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Portfolios with climate risk measures
+### Guillaume Coqueret .font90[.grey[(EMLYON Business School)]]
+### .font90[Financial Risks International Forum] 2022-03-22
+
+---
+
+
+&lt;!-- xaringan::inf_mr() --&gt;
+
+
+
+
+
+class: inverse, center, middle
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+font-size: 32px;
+padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+
+# Introduction
+
+
+---
+# Context
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+.font90[The demand for .green[green assets] has **soared**. .font80[.grey[(Morningstar data below)] ]] 
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+.bib[
+&lt;img src="morning.png" width="1050" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+... .font80[which may have driven green **returns**: see [van der Beck (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3929359) - and [Gabaix &amp; Koijen (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3686935) more generally.]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+`\(\rightarrow\)` .font80[**issues remain**: cost of sustainability, implementation leeway, greenwashing?]
+
+---
+# The problem(s)
+
+.font90[**Portfolio choice** seeks to determine optimal allocation between assets and requires "DOC" inputs from the investor:]  
+- .font80[**data**: returns, usual characteristics (for factors), ESG features: .font90[.grey[used for estimation purposes (e.g., expected returns, covariance matrix,] .green[greenness].grey[, etc.)]]]  
+- .font80[the **objective** (utility function): preference with respect to risk, greenness]   
+- .font80[some **constraints**] .font70[.grey[(liquidity, factor/geographical/sector exposure, leverage, etc.)]]     
+
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+--
+
+.font80[In the end:]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+`$$\small w^*=f(D,O,C)$$`
+
+.font80[In practice, portfolios can be (very) sensitive to these three groups of choices.]
+
+---
+
+class: inverse, center, middle
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+font-size: 32px;
+padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+
+# First issue: data
+
+---
+# ESG disagreement
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+
+.font80[Raters have different **sources** &amp; **methodologies**, which]  .font80[generate potentially large discrepancies in their assessments. This is widely documented:]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+--
+
+.font80[
+[Dimson, Marsh, Staunton (2020)](https://jpm.pm-research.com/content/47/1/75), [Avramov, Cheng, Lioui &amp; Tarelli (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3711218)    
+[Gibson, Krueger &amp; Schmidt (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3433728) &amp; [Berg, Kolbel, Rigobon (2022)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3438533):
+]
+
+--
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+
+&lt;img src="disagreement.png" width="890" style="display: block; margin: auto 0 auto auto;" /&gt;
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+--
+
+
+`\(\rightarrow\)` .font80[**confusing** for asset managers: which to use, how to average?]
+
+---
+# Which metrics to use?
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+
+.font80[[Le Guenedal &amp; Roncalli (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999971): *Portfolio Construction with Climate Risk Measures*]   
+
+.font90[What's the best **proxy** for greenness?] 
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+--
+
+.pull-left[
+- .font80[current] `\(\small \text{CO}_2\)` .font80[/ GHG emissions] `\(\rightarrow\)` .font80[**size bias**]  
+- .font80[emission **intensities** (emissions divided by revenue or mkt. cap.)]  `\(\rightarrow\)` .font80[hard to average]  
+- .font80[**pathways**] `\(\rightarrow\)` .font80[require models &amp; estimations for firms-specific trends:]
+]    
+ 
+
+
+--
+.pull-right[
+&lt;img src="pathway.png" width="690" /&gt;
+]
+
+
+
+`\(\rightarrow\)` .font80[reliable **Scope 3** time-series are short! Extrapolation can be hard/risky.]
+
+---
+# The cross-section of extrapolations
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+.font90[Very much trending upwards! Hard to sustain...]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+&lt;img src="paths.png" width="660" style="display: block; margin: auto;" /&gt;
+
+---
+# Other risk metrics... &amp; approaches
+
+- sensitivity to **carbon taxes** (default à la Merton) 
+- exposure to a long-short *carbon* portfolio ( `\(\beta\)`)
+- vulnerability to climate events / **disasters**   
+
+Other facets:  
+- .green[**opportunities**] (avoided .brown[emissions], .green[green] revenues from patents)   
+- aggregation (scoring, weighted averages, etc.)
+
+---
+
+class: inverse, center, middle
+
+
+&lt;style type="text/css"&gt;
+.remark-slide-content {
+font-size: 32px;
+padding: 1em 4em 1em 4em;
+}
+&lt;/style&gt;
+
+
+# Second issue: objectives &amp; constraints
+
+
+
+
+
+---
+# "Simple" benchmarks (1/2)
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+.font80[[Jondeau, Mojon &amp; Pereira da Silva (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3987186): *Building Benchmarks Portfolios with Decreasing Carbon Footprints*]
+
+.pull-left[
+.font90[**Starting point**: emission intensities are not uniformly distributed across firms:]
+
+.font90[**Issue**: sector &amp; geographical tilts. But **benchmarks** require traditional exposures!]
+]
+--
+.pull-right[
+&lt;img src="intensity.png" width="650" /&gt;
+]
+
+
+---
+# "Simple" benchmarks (2/2)
+
+&lt;div style="width: 100%;float: bottom;margin-top:-30px;margin-bottom: 50px;"&gt; 
+
+
+.font80[**Targeted Reinvestment**] `\(\rightarrow\)` .font80[smart approach, **BUT**:]   
+&lt;div style="width: 100%;float: bottom;margin-top:-35px;margin-bottom: 50px;"&gt; 
+- .font80[does the world need to stick to **business as usual** (!) benchmarks?]   
+- .font80[is it desirable to maintain sector tilts? Why maintain .brown[**inertia**]?] .font80[If anchoring is so important, then maybe we need **new** .green[benchmarks].]  
+- .font70[Passive investing made the cap-weighted indices the anchors, but ETFs can change that] `\(\rightarrow\)` .font70[new **framing** for practitioners &amp; academics. Why not be more ambitious: ]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-25px;margin-bottom: 50px;"&gt; 
+
+&lt;img src="benchmarks.png" width="750" style="display: block; margin: auto;" /&gt;
+
+&lt;div style="width: 100%;float: bottom;margin-top:-25px;margin-bottom: 50px;"&gt; 
+
+
+---
+# What's the limit?
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+.font90[=&gt; How far can we go without hurting performance .grey[(significantly)]?]   
+
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt;   
+
+.pull-left[
+[.font80[Pedersen, Fitzgibbons &amp; Pomorski JFE 2020]](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3466417): .font80[the **ESG** efficient frontier] 
+&lt;img src="frontier.png" width="600" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;div style="width: 100%;float: bottom;margin-top:150px;margin-bottom: 50px;"&gt; 
+.font90[There seems to be a .bluen[sweet] spot.]  
+But here: overall .bluen[**ESG**] &amp;  
+ESG `\(\neq\)` Emissions   
+&lt;div style="width: 100%;float: bottom;margin-top:60px;margin-bottom: 50px;"&gt; 
+It's likely this remains true for .brown[**emissions**]...
+]
+
+---
+# Back to optimization
+
+&lt;div style="width: 100%;float: bottom;margin-top:-30px;margin-bottom: 50px;"&gt; 
+
+.font80[[Le Guenedal &amp; Roncalli (2021)](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999971) propose a penalized quadratic optimization scheme with particular **constraints**. The agent is endowed with a .brown[**brown**] footprint that she wants to reduce by a factor] `\(\small \mathcal{R}\)`:   
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+.font80[
+- focused on turnover, volatility / tracking error (.brown[**benchmarks**] again!)   
+- accomodates for any footprint metric &amp; many constraints:
+]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+&lt;img src="eq.png" width="690" style="display: block; margin: auto;" /&gt;
+
+
+---
+# But, in short 
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+.font70[With this machinery, you can control &amp; fine tune everything... except **uncertainty**! **Estimation** versus .bluen[realization], **in-sample** versus .bluen[out-of-sample] performance.]
+
+&lt;div style="width: 100%;float: bottom;margin-top:10px;margin-bottom: 50px;"&gt; 
+
+.font70[
+| Indicator (firm) | Short term prediction (1Y-5Y) | Long term prediction (10Y+) |
+| --- |:---:|:---:|
+| Return  | Hard  | Hard  |   
+| Volatility / correlations | So so | So so |  
+| Emissions / intensities | Easy  | So so |  
+]
+
+&lt;div style="width: 100%;float: bottom;margin-top:-20px;margin-bottom: 50px;"&gt; 
+
+.font80[**Question**: how can we build reliable long-term granular emission forecasts?] .font70[Pathways, trajectories: not enough chronological depth? NLP, scrapping annual reports?]   
+
+.font80[Moreover, meta-meta analyses suggest that, on the long run, greenness is not related to average realized returns. Hence, it should suffice to optimize on .bluen[risk] and .green[sustainability]. (whereas in MPT, it's risk vs return) ]
+
+
+
+---
+# Open research questions
+
+Preferences drive demand; demand drives .bluen[**AUM**]...
+
+.bib[
+&lt;img src="conclusion.svg" width="890" style="display: block; margin: auto;" /&gt;
+]
+
+.font90[**Question**: what's the .grey[(actual/aggregate?)] **appetite** for greenness and how can we calibrate these trade-offs? ]  
+
+---
+# Thank you!
+
+**Going further**:   
+- [Perspectives in sustainable equity investing](http://www.esgperspectives.com)   
+- [Thierry Roncalli's course on sustainable finance](http://www.thierry-roncalli.com/SustainableFinance.html)
+
+&lt;div style="width: 100%;float: bottom;margin-top:100px;margin-bottom: 50px;"&gt; 
+
+ 
+.center[
+.font180[Time for **Q&amp;A**!]]
+
+
+
+---
+# Bibliography
+
+.bib[.font60[
+- [Avramov, Cheng, Lioui &amp; Tarelli 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3711218): *Sustainable investing with ESG rating uncertainty*
+- [Berg, Kolbel, Rigobon 2022](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3438533): *Aggregate Confusion: The Divergence of ESG Ratings*  
+- [Berk &amp; van Binsbergen 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3909166): *The impact of impact investors*   
+- [Coqueret &amp; Vu 2022](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705): *ESG news spillovers to (and from) the supply chain*   
+- [Derrien, Krüger,  Landier &amp; Yao 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3903274): *ESG news, future cash flows, and firm value*    
+- [Dimson, Marsh, Staunton 2020](https://jpm.pm-research.com/content/47/1/75): *Divergent ESG Ratings*   
+- [Gabaix &amp; Koijen 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3686935): *In search of the origins of financial fluctuations: The inelastic markets hypothesis*   
+- [Gibson, Krueger &amp; Schmidt 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3433728) : *ESG Rating Disagreement and Stock Returns*    
+- [Jondeau, Mojon &amp; Pereira da Silva 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3987186): *Building Benchmarks Portfolios with Decreasing Carbon Footprints*    
+- [Koijen &amp; Yogo 2020](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2537559): *A Demand System Approach to Asset Pricing*    
+- [Le Guenedal &amp; Roncalli 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999971): *Portfolio Construction with Climate Risk Measures*   
+- [Lioui &amp; Tarelli 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3878314): *Chasing the ESG factor*  
+- [Pastor, Stambaugh &amp; Taylor 2020](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3498354): *Sustainable investing in equilibrium*  
+- [Pastor, Stambaugh &amp; Taylor 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3864502): *Dissecting green returns*  
+- [Pedersen, Fitzgibbons &amp; Pomorski JFE 2020](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3466417): *Responsible Investing: The ESG-Efficient Frontier*    
+- [Sautner, van Lent, Vilkov &amp; Zhang 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3642508): *Firm-level Climate Change Exposure*   
+- [van der Beck 2021](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3929359): *Flow-Driven ESG Returns*   
+]
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
