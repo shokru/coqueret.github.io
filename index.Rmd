@@ -11,10 +11,10 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:27%; border:0px solid; margin-right: 20px" align="right">
+<img src="images/gcoq.jpg" style="width:36%; border-color:#FFFFFF; border:15px; margin-right: 10px" align="right">
 
 I am an associate professor of Finance & Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>.  
-My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly). Some of my recent work focuses on **supervised learning** and on **sustainable equity investing**. 
+My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly). Some of my recent work focuses on **supervised learning** and on <span style="color:#2BB833">**sustainable equity investing**</span>. 
 
 ------  
 
@@ -53,10 +53,10 @@ Master of Science in Management, **ESSEC Business School** (2002-2007)
 #### **Contact** 
 em**lyon business school**   
 23, avenue Guy de Collongue  
-69130 Ecully FRANCE   
+69130 Ecully - **FRANCE**   
 coqueret/at/em-lyon.com  
 
 
 ------  
-Updated in February 2022
+Updated in March 2022
 
