@@ -11,18 +11,17 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:36%; border:25px; margin-right: 0px" align="right">
+<img src="images/gcoq.jpg" style="width:33%; border:25px; margin-right: 115px" align="right">
 
-I am an associate professor of Finance & Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>.  
-My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly). Some of my recent work focuses on **supervised learning** and on <span style="color:#2BB833">**sustainable equity investing**</span>. 
+I am an associate professor at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests include **supervised learning for financial economics** and <span style="color:#2BB833">**sustainable equity investing**</span>. 
 
 ------  
 
 #### **Academic positions**   
 
-Associate Professor of Finance, em**lyon business school** (Sept. 2018 - Present)  
-Assistant Professor of Finance, **Montpellier Business School** (Aug. 2015 - Aug. 2018)  
-Senior Quantitative Researcher, **EDHEC-Risk Institute** (Apr. 2013 - Jul. 2015)
+Associate Professor, em**lyon business school** (2018 - Present)  
+Assistant Professor, **Montpellier Business School** (2015 - 2018)  
+Senior Quantitative Researcher, **EDHEC-Risk Institute** (2013 - 2015)
 
 ------   
 
