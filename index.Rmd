@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:36%; border:25px; margin-right: 20px" align="right">
+<img src="images/gcoq.jpg" style="width:36%; border:25px; margin-right: 0px" align="right">
 
 I am an associate professor of Finance & Data Science at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>.  
 My research interests revolve around applications of **numerical methods** in various fields (**financial economics** mostly). Some of my recent work focuses on **supervised learning** and on <span style="color:#2BB833">**sustainable equity investing**</span>. 
