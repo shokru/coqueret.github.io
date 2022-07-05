@@ -7,11 +7,13 @@
 description: "Research projects of Guillaume Coqueret"
 ---
 <br/>  
+<br/>  
+
 
 
 ### Books
 
-#### **Perspectives in ESG equity investing**
+#### **Perspectives in sustainable equity investing**
 CRC / Chapman Hall - March 2022   
 Order on <a href="https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (US)</a>
 or <a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (UK)</a>  
@@ -36,7 +38,6 @@ _____
 - Supervised portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">SSRN</a> - <a href="https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k" target="_blank">Colab (python) notebook</a>   
 - ESG news spillovers to (and from) the supply chain (with V. Le Tran): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">SSRN</a>   
 - Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook</a>  
-- Scope 3 emissions and their impact on green portfolios (with T. Anquetin, B. Tavin & L. Welgryn): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">SSRN</a>  
 
 
 
@@ -64,6 +65,12 @@ _____
 * Meromorphic Levy-Khintchine exponents with poles of order two, <br/>   **Communications on Stochastic Analysis**, Vol. 7, No. 2 (2013), pp. 179-198  <a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank">[Link]</a>  
 * Approximation of probabilistic Laplace transforms and their inverses, <br/>   **Communications in Applied Mathematics and Computational Science**, Vol. 7, No. 2 (2012), pp. 231-246  <a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a>    
 
+
+#### **SUSTAINABLE INVESTING**
+
+* Scopes of carbon emissions and their impact on green portfolios, <br/> **Economic Modelling** Special Issue on Green Finance, Forthcoming (with T. Anquetin, B. Tavin & L. Welgryn) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">SSRN</a>      
+* Tuning trend following strategies with macro ESG data, <br/> **Journal of Impact & ESG Investing**, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
+
 #### **WINE BUSINESS**
 
 * Herding behavior among wine investors, **Economic Modelling**, Vol. 68 (2018), pp. 318-328 (with B. Aytac and C. Mandou) <a href="https://www.sciencedirect.com/science/article/pii/S0264999317301001" target="_blank">[Link]</a>    
@@ -75,7 +82,7 @@ _____
 
 ### In the Practitioner Press
 
-* Tuning trend following strategies with macro ESG data, <br/> **Journal of Impact & ESG Investing**, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
+
 * Stock-specific sentiment and return predictability, <br/> **Quantitative Finance**, Vol. 20, No. 9 (2020), pp. 1531-1551 <a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1736314" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3248925" target="_blank">[Working paper]</a>   
 * Machine learning in systematic equity allocation: a model comparison, <br/> **Wilmott Magazine**, Vol. 2018, Issue 98 (2018), pp. 24-33 <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a>      
 * Equity portfolios with improved liability-hedging benefits, <br/>   **Journal of Portfolio Management**, Vol. 43, No. 2 (Winter 2017), pp. 37-49 (with L. Martellini and V. Milhau) <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a>    
