@@ -1,7 +1,7 @@
 <br/>  
 
 
-Spurious accuracy in predictive regressions
+Cost & opportunities in misspecified predictive regressions
 ================
 This page contains research and presentation material on the topic of quadratic errors in predictive regressions.     
 This is joint work with <a href="https://sites.google.com/site/romaindeguestsite/research" target="_blank">**Romain Deguest**</a>.

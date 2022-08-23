@@ -11,10 +11,10 @@
 
 
 
-<title>PRs.utf8</title>
+<title>PRs.knit</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -59,6 +59,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
 
@@ -83,6 +84,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -235,7 +239,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -254,19 +258,19 @@ $(document).ready(function () {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/shokru">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://twitter.com/g_coqueret">
-    <span class="fas fa-twitter fa-lg"></span>
+    <span class="fa fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fas fa-linkedin fa-lg"></span>
+    <span class="fa fa-linkedin fa-lg"></span>
      
   </a>
 </li>
@@ -284,29 +288,57 @@ $(document).ready(function () {
 
 
 <p><br/></p>
-<div id="spurious-accuracy-in-predictive-regressions" class="section level1">
-<h1>Spurious accuracy in predictive regressions</h1>
-<p>This page contains research and presentation material on the topic of quadratic errors in predictive regressions.<br />
-This is joint work with <a href="https://sites.google.com/site/romaindeguestsite/research" target="_blank"><strong>Romain Deguest</strong></a>.</p>
+<div id="cost-opportunities-in-misspecified-predictive-regressions"
+class="section level1">
+<h1>Cost &amp; opportunities in misspecified predictive regressions</h1>
+<p>This page contains research and presentation material on the topic of
+quadratic errors in predictive regressions.<br />
+This is joint work with
+<a href="https://sites.google.com/site/romaindeguestsite/research" target="_blank"><strong>Romain
+Deguest</strong></a>.</p>
 <hr />
 <div id="files" class="section level2">
 <h2>Files</h2>
 <ul>
-<li>The <strong>theoretical contributions</strong> of the paper are decomposed into:
+<li>The <strong>theoretical contributions</strong> of the paper are
+decomposed into:
 <ul>
-<li><a href="files/PRs/comparison.nb.html" target="_blank"><strong>Comparisons of methods</strong></a>: tests between integral formulae and Monte-Carlo simulations. This requires <a href="files/PRs/R_functions.R" target="_blank"><strong>R functions</strong></a> and <a href="files/PRs/c_functions.cpp" target="_blank"><strong>C functions</strong></a>.</li>
-<li><a href="files/PRs/sensitivity.nb.html" target="_blank"><strong>Sensitivity analysis</strong></a>: impact of persistence, forecasting horizon and sample size on loss / R^2.<br />
+<li><a href="files/PRs/comparison.nb.html" target="_blank"><strong>Comparisons
+of methods</strong></a>: tests between integral formulae and Monte-Carlo
+simulations. This requires
+<a href="files/PRs/R_functions.R" target="_blank"><strong>R
+functions</strong></a> and
+<a href="files/PRs/c_functions.cpp" target="_blank"><strong>C
+functions</strong></a>.</li>
+<li><a href="files/PRs/sensitivity.nb.html" target="_blank"><strong>Sensitivity
+analysis</strong></a>: impact of persistence, forecasting horizon and
+sample size on loss / R^2.<br />
 </li>
-<li><a href="files/PRs/univariate.nb.html" target="_blank"><strong>Univariate learning</strong></a>: comparison between PRs and univariate learning, that is, regression on lagged values of the process.</li>
+<li><a href="files/PRs/univariate.nb.html" target="_blank"><strong>Univariate
+learning</strong></a>: comparison between PRs and univariate learning,
+that is, regression on lagged values of the process.</li>
 </ul></li>
-<li>All our <strong>empirical results</strong> are based on the following <a href="files/PRs/emp_func.Rmd" target="_blank"><strong>RMarkdown notebook</strong></a> and the function <a href="files/PRs/r_func.R" target="_blank"><strong>file</strong></a>. The data can be found <a href="files/PRs/data_exp.RData" target="_blank"><strong>here</strong></a> (.RData format). It is based on that of Welch and Goyal (2008) plus one variable from Novy-Marx (2014).<br />
+<li>All our <strong>empirical results</strong> are based on the
+following
+<a href="files/PRs/emp_func.Rmd" target="_blank"><strong>RMarkdown
+notebook</strong></a> and the function
+<a href="files/PRs/r_func.R" target="_blank"><strong>file</strong></a>.
+The data can be found
+<a href="files/PRs/data_exp.RData" target="_blank"><strong>here</strong></a>
+(.RData format). It is based on that of Welch and Goyal (2008) plus one
+variable from Novy-Marx (2014).<br />
 The source for the multiple analyses are the following:
 <ul>
-<li><a href="files/PRs/impact_rho_web.nb.html" target="_blank"><strong>impact of rho_y</strong></a><br />
+<li><a href="files/PRs/impact_rho_web.nb.html" target="_blank"><strong>impact
+of rho_y</strong></a><br />
 </li>
-<li>value of <a href="files/PRs/constraints.nb.html" target="_blank"><strong>economic constraints</strong></a><br />
+<li>value of
+<a href="files/PRs/constraints.nb.html" target="_blank"><strong>economic
+constraints</strong></a><br />
 </li>
-<li>aggregate <a href="files/PRs/variance.nb.html" target="_blank"><strong>variance forecasting</strong></a></li>
+<li>aggregate
+<a href="files/PRs/variance.nb.html" target="_blank"><strong>variance
+forecasting</strong></a></li>
 </ul></li>
 </ul>
 <!--    
@@ -314,11 +346,17 @@ The source for the multiple analyses are the following:
 - Paper on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3709412" target="_blank"><strong>SSRN</strong></a>   
 -->
 <p><strong>References</strong>:<br />
-- Welch, I., &amp; Goyal, A. (2008). A comprehensive look at the empirical performance of equity premium prediction. <em>Review of Financial Studies</em>, 21(4), 1455-1508.<br />
-- Novy-Marx, R. (2014). Predicting anomaly performance with politics, the weather, global warming, sunspots, and the stars. <em>Journal of Financial Economics</em>, 112(2), 137-146.</p>
+- Welch, I., &amp; Goyal, A. (2008). A comprehensive look at the
+empirical performance of equity premium prediction. <em>Review of
+Financial Studies</em>, 21(4), 1455-1508.<br />
+- Novy-Marx, R. (2014). Predicting anomaly performance with politics,
+the weather, global warming, sunspots, and the stars. <em>Journal of
+Financial Economics</em>, 112(2), 137-146.</p>
 <hr />
 <hr />
-<p><strong>DISCLAIMER</strong>: the <strong>data</strong> and <strong>code</strong> are meant for research and pedagogical use only.</p>
+<p><strong>DISCLAIMER</strong>: the <strong>data</strong> and
+<strong>code</strong> are meant for research and pedagogical use
+only.</p>
 <hr />
 </div>
 </div>

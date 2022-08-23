@@ -31,13 +31,13 @@ or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathem
 _____ 
 
 ### Ongoing research (working papers)
-- Spurious accuracy in predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
+- Cost and opportunities in misspecified predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
 - Dynamic decision making with predictive panels (with B. Tavin): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">R notebook</a>     
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
 - Supervised portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">SSRN</a> - <a href="https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k" target="_blank">Colab (python) notebook</a>   
 - ESG news spillovers to (and from) the supply chain (with V. Le Tran): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">SSRN</a>   
-- Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook</a>  
+- Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (second study)</a>
 
 
 
@@ -68,7 +68,7 @@ _____
 
 #### **SUSTAINABLE INVESTING**
 
-* Scopes of carbon emissions and their impact on green portfolios, <br/> **Economic Modelling** Special Issue on Green Finance, Forthcoming (with T. Anquetin, B. Tavin & L. Welgryn) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">SSRN</a>      
+* Scopes of carbon emissions and their impact on green portfolios, <br/> **Economic Modelling** Special Issue on Green Finance, Vol. 115 (2022), (with T. Anquetin, B. Tavin & L. Welgryn) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">SSRN</a>      
 * Tuning trend following strategies with macro ESG data, <br/> **Journal of Impact & ESG Investing**, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
 
 #### **WINE BUSINESS**
@@ -91,7 +91,7 @@ _____
 
 
 ### Book Chapters
-- Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2022, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)   
+- Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2023, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)   
 - Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)    
 
  
