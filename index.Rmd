@@ -9,6 +9,9 @@
 ---
 ---
 
+<br/>  
+<br/>  
+
 <link rel="stylesheet" href="styles.css" type="text/css">
 
 <img src="images/gcoq.jpg" style="width:33%; border:25px; margin-right: 115px" align="right">
