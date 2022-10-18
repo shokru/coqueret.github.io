@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:33%; border:25px; margin-right: 115px" align="right">
+<img src="images/gcoq.jpg" style="width:33%; border:25px; margin-right: 110px" align="right">
 
 I am an associate professor at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests include **supervised learning for financial economics** and <span style="color:#2BB833">**sustainable equity investing**</span>. 
 
@@ -22,7 +22,8 @@ I am an associate professor at <a href="https://www.em-lyon.com/en/" target="_bl
 
 #### **Academic positions**   
 
-Associate Professor, em**lyon business school** (2018 - Present)  
+Head of QUANT research center, em**lyon business school** (2022 - present)    
+Associate Professor, em**lyon business school** (2018 - present)  
 Assistant Professor, **Montpellier Business School** (2015 - 2018)  
 Senior Quantitative Researcher, **EDHEC-Risk Institute** (2013 - 2015)
 
@@ -60,5 +61,5 @@ coqueret/at/em-lyon.com
 
 
 ------  
-Updated in Sept. 2022
+Updated in Oct. 2022
 

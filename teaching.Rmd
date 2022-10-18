@@ -11,7 +11,7 @@
 
 Course and links | Institution & program | Years 
 ------ | ------ | ---   
-Finance & data analysis in R  | **emlyon** business school, MSc. in Data Science & AI Strategy | 2022 - present   
+Finance & data analysis in R  | **emlyon** business school, MSc. in Data Science & AI Strategy | 2022 - present <hr>  
 Green finance: concepts & quantitative methods | **emlyon** business school, Master in Management | 2022 - present   
 Crash course on climate change + finance (notebook on [energy-emissions-economy-environment](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb) & notebook on [sustainable investing](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb)) | **emlyon** business school, Master in Management | 2021   
 [Machine Learning for Factor Investing](ml_factor.html) |  **emlyon** business school, MSc. in Finance | 2019 - present    
