@@ -49,8 +49,7 @@ Material
 Datasets (in R format - they end in February 2021):  
 
 - <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ML_course/data.RData" target="_blank">**Base** (small)</a>: 30 firms, 7 features, year 2000 onwards;  
-- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_full.RData" target="_blank">**Large**</a>: 900+ firms, 5 features, year 1995 onwards;  
-- <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_esg.RData" target="_blank">**ESG**</a>: 380+ firms, 6 features, year 2014 onwards.
+- <a href="https://github.com/shokru/coqueret.github.io/raw/master/files/ML_course/stocks_clean.rdata" target="_blank">**Large**</a>: ~900 firms, 10 features (including GHG emissions from 2011 on), year 1995 onwards;  
 
 <!--
 <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ml_factor.zip" target="_blank">**All code**</a>: Rmd files + data.  

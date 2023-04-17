@@ -11,10 +11,10 @@
 
 
 
-<title>ml_factor.utf8</title>
+<title>ml_factor.knit</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -59,6 +59,7 @@ if (window.hljs) {
 
 
 
+
 <link rel="stylesheet" href="styles.css" type="text/css" />
 
 
@@ -83,6 +84,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -235,7 +239,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -254,19 +258,19 @@ $(document).ready(function () {
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="http://github.com/shokru">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://twitter.com/g_coqueret">
-    <span class="fas fa-twitter fa-lg"></span>
+    <span class="fa fa-twitter fa-lg"></span>
      
   </a>
 </li>
 <li>
   <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fas fa-linkedin fa-lg"></span>
+    <span class="fa fa-linkedin fa-lg"></span>
      
   </a>
 </li>
@@ -284,30 +288,61 @@ $(document).ready(function () {
 
 
 <p><br/></p>
-<div id="supervised-learning-for-factor-investing" class="section level1">
+<div id="supervised-learning-for-factor-investing"
+class="section level1">
 <h1>Supervised learning for factor investing</h1>
-<p>This page contains teaching material (<strong>R</strong> code) for <strong>introductory</strong> courses on supervised learning applied to factor investing.</p>
+<p>This page contains teaching material (<strong>R</strong> code) for
+<strong>introductory</strong> courses on supervised learning applied to
+factor investing.</p>
 <hr />
 <div id="sessions" class="section level2">
 <h2>Sessions</h2>
-<p>The links below lead to <strong>html</strong> notebooks and <strong>pdf</strong> slides. The original <strong>Rmd</strong> files can be downloaded hereafter.</p>
+<p>The links below lead to <strong>html</strong> notebooks and
+<strong>pdf</strong> slides. The original <strong>Rmd</strong> files can
+be downloaded hereafter.</p>
 <ol style="list-style-type: decimal">
-<li><p><strong>Economic foundations</strong>: asset pricing anomalies, characteristics-based investing;<br />
-<a href="files/ML_course/S1_Foundations.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S1_Foundations.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Portfolio strategies</strong>: portfolio back-testing framework;<br />
-<a href="files/ML_course/S2_Portfolio.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S2_Portfolio.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Penalized regressions &amp; sparse portfolios</strong>: penalised regressions for minimumn variance portfolios and for robust forecasts;<br />
-<a href="files/ML_course/S3_Lasso.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S3_LASSO.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Data preparation</strong>: Feature engineering and labelling with a focus on categorical data;<br />
-<a href="files/ML_course/S4_Data.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S4_Data.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Decision trees</strong>: Simple trees, random forests and boosted trees;<br />
-<a href="files/ML_course/S5_Trees.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S5_Trees.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Neural networks</strong>: Multilayer perceptron and recurrent networks (<strong>G</strong>ated <strong>R</strong>ecurrent <strong>U</strong>nits);<br />
-<a href="files/ML_course/S6_NN.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S6_NN.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Validating &amp; tuning</strong>: Performance metrics and hyper-parameter adjustment;<br />
-<a href="files/ML_course/S7_Validation.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S7_Tuning.pdf" target="_blank"><strong>slides</strong></a></p></li>
-<li><p><strong>Extensions</strong>: SVMs, ensemble learning, interpretability and deflated Sharpe ratios;<br />
-<a href="files/ML_course/S8_Extensions.nb.html" target="_blank"><strong>html notebook</strong></a> - <a href="files/ML_course/S8_Extensions.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Economic foundations</strong>: asset pricing anomalies,
+characteristics-based investing;<br />
+<a href="files/ML_course/S1_Foundations.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S1_Foundations.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Portfolio strategies</strong>: portfolio back-testing
+framework;<br />
+<a href="files/ML_course/S2_Portfolio.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S2_Portfolio.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Penalized regressions &amp; sparse portfolios</strong>:
+penalised regressions for minimumn variance portfolios and for robust
+forecasts;<br />
+<a href="files/ML_course/S3_Lasso.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S3_LASSO.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Data preparation</strong>: Feature engineering and
+labelling with a focus on categorical data;<br />
+<a href="files/ML_course/S4_Data.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S4_Data.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Decision trees</strong>: Simple trees, random forests and
+boosted trees;<br />
+<a href="files/ML_course/S5_Trees.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S5_Trees.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Neural networks</strong>: Multilayer perceptron and
+recurrent networks (<strong>G</strong>ated <strong>R</strong>ecurrent
+<strong>U</strong>nits);<br />
+<a href="files/ML_course/S6_NN.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S6_NN.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Validating &amp; tuning</strong>: Performance metrics and
+hyper-parameter adjustment;<br />
+<a href="files/ML_course/S7_Validation.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S7_Tuning.pdf" target="_blank"><strong>slides</strong></a></p></li>
+<li><p><strong>Extensions</strong>: SVMs, ensemble learning,
+interpretability and deflated Sharpe ratios;<br />
+<a href="files/ML_course/S8_Extensions.nb.html" target="_blank"><strong>html
+notebook</strong></a> -
+<a href="files/ML_course/S8_Extensions.pdf" target="_blank"><strong>slides</strong></a></p></li>
 </ol>
 <hr />
 </div>
@@ -315,17 +350,19 @@ $(document).ready(function () {
 <h2>Material</h2>
 <p>Datasets (in R format - they end in February 2021):</p>
 <ul>
-<li><a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ML_course/data.RData" target="_blank"><strong>Base</strong> (small)</a>: 30 firms, 7 features, year 2000 onwards;<br />
+<li><a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ML_course/data.RData" target="_blank"><strong>Base</strong>
+(small)</a>: 30 firms, 7 features, year 2000 onwards;<br />
 </li>
-<li><a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_full.RData" target="_blank"><strong>Large</strong></a>: 900+ firms, 5 features, year 1995 onwards;<br />
-</li>
-<li><a href="https://github.com/shokru/coqueret.github.io/blob/master/files/data_esg.RData" target="_blank"><strong>ESG</strong></a>: 380+ firms, 6 features, year 2014 onwards.</li>
+<li><a href="https://github.com/shokru/coqueret.github.io/raw/master/files/ML_course/stocks_clean.rdata" target="_blank"><strong>Large</strong></a>:
+~900 firms, 10 features (including GHG emissions from 2011 on), year
+1995 onwards;</li>
 </ul>
 <!--
 <a href="https://github.com/shokru/coqueret.github.io/blob/master/files/ml_factor.zip" target="_blank">**All code**</a>: Rmd files + data.  
 -->
 <hr />
-<p><strong>DISCLAIMER</strong>: the <strong>data</strong> and <strong>code</strong> are meant for pedagogical use only.</p>
+<p><strong>DISCLAIMER</strong>: the <strong>data</strong> and
+<strong>code</strong> are meant for pedagogical use only.</p>
 <hr />
 </div>
 </div>
