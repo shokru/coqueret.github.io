@@ -10,10 +10,10 @@
 
 
 Course and links | Institution & program | Years 
------- | ------ | ---   
-Finance & data analysis in R  | **emlyon** business school, MSc. in Data Science & AI Strategy | 2022 - present <hr>  
+------- | ---- | --   
+**Finance** & **data analysis** (ML) in R: [fraud detection](https://www.gcoqueret.com/files/ML_course/fraud_detection.html), [credit scoring](https://www.gcoqueret.com/files/ML_course/credit_risk.html), [time-series and crypto](https://www.gcoqueret.com/files/ML_course/ts_crypto.html)  | **emlyon** business school, MSc. in Data Science & AI Strategy | 2022 - present <hr> <hr>  
 [Green finance: concepts & quantitative methods](http://www.greenfinance.education) | **emlyon** business school, Master in Management | 2022 - present   
-Crash course on climate change + finance (notebook on [energy-emissions-economy-environment](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb) & notebook on [sustainable investing](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb)) | **emlyon** business school, Master in Management | 2021   
+Crash course on **climate change** + **finance** (notebook on [energy-emissions-economy-environment](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb) & notebook on [sustainable investing](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb)) | **emlyon** business school, Master in Management | 2021    <br>  <hr>      
 [Machine Learning for Factor Investing](ml_factor.html) |  **emlyon** business school, MSc. in Finance | 2019 - present    
 [Dynamic Dashboards with Shiny](shiny.html) |**emlyon** business school, Master in Management, **emlyon** MSc Digital Market & Data Science | 2018-present  
 [Machine Learning for Factor Investing](ml_factor.html) |  **Imperial College** Business School, MSc. in Finance | 2019      
