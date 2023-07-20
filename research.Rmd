@@ -11,26 +11,23 @@ description: "Research projects of Guillaume Coqueret"
 
 
 
-### Books
+### <font color="#509948">**Books**</font>
 
 #### **Perspectives in sustainable equity investing**
 CRC / Chapman Hall - March 2022   
 Order on <a href="https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (US)</a>
 or <a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (UK)</a>  
-**Website**: http://www.esgperspectives.com  
-Early working paper version on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">SSRN</a>
+**Available**: <a href="http://www.esgperspectives.com" target="_blank">**open source website**</a> - <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">Early working paper version</a>
 
 #### **Machine learning for factor investing** (with T. Guida)
 CRC / Chapman Hall, September 2020   
 Order on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon (US)</a>
-or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2" target="_blank">Amazon (UK)</a>  
-**Website**: http://www.mlfactor.com    
-**Material**: https://github.com/shokru/mlfactor.github.io/tree/master/material    
-**Slides**: <a href="files/SLIDES/SLIDES.html" target="_blank">[html]</a>
+or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2" target="_blank">Amazon (UK)</a>   
+**Available**: <a href="http://www.mlfactor.com" target="_blank">**open source website**</a> - <a href="https://github.com/shokru/mlfactor.github.io/tree/master/material" target="_blank">**Material**</a> - <a href="files/SLIDES/SLIDES.html" target="_blank">**Slides**</a>
 
 _____ 
 
-### Ongoing research (working papers)   
+### <font color="#509948">**Ongoing research** (working papers)</font>  
 
 - A closer look at the biodiversity premium (with T. Giroux): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
 - Unexpected opportunities in misspecified predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
@@ -44,7 +41,7 @@ _____
 
 _____ 
 
-### Published Academic Articles
+### <font color="#509948">**Published Academic Articles**</font> 
 #### **FINANCE & ECONOMICS**
 
 * A note on implied correlation for bivariate contracts, <br/> <span style="color:#3B60A2">**Economics Bulletin**</span>, Vol. 40, No. 2 (2020), pp. 1388-1396 (with B. Tavin) <a href="http://www.accessecon.com/Pubs/EB/2020/Volume40/EB-20-V40-I2-P119.pdf" target="_blank">[Link]</a>   
@@ -99,7 +96,7 @@ _____
 
 _____ 
 
-### In the Practitioner Press
+### <font color="#509948">**In the Practitioner Press**</font> 
 
 * Supervised portfolios, <br> <span style="color:#3B60A2">**Quantitative Finance**</span>, Vol. 22, No. 12 (2022), pp. 2275-2295 (with G. Chevalier & T. Raffinot): 
 <a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank">[Link]</a>
@@ -112,7 +109,7 @@ _____
 _____ 
 
 
-### Book Chapters
+### <font color="#509948">**Book Chapters**</font> 
 - Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2023, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)   
 - Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)    
 
@@ -120,7 +117,7 @@ _____
 _____ 
 
 
-### Book Review
+### <font color="#509948">**Book Review**</font> 
 Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bilokon), <span style="color:#3B60A2">**Quantitative Finance**</span>, 2020  <a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1828609" target="_blank">[Link]</a>
 
  
@@ -128,7 +125,7 @@ Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bil
 _____ 
 
 
-### Permanent Working Papers
+### <font color="#509948">**Permanent Working Papers**</font> 
 * Boosting ESG-Based Optimization With Asset Pricing Characteristics, 2021 (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242" target="_blank">[SSRN]</a>   
 * Stock returns and the cross-section of characteristics: a tree-based approach, 2018 (with T. Guida)  <a href="files/TAPA.pdf" target="_blank">[PDF]</a>    
 * Active allocation to smart factor indices, 2015 (with N. Amenc and L. Martellini) - Scientific Beta Research Paper <a href="files/active_allocation_timing.pdf" target="_blank">[PDF]</a>     
@@ -140,7 +137,7 @@ _____
 
 _____
 
-### Research presentations
+### <font color="#509948">**Research presentations**</font>
 
 * Explaining green returns (2022) <a href="files/SLIDES/Explaining_green_returns.pdf" target="_blank">[pdf]</a>   
 * Advances in asset pricing (2020) <a href="files/SLIDES/AAP/AAP.html" target="_blank">[html]</a>   
@@ -148,6 +145,6 @@ _____
 _____ 
 
 
-### My academic profiles
+### <font color="#509948">**Academic profiles**</font>
 <a href="http://orcid.org/0000-0002-1596-4086" target="_blank">ORCID</a> &emsp;  <a href="https://www.researchgate.net/profile/Guillaume_Coqueret" target="_blank">Researchgate</a> &emsp;  <a href="https://publons.com/researcher/1352687/guillaume-coqueret" target="_blank">Publons</a>    
   
