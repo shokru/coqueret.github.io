@@ -30,11 +30,15 @@ or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathem
 
 _____ 
 
-### Ongoing research (working papers)
+### Ongoing research (working papers)   
+
+- A closer look at the biodiversity premium (with T. Giroux): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
 - Unexpected opportunities in misspecified predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
-- Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>
+- Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>  
+- Interactions in Asset Pricing (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">SSRN</a>   
+- Interpretable Supervised Portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank">SSRN</a>
 
 
 
@@ -68,19 +72,25 @@ _____
 
 
 
-#### **DATA SCIENCE, PROBABILITY & STATISTICS**
+#### **DATA & DECISION SCIENCE**
 
-* Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Forthcoming (2023) - (with B. Tavin) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
+* Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Forthcoming (2023) - (with B. Tavin) <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
 * The determinants of health assessment in the United States: A supervised learning approach, <br/> <span style="color:#3B60A2">**Healthcare Analytics**</span>, Vol. 2 (2022) <a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank">[Link - Open Access]</a>     
 * Persistence in factor-based supervised learning models, <br/>  <span style="color:#3B60A2">**Journal of Finance & Data Science**</span>, Vol. 8 (2022), pp. 12-34 <a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank">[Link - Open Access]</a>  <a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a>   
 * Approximate NORTA simulations for virtual sample generation, <br/>   <span style="color:#3B60A2">**Expert Systems With Applications**</span>, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
+ 
+
+
+#### **PROBABILITY & STATISTICS** (older work)
+
 * On the distribution of the supremum of the spectrally negative stable process with drift, <br/>  <span style="color:#3B60A2"> **Statistics & Probability Letters**</span>, Vol. 107 (2015), pp. 333-340 <a href="https://www.sciencedirect.com/science/article/pii/S0167715215003314" target="_blank">[Link]</a>     
 * Second order risk aggregation with the Bernstein copula, <br/>  <span style="color:#3B60A2"> **Insurance: Mathematics and Economics**</span>, Vol. 58 (2014), pp. 150-158 <a href="https://www.sciencedirect.com/science/article/pii/S0167668714000882" target="_blank">[Link]</a>    
 * Meromorphic Levy-Khintchine exponents with poles of order two, <br/>  <span style="color:#3B60A2"> **Communications on Stochastic Analysis**</span>, Vol. 7, No. 2 (2013), pp. 179-198  <a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank">[Link]</a>  
-* Approximation of probabilistic Laplace transforms and their inverses, <br/>  <span style="color:#3B60A2"> **Communications in Applied Mathematics and Computational Science**</span>, Vol. 7, No. 2 (2012), pp. 231-246  <a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a>    
+* Approximation of probabilistic Laplace transforms and their inverses, <br/>  <span style="color:#3B60A2"> **Communications in Applied Mathematics and Computational Science**</span>, Vol. 7, No. 2 (2012), pp. 231-246  <a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a>   
 
 
-#### **WINE BUSINESS**
+
+#### **WINE BUSINESS** (older work)
 
 * Herding behavior among wine investors, <span style="color:#3B60A2">**Economic Modelling**</span>, Vol. 68 (2018), pp. 318-328 (with B. Aytac and C. Mandou) <a href="https://www.sciencedirect.com/science/article/pii/S0264999317301001" target="_blank">[Link]</a>    
 * Optimal wine pricing for restaurants, <span style="color:#3B60A2">**Journal of Wine Economics**</span>, Vol. 10, No. 2 (2015), pp. 204-224 <a href="https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E" target="_blank">[Link]</a>      
