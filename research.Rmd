@@ -29,6 +29,7 @@ _____
 
 ### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
 
+- Sustainable commodity factors (with B. Tavin and Y. Zhou)    
 - A closer look at the biodiversity premium (with T. Giroux): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
 - Unexpected opportunities in misspecified predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
@@ -54,7 +55,7 @@ _____
 #### **SUSTAINABLE INVESTING**
 
 * ESG news spillovers across the value chain, <br/>
-<span style="color:#3B60A2">**Financial Management**</span>, Forthcoming (2023), (with V. Le Tran) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">[Working Paper]</a>    
+<span style="color:#3B60A2">**Financial Management**</span>, Vol. 52, No. 4 (2023), pp. 677-710 (with V. Le Tran) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">[Working Paper]</a>    
 * International market exposure to sovereign ESG, <br/> <span style="color:#3B60A2">**Journal of Sustainable Finance & Investment**</span>, Forthcoming (2023), (with C. Morgenstern & J. Kelly) <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open Access]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working Paper]</a>   
 * Scopes of carbon emissions and their impact on green portfolios, <br/> <span style="color:#3B60A2">**Economic Modelling**</span>, Vol. 115 (2022), (with T. Anquetin, B. Tavin & L. Welgryn) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0264999322001973" target="_blank">[Link]</a>  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">[Working Paper]</a>      
 * Tuning trend following strategies with macro ESG data, <br/> <span style="color:#3B60A2">**Journal of Impact & ESG Investing**</span>, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
@@ -98,6 +99,7 @@ _____
 
 ### <font color="#9AAD98">**In the Practitioner Press**</font> 
 
+* The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Forthcoming, (with JC Bertrand, N. McLoughlin and S. Mesnard)   
 * Supervised portfolios, <br> <span style="color:#3B60A2">**Quantitative Finance**</span>, Vol. 22, No. 12 (2022), pp. 2275-2295 (with G. Chevalier & T. Raffinot): 
 <a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank">[Link]</a>
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">[Working Paper]</a> - 
