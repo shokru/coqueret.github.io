@@ -99,7 +99,7 @@ _____
 
 ### <font color="#9AAD98">**In the Practitioner Press**</font> 
 
-* The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Forthcoming, (with JC Bertrand, N. McLoughlin and S. Mesnard)   
+* The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Forthcoming, (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="papers/climate_risk_alloc.pdf" target="_blank">[Working Paper]</a>  
 * Supervised portfolios, <br> <span style="color:#3B60A2">**Quantitative Finance**</span>, Vol. 22, No. 12 (2022), pp. 2275-2295 (with G. Chevalier & T. Raffinot): 
 <a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank">[Link]</a>
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">[Working Paper]</a> - 
@@ -129,12 +129,12 @@ _____
 
 ### <font color="#9AAD98">**Permanent Working Papers**</font> 
 * Boosting ESG-Based Optimization With Asset Pricing Characteristics, 2021 (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242" target="_blank">[SSRN]</a>   
-* Stock returns and the cross-section of characteristics: a tree-based approach, 2018 (with T. Guida)  <a href="files/TAPA.pdf" target="_blank">[PDF]</a>    
-* Active allocation to smart factor indices, 2015 (with N. Amenc and L. Martellini) - Scientific Beta Research Paper <a href="files/active_allocation_timing.pdf" target="_blank">[PDF]</a>     
-* Estimation of covariance matrices for portfolio optimization, 2013 (with V. Milhau) - Scientific Beta Research Paper <a href="files/Estim_cov.pdf" target="_blank">[PDF]</a>    
-* Equity portfolios with improved liability-hedging benefits - Long Version  (with R. Deguest, L. Martellini and V. Milhau)  <a href="files/OTPP.pdf" target="_blank">[PDF]</a>    
-* Risk aggregation with the generalized logistic distribution, 2013 <a href="files/Logistic.pdf" target="_blank">[PDF]</a>  
-* Pricing exotic options in the Finite Moment Log-Stable model, 2012 <a href="files/FMLS.pdf" target="_blank">[PDF]</a>  
+* Stock returns and the cross-section of characteristics: a tree-based approach, 2018 (with T. Guida)  <a href="papers/TAPA.pdf" target="_blank">[PDF]</a>    
+* Active allocation to smart factor indices, 2015 (with N. Amenc and L. Martellini) - Scientific Beta Research Paper <a href="papers/active_allocation_timing.pdf" target="_blank">[PDF]</a>     
+* Estimation of covariance matrices for portfolio optimization, 2013 (with V. Milhau) - Scientific Beta Research Paper <a href="papers/Estim_cov.pdf" target="_blank">[PDF]</a>    
+* Equity portfolios with improved liability-hedging benefits - Long Version  (with R. Deguest, L. Martellini and V. Milhau)  <a href="papers/OTPP.pdf" target="_blank">[PDF]</a>    
+* Risk aggregation with the generalized logistic distribution, 2013 <a href="papers/Logistic.pdf" target="_blank">[PDF]</a>  
+* Pricing exotic options in the Finite Moment Log-Stable model, 2012 <a href="papers/FMLS.pdf" target="_blank">[PDF]</a>  
 
 
 _____
