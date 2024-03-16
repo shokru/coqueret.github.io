@@ -25,7 +25,7 @@ The links below lead to html **slides** and course **material**.
 
 6. **Shiny 3** (Further options & deployment): <a href="files/shiny/S6_deploy.html" target="_blank">**slides**</a> and more importantly: the <a href="files/shiny/steps6.zip" target="_blank">**examples**</a>.  
 
-7. **Geocomputing, Twitter data & simple text mining**: <a href="files/shiny/geocomputing.nb.html" target="_blank">**notebook for maps**</a> and <a href="files/shiny/Twitter_text.nb.html" target="_blank">**notebook for Twitter text analysis**</a> + <a href="files/shiny/Geocomputing.zip" target="_blank">**all files**</a>  for the maps.
+7. **Geocomputing, Twitter data & simple text mining**: <a href="files/shiny/geocomputing.nb.html" target="_blank">**notebook for maps**</a> and <a href="files/shiny/Mastodon_text.nb.html" target="_blank">**notebook for Mastodon text analysis**</a> + <a href="files/shiny/Geocomputing.zip" target="_blank">**all files**</a>  for the maps.
 
 8. **Modelling** & **case study**: <a href="files/shiny/S8.zip" target="_blank">**all files (zipped)**</a>.
 
