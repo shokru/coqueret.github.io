@@ -23,7 +23,8 @@ I am an associate professor at <a href="https://www.em-lyon.com/en/" target="_bl
 #### <font color="#9AAD98">**Academic positions** </font>  
 
 Head of QUANT research center, em**lyon business school** (2022 - present)    
-Associate Professor, em**lyon business school** (2018 - present)  
+Professor, em**lyon business school** (2024 - present)  
+Associate Professor, em**lyon business school** (2018 - 2024)   
 Assistant Professor, **Montpellier Business School** (2015 - 2018)  
 Senior Quantitative Researcher, **EDHEC-Risk Institute** (2013 - 2015)
 
@@ -35,7 +36,7 @@ See also my <a href="https://www.linkedin.com/in/guillaumecoqueret/" target="_bl
 
 Accreditation to supervise research (French HDR), **Univ. Lyon 2** (2022)    
 Ph.D. in Finance & Applied Mathematics, **ESSEC Business School** & **Univ. Lille 1** (2008-2012)  
-Master of Science in Probability and Finance, **Univ. Paris 6** (2007-2008)    
+Master of Science in Probability and Finance, **Sorbonne Univ.** (ex-Univ. Paris 6 UPMC) (2007-2008)    
 Master of Science in Market Finance, **Univ. Paris 1** (2005-2006)    
 Master of Science in Management, **ESSEC Business School** (2002-2007)   
 
@@ -60,11 +61,11 @@ Master of Science in Management, **ESSEC Business School** (2002-2007)
 
 #### <font color="#9AAD98">**Contact** </font>  
 em**lyon business school**   
-23, avenue Guy de Collongue  
-69130 Ecully - **FRANCE**   
+144, avenue Jean Jaurès    
+69007 Lyon - **FRANCE**   
 coqueret/at/em-lyon.com  
 
 
 ------  
-Updated in Jan. 2024
+Updated in Apr. 2024
 

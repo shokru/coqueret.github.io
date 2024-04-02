@@ -20,8 +20,8 @@ or <a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaum
 **Available**: <a href="http://www.esgperspectives.com" target="_blank">**open source website**</a> - <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">Early working paper version</a>
 
 #### **Machine learning for factor investing** (with T. Guida)
-CRC / Chapman Hall, September 2020   
-Order on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon (US)</a>
+CRC / Chapman Hall, **R** version published in September 2020 - **Python** version published in September 2023    
+Order the **R** version on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon (US)</a>
 or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2" target="_blank">Amazon (UK)</a>   
 **Available**: <a href="http://www.mlfactor.com" target="_blank">**open source website**</a> - <a href="https://github.com/shokru/mlfactor.github.io/tree/master/material" target="_blank">**Material**</a> - <a href="files/SLIDES/SLIDES.html" target="_blank">**Slides**</a>
 
@@ -29,21 +29,24 @@ _____
 
 ### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
 
-- Sustainable commodity factors (with B. Tavin and Y. Zhou)    
-- A closer look at the biodiversity premium (with T. Giroux): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
+- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">SSRN</a>    
+- The biodiversity premium (with T. Giroux & O.D. Zerbib): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
 - Unexpected opportunities in misspecified predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
 - Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>  
 - Interactions in Asset Pricing (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">SSRN</a>   
-- Interpretable Supervised Portfolios (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank">SSRN</a>
 
 
 
 _____ 
 
 ### <font color="#9AAD98">**Published Academic Articles**</font> 
-#### **FINANCE & ECONOMICS**
+
+Articles are grouped into **research themes** below.
+
+<details>
+  <summary>**FINANCE & ECONOMICS**</summary>
 
 * A note on implied correlation for bivariate contracts, <br/> <span style="color:#3B60A2">**Economics Bulletin**</span>, Vol. 40, No. 2 (2020), pp. 1388-1396 (with B. Tavin) <a href="http://www.accessecon.com/Pubs/EB/2020/Volume40/EB-20-V40-I2-P119.pdf" target="_blank">[Link]</a>   
 * Procedural Rationality, Asset Heterogeneity and Market Selection,  <br/> <span style="color:#3B60A2">**Journal of Mathematical Economics**</span>, Vol. 82 (2019), pp. 125-149 (with B. Tavin) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2952659" target="_blank">[Working paper]</a>   <br/>
@@ -51,55 +54,88 @@ _____
 * An investigation of model risk in a market with jumps and stochastic volatility, <br/>   <span style="color:#3B60A2">**European Journal of Operational Research**</span>, Vol. 253 (2016), pp. 648-658 (with B. Tavin) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0377221716301461" target="_blank">[Link]</a>    <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2474223" target="_blank">[Working paper]</a>
 * Lookback option prices under a spectrally negative tempered-stable model, <br/>   <span style="color:#3B60A2">**International Journal of Theoretical and Applied Finance**</span>, Vol. 16, No. 3 (2013)  <a href="https://www.worldscientific.com/doi/abs/10.1142/S021902491350012X" target="_blank">[Link]</a>    
 
+</details>
 
-#### **SUSTAINABLE INVESTING**
+
+
+<details>
+  <summary>**SUSTAINABLE FINANCE**</summary>
 
 * ESG news spillovers across the value chain, <br/>
 <span style="color:#3B60A2">**Financial Management**</span>, Vol. 52, No. 4 (2023), pp. 677-710 (with V. Le Tran) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">[Working Paper]</a>    
-* International market exposure to sovereign ESG, <br/> <span style="color:#3B60A2">**Journal of Sustainable Finance & Investment**</span>, Forthcoming (2023), (with C. Morgenstern & J. Kelly) <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open Access]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working Paper]</a>   
 * Scopes of carbon emissions and their impact on green portfolios, <br/> <span style="color:#3B60A2">**Economic Modelling**</span>, Vol. 115 (2022), (with T. Anquetin, B. Tavin & L. Welgryn) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0264999322001973" target="_blank">[Link]</a>  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">[Working Paper]</a>      
-* Tuning trend following strategies with macro ESG data, <br/> <span style="color:#3B60A2">**Journal of Impact & ESG Investing**</span>, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
+
+</details>
 
 
-#### **STANDARD PORTFOLIO CHOICE**
+
+<details>
+  <summary>**STANDARD PORTFOLIO CHOICE**</summary>
 
 * Training trees on tails with applications to portfolio choice, <br/>   <span style="color:#3B60A2">**Annals of Operations Research**</span>, Vol. 288 (2020), pp. 181-221 (with T. Guida) <a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank">[Working paper]</a> 
 <a href="http://www.gcoqueret.com/tot.html" target="_blank">[Material]</a>   
 * Characteristics-based portfolio choice with leverage constraints, <br/>   <span style="color:#3B60A2">**Journal of Banking and Finance**</span>, Vol. 70 (2016), pp. 23-37 (with M. Ammann and J-P. Schade) <a href="https://www.sciencedirect.com/science/article/pii/S0378426616300516" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2736324" target="_blank">[Working paper]</a>   
 * Diversified minimum-variance portfolios, <br/>   <span style="color:#3B60A2">**Annals of Finance**</span>, Vol. 11, No. 2 (2015), pp. 221-241 <a href="https://link.springer.com/article/10.1007%2Fs10436-014-0253-x" target="_blank">[Link]</a>    
 
+</details>
 
 
-#### **DATA & DECISION SCIENCE**
+
+<details>
+  <summary>**DATA & DECISION SCIENCES**</summary>
 
 * Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Forthcoming (2023) - (with B. Tavin) <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
 * The determinants of health assessment in the United States: A supervised learning approach, <br/> <span style="color:#3B60A2">**Healthcare Analytics**</span>, Vol. 2 (2022) <a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank">[Link - Open Access]</a>     
 * Persistence in factor-based supervised learning models, <br/>  <span style="color:#3B60A2">**Journal of Finance & Data Science**</span>, Vol. 8 (2022), pp. 12-34 <a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank">[Link - Open Access]</a>  <a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a>   
 * Approximate NORTA simulations for virtual sample generation, <br/>   <span style="color:#3B60A2">**Expert Systems With Applications**</span>, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
  
+</details>
 
-
-#### **PROBABILITY & STATISTICS** (older work)
+ 
+ 
+<details>
+  <summary>**PROBABILITY & STATISTICS** (older work)</summary>
 
 * On the distribution of the supremum of the spectrally negative stable process with drift, <br/>  <span style="color:#3B60A2"> **Statistics & Probability Letters**</span>, Vol. 107 (2015), pp. 333-340 <a href="https://www.sciencedirect.com/science/article/pii/S0167715215003314" target="_blank">[Link]</a>     
 * Second order risk aggregation with the Bernstein copula, <br/>  <span style="color:#3B60A2"> **Insurance: Mathematics and Economics**</span>, Vol. 58 (2014), pp. 150-158 <a href="https://www.sciencedirect.com/science/article/pii/S0167668714000882" target="_blank">[Link]</a>    
 * Meromorphic Levy-Khintchine exponents with poles of order two, <br/>  <span style="color:#3B60A2"> **Communications on Stochastic Analysis**</span>, Vol. 7, No. 2 (2013), pp. 179-198  <a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank">[Link]</a>  
 * Approximation of probabilistic Laplace transforms and their inverses, <br/>  <span style="color:#3B60A2"> **Communications in Applied Mathematics and Computational Science**</span>, Vol. 7, No. 2 (2012), pp. 231-246  <a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a>   
 
+</details>
 
 
-#### **WINE BUSINESS** (older work)
+
+<details>
+  <summary>**WINE BUSINESS** (older work)</summary>
 
 * Herding behavior among wine investors, <span style="color:#3B60A2">**Economic Modelling**</span>, Vol. 68 (2018), pp. 318-328 (with B. Aytac and C. Mandou) <a href="https://www.sciencedirect.com/science/article/pii/S0264999317301001" target="_blank">[Link]</a>    
 * Optimal wine pricing for restaurants, <span style="color:#3B60A2">**Journal of Wine Economics**</span>, Vol. 10, No. 2 (2015), pp. 204-224 <a href="https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E" target="_blank">[Link]</a>      
 
+</details>
 
 
 _____ 
 
 ### <font color="#9AAD98">**In the Practitioner Press**</font> 
 
-* The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Forthcoming, (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="papers/climate_risk_alloc.pdf" target="_blank">[Working Paper]</a>  
+
+<details>
+  <summary>**SUSTAINABLE INVESTING**</summary>
+
+* The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Vol. 50, No. 5 (2024), pp. 238-263 (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="https://www.pm-research.com/content/iijpormgmt/early/2024/01/30/jpm20241586" target="_blank">[Link]</a> <a href="papers/climate_risk_alloc.pdf" target="_blank">[Working Paper]</a>    
+* International market exposure to sovereign ESG, <br/> <span style="color:#3B60A2">**Journal of Sustainable Finance & Investment**</span>, Forthcoming (2022), (with C. Morgenstern & J. Kelly) <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open Access]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working Paper]</a>   
+* Tuning trend following strategies with macro ESG data, <br/> <span style="color:#3B60A2">**Journal of Impact & ESG Investing**</span>, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
+
+</details>
+
+
+
+
+<details>
+  <summary>**QUANTITATIVE FINANCE**</summary>
+
+* Interpretable supervised portfolios, <br> 
+<span style="color:#3B60A2">**Journal of Financial Data Science**</span>, Forthcoming (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank">[Working Paper]</a>    
 * Supervised portfolios, <br> <span style="color:#3B60A2">**Quantitative Finance**</span>, Vol. 22, No. 12 (2022), pp. 2275-2295 (with G. Chevalier & T. Raffinot): 
 <a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank">[Link]</a>
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">[Working Paper]</a> - 
@@ -107,6 +143,8 @@ _____
 * Stock-specific sentiment and return predictability, <br/> <span style="color:#3B60A2">**Quantitative Finance**</span>, Vol. 20, No. 9 (2020), pp. 1531-1551 <a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1736314" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3248925" target="_blank">[Working paper]</a>   
 * Machine learning in systematic equity allocation: a model comparison, <br/> <span style="color:#3B60A2">**Wilmott Magazine**</span>, Vol. 2018, Issue 98 (2018), pp. 24-33 (with T. Guida) <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a>      
 * Equity portfolios with improved liability-hedging benefits, <br/>   <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Vol. 43, No. 2 (Winter 2017), pp. 37-49 (with L. Martellini and V. Milhau) <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a>    
+
+</details>
 
 _____ 
 
