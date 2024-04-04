@@ -10,13 +10,13 @@
 ---
 
 <br/>  
-<br/>  
+
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
 <img src="images/gcoq.jpg" style="width:33%; border:25px; margin-right: 110px" align="right">
 
-I am an associate professor at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests include **supervised learning for financial economics** and <span style="color:#2BB833">**sustainable equity investing**</span>. 
+I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests include **supervised learning for financial economics** and <span style="color:#2BB833">**sustainable equity investing**</span>. 
 
 ------  
 

@@ -11,12 +11,13 @@
 
 Course and links | Institution & program | Years 
 ------- | ---- | --   
+**Introductory macroeconomics** | **Ecole Normale Supérieure** de Lyon | 2024 - present   
 **Financial macroeconomics**: [C-CAPM](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S1_consumption.html), [Extreme risks](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S2_rare_events.html), [Heterogeneous agents](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S3_HAMs.html), [Degrowth & sustainability](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S4_alt_growth.html) | **Ecole Normale Supérieure** de Lyon | 2024 - present   
 **Finance** & **data analysis** (ML) in R: [fraud detection](https://www.gcoqueret.com/files/ML_course/fraud_detection.html), [credit scoring](https://www.gcoqueret.com/files/ML_course/credit_risk.html), [time-series and crypto](https://www.gcoqueret.com/files/ML_course/ts_crypto.html)  | **emlyon** business school, MSc. in Data Science & AI Strategy | 2022 - present <hr> <hr>  
-[Green finance: concepts & quantitative methods](http://www.greenfinance.education) | **emlyon** business school, Master in Management | 2022 - present   
-Crash course on **climate change** + **finance** (notebook on [energy-emissions-economy-environment](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb) & notebook on [sustainable investing](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb)) | **emlyon** business school, Master in Management | 2021    <br>  <hr>      
+[Green finance: concepts & quantitative methods](http://www.greenfinance.education) | **emlyon** business school, Master in Management | 2022 - present     
 [Machine Learning for Factor Investing](ml_factor.html) |  **emlyon** business school, MSc. in Finance | 2019 - present    
-[Dynamic Dashboards with Shiny](shiny.html) |**emlyon** business school, Master in Management, **emlyon** MSc Digital Market & Data Science | 2018-present  
+[Dynamic Dashboards with Shiny](shiny.html) |**emlyon** business school, Master in Management, **emlyon** MSc Digital Market & Data Science | 2018-2025   
+Crash course on **climate change** + **finance** (notebook on [energy-emissions-economy-environment](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb) & notebook on [sustainable investing](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb)) | **emlyon** business school, Master in Management | 2021    <br>  <hr>      
 [Machine Learning for Factor Investing](ml_factor.html) |  **Imperial College** Business School, MSc. in Finance | 2019      
 [Introduction to statistics with R](rstats.html) | **emlyon** business school, Master in Management | 2018   
 Non-Gaussian processes in finance | **emlyon** business school, Master in Quantitative Finance | 2018     
