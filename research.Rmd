@@ -29,9 +29,8 @@ _____
 
 ### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
 
-- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">SSRN</a>    
+- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">SSRN</a> <br> (Winner of the cascad best reproduced paper award at the 2024 AFFI conference)     
 - The biodiversity premium (with T. Giroux & O.D. Zerbib): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
-- Unexpected opportunities in misspecified predictive regressions (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>       
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
 - Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>  
@@ -84,7 +83,8 @@ Articles are grouped into **research themes** below.
 <details>
   <summary>**DATA & DECISION SCIENCES**</summary>
 
-* Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Forthcoming (2023) - (with B. Tavin) <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
+* Unexpected opportunities in misspecified predictive regressions,  <br/> <span style="color:#3B60A2">**European Journal of Operational Research**</span> Forthcoming (2024) (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>   
+* Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Vol. 75, No. 6 (2023), pp. 1055-1075 (with B. Tavin) <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
 * The determinants of health assessment in the United States: A supervised learning approach, <br/> <span style="color:#3B60A2">**Healthcare Analytics**</span>, Vol. 2 (2022) <a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank">[Link - Open Access]</a>     
 * Persistence in factor-based supervised learning models, <br/>  <span style="color:#3B60A2">**Journal of Finance & Data Science**</span>, Vol. 8 (2022), pp. 12-34 <a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank">[Link - Open Access]</a>  <a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a>   
 * Approximate NORTA simulations for virtual sample generation, <br/>   <span style="color:#3B60A2">**Expert Systems With Applications**</span>, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
@@ -135,7 +135,7 @@ _____
   <summary>**QUANTITATIVE FINANCE**</summary>
 
 * Interpretable supervised portfolios, <br> 
-<span style="color:#3B60A2">**Journal of Financial Data Science**</span>, Forthcoming (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank">[Working Paper]</a>    
+<span style="color:#3B60A2">**Journal of Financial Data Science**</span>, Vol. 6, No. 2, pp. 10 - 34 (with G. Chevalier & T. Raffinot): <a href="https://www.pm-research.com/content/iijjfds/6/2/10" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank">[Working Paper]</a>    
 * Supervised portfolios, <br> <span style="color:#3B60A2">**Quantitative Finance**</span>, Vol. 22, No. 12 (2022), pp. 2275-2295 (with G. Chevalier & T. Raffinot): 
 <a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank">[Link]</a>
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">[Working Paper]</a> - 

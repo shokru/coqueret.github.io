@@ -14,7 +14,7 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:33%; border:25px; margin-right: 110px" align="right">
+<img src="images/gcoq.jpg" style="width:30%; border:25px; margin-right: 100px" align="right">
 
 I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests include **supervised learning for financial economics** and <span style="color:#2BB833">**sustainable equity investing**</span>. 
 
@@ -22,7 +22,7 @@ I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_bl
 
 #### <font color="#9AAD98">**Academic positions** </font>  
 
-Head of QUANT research center, em**lyon business school** (2022 - present)    
+Head of the QUANT research center, em**lyon business school** (2022 - present)    
 Professor, em**lyon business school** (2024 - present)  
 Associate Professor, em**lyon business school** (2018 - 2024)   
 Assistant Professor, **Montpellier Business School** (2015 - 2018)  
@@ -67,5 +67,5 @@ coqueret/at/em-lyon.com
 
 
 ------  
-Updated in Apr. 2024
+Updated in May 2024
 
