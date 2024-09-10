@@ -1,0 +1,43 @@
+<br/>  
+
+
+Introduction to macroeconomics
+================
+This page contains teaching material for a starter on macroeconomics - given at the Ecole Normale Supérieure CPES (classes préparatoires aux études supérieures). 
+
+------------------------------------------------------------------------
+
+
+Topics
+----
+
+The links below lead to html **slides** and course **material**.
+
+
+- <a href="files/S4_MLE.nb.html" target="_blank">**Introduction, data and basic salient facts**</a>   
+- <a href="files/S4_MLE.nb.html" target="_blank">**The Solow model** and extensions</a>    
+- **The Ramsey model**
+
+---------
+
+
+-----
+
+Resources
+----
+
+<a href="https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/" target="_blank">**Advanced Macroeconomics: An Easy Guide**</a> by Campante et al.
+
+<a href="http://piketty.pse.ens.fr/files/BarroSalaIMartin2004.pdf" target="_blank">**Economic growth**</a> by Barro and Sala-ì-Martin.
+
+<a href="https://www.mheducation.com/highered/product/advanced-macroeconomics-romer/M9781260185218.html" target="_blank">**Advanced Macroeconomics** (editor website)</a> by Romer.
+
+
+
+
+------------------------------------------------------------------------
+
+**DISCLAIMER**: the data and code are meant for pedagogical use only. 
+
+------------------------------------------------------------------------
+
