@@ -17,7 +17,7 @@ The links below lead to html **slides** and course **material**.
 
 - <a href="files/macro/S1_intro.html" target="_blank">**Introduction, data and basic salient facts**</a>   
 - <a href="files/macro/S2_Solow.html" target="_blank">**The Solow model** and extensions</a>    
-- **The Ramsey model**
+- <a href="files/macro/S3_Ramsey.html" target="_blank">**The Ramsey model**</a>
 
 ---------
 
