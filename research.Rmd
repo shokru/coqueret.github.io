@@ -9,32 +9,33 @@ description: "Research projects of Guillaume Coqueret"
 <br/>  
 <br/>  
 
+<style>
+details > summary {
+  padding: 9px;
+  width: 100%;
+  background-color: #ecf5ec;
+  border: none;
+  box-shadow: 1px 1px 2px #bbbbbb;
+  cursor: pointer;
+}
+
+br {
+  display: block; /* makes it have a width */
+  content: ""; /* clears default height */
+  margin-top: 0; /* change this to whatever height you want it */
+}
+</style>
 
 
-### <font color="#9AAD98">**Books**</font>
 
-#### **Perspectives in sustainable equity investing**
-CRC / Chapman Hall - March 2022   
-Order on <a href="https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (US)</a>
-or <a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (UK)</a>  
-**Available**: <a href="http://www.esgperspectives.com" target="_blank">**open source website**</a> - <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">Early working paper version</a>
-
-#### **Machine learning for factor investing** (with T. Guida)
-CRC / Chapman Hall, **R** version published in September 2020 - **Python** version published in September 2023    
-Order the **R** version on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon (US)</a>
-or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2" target="_blank">Amazon (UK)</a>   
-**Available**: <a href="http://www.mlfactor.com" target="_blank">**open source website**</a> - <a href="https://github.com/shokru/mlfactor.github.io/tree/master/material" target="_blank">**Material**</a> - <a href="files/SLIDES/SLIDES.html" target="_blank">**Slides**</a>
-
-_____ 
 
 ### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
 
-- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">SSRN</a> <br> (Winner of the cascad best reproduced paper award at the 2024 AFFI conference)     
-- The biodiversity premium (with T. Giroux & O.D. Zerbib): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>    
+- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">SSRN</a> <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
 - Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>  
-- Interactions in Asset Pricing (with G. Chevalier & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">SSRN</a>   
+- Interactions in Asset Pricing (with G. Chevalier, M. Laguerre & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">SSRN</a>   
 
 
 
@@ -55,17 +56,35 @@ Articles are grouped into **research themes** below.
 
 </details>
 
+<br>
 
 
 <details>
   <summary>**SUSTAINABLE FINANCE**</summary>
 
+* The biodiversity premium, <br/>
+<span style="color:#3B60A2">**Ecological Economics**</span>, Forthcoming (with T. Giroux & O.D. Zerbib): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>     
 * ESG news spillovers across the value chain, <br/>
 <span style="color:#3B60A2">**Financial Management**</span>, Vol. 52, No. 4 (2023), pp. 677-710 (with V. Le Tran) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">[Working Paper]</a>    
 * Scopes of carbon emissions and their impact on green portfolios, <br/> <span style="color:#3B60A2">**Economic Modelling**</span>, Vol. 115 (2022), (with T. Anquetin, B. Tavin & L. Welgryn) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0264999322001973" target="_blank">[Link]</a>  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">[Working Paper]</a>      
 
 </details>
 
+<br>
+
+
+<details>
+  <summary>**DATA & DECISION SCIENCES**</summary>
+
+* Unexpected opportunities in misspecified predictive regressions,  <br/> <span style="color:#3B60A2">**European Journal of Operational Research**</span> Forthcoming (2024) (with R. Deguest): <a href="https://www.sciencedirect.com/science/article/pii/S0377221724004235" target="_blank">[Link]</a> <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>   
+* Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Vol. 75, No. 6 (2023), pp. 1055-1075 (with B. Tavin) <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
+* The determinants of health assessment in the United States: A supervised learning approach, <br/> <span style="color:#3B60A2">**Healthcare Analytics**</span>, Vol. 2 (2022) <a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank">[Link - Open Access]</a>     
+* Persistence in factor-based supervised learning models, <br/>  <span style="color:#3B60A2">**Journal of Finance & Data Science**</span>, Vol. 8 (2022), pp. 12-34 <a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank">[Link - Open Access]</a>  <a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a>   
+* Approximate NORTA simulations for virtual sample generation, <br/>   <span style="color:#3B60A2">**Expert Systems With Applications**</span>, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
+ 
+</details>
+
+<br>
 
 
 <details>
@@ -77,21 +96,9 @@ Articles are grouped into **research themes** below.
 * Diversified minimum-variance portfolios, <br/>   <span style="color:#3B60A2">**Annals of Finance**</span>, Vol. 11, No. 2 (2015), pp. 221-241 <a href="https://link.springer.com/article/10.1007%2Fs10436-014-0253-x" target="_blank">[Link]</a>    
 
 </details>
-
-
-
-<details>
-  <summary>**DATA & DECISION SCIENCES**</summary>
-
-* Unexpected opportunities in misspecified predictive regressions,  <br/> <span style="color:#3B60A2">**European Journal of Operational Research**</span> Forthcoming (2024) (with R. Deguest): <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>   
-* Dynamic decision making with predictive panels, <br/> <span style="color:#3B60A2">**Journal of the Operational Research Society**</span>, Vol. 75, No. 6 (2023), pp. 1055-1075 (with B. Tavin) <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working Paper]</a> - <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R notebook]</a>   
-* The determinants of health assessment in the United States: A supervised learning approach, <br/> <span style="color:#3B60A2">**Healthcare Analytics**</span>, Vol. 2 (2022) <a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank">[Link - Open Access]</a>     
-* Persistence in factor-based supervised learning models, <br/>  <span style="color:#3B60A2">**Journal of Finance & Data Science**</span>, Vol. 8 (2022), pp. 12-34 <a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank">[Link - Open Access]</a>  <a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a>   
-* Approximate NORTA simulations for virtual sample generation, <br/>   <span style="color:#3B60A2">**Expert Systems With Applications**</span>, Vol. 73 (2017), pp. 69-81 <a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a>    
  
-</details>
-
  
+<br> 
  
 <details>
   <summary>**PROBABILITY & STATISTICS** (older work)</summary>
@@ -103,7 +110,7 @@ Articles are grouped into **research themes** below.
 
 </details>
 
-
+<br>
 
 <details>
   <summary>**WINE BUSINESS** (older work)</summary>
@@ -116,6 +123,24 @@ Articles are grouped into **research themes** below.
 
 _____ 
 
+### <font color="#9AAD98">**Books**</font>
+
+#### **Perspectives in sustainable equity investing**
+CRC / Chapman Hall - March 2022   
+Order on <a href="https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (US)</a>
+or <a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon (UK)</a>  
+**Available**: <a href="http://www.esgperspectives.com" target="_blank">**open source website**</a> - <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">Early working paper version</a>
+
+#### **Machine learning for factor investing** (with T. Guida)
+CRC / Chapman Hall, **R** version published in September 2020 - **Python** version published in September 2023    
+Order the **R** version on <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on the publisher's website</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon (France)</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon (US)</a>
+or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2" target="_blank">Amazon (UK)</a>   
+**Available**: <a href="http://www.mlfactor.com" target="_blank">**open source website**</a> - <a href="https://github.com/shokru/mlfactor.github.io/tree/master/material" target="_blank">**Material**</a> - <a href="files/SLIDES/SLIDES.html" target="_blank">**Slides**</a>
+
+
+
+_____ 
+
 ### <font color="#9AAD98">**In the Practitioner Press**</font> 
 
 
@@ -123,12 +148,12 @@ _____
   <summary>**SUSTAINABLE INVESTING**</summary>
 
 * The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Vol. 50, No. 5 (2024), pp. 238-263 (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="https://www.pm-research.com/content/iijpormgmt/early/2024/01/30/jpm20241586" target="_blank">[Link]</a> <a href="papers/climate_risk_alloc.pdf" target="_blank">[Working Paper]</a>    
-* International market exposure to sovereign ESG, <br/> <span style="color:#3B60A2">**Journal of Sustainable Finance & Investment**</span>, Forthcoming (2022), (with C. Morgenstern & J. Kelly) <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open Access]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working Paper]</a>   
+* International market exposure to sovereign ESG, <br/> <span style="color:#3B60A2">**Journal of Sustainable Finance & Investment**</span>, Vol. 14, No. 4, (2024), pp 968-987, (with C. Morgenstern & J. Kelly) <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open Access]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working Paper]</a>   
 * Tuning trend following strategies with macro ESG data, <br/> <span style="color:#3B60A2">**Journal of Impact & ESG Investing**</span>, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
 
 </details>
 
-
+<br>
 
 
 <details>
