@@ -20,8 +20,8 @@ The links below lead to html **slides** and course **material**.
 3. <a href="files/macro/S3_Ramsey.html" target="_blank">**The Ramsey model**</a> and <a href="files/macro/S4_open.html" target="_blank">**open economies** (short)</a>.  
 4. <a href="files/macro/S5_human_capital.html" target="_blank">**Human capital**</a>   
 5. <a href="files/macro/S6_technology.html" target="_blank">**Technological change**</a>   
-6. Unified growth theory    
-7. Simulations    
+6. <a href="files/macro/S7_unified_theory.html" target="_blank">**Unified growth theory**</a>      
+7. <a href="files/macro/S8_Simulations.html" target="_blank">**Simulations**</a>       
 8. Some financial economics
 
 ---------
