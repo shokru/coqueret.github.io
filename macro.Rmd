@@ -22,7 +22,7 @@ The links below lead to html **slides** and course **material**.
 5. <a href="files/macro/S6_technology.html" target="_blank">**Technological change**</a>   
 6. <a href="files/macro/S7_unified_theory.html" target="_blank">**Unified growth theory**</a>      
 7. <a href="files/macro/S8_Simulations.html" target="_blank">**Simulations**</a>       
-8. Some financial economics
+8. <a href="files/macro/S9_finance.html" target="_blank">**Some financial economics**</a>
 
 ---------
 

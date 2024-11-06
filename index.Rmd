@@ -20,15 +20,22 @@ I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_bl
 
 ------  
 
-#### <font color="#9AAD98">**Academic positions** </font>  
+#### <font color="#9AAD98">**Employment** </font>  
 
-Head of the QUANT research center, em**lyon business school** (2022 - present)    
 Professor, em**lyon business school** (2024 - present)  
 Associate Professor, em**lyon business school** (2018 - 2024)   
 Assistant Professor, **Montpellier Business School** (2015 - 2018)  
 Senior Quantitative Researcher, **EDHEC-Risk Institute** (2013 - 2015)
 
 See also my <a href="https://www.linkedin.com/in/guillaumecoqueret/" target="_blank"> **LinkedIn** profile</a>. 
+
+------  
+
+#### <font color="#9AAD98">**Academic positions** </font>  
+
+Board member, Association Française de Finance ([AFFI](https://www.affi.asso.fr/)) (2024 - present)   
+Head of the AIM Institute (AI and Management), em**lyon business school** (2024 - present)      
+Head of the QUANT research center, em**lyon business school** (2022 - 2024)    
 
 ------   
 
@@ -67,5 +74,5 @@ coqueret/at/em-lyon.com
 
 
 ------  
-Updated in May 2024
+Updated in November 2024
 
