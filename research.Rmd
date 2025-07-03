@@ -33,11 +33,14 @@ br2 {
 
 ### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
 
-- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">SSRN</a> <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
-- Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">SSRN</a>    
-- Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">SSRN</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
-- Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>  
-- Interactions in Asset Pricing (with G. Chevalier, M. Laguerre & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">SSRN</a>   
+- Overparametrized models with posterior drift (with M. Laguerre) <a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a>    
+- Persistent anomalies and nonstandard errors (with C. Pérignon)   
+- Global p-values in multi-design studies (with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier)   
+- Incentives in corporate energy mix decisions (with B. Qiu)    
+- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">[SSRN]</a> <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
+- Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">[SSRN]</a>    
+- Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">[SSRN]</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
+- Interactions in Asset Pricing (with G. Chevalier, M. Laguerre & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">[SSRN]</a>   
 
 
 
@@ -209,7 +212,8 @@ Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bil
 _____ 
 
 
-### <font color="#9AAD98">**Permanent Working Papers**</font> 
+### <font color="#9AAD98">**Permanent Working Papers**</font>   
+* Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>   
 * Boosting ESG-Based Optimization With Asset Pricing Characteristics, 2021 (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242" target="_blank">[SSRN]</a>   
 * Stock returns and the cross-section of characteristics: a tree-based approach, 2018 (with T. Guida)  <a href="papers/TAPA.pdf" target="_blank">[PDF]</a>    
 * Active allocation to smart factor indices, 2015 (with N. Amenc and L. Martellini) - Scientific Beta Research Paper <a href="papers/active_allocation_timing.pdf" target="_blank">[PDF]</a>     

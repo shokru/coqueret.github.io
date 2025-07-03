@@ -14,9 +14,14 @@
 
 <link rel="stylesheet" href="styles.css" type="text/css">
 
-<img src="images/gcoq.jpg" style="width:30%; border:25px; margin-right: 100px" align="right">
+<img src="images/gcoq.jpg" style="width:30%; border:35px; margin-right: 100px" align="right">
 
-I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>. My research interests include **supervised learning for financial economics** and <span style="color:#2BB833">**sustainable equity investing**</span>. 
+I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>.  
+My research interests include 
+
+- <span style="color:#2BB833">**sustainable equity investing**</span>,  
+- **supervised learning for financial economics** and 
+- **the impact of AI on organizations more generally**. 
 
 ------  
 
@@ -76,5 +81,5 @@ coqueret/at/em-lyon.com
 
 
 ------  
-Updated in February 2025
+Updated in July 2025
 
