@@ -34,7 +34,7 @@ br2 {
 ### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
 
 - Overparametrized models with posterior drift (with M. Laguerre) <a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a>    
-- Persistent anomalies and nonstandard errors (with C. Pérignon)   
+- Persistent anomalies and nonstandard errors (with C. Pérignon) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank">[SSRN]</a>  
 - Global p-values in multi-design studies (with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier)   
 - Incentives in corporate energy mix decisions (with B. Qiu)    
 - Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">[SSRN]</a> <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
