@@ -1,0 +1,575 @@
+---
+title: "Growth: the Ramsey model"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    number-sections: true
+    number-depth: 3
+engine: knitr    
+filters:
+  - webr      
+#webr:
+#  packages: ['ggplot2', 'dplyr']    
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)   # Package for data wrangling
+library(readxl)      # Package to import MS Excel files
+library(latex2exp)   # Package for LaTeX expressions
+library(quantmod)    # Package for stock data extraction
+library(highcharter) # Package for reactive plots
+```
+
+
+The content of this notebook is mostly inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/). The numerical insights are derived from [**Economic Growth**](https://mitpress.mit.edu/9780262025539/economic-growth/) by Barro and Sala-i-Martin. 
+
+
+# Context
+
+Basically, the Solow model, in part because it is overly simplistic, has several flaws. The major one being that it is incapable of explaining **growth**.
+
+The Ramsey model is almost 100 years old (1928) but has had a sizable impact on economic theory in general and in **social/environmental discounting** in particular. It is often referred to as the **Neoclassical Growth Model** (NGM). It was later extended by David Cass and Tjalling Koopmans (separately). 
+
+# The model
+
+## Consumption
+
+Perhaps one of the most important changes compared to the Solow model is the handling of **consumption** (which will later on be studied in greater depth). In the **Solow model**, consumption was inferred from a savings rate, $s$. In the **Ramsey model**, as is standard in mainstream economics, the (representative) consumer has a total utility of:
+$$U=\int_0^\infty e^{-\rho t} e^{n t} u(c_t)dt.$$
+
+$u(\cdot)$ is the utility over per-capita consumption, $n$ is the growth rate of the population and $\rho$ the discounting rate that summaries **preferences over time**, i.e., how much we prefer to consume now versus some time in the future. As is customary, we assume that  
+
+- $u'(c)>0$: the more you consume, the happier (or more satisfied) you are;    
+- $u''(c)<0$: the marginal utility decreases, meaning the higher your consumption, the lower the improvement of utility when consumption increases. Imagine you have infinite appetite: you will derive more utility from eating a second candy (compared to just one) than from eating 101 candies (compared to 100).    
+
+If we assume **zero depreciation** ($\delta=0$), the motion of capital is then given by $\dot{K}_t=Y_t-C_t$ (by constraint). Thus, in per-capita terms,
+$$\frac{\dot{K}_t}{L_t}=f(k_t)-c_t.$$
+
+From the previous chapter, it also holds that $\frac{\dot{K}_t}{L_t}=\dot{k}_t+nk_t$, thus 
+
+$$\dot{k}_t=f(k_t)-nk_t-c_t,$$ {#eq-budget}
+
+The evolution of **per-capita capital**: it increases with production, but decreases with the growth rate of the population (which is at the denominator of $k_t$), and of course with $c_t$. The above equation can be interpreted as a **budget constraint**.
+
+
+:::{.callout-note collapse="false"}
+## About the Lagrange multiplier method
+
+The Lagrange multiplier is used when trying to optimize a function under some constraint. If we seek to minimize (or maximize) $f(x)$ and the constraint can be written as $g(x)=0$, then the Lagrangian is
+$$f(x)-\lambda g(x)$${#eq-lagrange}
+and the first order conditions (FOCs) with respect to $x$ and $\lambda$ will impose restrictions on the solution - often leading to a unique value. Note that $x$ (and $\lambda$) may be of vector type.
+
+For instance, assume you are running a factory and your production function is $R=f(C,L)=10\sqrt{CL}$ (i.e., $\alpha = 1/2$ with CRS). Each unit of labor $L$ and commodity $C$ costs 2 dollars and 1 dollar, respectively. Hence your total cost is ($C+2L$)$\$$ per unit. Suppose you have an initial amount of money of 10$\$$, how can you maximize you profit (revenue minus costs)?
+The Lagrangian is
+$$\mathcal{L}(C,L)=10\sqrt{CL}-\lambda(C+2L-10)$$
+and the derivatives are
+$$\frac{\partial \mathcal{L}}{\partial C}=5\sqrt{L/C}-\lambda, \quad \frac{\partial \mathcal{L}}{\partial L}=5\sqrt{C/L}-2\lambda, \quad \frac{\partial \mathcal{L}}{\partial \lambda}=C+2L-10.$$
+
+The budget constraint is clear from the last FOC: $C+2L=10$. We also have $2\sqrt{L/C}=\sqrt{C/L}$, i.e., $2L=C$ so that $2C=10$, i.e., $C=5$ and $L=2.5$. The profit is approximately `r round(10*sqrt(5*2.5)-10,2)`. Below, we illustrate this with two levels of revenues. 
+
+```{webr-r}
+#| context: setup
+#| class-source: my_class
+#| classes: my_class
+#| message: false
+#| warning: false
+library(tidyverse)
+```  
+
+Let us see graphically. 
+
+```{webr-r}
+#| class-source: my_class
+#| classes: my_class
+n_points <- 30
+R_1 <- 40
+R_2 <- 30
+C <- seq(1, 10, length.out = n_points)
+L_1 <- (R_1/10)^2/C
+L_2 <- (R_2/10)^2/C
+data.frame(C, L_1, L_2) |>
+  pivot_longer(-C, names_to = "Revenue", values_to = "L") |>
+  ggplot(aes(x = C, y = L, color = Revenue)) + geom_line() + theme_classic() +
+  geom_function(fun = ~ (10-.x)/2, color = "black") +
+  theme(legend.position.inside = c(0.6,0.6)) + 
+  scale_color_manual(values = c("#FF8811", "#2299FF"),
+                     labels = c(paste("R =", R_1), paste("R =", R_2)))
+```
+
+One is feasible, the other is not. Recall that the profit is $R-10$, hence the optimal revenue is around 35$\$$.
+
+:::
+
+
+
+::: {.callout-tip collapse="false"}
+## Solution of the dynamic problem
+
+The solution of the consumer's problem is complicated because she has to determine at time 0 the best **path** of future consumption. To solve this, we must resort to [**optimal control theory**](https://en.wikipedia.org/wiki/Optimal_control). We seek to optimize with respect to the **control variable** $c_t$; whereas $k_t$ is the underlying **state variable**. We define the Hamiltonian
+$$H=u(c_t)e^{nt}+\lambda_t(f(k_t)-nk_t-c_t),$$
+
+which is the dynamic equivalent of the Lagrangian in static optimization - modulo the fact that the multiplier is associated with $\dot{k}_t$ (and not the exact budget constraint). $\lambda_t$ is the co-state variable, the counterpart of the Lagragian multiplier. The first order conditions (FOCs) are then, for the control variable:
+$$\frac{\partial H}{\partial c_t}=e^{nt}u'(c_t)-\lambda_t=0 \quad \Leftrightarrow \quad u'(c_t)e^{nt}=\lambda_t$$
+and for the state variable, the condition reads (not equal to zero):
+$$\frac{\partial H}{\partial k_t}=\lambda_t(f'(k_t)-n) = -\dot{\lambda}_t +\rho \lambda_t \quad \Leftrightarrow \quad \dot{\lambda}_t =\lambda_t(n + \rho -f'(k_t)) $$ {#eq-lambda} 
+
+Lastly, we mention an additional requirement, the so-called **transversality condition** (TVC):
+$$\lim_{t \rightarrow \infty} e^{-\rho t}k_t \lambda_t=0,$$
+which basically implies that infinite horizon discounted capital is equal to zero.
+
+:::
+
+From the first FOC, it must hold that $e^{nt}u'(c_t)=\lambda_t$ and differentiating this with respect to time, we get (dividing by $\lambda_t$):
+$$u''(c_t)e^{nt}\dot{c}_t + nu'(c_t) e^{nt}=\dot{\lambda}_t \quad \Leftrightarrow \quad \frac{u''(c_t)c_t \dot{c}_t}{u'(c_t)c_t}=\frac{\dot{\lambda}_t}{\lambda_t}-n,$$
+
+i.e.,
+
+$$\frac{\dot{c}_t}{c_t}=-\sigma \left(\frac{\dot{\lambda}_t}{\lambda_t}-n \right),$$ {#eq-euler0}
+
+where
+
+$$\sigma=-\frac{u'(c_t)}{u''(c_t)c_t}>0$$ {#eq-EIS}
+
+is the [**elasticity of intertemporal substitution**](https://en.wikipedia.org/wiki/Elasticity_of_intertemporal_substitution) (EIS). The larger $\sigma$ is, the more the agent wants to substitute consumption over time (i.e., be more flexible). A low EIS means that the agent wants to experience a **smooth flow** of consumption.
+
+::: {.callout-important collapse="false"}
+From @eq-lambda and @eq-euler0, this is equivalent to 
+
+$$\frac{\dot{c}_t}{c_t}=\sigma (f'(k_t)-\rho)$$ {#eq-euler}
+This is a central equation in macroeconomics (and asset pricing too) - often called the **Euler equation**. The interpretation is as follows. The agent seeks to optimize her consumption flow. If she sacrifices 1 unit of consumption to increase capital for future consumption (reflected in $f'(k_t)$), the problem is that the next consumption flow will be discounted by $\rho$. Consumption remains constant $\frac{\dot{c}_t}{c_t}=0$ when the two are equal. 
+
+In **Economic Growth** by Barro & Sala-ì-Martin, the expression is a bit different. Therein, the authors resort to another approach that focuses on the labor market and access to loans. In the end, they find $\frac{\dot{c}_t}{c_t}=\sigma (r-\rho)$, where $r$ is the rate of loans. 
+
+:::
+
+
+::: {.callout-note collapse="false"}
+## Derivation of the co-state equation
+
+We have not yet mentioned where @eq-lambda came from. This is a bit of a technical result that fetches into the arsenal of **dynamic optimization**. The full specification is as follows (integrating the static Lagrange "function" - again, the multiplier scales $\dot{k}_t$ and not the full constraint):
+
+$$\int_0^\infty L_tdt= \int_0^\infty e^{-\rho t}(e^{nt}u(c_t)+\lambda_t(f(k_t)-nk_t-c_t - \dot{k}_t))dt$$
+
+At a **stationary point** of the above integral (here, corresponding to a FOC which we seek), there is an important result called the [**Euler-Lagrange equation**](https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation) that implies that differentiating with respect to $k_t$, we have
+$$\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{k}}  \right) =\frac{\partial L}{\partial k}$$
+Basically, the derivative with respect to $k$ is a mix between those with respect to $t$ and $\dot{k}$. The complexity of the Euler-Lagrange equation is that is refers to **functionals of functions**, hence the underlying object is already complex.
+
+In the above equation, we have $\frac{\partial L}{\partial \dot{k}}=-e^{-\rho t}\lambda_t$ so $\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{k}}  \right)=\rho e^{-\rho t}\lambda_t-e^{-\rho t}\dot{\lambda_t}$ and at the same time $\frac{\partial L}{\partial k}=e^{\rho t}\lambda_t(f'(k_t)-n)$,
+which brings us back to @eq-lambda.
+
+:::
+
+
+## The balanced growth path
+
+The dynamics of the models are given by @eq-budget for **capital** and @eq-euler for **consumption**. Two equations and two unknowns. 
+
+Again, to obtain a constant $\frac{\dot{k}_t}{k_t}$, we need $\dot{k}_t=0$, which, from @eq-budget imposes
+$$c^*=f(k^*)-nk^*$$ {#eq-bgp}
+
+Setting @eq-euler to zero gives $f'(k^*)=\rho$. 
+
+
+## Wages in a CES economy
+
+The question here pertains to the relative growth rates of the economy versus that of capital. Indeed if the growth rate of capital is larger than that of the economy, this may lead to the increase of inequalities because those owning the capital will make more than those who are simply working (a topic that has been [much discussed](https://en.wikipedia.org/wiki/Capital_in_the_Twenty-First_Century)). We can shed some light on this question by specifying a new production function, namely the **Constant Elasticity of Substitution** (CES) function: 
+
+$$Y=\left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{\epsilon/(\epsilon-1)}, \quad \epsilon \ge 0.$$ {#eq-CES}
+
+The **marginal rate of substitution** is^[This comes from
+$\frac{\partial Y}{\partial K}=\beta (1-1/\epsilon)\frac{\epsilon}{(\epsilon-1)} K^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}$ and 
+$\frac{\partial Y}{\partial (AL)}=\alpha (AL)^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}$] 
+
+$$MRS = \frac{\frac{\partial Y}{\partial (AL)}}{\frac{\partial Y}{\partial K}}=\frac{\alpha}{\beta}\left(\frac{AL}{K}\right)^{-1/\epsilon}. $$
+
+The **elasticity of substitution** is the percentage change in the capital-labor ratio K/(AL) resulting from a percentage change in the MRS:
+
+$$ES=\frac{d \log(K/(AL))}{d\log(MRS)}$$
+Since $\log(MRS) = \log(\alpha/\beta) -\frac{1}{\epsilon} \log((AL)/K)$, differentiating both sides with respect to $\log(K/(AL))$ gives $ES=\epsilon$. This justifies the name CES model.
+
+Now, let us introduce the notion of **profit** for the aggregate economy. This profit is equal to the value of the output (considered as sold), minus the cost of production, i.e.,
+
+$$\Pi = Y - wL - \varsigma,$$
+where $w$ is the wage level and $\varsigma$ are the costs linked to capital (not to be confused with consumption - apologies for the notation). To maximize profit, we differentiate with respect to $L$:
+$$\frac{\partial \Pi}{\partial L}=\alpha A (AL)^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha  (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}-w$$
+
+Hence, upon equilibrium, the labor share is 
+$$\frac{wL}{Y}=\alpha \left( \frac{AL}{Y}\right)^{1-1/\epsilon}$$
+$\rightarrow$ The long-term dynamics depend on $A$ and $\epsilon$.
+
+
+# Linearizations
+
+## Baseline
+
+As mentioned before, the model is driven by two quantities, **capital** and **consumption**. From @eq-budget and @eq-euler, we have that $\dot{k}_t$ and $\dot{c}_t$ depend on the values of both $k_t$ and $c_t$. Unfortunately, not in a purely linear fashion. Hence, we can take a Taylor-expansion-like approach to linearize the behavior of the two variables in the vicinity of the equilibrium. For instance, for $\dot{k}_t$, we simplify the expression to 
+$$\dot{k}_t \approx \left.\frac{\partial \dot{k}_t}{\partial k_t}\right|_{x_t=x^*}(k_t-k^*) + \left. \frac{\partial \dot{k}_t}{\partial c_t}\right|_{x_t=x^*}(c_t-c^*)$$
+where the notation $\left. \frac{\partial y_t}{\partial z_t}\right|_{x_t=x^*}$ means: "take the derivative of $y$ with respect to $z$ and take $x$ to be equal to $x^*$". Here, $x=(k,c)$ encompasses the two variables $k$ and $c$.
+
+We have $\left.\frac{\partial \dot{k}_t}{\partial k_t}\right|_{k^*}=f'(k^*)-n$ (from the budget constraint) and $\left. \frac{\partial \dot{k}_t}{\partial c_t}\right|_{k^*}=-1$. From @eq-euler, we complete obtain the terms for $\dot{c}_t$. In the end, it holds that
+
+$$\begin{bmatrix} \dot{k}_t \\ \dot{c}_t \end{bmatrix} = \Omega \begin{bmatrix} k_t - k^* \\ c_t - c^* \end{bmatrix}$$
+with
+
+$$\Omega = \begin{bmatrix} \rho-n & -1 \\
+\sigma f''(k^*) & 0
+\end{bmatrix}.$$ {#eq-Omega}
+
+Below, we consider a simple Cobb-Douglas production function, $f(k)=A k^\alpha$. Hence $f'(k)=A\alpha k^{\alpha-1}$ and $f''(k)=-A\alpha(1-\alpha)k^{\alpha-2}$. In particular, $f'(k^*)=\rho$ implies $A \alpha (k^*)^{\alpha-1}=\rho$, i.e., $k^*=(\rho/(\alpha A))^{1/(\alpha-1)}$.
+
+
+## Log-linearization 
+
+We pursue with a Cobb-Douglas production function, so that the dynamics are
+
+$$\frac{\dot{k}_t}{k_t}=Ak_t^{\alpha-1}-n-\frac{c_t}{k_t}=Ae^{(\alpha-1)\log(k_t)}-n-e^{\log(c_t/k_t)},$$
+$$\frac{\dot{c}_t}{c_t}=\sigma(\alpha Ak_t^{\alpha - 1}-\rho)=\sigma \left( \alpha A e^{(\alpha-1)\log(k_t)}-\rho \right).$$
+Upon equilibrium,
+$$Ae^{(\alpha-1)\log(k^*)}-e^{\log(c^*/k^*)}=n, \quad \alpha A e^{(\alpha-1)\log(k^*)}=\rho $$ {#eq-equi}
+
+
+Notice that for any variable, $\frac{\partial \log(x_t)}{\partial t}= \frac{\dot{x}_t}{x_t}$. Hence if we write $\hat{k}_t=\log(k_t)$
+$$\frac{\partial \hat{k}_t}{\partial t}= Ae^{(\alpha-1)\hat{k}_t}-n-e^{\hat{c}_t-\hat{k}_t}, \quad \frac{\partial \hat{c}_t}{\partial t}=\sigma \left( \alpha A e^{(\alpha-1)\hat{k}_t}-\rho \right)$$
+So that from @eq-equi,
+$$\left.\frac{\partial}{\partial \hat{k}_t} \left(Ae^{(\alpha-1)\hat{k}_t}-n-e^{\hat{c}_t-\hat{k}_t} \right) \right|_{\hat{k}_t=\hat{k}^*} = \left. A(\alpha-1)e^{(\alpha-1)\hat{k}_t}+e^{\hat{c}_t-\hat{k}_t} \right|_{\hat{k}_t=\hat{k}^*}=\rho-n$$
+and
+
+$$\left.\frac{\partial}{\partial \hat{c}_t} \left(Ae^{(\alpha-1)\hat{k}_t}-n-e^{\hat{c}_t-\hat{k}_t} \right) \right|_{\hat{k}_t=\hat{k}^*} = \left. -e^{\hat{c}_t-\hat{k}_t} \right|_{\hat{k}_t=\hat{k}^*}=n-\rho/\alpha$$
+
+We can do the same for $c$:
+$$\left.\frac{\partial}{\partial \hat{k}_t} \left(\sigma \left( \alpha A e^{(\alpha-1)\hat{k}_t}-\rho \right) \right) \right|_{\hat{k}_t=\hat{k}^*} = \left. \sigma \alpha (\alpha-1)Ae^{(\alpha-1)\hat{k}_t} \right|_{\hat{k}_t=\hat{k}^*}=\sigma (\alpha-1)\rho$$
+and the last derivative is zero.
+
+So, again via **Talyor expansion**, we can write
+$$\begin{bmatrix} \frac{\partial \log(k_t)}{\partial t} \\ \frac{\partial \log(c_t)}{\partial t} \end{bmatrix}=
+\begin{bmatrix} \rho-n & n-\rho/\alpha \\ \sigma(\alpha-1)\rho & 0  \end{bmatrix} \begin{bmatrix} \log(k_t/k^*) \\ \log(c_t/c^*) \end{bmatrix} ,$$
+
+or, in our other notation,
+
+$$\begin{bmatrix} \frac{\partial \hat{k}_t}{\partial t} \\ \frac{\partial \hat{c}_t}{\partial t} \end{bmatrix}=
+\begin{bmatrix} \rho-n & n-\rho/\alpha \\ \sigma(\alpha-1)\rho & 0  \end{bmatrix} \begin{bmatrix} \hat{k}_t-\hat{k}^* \\ \hat{c}_t-\hat{c}^* \end{bmatrix}. $$
+
+## Analytical solution
+
+The solution of the [matrix differential equation](https://en.wikipedia.org/wiki/Matrix_differential_equation) takes the form^[This is in fact an approximation: it should depend on the eignevectors too - but we omit this for now.] 
+$$\hat{k}_t=\hat{k}^* + \psi_1 e^{\beta_1 t} + \psi_2 e^{\beta_2t}, $$
+
+where the $\beta_i$ are the **eigenvalues** of the transition matrix above and the $\psi_i$ are some constants. In the usual parameter configuration, the eigenvalues have opposite signs. Because we are interested in equilibria, the system must not blow up, hence the $\psi_i$ associated with the positive eigenvalue must be zero. To identify the remaining constant, it suffices to take $t=0$. In the end, the dynamics of the log of capital per capita is
+$$\hat{k}_t=\hat{k}^*+(\hat{k}_0-\hat{k}^*)e^{\beta t},$$
+with $\beta$ being the negative eigenvalue. 
+
+
+# Time-elimination method
+
+It **_should_** be relatively easy to simulate the $k$ and $c$ system using the **Euler method**. The problem is that it is only stable for a choice of one particular value for $c_0$! Hence, we must find this value! The system is
+\begin{align}
+\dot{k}_t & = Ak_t^\alpha -nk_t-c_t \\
+\dot{c}_t & = \sigma c_t(A\alpha k_t^{\alpha-1}-\rho)
+\end{align}
+
+We would like to express consumption as a function of $k$, i.e., write $c=c(k)$. This form has derivative with respect to $k$:
+$$c'(k)=\frac{\partial c}{\partial k}=\frac{\partial c}{\partial t}\frac{\partial t}{\partial k}=\frac{\dot{c}}{\dot{k}}=\frac{ \sigma c_t(A\alpha k_t^{\alpha-1}-\rho)}{Ak_t^\alpha -nk_t-c_t }$$
+
+While we do not know the values of these expressions for $c_0,k_0$, we know them for $c^*, k^*$. However, $c'(k^*)$ is undefined because equal to $0/0$. We must resort to [L'Hospital rule](https://en.wikipedia.org/wiki/L'H%C3%B4pital's_rule) and use the derivatives instead. It holds that
+
+$$c'(k^*)=\frac{\sigma(c^*A\alpha(\alpha-1)(k^*)^{\alpha-2}+0)}{A\alpha(k^*)^{\alpha-1}-n-c'(k^*)}$$
+This make a **quadratic equation** for $c'(k^*)$: $ac'(k^*)+bc'(k^*)+d=0$, which can be solved to get target values.
+$$
+c'(k^*)=\frac{1}{2} \left( n-A\alpha (k^*)^{\alpha-1}\pm \sqrt{\left(n-A\alpha (k^*)^{\alpha-1}\right)^2-4\sigma c^*A\alpha(\alpha-1)(k^*)^{\alpha-2} }\right)
+$$ {#eq-cprime}
+
+But this allows only to solve the problem in the $c$-$k$ space, not the dynamic (time-indexed) one.
+
+
+
+# Numerical examples
+
+
+
+## Divergence in time simulations
+
+This part of the notebook is here to illustrate one drawback of the model: it is very hard to simulate the time-series of $c_t$ and $k_t$ that lead to a stable point. 
+
+First, we initialize some parameters.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+library(tidyverse)
+
+A <- 1
+alpha <- 0.5
+n <- 0.02
+rho <- 0.03
+sigma <- 1
+```
+
+The fixed points are
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| 
+k_star <- (rho/A/alpha)^(1/(alpha-1))
+c_star <- A*k_star^alpha - n * k_star
+k_star
+c_star
+```
+
+And $\Omega$ from @eq-Omega:
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+Omega <- matrix(c(rho - n, -1, -sigma*c_star*A*alpha*(1-alpha)*k_star^(alpha-2), 0), 
+                nrow = 2, byrow = T)
+Omega
+```
+
+
+Let's have a look at the eigen-decomposition of $\Omega$.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+eigen(Omega)
+```
+
+We do have eigenvalues of opposite signs - and eigenvectors close to $v=(1,0)$. 
+
+
+We then turn to an attempt at simulating evolution of the system. Note that there is no randomness involved.  
+We proceed with the [Euler discretization scheme](https://en.wikipedia.org/wiki/Euler_method). The idea is to compute the increments $\dot{x}_t=[\dot{k}_t \ \dot{c}_t]$ and to update $x_t:=x_{t-1}+\epsilon\dot{x}_t$ with a small step $\epsilon=dt$. 
+
+We recall that we generate the paths according to @eq-budget and @eq-euler. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+n_steps <- 1000
+k_0 <- k_star * 0.9  
+c_0 <- c_star * 0.9
+dt <- 0.1
+
+path_generator <- function(n_steps, A, alpha, rho, k_0, c_0, dt){
+  x_dot <- matrix(0, nrow = n_steps, ncol = 2)
+  x <- matrix(0, nrow = n_steps, ncol = 2)
+  x[1,] <- c(k_0, c_0)
+  for(j in 2:n_steps){
+    x_dot[j,1] <- A*x[j-1,1]^alpha - n*x[j-1,1] - x[j-1,2]
+    x_dot[j,2] <- x[j-1,2] * sigma * (A*alpha*x[j-1,1]^(alpha-1)-rho)
+    x[j,] <- x[j-1,] + x_dot[j,] * dt
+  }
+  x
+}
+
+x <- path_generator(n_steps, A, alpha, rho, k_star*0.9, 0.9*c_star, dt)
+```
+
+Note that the initial points are taken close to the steady state. 
+
+We can then plot the outcome.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+
+intercept <- data.frame(value = c(k_star, c_star), series = c("k", "c"))
+
+bind_cols(t = 1:n_steps, k = x[,1], c = x[,2]) |>
+  pivot_longer(-t, names_to = "series", values_to = "value") |>
+  ggplot(aes(x = t, y = value)) + geom_line() +
+  facet_wrap(vars(series), scales = "free") + theme_classic() +
+  geom_hline(data = intercept, aes(yintercept = value), color = "red")
+```
+
+
+
+With the linearization technique, the paths are similar. But unfortunately, they do not converge to the steady state... (shown in red).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+
+x_dot <- matrix(0, nrow = n_steps, ncol = 2)
+x <- matrix(0, nrow = n_steps, ncol = 2)
+x[1,] <- c(k_0, c_0)
+
+for(j in 2:n_steps){
+  x_dot[j,] <- Omega %*% (x[j-1,] - c(k_star, c_star))
+  x[j,] <- x[j-1,] + x_dot[j,] * dt
+}
+
+bind_cols(t = 1:n_steps, k = x[,1], c = x[,2]) |>
+  pivot_longer(-t, names_to = "series", values_to = "value") |>
+  ggplot(aes(x = t, y = value)) + geom_line() +
+  facet_wrap(vars(series), scales = "free") + theme_classic() +
+  geom_hline(data = intercept, aes(yintercept = value), color = "red")
+```
+
+## The exponential form
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+
+n_steps <- 300
+k_0 <- 1
+beta <- min(eigen(Omega)$values) # smallest eigenvalue
+k <- k_star + (k_0-k_star) * exp(beta*(1:n_steps))
+data.frame(t = 1:n_steps, k = k) |>
+  ggplot(aes(x = t, y = k)) + geom_line() + theme_classic() +
+  geom_hline(yintercept = k_star, color = "red", linetype = 2)
+```
+
+## The $k$-$c$ space
+
+As usual, let's assume a Cobb-Douglas production function $y = f(k) = Ak^\alpha$, i.e., $f'(k)=\alpha Ak^{\alpha-1}$. We work with $\alpha = 0.5$ below for simplicity.   
+
+We recall the fundamental identities of the steady state (see @eq-bgp and below): $c^*=f(k^*)-nk^*$ and $f'(k^*)=\rho$, which implies $k^*= (\rho/(\alpha A))^{1/(\alpha-1)}$.   
+
+Note that the relationship $c=f(k)-nk$ is plotted below. The second identity depends on $k$ only and is used to derive $k^*$.  
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+
+A <- 1
+alpha <- 0.5
+rho <- 0.03
+n <- 0.02
+k_star <- (rho/alpha/A)^(1/(alpha-1))
+c_star <- A*k_star^alpha - n*k_star
+
+n_grid <- 100
+k <- seq(0, 1000, length.out = n_grid)
+c <- A*k^alpha - n * k
+
+data.frame(k = k, c = c) |>
+  ggplot(aes(x = k, y = c)) + geom_line(color = "#2299FF") + theme_classic() +
+  geom_vline(xintercept = k_star, linetype = 2) +
+  annotate("text", x = k_star, y = c_star, label = "k*", hjust = 1.3, vjust = 0) +
+  annotate("point", x = k_star, y = c_star)
+```
+
+
+
+# Extensions
+
+The initial model has been extended in several directions:
+
+- **capital depreciation**: when the motion of capital is penalized by a factor $-\delta k_t$    
+- **human capital**: by adding a new production factor     
+- **technology**: when including particular productivity gains   
+- **more than one sector** (specialization)
+
+Some of the above points will be covered later on. But capital depreciation is easy to treat. Indeed, in @eq-budget, it suffices to retrieve a portion of capital:
+
+$$\dot{k}_t=f(k_t)-nk_t-c_t,$$ 
+becomes
+$$\dot{k}_t=f(k_t)-(n+\delta)k_t-c_t,$$ {#eq-budget2}
+which comes from the new law of motion of capital $\dot{K}_t = Y_t-C_t-\delta K_t$. 
+
+
+# Some useless code
+
+$c'(k^*)$ from @eq-cprime.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+#b <- A*alpha*k_star^(alpha-1) - n
+#c_prime <- 0.5*(-b+sqrt(b^2-4*sigma*c_star*alpha*(alpha-1)*k_star^(alpha-2)))
+
+
+```
+
+Log-linearization version
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+# hat_k_0 <- log(k_star) + 0.2
+# hat_c_0 <- log(c_star) + 0.2
+# x_dot <- matrix(0, nrow = n_steps, ncol = 2)
+# x <- matrix(0, nrow = n_steps, ncol = 2)
+# x[1,] <- c(hat_k_0, hat_c_0)
+# 
+# M <- matrix(c(rho-n, n-rho/alpha, sigma*(alpha-1)*rho, 0), byrow = T, nrow = 2)
+#intercept <- data.frame(value = c(log(k_star), log(c_star)), series = c("k", "c"))
+# 
+# for(j in 2:n_steps){
+#   #x_dot[j,] <- Omega %*% (x[j-1,] - c(k_star, c_star))
+#   x_dot[j,] <- M %*% (x[j-1,]-c(log(k_star), log(c_star))) 
+#   x[j,] <- x[j-1,] + x_dot[j,] * dt
+# }
+```
+
+

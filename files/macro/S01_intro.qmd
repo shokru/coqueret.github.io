@@ -1,0 +1,602 @@
+---
+title: "Introduction to macroeconomics"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    number-sections: true
+    number-depth: 3
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.78em;
+}
+
+.center{
+  margin: 0!important;
+  height: 30px;
+}
+```
+
+**NOTE**: The present notebook is coded with [quarto](https://quarto.org/), in the [**R**](https://www.r-project.org/) programming language. The white margin to the right will be used to display code output. To access [World Bank data](https://data.worldbank.org/) using python, we recommend this short [colab notebook](https://colab.research.google.com/drive/1qvbbAYaXNz5FP4Q5zyY21qkZvUIPF1P9#scrollTo=cg3IH0nTuJu8).
+
+This document relies heavily on the [{**tidyverse**}](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other important libraries. 
+
+
+To install packages, use the install.packages() function as below (commented on purpose).
+
+```{r}
+# install.packages("tidyverse")
+```
+
+Once they are installed, we can call/load/activate them in the current session. 
+
+```{r, message = F, warning = F}
+library(tidyverse)  # Package for data wrangling
+library(readxl)     # Package to import MS Excel files
+library(latex2exp)  # Package for LaTeX expressions
+library(quantmod)   # Package for stock data extraction
+library(plotly)     # For interactive plots
+library(ggsci)      # For addition color palettes
+```
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous ones have have not been executed. 
+
+# Topics in macroeconomics
+
+**Macroeconomics** is a vast discipline. There are many valuable textbooks on the matter, but we take for instance the recent and excellent [Advanced Macroeconomics - An Easy Guide](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/) - *CSV2021* henceforth (initials of authors). It will guide us all along the way.
+Its content is divided into the following sections:
+
+::: {.callout-note collapse="true"}
+## Content of the *CSV2021* book
+
+* __Growth Theory__   
+
+  - <span style="color:#20C779">Growth theory preliminaries</span>      
+  - <span style="color:#20C779">The neoclassical growth model</span>    
+  - <span style="color:#20C779">An application: The small open economy</span>     
+  - <span style="color:#20C779">Endogenous growth models I: Escaping diminishing returns (with human capital)</span>    
+  - <span style="color:#20C779">Endogenous growth models II: Technological change</span>   
+  - <span style="color:#20C779">Proximate and fundamental causes of growth</span>    
+  
+* __Overlapping Generations Models__   
+
+  - <span style="color:#20C779">Overlapping generations models</span>   
+  - <span style="color:#20C779">An application: Pension systems and transitions</span>   
+  - <span style="color:#20C779">Unified growth theory</span>    
+
+* __Consumption and Investment__   
+
+  - <span style="color:#20C779">Consumption</span>    
+  - <span style="color:#20C779">Consumption under uncertainty and macro finance</span>    
+  - Investment   
+
+* __Short Term Fluctuations__  
+
+  - <span style="color:#20C779">Real business cycles</span>    
+  - <span style="color:#20C779">(New) Keynesian theories of fluctuations: A primer</span>       
+  - Unemployment    
+
+* __Monetary and Fiscal Policy__  
+
+  - Fiscal policy I: Public debt and the effectiveness of fiscal policy  
+  - Fiscal policy II: The long-run determinants of fiscal policy  
+  - Monetary policy: An introduction   
+  - Rules vs Discretion  
+  - Recent debates in monetary policy 
+  - New developments in monetary and fiscal policy   
+
+:::
+
+
+
+In the present course, we will cover those in <span style="color:#20C779">green</span>. For the sake of consistency, we will often keep the same notations as *CSV2021*.  
+
+We also recommend the older monographs [**Economic Growth**](http://piketty.pse.ens.fr/files/BarroSalaIMartin2004.pdf) by Barro and Sala-ì-Martin and [Advanced Macroeconomics](https://www.mheducation.com/highered/product/advanced-macroeconomics-romer/M9781260185218.html) by Romer. Those who want to push further can have a look at the [**PhD Macro Book**](https://phdmacrobook.org/). 
+
+
+Also, before we start, a brief warning (to be discussed in class):
+
+![](aeroflot.png)
+
+
+
+# Empirical overview
+
+The aim of any model is to **explain** or even **predict salient empirical facts**. In order to test the validity of models, we need data.
+
+
+There are many sources from which we can obtain macroeconomic data and many are national or international institutions. Some are more practical and user-friendly than others, especially via their API services.  
+
+::: {.callout-note collapse="false"}
+## List of resources
+
+We mention for instance: 
+
+- the [**World Bank**](https://data.worldbank.org/);    
+- the [**Federal Reserve of Saint Louis**](https://fred.stlouisfed.org/);    
+- the [**OECD**](https://data.oecd.org/);    
+- the [**International Monteary Fund**](https://www.imf.org/external/datamapper/datasets), see also [here](https://www.imf.org/en/Publications/WEO/weo-database/2023/October/download-entire-database) for instance;    
+- the [**Bank for International Settlements**](https://data.bis.org/bulkdownload);  
+- [gapminder](https://www.gapminder.org/data). 
+
+I recommend to have a look at the [econdataverse](https://www.econdataverse.org/), and perhaps the [IMF's World Economic Outlook R package](https://teal-insights.github.io/r-imfweo/) in particular. 
+:::
+
+Below, we will use the first one (World Bank) because we feel it is the most user-friendly to access directly and does not require any authentication.
+
+We list the indicators (from the World Bank) we'll study below:   
+
+- **GDP**: [NY.GDP.MKTP.CD](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD). These strange identifiers are how the World Bank calls the fields it discloses;     
+- [**population**](https://data.worldbank.org/indicator/SP.POP.TOTL) (SP.POP.TOTL);   
+- [**GDP per capita**](https://data.worldbank.org/indicator/NY.GDP.PCAP.CD) (NY.GDP.PCAP.CD);    
+- [**GDP growth**](https://data.worldbank.org/indicator/NY.GDP.MKTP.KD.ZG) (NY.GDP.MKTP.KD.ZG);    
+- [**central government debt**](https://data.worldbank.org/indicator/GC.DOD.TOTL.GD.ZS) (GC.DOD.TOTL.GD.ZS);     
+- [**inflation**](https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG) (FP.CPI.TOTL.ZG), and      
+- [**unemployment**](https://data.worldbank.org/indicator/SL.UEM.TOTL.ZS) (SL.UEM.TOTL.ZS).    
+
+The data starts in 1960 and for simplicity, we focus on two countries, France and the United States. To add other countries, you need to add their names as is it specified in the data - see example below with Spain, Italy, Poland, Slovenia and Venezuela. You can also specify their [ISO alpha-2 codes](https://www.nationsonline.org/oneworld/country_code_list.htm).  
+
+
+The chunk below fetches the data. It can take up to a few minutes to run.  
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 4 
+#| fig.height: 2
+#| cache: true
+
+library(WDI)
+wb_raw = WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
+                            "population" = "SP.POP.TOTL",
+                            "gdp" = "NY.GDP.MKTP.CD",
+                            "gdp_growth" = "NY.GDP.MKTP.KD.ZG",
+                            "inflation" = "FP.CPI.TOTL.ZG",
+                            "debt" = "GC.DOD.TOTL.GD.ZS",
+                            "unemployment" = "SL.UEM.TOTL.ZS"), 
+              #country = c('FR','US'), # here you can specify some countries
+              extra = TRUE,
+              start = 1960, 
+              end = 2025) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c)
+wb_data <- wb_raw |> filter(country %in% c("France", "United States")) |> arrange(country, year)
+wb_eu <- wb_raw |> filter(country %in% c("Spain", "Italy", "Poland", "Slovenia", "Venezuela, RB")) |> arrange(country, year)
+```
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 4 
+#| fig.height: 2
+#| cache: true
+
+wb_eu <- wb_eu |> mutate(gdp_per_capita = if_else(is.na(gdp_per_capita), gdp/population, gdp_per_capita))
+```
+
+
+Below, we provide a **snapshot** of the data.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+head(wb_data |> select(-region))
+```
+
+As usual, there are some missing points (NAs). Several causes can explain missing data. Either the country did not compute (or want to compute/disclose) particular indicators, or the database simply does not include it. Sometimes, it may be necessary to resort to several sources and join them. 
+
+
+## Gross domestic product
+
+### Definitions
+
+Surprisingly, there are several ways to evaluate the amount of goods and services produced within a country in a given year. We provide the definition used by the [**World Bank**](https://databank.worldbank.org/metadataglossary/world-development-indicators/series/NY.GDP.MKTP.KD.ZG):  
+
+
+"*GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources*". 
+
+
+As we will see later, there are several ways to compute the GDP, depending on the [focus](https://en.wikipedia.org/wiki/Gross_domestic_product#Determining_gross_domestic_product_(GDP)) (production, income, expenditure). 
+
+The international standard for measuring GDP is contained in the System of National Accounts, 1993, compiled by the [International Monetary Fund](https://www.imf.org/external/pubs/ft/sna/default.htm), the European Commission, the Organization for Economic Cooperation and Development, the United Nations, and the World Bank.
+
+The baseline values reported for GDP are measured in the prices of a particular year. But current price series are influenced by the effects of **inflation** (see below in @sec-inflation)... hence it is possible to correct this - in which case the series becomes "**constant**" in prices of a given year (e.g., 2010). 
+
+
+### Examples
+
+
+Let's visualize the time-series of **GDP per capita**, this is usually the proxy for how rich the average citizen is - and is used to compared wealth (or well-being, loosely speaking) of citizens across the world. We can of course point to other indicators, like [**happiness**](https://worldhappiness.report/), though they are out of the scope of the present course. The French statistical administration even introduced the idea of "[subjective GDP](https://blog.insee.fr/regarder-la-croissance-sous-l-angle-du-pib-ressenti/)" (see also this [report](https://www.insee.fr/fr/statistiques/4639940)).
+
+Below, code snippets are shown in the body of the text, while visual output is presented in the right margin.  
+
+```{r, warning = F, message = F, fig.width=4, fig.height=2, column = 'margin'}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 2
+
+g <- wb_data |>
+  mutate(gdp_per_capita = round(gdp_per_capita)) |>
+  ggplot(aes(x = year, y = gdp_per_capita, color = country)) +
+  geom_line() + theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("GDP per capita") +
+  scale_color_manual(values = c("#22D4A3", "#000000"))
+ggplotly(g) |>
+  layout(legend = list(orientation = "h", x = -0.2, y =-0.2))
+```
+
+It seems the divide between the US and France has slowly but steadily accelerated since 1990. **Investments**, **R&D spending** (innovation & technology), as well as higher **energy costs** are [potential explanations](https://www.aeaweb.org/articles?id=10.1257/jep.22.1.25). Other reasons: a higher number of **hours worked** in the US, and the relative strength of the dollar (which fluctuates). For raw GDP, [**population trends**](https://www.ined.fr/en/everything_about_population/data/world-projections/projections-by-countries/) are also important.
+
+
+In Eastern Europe, GDP per capita has been catching up that of countries of Southern Europe since ~2010.
+
+```{r, warning = F, message = F, fig.width=4, fig.height=2, column = 'margin'}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 4
+
+wb_eu |>
+  filter(year > 1990) |>
+  mutate(gdp_per_capita = round(gdp_per_capita)) |>
+  ggplot(aes(x = year, y = gdp_per_capita, color = country)) +
+  geom_line() + theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.position = "bottom",
+        legend.title = element_text(face = "bold")) +
+  ggtitle("GDP per capita") + 
+  guides(color = guide_legend(nrow = 2, byrow = T)) + 
+  scale_color_observable()
+```
+
+
+
+But what about **GDP growth**?... 
+$$\Delta GDP_t=\frac{GDP_t-GDP_{t-1}}{GDP_{t-1}}.$$
+(from one period - year, or quarter - to the other).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 3
+
+wb_data |>
+  mutate(gdp_growth = round(gdp_growth, 2)) |>
+  ggplot(aes(x = year, y = gdp_growth, fill = country)) +
+  geom_col(position = "dodge") + theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.position = c(0.5,0.2),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("GDP growth (%)") +
+  scale_fill_manual(values = c("#22D4A3", "#000000"))
+```
+
+In the recent period (1980 onwards), US figures are consistently above those of France. The US economy (as measured by GDP) has thus increased faster than France's. This could already be seen in the preceding plot. 
+
+
+### The cross-section of countries
+
+What kind of differences exist between countries in terms of GDP/capita? 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 4
+
+wb_raw |>
+  filter(year == 2023, income != "Aggregates") |>
+  mutate(gdp_per_capita = round(gdp_per_capita)) |>
+  ggplot(aes(y = reorder(country, gdp_per_capita), x = gdp_per_capita)) + geom_col() +
+  theme(axis.text.y = element_blank(), 
+        axis.title.y = element_blank(), 
+        axis.ticks.y = element_blank()) + 
+  xlab("GDP per capita") + 
+  annotate("text", label = "this is Monaco", y = "Monaco", x = 149000, size = 3.3, vjust = 1.2) + 
+  annotate("text", label = "this is Afghanistan", y = "Afghanistan", x = 29500, size = 3.3, vjust = 0.1)
+```
+
+In 2023, the discrepancy is between Monaco (220k USD) and Afghanistan (0.4k USD), so a gap between 1 and 500 roughly!   
+
+What are the **rich countries**?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 3
+
+wb_raw |>
+  filter(year == 2023, income != "Aggregates", gdp_per_capita > 50000) |>
+  mutate(gdp_per_capita = round(gdp_per_capita)) |>
+  ggplot(aes(y = reorder(country, gdp_per_capita), x = gdp_per_capita)) + geom_col(fill = "#2299FF") +
+  theme_classic() + 
+  theme(axis.title.y = element_blank()) + xlab("GDP per capita") 
+```
+
+Most of them are "*small*" (at least in terms of population, the US being the most notable exception).
+
+A brief look at [**human development index**](https://hdr.undp.org/data-center/human-development-index#/indicies/HDI) (from the United Nations) that embeds other criteria:
+
+![](https://hdr.undp.org/sites/default/files/styles/original/public/images/2022-03/hdiRoadMap.png)
+
+
+
+We fetch data from the open-numbers repository on [Github](https://github.com/) (managed by [gapminder](https://www.gapminder.org/)).
+
+
+
+
+```{r, warning = F, message = F, fig.width=4, fig.height=2, column = 'margin'}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+
+
+url <- "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/master/countries-etc-datapoints/ddf--datapoints--hdi_human_development_index--by--geo--time.csv"
+hdi <- read_csv(url)
+colnames(hdi) <- c("country", "year", "hdi")
+
+hdi |>
+  filter(country %in% c("fra", "usa")) |>
+  ggplot(aes(x = year, y = hdi, color = country)) +
+  geom_line() + theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.position = c(0.8,0.25),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("Human Development Index") +
+  scale_color_manual(values = c("#22D4A3", "#000000"))
+
+```
+
+
+Money does not buy everything it seems... and France is catching up, despite lower GDP per capita in the recent period.
+
+Across countries, this gives:
+
+```{r, warning = F, message = F, fig.width=4, fig.height=2, column = 'margin'}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 2
+
+hdi |> 
+  filter(year == 2023) |>
+  arrange(desc(hdi)) |>
+  head(10)
+```
+
+
+
+## Inflation {#sec-inflation}
+
+### Definition
+
+Now, let us move on to another important topic: the **evolution of prices**. 
+
+It is critical to maintain inflation to relatively low levels (e.g., 2%). **Hyperinflation** has devastating effects for a country (one notable case is Germany in the 1920s - but Argentina nowadays is another example). 
+This is so important that in Europe, the **primary mandate** (objective) of the European Central Bank (ECB) is to control inflation, 2% being the usual target.  
+In the US, the tone is the same:   
+
+"*In conducting monetary policy, we will remain highly focused on fostering as strong a labor market as possible for the benefit of all Americans. And we will steadfastly seek to achieve a 2 percent inflation rate over time.*"   
+
+Federal Reserve Board (Fed) Chair Jerome Powell in  his Aug. 27, 2020 speech. 
+
+But how is **inflation** [computed](https://www.ecb.europa.eu/ecb/educational/explainers/tell-me-more/html/what_is_inflation.en.html)? The calculation rests on the notion of a representative **basket** that encompasses the goods and services consumed by the **average citizen** of a country. The price of items (bread, apples, microwave oven, cars, cinema ticket, etc.) is recorded from various sources (across supermarket chains, but also from online stores). Then, the basket price is computed as a weighted average of all of its elements (this is sometimes referred to the **Consumer Price Index** - CPI). This is usually done every month, hence data is quite granular. Inflation is then the increase of the CPI compared to its value 12 months earlier.
+
+
+### Illustration
+
+The horizontal grey line marks the 2% target (upper bound). It was quite well met between 1990 and 2020.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 3
+
+wb_data |>
+  ggplot(aes(x = year, y = inflation, fill = country)) +
+  geom_col(position = "dodge") + theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.position = c(0.7,0.7),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("Inflation (%)") + geom_hline(yintercept = 2, color = "grey") + 
+  annotate("text", label = "2% target", x = 2015, y = 4, color = "grey") + 
+  scale_fill_manual(values = c("#22D4A3", "#000000"))
+```
+
+The values are annualized and they are in percents.  
+There appears to be a change. Before 1985, France had (much) higher inflation, but since then, it is the opposite.  
+We clearly see the post-2022 surge in high inflation.  
+From these series, we can reconstruct the CPI (usually, it's done the other way around).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 3
+
+wb_data |>
+  group_by(country) |>
+  mutate(CPI = cumprod(1+inflation/100)) |>
+  ggplot(aes(x = year, y = CPI, color = country)) + geom_line() +
+  ggtitle("Customer Price index") +
+  scale_color_manual(values = c("#22D4A3", "#000000")) + theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.position = c(0.8,0.2),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) 
+```
+
+Prices have risen slightly faster in France, compared to the US - during the 1970-1990 decades. After that, trends are more parallel.
+
+## Unemployment
+
+### Definitions
+
+For unemployment, there are some subtleties. Indeed, the World Bank proposes two estimates:    
+
+- one unified number from the [**International Labour Organization**](https://ilostat.ilo.org/resources/concepts-and-definitions/ilo-modelled-estimates/) (ILO), and    
+- one from the **national agencies**.  
+
+The French [INSEE](https://www.insee.fr/fr/accueil) follows the ILO guidelines for instance. Someone is considered unemployed if the following criteria are verified. This person   
+
+- is aged 15 years or over;     
+- is without work;     
+- has actively taken steps to seek work over the last four weeks or has found a job that begins in less than 3 months;      
+- is available for work in the next two weeks    
+
+Employment starts when a person has done at least one hour’s paid work (including short contracts or partial work).
+The unemployment rate is: $$U = \frac{\# \text{unemployed}}{\# \text{employed} + \#\text{unemployed}}$$
+
+The denominator is the size of the **active workforce** (who are in fact **potentially** active). Inactive people are for instance children or retired citizens. Estimates are produced thanks to [**Labour Force Surveys**](https://www.insee.fr/en/metadonnees/source/serie/s1223) of 20 questions - conducted every week (!) in France (sample size ~100k+). This is done continuously, with rolling "*reference weeks*". 
+
+For comparison purposes, we stick to the ILO definition, but in this case, the data starts in 1991 only.
+
+### Examples
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 2
+
+g <- wb_data |>
+  na.omit() |>
+  ggplot(aes(x = year, y = unemployment, color = country)) + geom_line() +
+  theme_classic() + 
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) + 
+  ggtitle("Unemployment (%)") +
+  scale_color_manual(values = c("#22D4A3", "#000000"))
+ggplotly(g) |>
+  layout(legend = list(orientation = "h", x = -0.2, y =-0.2))
+```
+
+There are pronounced fluctuations of the **unemployment rate**. Especially for the US, for which the job market is more "*fluid*": jobs are more easily created and destroyed there, compared to France where it's harder to lay off - and hence employers are more careful when hiring. The average value is again to the advantage of the US... (it is cutomary to consider that lower unemployment is better, but precarious jobs are also more widespread in the US). 
+
+
+## Debt
+
+### Definition
+
+Central governments use debt instruments (e.g., bonds) to access financial markets and capital. This is usually because their budgets is in **deficit**. Note that some data providers sometimes also provide a field called **General Government Debt**: in this case, local debts from cities, regions or states is also included in the totals. To keep numbers to reasonable levels, and to compare countries, the total debt levels are scaled by GDP. 
+
+Let's have a look at a sample from the [French debt](https://www.aft.gouv.fr/fr/node/452):
+
+![](dette_2024.png)
+
+![](dette_2025.png)
+
+Short-term debt usually refers to payments that will be due in one year or less.     
+Medium-term is between 1 and 5-10 years and long-term is beyond 5-10 years.  
+"Encours démembré" = strips, i.e., zero-coupon bonds.  
+
+### Snapshot of data
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+
+wb_data |>
+  filter(year > 1985) |>
+  ggplot(aes(x = year, y = debt, fill = country)) +
+  geom_hline(yintercept = 100, color = "grey") +
+  geom_col(position = "dodge") + theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.position = c(0.3, 0.7),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("Debt (% of GDP)") + 
+  scale_fill_manual(values = c("#22D4A3", "#000000"))
+```
+
+We see the data is more recent here.  
+A natural threshold is 100%: when total debt is equal to national output.  
+The trend is clearly upward, which raises the question of the sustainability of ever growing debt. For now, it still holds, but for how long? $\rightarrow$ see the [European debt sustainability monitor](https://economy-finance.ec.europa.eu/publications/debt-sustainability-monitor-2024_en).
+
+
+# Bottom line
+
+Data, **data**, data, it's all about data! 
+
+Nevertheless, it is far from easy to explain each one of this concepts (variables) alone (and the corresponding series). But the **joint** (and possibly causal) relationships across countries and between notions are very hard to rationalize! 
+
+Standard models try to explain sustained growth, but often fail to do so. This is what we will see/cover in the next sessions. 
+
+In short: we have seen the **data** (empirical salient facts), we will then cover (some) (imperfect) **theory**.
+
+```{r}
+
+```
+

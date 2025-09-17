@@ -1,0 +1,859 @@
+---
+title: "Growth: the Solow model"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    number-sections: true
+    number-depth: 3
+engine: knitr    
+filters:
+  - webr    
+#webr:
+#  packages: ['ggplot2', 'dplyr']  
+---
+
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.78em;
+}
+```
+
+**NOTE**: The present notebook is coded with [quarto](https://quarto.org/), in the [**R**](https://www.r-project.org/) programming language. The white margin to the right will be used to display code output.
+
+This document relies heavily on the [{**tidyverse**}](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other important libraries. 
+
+Because we use WEBR, the notebook takes time to load because it fetches the data from the World Bank API - it thus requires an **internet connexion**.
+
+
+To install R packages on your own device, use the install.packages() function as below (commented on purpose).
+
+```{r}
+# install.packages("tidyverse")
+```
+
+Once they are installed, we can call/load/activate them in the current session. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)    # Package for data wrangling
+library(readxl)       # Package to import MS Excel files
+library(latex2exp)    # Package for LaTeX expressions
+library(quantmod)     # Package for stock data extraction
+library(WDI)          # To access World Bank data
+library(gtsummary)    # To format regression output
+library(ggsci)        # Color scales
+library(tidyfit)      # Enhanced regressions
+library(ggrepel)      # Better labels on plots 
+library(plm)          # Panel models
+```
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous ones have have not been executed. 
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+# Growth: a central question in economics
+
+For decades, economists have sought to understand and explain the **drivers of growth**. Let us understand why by looking at long-run patterns of economic output.
+
+The [**Maddison Project Database**](https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020) compiles data for GDP over **long chronological depths**.
+
+Below, we focus on a subset of countries for which a lot of points are available. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 4
+temp <- tempfile()
+link <- "https://dataverse.nl/api/access/datafile/421302"
+# 2020 version below in comments
+#link <- "https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2020.xlsx"
+#lt_gdp <- read_excel(temp, sheet = 3)
+#lt_gdp <- read_excel(temp, sheet = 3)
+#country_list <- c("France", "United States", "Italy", "Mexico", "Poland", "South Africa")
+download.file(link, temp)
+lt_gdp <- read_excel(temp, sheet = 3, skip = 2) |>
+  pivot_longer(-year, names_to = "country", values_to = "gdppc")
+
+country_list <- c("FRA", "USA", "ITA", "MEX", "POL", "ZAF")
+
+lt_gdp |>
+  filter(year > 1700, country %in% country_list) |>
+  ggplot(aes(x = year, y = gdppc, color = country)) + geom_line() +
+  theme_classic() + ylab("GDP per capita") +
+  theme(legend.position = c(0.3, 0.5),
+        axis.title.x = element_blank()) 
+```
+
+What we see is an exponential pattern in growth. And the central question is: **how come**???   
+The purpose of the sessions to come will be to propose theoretical models that seek to reproduce this salient fact. 
+
+**NOTE**: for long term estimates of GDP, we refer to this [**tool**](https://philmkoch.github.io/historicalGDPpc_app/), [**data**](https://github.com/philmkoch/historicalGDPpc), and the corresponding [paper](https://www.pnas.org/doi/10.1073/pnas.2402060121).
+
+# The baseline model
+
+In this section, we present the [Solow model of growth](https://academic.oup.com/qje/article-abstract/70/1/65/1903777). 
+
+## Notations and first properties
+
+We model aggregate output $Y$ as a function of two inputs: capital $K$ and labor $L$:
+
+$$Y=F(K,L),$$
+where the function $F$ must satisfy a set of properties (which define **neoclassical production functions** and are sometimes called the **[Inada conditions](https://en.wikipedia.org/wiki/Inada_conditions)**):    
+
+1. **first**, $\frac{\partial F}{\partial K}>0$ and $\frac{\partial F}{\partial L}>0$: with more capital or more labor, we are able to produce more (makes sense!).    
+2. **second**, however: $\frac{\partial^2 F}{\partial^2 K}<0$ and $\frac{\partial^2 F}{\partial L^2}<0$: the returns to increasing inputs are diminishing. Increasing one input will only lead you so far...   
+3. **third**, $F$ exhibits **constant returns to scale**: $F(aK, aL)= aF(K,L)$: doubling both inputs will exactly double production.  
+4. **fourth,** $\underset{K \rightarrow 0}{\lim}\frac{\partial F}{\partial K}=\underset{L \rightarrow 0}{\lim}\frac{\partial F}{\partial L}=\infty$ (marginal product of inputs is arbitrarily large when inputs are very small, i.e., the first inputs have the most importance) and reversely, $\underset{K \rightarrow \infty}{\lim}\frac{\partial F}{\partial K}=\underset{L \rightarrow \infty}{\lim}\frac{\partial F}{\partial L}=0$ (marginal product vanishes when inputs are too large). 
+
+::: {.callout-tip collapse="false"}
+## About returns to scale
+
+Basically, there are three cases:   
+- $F(aK, aL)= aF(K,L)$: **constant** returns to scale;    
+- $F(aK, aL)> aF(K,L)$: **increasing** returns to scale;  
+- $F(aK, aL)< aF(K,L)$: **decreasing** returns to scale.
+
+The most common assumption is that returns to scale are constant.
+:::  
+
+One example below. We plot production as a function of **labor force**. As the labor force increases, production does too, but the marginal effect decays. In this example, with 25 people, I can produce a good worth 5M€, but 100 people will only produce 10M€ of goods. This is of course assuming **constant capital**. To further (more rapidly) increase the output, you would also need to put in more investment to the system.     
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 2
+tibble(labor = 1:100) |>
+  ggplot(aes(x = labor)) + geom_function(fun = sqrt, color = "#2266DD") +
+  theme_classic() + 
+  geom_vline(xintercept = 25, linetype = 2) + 
+  geom_vline(xintercept = 100, linetype = 3) + 
+  geom_hline(yintercept = 5, linetype = 2) + 
+  geom_hline(yintercept = 10, linetype = 3) 
+```
+
+```{webr-r}
+#| context: setup
+#| class-source: my_class
+#| classes: my_class
+#| message: false
+#| warning: false
+library(tidyverse)
+library(tidyfit) 
+```  
+
+```{webr-r}
+#| class-source: my_class
+#| classes: my_class
+tibble(labor = 1:100) |>
+  ggplot(aes(x = labor)) + geom_function(fun = sqrt, color = "#2266DD") +
+  theme_classic() + 
+  geom_vline(xintercept = 25, linetype = 2) + 
+  geom_vline(xintercept = 100, linetype = 3) + 
+  geom_hline(yintercept = 5, linetype = 2) + 
+  geom_hline(yintercept = 10, linetype = 3) 
+```
+
+
+
+
+::: {.callout-note collapse="false"}
+## Example: Cobb-Douglas function
+
+The most straightforward example of a function that satisfies these conditions is the **Cobb-Douglas** function with constant returns to scale:
+
+$$Y=AK^\alpha L^{1-\alpha}, \quad \alpha\in(0,1),$$
+where $A>0$ is some constant that can relate to **technological capability** or **energy consumption**. The value $\alpha$ determines the relative importance of capital versus labor in output creation.   
+A generalization of Cobb-Douglas is $Y=AK^\alpha L^{\beta}$ with $\alpha+\beta \neq 1$...
+
+:::
+
+## What some data says
+
+Now, let's have a closer look - with **data**! From the general Cobb-Douglas function $Y = AK^aL^{b}$, we get: $$\log(Y)=\log(A)+a \log(K)+b\log(L),$$ {#eq-reg_model}
+
+which is a perfect form for a **linear regression**!  
+Below, we import the data and take a look at the univariate link between workforce size (proxy for labor) and GDP.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 7
+wb_growth <- WDI(                           # World Bank data
+  indicator = c(
+    "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
+    "savings_rate" = "NY.GDS.TOTL.ZS",      # Savings rate (% GDP)
+    "pop" = "SP.POP.TOTL",                  # Population
+    "pop_growth" = "SP.POP.GROW",           # Population growth
+    "capital_formation" = "NE.GDI.TOTL.ZS", # Gross capital formation (% GDP)
+    "gdp_percap" = "NY.GDP.PCAP.CD",        # GDP per capita
+    "gdp" = "NY.GDP.MKTP.CD"                # Gross Domestic Product (GDP)
+  ), 
+  extra = TRUE,
+  start = 1960,
+  end = 2024) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) |>
+  filter(lastupdated == max(lastupdated)) |>
+  arrange(country, year) |>
+  mutate(capital_percap = capital_formation / labor)
+
+wb_growth <- wb_growth |> filter(region != "Aggregates") # Remove continents & co. 
+
+wb_growth |>
+  ggplot(aes(x = labor, y = gdp, color = region)) + geom_point(size = 0.3, alpha = 0.5) + 
+  scale_x_log10() + scale_y_log10(limits = c(10^7, 10^14)) + 
+  geom_smooth(method = "lm", se = F) + theme_classic() +
+  scale_color_d3() +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(nrow = 4, byrow = TRUE)) +
+  labs(title = "GDP & labor", caption = "Mind the log-log scale")
+```
+
+
+Gross capital formation is not necessarily exactly the best input, but it's likely the one that is closest to a capital proxy in the World Bank data. So we use it anyway for the sake of providing some illustration.  
+
+::: {.callout-note collapse="false"}
+## Capital & investment
+
+Usually, we are interested in the **stock** of capital, and not flows (the net of additions minus subtractions). Often, we have the latter, which we write $I_t$. Because we must assume a depreciation rate $\delta$, the stock of capital is
+
+$$K_t=(1-\delta)K_{t-1}+I_t,$${#eq-capital_stock}
+
+where, depending on timing, $I_t$ can be replaced by $I_{t-1}$, and in the end,
+
+$$K_t=(1-\delta)^tK_0 + \sum_{s=0}^tI_s (1-\delta)^{t-s}$$
+But this still requires $K_0$...    
+**Note** that reasonable values for $\delta$ are ~5-6%, though in some industries, it could be higher (e.g.: the tech sector, for which obsolescence can come faster - see plot to the right: depreciation can reach -50% within 5-10 years).
+
+:::
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 3
+ggplot() + xlim(c(1, 10)) +
+  geom_function(fun = ~ 0.95^(.x), size = 1, aes(alpha = "delta = 0.95")) +
+  geom_function(fun = ~ 0.90^(.x), size = 1, aes(alpha = "delta = 0.90")) +
+  theme_minimal() + scale_alpha_manual(values = c(1, 0.42)) + 
+  theme(legend.position = c(0.8,0.8),
+        legend.title = element_blank())
+```
+
+
+
+What about quantities per capita? Let's look at our **capital** proxy.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 7
+wb_growth |>
+  ggplot(aes(x = capital_percap, y = gdp_percap, color = region)) + geom_point(size = 0.3, alpha = 0.5) + 
+  scale_x_log10() + scale_y_log10(limits = c(100, 150000)) + 
+  geom_smooth(method = "lm", se = F) + theme_classic() +
+  scale_color_d3() +
+  theme(legend.position = "bottom") +
+  guides(color = guide_legend(nrow = 4, byrow = TRUE)) +
+  labs(title = "GDP & capital per capita", caption = "Mind the log-log scale")
+```
+
+Clearly, the slopes do not agree (they increase for Europe and North America and decrease for the other zones); the variable is perhaps not really suitable for this exercise. But, for simplicity, let's pretend it is.
+
+We can then try to estimate the $a$ and $b$ constant in the model defined in @eq-reg_model.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+lm(log(gdp) ~ log(labor) + log(capital_formation), 
+   data = wb_growth |> 
+     filter(gdp > 0, labor > 0, capital_formation > 0) |>
+     select(gdp, labor, capital_formation) |> na.omit()) |>
+  tbl_regression(intercept = T)
+```
+
+In this case, as we did not impose constant returns to scale, we see that the latter are in fact **increasing**... with the data & model (& estimation method) we use of course. 
+
+In fact, there are potentially large differences across countries and years; hence a **panel** model would be more suitable. Below, we enforce two-way **fixed effects** ($c_t$ to remove time-averages and $d_i$ to remove country-specific averages):
+
+$$\log(Y_{t,i})= a\log(K_{t,i})+b\log(L_{t,i})+c_t+d_i+e_{t,i}. $$
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+plm(
+  formula = "log(gdp) ~ log(labor) + log(capital_formation)", 
+  data = wb_growth |> 
+    filter(gdp > 0, labor > 0, capital_formation > 0) |>
+    mutate(country = as.factor(country)) |>
+    select(gdp, labor, capital_formation, country, year) |> na.omit(),
+  effect = "twoways",
+  model = "within",
+  index = c("country", "year")
+) |>
+  tbl_regression(intercept = T)
+```
+
+Here the results are **substantially** different - and seem to point towards decreasing returns to scale (the sum of coefficients is smaller than one). 
+
+## A few simplifications
+
+
+To further ease notations, we can use **constant returns** in the following way and focus on **per capita** output (e.g., assuming uniform competence across time and across the population). The idea is simply to equate labor and population and to write:
+
+$$Y=F(K,L)= LF(K/L,1).$$
+We can then think in terms of **per capita quantities**, which we write in lowercase letters: $y=Y/L$, $k=K/L$. The model becomes simply:
+$$y = f(k),$$
+and, for instance with a Cobb-Douglas production function, we get
+$$y=Ak^\alpha.$$
+
+This is simpler, as their is only one input and the important parameter, $\alpha$, features here only once!
+
+## Laws of motion
+
+Until now, we have not mentioned an important dimension in models, **time**. Production occurs every year, but also every month, every week, and every day! First, let us fix things for **labor** (say, (active) population). The model is not intended to explain or focus on this particular variable, hence it makes a simple assumption:
+$$L_t=L(t)=e^{nt}$$
+
+We then introduce an important notation: the **differential operator** with respect to time, represented with a dot:
+$$\dot{L}=\frac{\partial L}{\partial t}=ne^{nt} \quad \Longrightarrow \quad  \frac{\dot{L}}{L}=n.$$
+
+Clearly $n$ is the **growth rate of labor**. Usually, it is assumed nonnegative, but who knows what surprises the future will reveal? Some countries already experience degrowth in population... 
+
+
+```{r, warning = F, message = F, fig.width=4, fig.height=2, column = 'margin'}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 2
+url <- "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/master/countries-etc-datapoints/ddf--datapoints--total_population_with_projections--by--geo--time.csv"
+pop <- read_csv(url)
+colnames(pop) <- c("country", "year", "pop")
+pop <- pop |> mutate(pop = pop / 10^6)
+
+pop |>
+  filter(country %in% c("fra", "usa", "chn"), year > 1800) |>
+  ggplot(aes(x = year, y = pop, color = country)) +
+  geom_line() + theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("Population in millions (log-scale)") +
+  scale_y_log10()
+
+```
+
+The projections for 2100 reveal stark changes.
+
+```{r, warning = F, message = F, fig.width=4, fig.height=2, column = 'margin'}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+pop |>
+  filter(year == 2100) |>
+  arrange(desc(pop)) |>
+  head(15) |>
+  ggplot(aes(x = pop, y = reorder(country, pop))) +
+  geom_col() + theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.title = element_text(face = "bold")) +
+  ggtitle("Population in 2100 (in millions)") 
+
+```
+
+
+::: {.callout-note collapse="false"}
+## Side note on demographics
+
+**Demographic projections** are very important for many reasons (economic in particular).   
+For recent elements on this topic, see the paper [The wealth of working nations](https://www.sciencedirect.com/science/article/pii/S0014292125000121) and the (related) video [The Demographic Future of Humanity](https://www.youtube.com/watch?v=f7_e_A_vFnk). 
+In particular, it is argued that the size of the **working** population matters and that wealth (GDP) should be measured as the product of per-worker output times the number of active workers. When a population ages, this latter number usually shrinks slowly, thus the ratio GDP/workers is perhaps more relevant than GDP/population.
+
+:::
+
+
+In addition, $n$ is fixed exogenously, but there are models that endogenize it so that it is determined/constrained by other factors. For instance, we'll see later that agents can choose to allocate their time between working and taking care of children.  
+
+::: {.callout-tip collapse="false"}
+## About the dot $\dot{L}$ notation
+
+The dot notation $\dot{L}$ stands for the derivative of the $L$ function with respect to **time**. It is the infinitesimal increase of $L$ when $t$ (time) increasing by just a tiny bit. $\dot{L}_t=\frac{\partial L_t}{\partial t}$. Importantly, this assumes that **time is continuous**. This is somewhat far-fetched when we think in terms of data, as many indicators are only available on a yearly basis, with a few at the monthly frequency (e.g., inflation). 
+
+Nevertheless, with the advent of big data and nowcasting, higher frequencies are becoming more common. For instance, the OECD used to propose a [**_real-time_** GDP tracker](https://web-archive.oecd.org/sections/weekly-tracker-of-gdp-growth/index.htm) that was updated at a weekly rate, but it seems this project was suspended (until some hypothetical future update). 
+
+:::
+
+
+The most interesting part of the model pertains to **capital** (it's the only variable driving output). Indeed, we have:
+$$\dot{y}=\frac{\partial }{\partial t}Ak(t)^\alpha = \alpha A \dot{k} k^{\alpha-1}=\alpha A \dot{k}\frac{k^\alpha}{k}=\alpha \frac{\dot{k}}{k}y \quad \Leftrightarrow \quad \frac{\dot{y}}{y}=\alpha \frac{\dot{k}}{k} .$$
+
+The (relative) growth rate of output is proportional to that of capital (per capita).
+
+It is assumed that capital dynamics are driven by two opposite forces: **investment** (in production apparatus) and **capital depreciation**:
+
+$$\dot{K}=\frac{\partial K}{\partial t}= sY-\delta K \ \Leftrightarrow \ \frac{\dot{K}}{L}=sy-\delta k , $$ {#eq-d_capital}
+
+where $s \in [0,1]$ is called the **savings rate** and measures how much of the current output value is **reinvested** (in the economy as a whole here). The constant $\delta>0$ is the rate at which capital value decays. 
+
+Now, it's easier to use the simple model, the one that considers *per capita* quantities. What's the law of motion of $K/L$? Because $\dot{L}=n L$, it's 
+$$\dot{k}=\frac{\partial (K/L)}{\partial t}=\frac{\dot{K}L-K\dot{L}}{L^2}=\frac{\dot{K}-Kn}{L}=\dot{K}/L-kn. $$
+If we plug this into (@eq-d_capital), we get
+$$\dot{k}=sy - k (\delta + n),$$ {#eq-dotk}
+
+where we see that the dynamics of per capita capital is: saved capital minus a **depreciation rate** $\delta + n$. Intuitively, if the population grows at rate $n$, then the quantity per capita should decrease at rate $n$, too.
+
+### Illustration
+
+Below, we seek to depict the above relationship. We fix:   
+- a **savings rate** of $s=10\%$,  
+- a **population growth** of $n=0.02$,   
+- a **depreciation rate** of $\delta=0.05$. 
+
+And we work with $\alpha = 1/2$ and $A=1$ for simplicity.
+<!-- We have $k^*=sy/(n+\delta)=sA(k^*)^\alpha/(n+\delta)$, which implies $k^*=(sA/(n+\delta))^{1/(1-\alpha)}$.  -->
+We plot the two terms and where they cross is a point of stability (see below).
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+s <- 0.1
+n_delta <- 0.07
+k_star <- (s/(n_delta))^2
+tibble(x = 0:10) |>
+  ggplot(aes(x = x)) +
+  geom_function(fun = function(x) 0.1*(x^0.5), color = "#EE4422") + 
+  geom_function(fun = function(x) 0.07*x, color = "#EEBB11") + 
+  theme_classic() + xlab("k (capital)") + 
+  theme(axis.title.y = element_blank(),
+        axis.text = element_blank()) +
+  geom_vline(xintercept = k_star, linetype = 2, color = "grey") + 
+  geom_hline(yintercept = sqrt(k_star)*s, linetype = 2, color = "grey") +
+  geom_label(aes(x = 9, y = 0.3), label = "saved output", color = "#EE4422", size = 3, fill = "white") +
+  geom_label(aes(x = 9, y = 0.6), label = "depreciation", color = "#EEBB11", size = 3, fill = "white") 
+```
+
+
+# Steady states
+
+## Balanced growth paths, focused on **capital**
+
+**Balanced growth paths** (BGP) are parameter combinations that lead to **constant (relative) growth rates**. Because the key quantities (growth rates) do not change anymore, this can be perceived as a form of **equilibrium**. We are interested in these situations as they characterizes stable versions of the model - they are also called **steady states**.
+For instance, in the specification outlined above, this would mean that $\dot{k}/k$ is constant. Given @eq-dotk, it is equal to 
+$$\gamma_k=\frac{\dot{k}}{k}=\frac{sy}{k}-(n+\delta),$$ {#eq-g_capital}
+hence, we see that the relative rate still depends on $k$. For it to be constant, we would need $k$ to be constant too and thus, this requires $\dot{k}=0$ (except in the **exceptional configuration** where $\alpha = 1$)! If $\alpha \neq 1$, the BGP implies that all quantities be constant, which seems rather *unrealistic* in practice, but anyhow, it's an interesting exercise.
+
+::: {.callout-important collapse="false"}
+## The main takeaway
+
+This leads to the main conclusion: the **Solow models does not generate endogenous growth in equilibrium**!
+
+:::  
+
+In the above example, the **equilibrium point** is where the red and yellow curves meet, i.e., where the increase obtained from the **saved output** is offset by the **natural depreciation** of the capital. 
+
+If we take the Cobb-Douglas example, for which $y=Ak^a$, the condition is $sy - k (\delta + n)=0$, i.e, 
+$$sAk^a=k(\delta +n) \Longleftrightarrow k^{a-1}=\frac{\delta + n}{sA}  \Longleftrightarrow k^*=\left(\frac{sA}{\delta + n} \right)^{1/(1-a)}$$ {#eq-kstar} 
+
+Below, we plot $sy/k$ and $n+\delta=0.01+0.05=0.06$ (population growth and capital depreciation), with $y=Ak^{1/2}$, $A=1$ and $s=0.1$. The point where the curves cross is $s/k^{1/2}=n+d$, i.e., $k=(s/(n+d))^2$ in our example. It marks the zone where capital will increase versus the one where it will shrink. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+n_d <- 0.06
+a <- 0.5
+s <- 0.1
+solution <- (s/n_d)^2
+```
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+tibble(x = 1:10) |>
+  ggplot(aes(x = x)) + geom_function(fun = function(x) (s/(x^a)), color = "#2266DD") +
+  theme_classic() + xlab("k (capital)") + 
+  theme(axis.title.y = element_blank(),
+        axis.text = element_blank()) +
+  geom_vline(xintercept = solution, color = "grey") + 
+  annotate("text", label = "capital \nshrinks \nto the \nright", vjust = 1,
+           x = solution + 0.1, y = s, color = "grey", hjust = 0, size = 3) +
+  annotate("text", label = "capital \ngrows \nto the \nleft", vjust = 1,
+           x = solution - 0.1, y = s, color = "grey", hjust = 1, size = 3) +
+  geom_hline(yintercept = n_d, linetype = 2, color = "#EEBB11") +
+  annotate("text", label = "k*", x = solution + 0.1, y = n_d, hjust = 0, vjust = -0.5) + 
+  geom_label(aes(x = 9, y = 0.035), label = "sy/k", color = "#2266DD", size = 3, fill = "white") +
+  geom_label(aes(x = 9, y = n_d), label = "n+d", color = "#EEBB11", size = 3, fill = "white") 
+```
+
+We recall that, in the model, the **capital**, $k$, is the key driver of growth. Its growth rate, $\gamma_k$ is given in @eq-g_capital.
+
+To reach the steady state (BGP), it is required that $\dot{k}>0$ when $k<k^*$ or $\dot{k}<0$ when $k>k^*$. In both cases, this means that, taken exactly at the optimal $k^*$, the derivative with respect to $k$ is negative:  
+
+$$\left. \frac{\partial \dot{k}}{\partial k} \right|_{k=k^*}<0.$$
+In the Cobb-Douglas model, from (@eq-dotk), we have 
+
+$$\frac{\partial \dot{k}}{\partial k}=sy'(k)- (n+\delta) = s (A\alpha k^{\alpha -1}) - (n+\delta),$$
+and substituting (@eq-kstar), 
+
+$$sA\alpha \left( \left(\frac{sA}{\delta + n} \right)^{1/(1-a)} \right) ^{\alpha-1}-(n+\delta)=sA\alpha\left(\frac{sA}{n+\delta} \right)^{-1}-(n+\delta)=(\alpha-1)(n+\delta).$$
+To be negative (assuming $n+\delta>0$), this expression requires $\alpha <1$, i.e., **diminishing returns**. 
+
+
+## Sensitivity analysis
+
+What if the output increases, e.g., if the **productivity factor** $A$ becomes larger by 30%? For instance, this could come from a technological shock (boost). Imagine something like the **internet** in the 1990s-2000s... or **artificial intelligence**?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+tibble(x = 1:10) |>
+  ggplot(aes(x = x)) + theme_classic() + xlab("k (capital)") +
+  geom_function(fun = function(x) (s/(x^a)), color = "#427FEE") +
+  geom_function(fun = function(x) (1.3*s/(x^a)), color = "#0B42A3") +          
+  theme(axis.title.y = element_blank(),
+        axis.text = element_blank()) +
+  geom_vline(xintercept = solution, color = "grey") +
+  geom_vline(xintercept = (1.3*s/n_d)^2, color = "#444444") +
+  geom_hline(yintercept = n_d, linetype = 2, color = "#EEBB11") +
+  annotate("text", label = TeX("$k_1^*$"), x = solution + 0.1, y = n_d, hjust = 0, vjust = -0.2) + 
+  annotate("text", label =  TeX("$k_2^*$"), x =  (1.3*s/n_d)^2 + 0.1, y = n_d, hjust = 0, vjust = -0.2) + 
+  geom_label(aes(x = 9, y = 0.035), label = "sy/k", color = "#427FEE", size = 3, fill = "white") +
+  geom_label(aes(x = 9, y = 0.045), label = "1.3sy/k", color = "#0B42A3", size = 3, fill = "white") +
+  geom_label(aes(x = 9, y = n_d), label = "n+d", color = "#EEBB11", size = 3, fill = "white") 
+```
+
+Optimal capital stock increases temporarily. Over a long horizon, the relative growth rate $\gamma_k$ will shrink back to zero, but the **levels** of capital and output will have risen (permanently) by some strictly positive amount. A similar pattern would occur if the savings rate $s$ increased suddenly ($\rightarrow$ exercise!). Such shocks can for instance come from **government policies**. 
+
+
+## What about consumption?
+
+In the model, **consumption** is what is not saved, i.e., $c=(1-s)y$.
+
+Upon equilibrium, the growth rate in @eq-g_capital is equal to zero, hence 
+$$sy^* =k^*(\delta+n)$$ {#eq-sy} 
+and long-term consumption is
+$$c^*=y^*-(\delta + n)k^*,$$
+but in this expression, $y^*$ and $k^*$ depend on the savings rate $s$; see for instance @eq-kstar: $k^*=\left(\frac{sA}{\delta + n} \right)^{1/(1-a)}$. The long-term (steady) consumption can thus be influenced by $s$. Since $y=Ak^a$, this gives
+$$c^*= A\left(\frac{sA}{\delta + n} \right)^{a/(1-a)}-(\delta+n)\left(\frac{sA}{\delta + n} \right)^{1/(1-a)}.$$
+
+We illustrate this shape in the plot to the right. We see that there is in fact an **optimal level** for $s$... perhaps this should be endogenized directly within the model with agents that maximize their consumption stream (more on that later!).
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+c_star <- function(s, a, A, d_n){
+  A*(s*A/n_d)^(a/(1-a)) - n_d*(s*A/n_d)^(1/(1-a))
+}
+
+tibble(s = seq(0.1,0.9, by = 0.1)) |>
+  ggplot(aes(x = s)) + theme_classic() + xlab("s (savings rate)") + ylab("consumption") + 
+  geom_function(fun = c_star, args = list(a = 0.5, A = 1, d_n = 0.06), aes(color = "a = 0.5")) +
+  geom_function(fun = c_star, args = list(a = 0.6, A = 1, d_n = 0.06), aes(color = "a = 0.6")) +          
+  theme(legend.position = c(0.5, 0.5),
+        axis.text = element_blank()) 
+
+```
+
+
+# The cross-section of wealth (first look)
+
+Ok, so the model is not great at generating stable long-term growth. But maybe it can explain **differences in GDP per capita** across countries...
+
+We recall the optimal from @eq-sy and @eq-kstar: 
+$$y^*=A^{1/(1-\alpha)}\left( \frac{s}{n+\delta} \right)^{\alpha/(1-\alpha)}.$$
+
+If we take the log,
+
+$$\log(y^*) = \frac{1}{1-\alpha}\log(A) + \frac{\alpha}{1-\alpha}\log\left(\frac{s}{n+\delta} \right)$$
+
+Capital depreciation is hard to measure, so let's fix it at $\delta=0.1$ for all countries (a slightly high value).  
+Now, let's see what the data tells us: is the above formula reliable or not?
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+wb_growth <- wb_growth |> 
+  group_by(country) |>
+  mutate(pop_growth = mean(pop_growth, na.rm = T)) |>
+  ungroup() |>
+  mutate(x = log(savings_rate/(0.1 + pop_growth)))
+lm(log(gdp_percap) ~ x, 
+   data = wb_growth |> 
+     filter(gdp_percap > 0, x > 0) |>
+     select(gdp_percap, x) |> na.omit()) |>
+  tbl_regression(intercept = T)
+```
+
+So we have that
+
+$$\frac{\log(A)}{1-\alpha}=5.5, \quad \frac{\alpha}{1-\alpha} = 0.97$$
+
+This gives $\alpha=0.49$ and $A=e^{2.7}=14.8$.
+
+If we use time-series data to estimate country-specific $\alpha$ and $A$ (total productivity factor).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 3
+wb_growth |>
+  filter(gdp_percap > 4000, is.finite(capital_percap), pop > 10^7) |>
+  group_by(country) |>
+  mutate(n = n()) |>
+  filter(n > 32) |>
+  group_by(country) |>
+  regress(log(gdp_percap) ~ log(capital_percap), m("lm")) |>
+  coef() |>
+  select(country, term, estimate) |>
+  pivot_wider(names_from = "term", values_from = "estimate") |>
+  mutate(alpha = exp(`log(capital_percap)`),
+         A = exp(`(Intercept)`)) |>
+  filter(alpha > 0.01, alpha < 0.99) |>
+  ggplot(aes(x = alpha, y = A)) + geom_point() + geom_text_repel(aes(label = country)) +
+  scale_x_log10() + scale_y_log10() + theme_classic()  
+```
+
+We only show the countries for which $\alpha \in (0,1)$ but even this leads to $A$ taking very different values.  
+Somewhat surprisingly, the link between the two values is positive.
+
+Lastly, let's try a hybrid approach via a panel model in which the alpha will be common to all countries but the fixed effects coding the $A_i$ differ...
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+fit <- plm(
+  formula = "log(gdp_percap) ~ x", 
+  data = wb_growth |> 
+    filter(gdp_percap > 0, labor > 0, savings_rate > 0) |>
+    mutate(country = as.factor(country)) |>
+    mutate(x = log(savings_rate/(0.05 + pop_growth))) |>
+    select(gdp_percap, labor, country, year, x) |> na.omit(),
+  effect = "twoways",
+  model = "within",
+  index = c("country")
+) 
+fit |>  tbl_regression(intercept = T)
+```
+
+The result is very different again. $\alpha$ is surprisingly low. The **productivity factors** reflect variations in GDP per capita.
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+alpha <- 0.08/(1+0.08)
+exp(fixef(fit)*(1-alpha)) |> as.list() |> data.frame() |> 
+  pivot_longer(everything(), names_to = "country", values_to = "A") |>
+  head(12)
+```
+
+
+# Simulation: a try
+
+Let's see what happens if we try to simulate the motion of capital:
+
+$$\dot{k}_t=s Ak_t^\alpha - k_t (\delta + n),$$
+
+
+
+A simulation is not necessarily obvious; here we follow the [**Euler discretization scheme**](https://en.wikipedia.org/wiki/Euler_method) (with unit step) and use $A=1$.  
+We wrap the code in a function that depends on the important parameters and we allow for some randomness (just out of curiosity). This randomness is coded with the function `rnorm` (Gaussian noise). 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+s <- 0.1       # Savings rate
+delta <- 0.05  # Capital depreciation
+n <- 0.02      # Population growth
+alpha <- 0.8   # Cobb-Douglas parameter
+n_k <- 100     # Number of points (time-steps)
+gen_k <- function(alpha, s, delta, n, sigma, n_k){
+  k_dot <- 0
+  k <- 100     # Initial value = starting point
+  for(t in 2:n_k){ 
+    k_dot[t] <- s*k[t-1]^alpha - k[t-1]*(delta+n) + sigma*rnorm(1)
+    k[t] <- k[t-1] + k_dot[t]
+  }
+  k
+}
+```
+
+```{webr-r}
+#| context: setup
+#| class-source: my_class
+#| classes: my_class
+#| message: false
+#| warning: false
+s <- 0.1       # Savings rate
+delta <- 0.05  # Capital depreciation
+n <- 0.02      # Population growth
+alpha <- 0.8   # Cobb-Douglas parameter
+n_k <- 100     # Number of points (time-steps)
+gen_k <- function(alpha, s, delta, n, sigma, n_k){
+  k_dot <- 0
+  k <- 100     # Initial value = starting point
+  for(t in 2:n_k){ 
+    k_dot[t] <- s*k[t-1]^alpha - k[t-1]*(delta+n) + sigma*rnorm(1)
+    k[t] <- k[t-1] + k_dot[t]
+  }
+  k
+}
+```  
+
+And plot the result for two values of the **savings rate**, but without any randomness.
+
+```{webr-r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+tibble(
+  t = 1:n_k,
+  k1 = gen_k(alpha, s, delta, n, 0, n_k),
+  k2 = gen_k(alpha, 2*s, delta, n, 0, n_k)
+) |>
+  pivot_longer(-t, names_to = "s", values_to = "k") |>
+  ggplot(aes(x = t, y = k, color = s)) + geom_line() +
+  theme_classic() + theme(legend.position = c(0.5,0.5)) +
+  scale_color_manual(values = c("#1199FF", "#FF9911"), labels = c("0.1", "0.2")) +
+  geom_hline(yintercept = (2*s/(delta+n))^(1/(1-alpha)), linetype = 2)
+```
+If the savings rate is too low, the capital stock decreases... (because the economy does not reinvest enough to mitigate the depreciation rate).       
+We show the equilibrium value $k^*$ with the horizontal line.
+
+
+
+What happens with a bit of noise?
+
+```{webr-r}
+#| message: false
+#| warning: false
+set.seed(42)
+tibble(
+  t = 1:n_k,
+  k1 = gen_k(alpha, s, delta, n, 1, n_k), 
+  k2 = gen_k(alpha, 2*s, delta, n, 5, n_k)
+) |>
+  pivot_longer(-t, names_to = "s", values_to = "k") |>
+  ggplot(aes(x = t, y = k, color = s)) + geom_line() +
+  theme_classic() + theme(legend.position = c(0.8,0.4)) +
+  scale_color_manual(values = c("#1199FF", "#FF9911"), labels = c("0.1", "0.2"))
+```
+
+
+# Takeaways
+
+$\rightarrow$ The **Solow model** does not generate (steady) growth endogenously.  
+It is not reable able to produce some of the most salient stylized facts in macroeconomics...   
+The next sessions will try to propose extensions that intend to address these limitations.   
+
+
+
+```{webr-r}
+1+1 # Open web-r window
+```
+
+
+
+```{r}
+
+```
+
