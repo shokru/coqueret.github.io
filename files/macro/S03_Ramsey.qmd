@@ -54,7 +54,7 @@ The content of this notebook is mostly inspired from the book [**Advanced Macro-
 
 # Context
 
-Basically, the Solow model, in part because it is overly simplistic, has several flaws. The major one being that it is incapable of explaining **growth**.
+Basically, the **Solow** model, in part because it is overly simplistic, has several flaws. The major one being that it is incapable of delivering **growth** in equilibrium.
 
 The Ramsey model is almost 100 years old (1928) but has had a sizable impact on economic theory in general and in **social/environmental discounting** in particular. It is often referred to as the **Neoclassical Growth Model** (NGM). It was later extended by David Cass and Tjalling Koopmans (separately). 
 
@@ -62,18 +62,18 @@ The Ramsey model is almost 100 years old (1928) but has had a sizable impact on 
 
 ## Consumption
 
-Perhaps one of the most important changes compared to the Solow model is the handling of **consumption** (which will later on be studied in greater depth). In the **Solow model**, consumption was inferred from a savings rate, $s$. In the **Ramsey model**, as is standard in mainstream economics, the (representative) consumer has a total utility of:
+Perhaps one of the most important changes compared to the Solow model is the handling of **consumption** (which will later on be studied in greater depth). In the **Solow model**, consumption was inferred from a savings rate, $s$. In the **Ramsey model**, as is standard in mainstream economics, consumption is subject to **optimization**. The (representative) consumer has a total utility of:
 $$U=\int_0^\infty e^{-\rho t} e^{n t} u(c_t)dt.$$
 
-$u(\cdot)$ is the utility over per-capita consumption, $n$ is the growth rate of the population and $\rho$ the discounting rate that summaries **preferences over time**, i.e., how much we prefer to consume now versus some time in the future. As is customary, we assume that  
+$u(\cdot)$ is the utility over per-capita consumption, $n$ is the growth rate of the population and $\rho$ the discounting rate that summarizes **preferences over time**, i.e., how much we prefer to consume now versus some time in the future. As is customary, we assume that  
 
 - $u'(c)>0$: the more you consume, the happier (or more satisfied) you are;    
 - $u''(c)<0$: the marginal utility decreases, meaning the higher your consumption, the lower the improvement of utility when consumption increases. Imagine you have infinite appetite: you will derive more utility from eating a second candy (compared to just one) than from eating 101 candies (compared to 100).    
 
-If we assume **zero depreciation** ($\delta=0$), the motion of capital is then given by $\dot{K}_t=Y_t-C_t$ (by constraint). Thus, in per-capita terms,
+If we assume **zero depreciation** ($\delta=0$), the motion of capital is then given by $\dot{K}_t=Y_t-C_t$ (by constraint). In the Solow model, the equivalent motion is $\dot{K}_t=sY_t$ and consumption is $C_t = (1-s)Y_t$.  Thus, in per-capita terms,
 $$\frac{\dot{K}_t}{L_t}=f(k_t)-c_t.$$
 
-From the previous chapter, it also holds that $\frac{\dot{K}_t}{L_t}=\dot{k}_t+nk_t$, thus 
+From the previous chapter, it also holds that $\dot{k}_t = \frac{\dot{K}_t}{L_t}-nk_t$, thus 
 
 $$\dot{k}_t=f(k_t)-nk_t-c_t,$$ {#eq-budget}
 
@@ -85,7 +85,7 @@ The evolution of **per-capita capital**: it increases with production, but decre
 
 The Lagrange multiplier is used when trying to optimize a function under some constraint. If we seek to minimize (or maximize) $f(x)$ and the constraint can be written as $g(x)=0$, then the Lagrangian is
 $$f(x)-\lambda g(x)$${#eq-lagrange}
-and the first order conditions (FOCs) with respect to $x$ and $\lambda$ will impose restrictions on the solution - often leading to a unique value. Note that $x$ (and $\lambda$) may be of vector type.
+and the **first order conditions** (FOCs) with respect to $x$ and $\lambda$ will impose restrictions on the solution - often leading to a unique value. The second order conditions will determine if the extrema is a minimum or maximum (or even a potential saddle-point). Note that $x$ (and $\lambda$) may be vectors. 
 
 For instance, assume you are running a factory and your production function is $R=f(C,L)=10\sqrt{CL}$ (i.e., $\alpha = 1/2$ with CRS). Each unit of labor $L$ and commodity $C$ costs 2 dollars and 1 dollar, respectively. Hence your total cost is ($C+2L$)$\$$ per unit. Suppose you have an initial amount of money of 10$\$$, how can you maximize you profit (revenue minus costs)?
 The Lagrangian is
@@ -136,7 +136,7 @@ One is feasible, the other is not. Recall that the profit is $R-10$, hence the o
 The solution of the consumer's problem is complicated because she has to determine at time 0 the best **path** of future consumption. To solve this, we must resort to [**optimal control theory**](https://en.wikipedia.org/wiki/Optimal_control). We seek to optimize with respect to the **control variable** $c_t$; whereas $k_t$ is the underlying **state variable**. We define the Hamiltonian
 $$H=u(c_t)e^{nt}+\lambda_t(f(k_t)-nk_t-c_t),$$
 
-which is the dynamic equivalent of the Lagrangian in static optimization - modulo the fact that the multiplier is associated with $\dot{k}_t$ (and not the exact budget constraint). $\lambda_t$ is the co-state variable, the counterpart of the Lagragian multiplier. The first order conditions (FOCs) are then, for the control variable:
+which is the dynamic equivalent of the Lagrangian in static optimization - modulo the fact that the multiplier is associated with the expression of $\dot{k}_t$ (and not to that of the budget constraint, this can be proven usingintegration by parts, [but is far from obvious](https://en.wikipedia.org/wiki/Hamiltonian_(control_theory)#Derivation_from_the_Lagrangian)). $\lambda_t$ is the co-state variable, the counterpart of the Lagragian multiplier. The first order conditions (FOCs) are then, for the control variable:
 $$\frac{\partial H}{\partial c_t}=e^{nt}u'(c_t)-\lambda_t=0 \quad \Leftrightarrow \quad u'(c_t)e^{nt}=\lambda_t$$
 and for the state variable, the condition reads (not equal to zero):
 $$\frac{\partial H}{\partial k_t}=\lambda_t(f'(k_t)-n) = -\dot{\lambda}_t +\rho \lambda_t \quad \Leftrightarrow \quad \dot{\lambda}_t =\lambda_t(n + \rho -f'(k_t)) $$ {#eq-lambda} 
@@ -144,6 +144,22 @@ $$\frac{\partial H}{\partial k_t}=\lambda_t(f'(k_t)-n) = -\dot{\lambda}_t +\rho 
 Lastly, we mention an additional requirement, the so-called **transversality condition** (TVC):
 $$\lim_{t \rightarrow \infty} e^{-\rho t}k_t \lambda_t=0,$$
 which basically implies that infinite horizon discounted capital is equal to zero.
+
+:::
+
+::: {.callout-note collapse="false"}
+## About the derivation of the co-state equation
+
+We have not yet mentioned where @eq-lambda came from. This is a bit of a technical result that fetches into the arsenal of **dynamic optimization**. The full specification is as follows (integrating the static Lagrange "function" - again, the multiplier scales $\dot{k}_t$ and not the full constraint):
+
+$$\int_0^\infty L_tdt= \int_0^\infty e^{-\rho t}(e^{nt}u(c_t)+\lambda_t(f(k_t)-nk_t-c_t - \dot{k}_t))dt$$
+
+At a **stationary point** of the above integral (here, corresponding to a FOC which we seek), there is an important result called the [**Euler-Lagrange equation**](https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation) that implies that differentiating with respect to $k_t$, we have
+$$\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{k}}  \right) =\frac{\partial L}{\partial k}$$
+Basically, the derivative with respect to $k$ is a mix between those with respect to $t$ and $\dot{k}$. The complexity of the Euler-Lagrange equation is that is refers to **functionals of functions**, hence the underlying object is already complex.
+
+In the above equation, we have $\frac{\partial L}{\partial \dot{k}}=-e^{-\rho t}\lambda_t$ so $\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{k}}  \right)=\rho e^{-\rho t}\lambda_t-e^{-\rho t}\dot{\lambda_t}$ and at the same time $\frac{\partial L}{\partial k}=e^{\rho t}\lambda_t(f'(k_t)-n)$,
+which brings us back to @eq-lambda.
 
 :::
 
@@ -171,26 +187,12 @@ In **Economic Growth** by Barro & Sala-ì-Martin, the expression is a bit differ
 :::
 
 
-::: {.callout-note collapse="false"}
-## Derivation of the co-state equation
 
-We have not yet mentioned where @eq-lambda came from. This is a bit of a technical result that fetches into the arsenal of **dynamic optimization**. The full specification is as follows (integrating the static Lagrange "function" - again, the multiplier scales $\dot{k}_t$ and not the full constraint):
-
-$$\int_0^\infty L_tdt= \int_0^\infty e^{-\rho t}(e^{nt}u(c_t)+\lambda_t(f(k_t)-nk_t-c_t - \dot{k}_t))dt$$
-
-At a **stationary point** of the above integral (here, corresponding to a FOC which we seek), there is an important result called the [**Euler-Lagrange equation**](https://en.wikipedia.org/wiki/Euler%E2%80%93Lagrange_equation) that implies that differentiating with respect to $k_t$, we have
-$$\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{k}}  \right) =\frac{\partial L}{\partial k}$$
-Basically, the derivative with respect to $k$ is a mix between those with respect to $t$ and $\dot{k}$. The complexity of the Euler-Lagrange equation is that is refers to **functionals of functions**, hence the underlying object is already complex.
-
-In the above equation, we have $\frac{\partial L}{\partial \dot{k}}=-e^{-\rho t}\lambda_t$ so $\frac{d}{dt}\left(\frac{\partial L}{\partial \dot{k}}  \right)=\rho e^{-\rho t}\lambda_t-e^{-\rho t}\dot{\lambda_t}$ and at the same time $\frac{\partial L}{\partial k}=e^{\rho t}\lambda_t(f'(k_t)-n)$,
-which brings us back to @eq-lambda.
-
-:::
 
 
 ## The balanced growth path
 
-The dynamics of the models are given by @eq-budget for **capital** and @eq-euler for **consumption**. Two equations and two unknowns. 
+The dynamics of the models are given by @eq-budget for **capital** and @eq-euler for **consumption**. Two expressions that must be equal to zero, hence, two equations with two unknowns. 
 
 Again, to obtain a constant $\frac{\dot{k}_t}{k_t}$, we need $\dot{k}_t=0$, which, from @eq-budget imposes
 $$c^*=f(k^*)-nk^*$$ {#eq-bgp}
@@ -222,7 +224,7 @@ where $w$ is the wage level and $\varsigma$ are the costs linked to capital (not
 $$\frac{\partial \Pi}{\partial L}=\alpha A (AL)^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha  (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}-w$$
 
 Hence, upon equilibrium, the labor share is 
-$$\frac{wL}{Y}=\alpha \left( \frac{AL}{Y}\right)^{1-1/\epsilon}$$
+$$\frac{wL}{Y}=\alpha \left( \frac{AL}{Y}\right)^{1-1/\epsilon} \in (0,1)$$
 $\rightarrow$ The long-term dynamics depend on $A$ and $\epsilon$.
 
 
@@ -230,7 +232,7 @@ $\rightarrow$ The long-term dynamics depend on $A$ and $\epsilon$.
 
 ## Baseline
 
-As mentioned before, the model is driven by two quantities, **capital** and **consumption**. From @eq-budget and @eq-euler, we have that $\dot{k}_t$ and $\dot{c}_t$ depend on the values of both $k_t$ and $c_t$. Unfortunately, not in a purely linear fashion. Hence, we can take a Taylor-expansion-like approach to linearize the behavior of the two variables in the vicinity of the equilibrium. For instance, for $\dot{k}_t$, we simplify the expression to 
+As mentioned before, the model is driven by two quantities, **capital** and **consumption**. From @eq-budget and @eq-euler, we have that $\dot{k}_t$ and $\dot{c}_t$ depend on the values of both $k_t$ and $c_t$. Unfortunately, not in a purely linear fashion. Hence, we can take a Taylor-expansion-like approach to linearize the behavior of the two variables in the vicinity of the equilibrium. For instance, for $\dot{k}_t$, we simplify the expression to the **first order** as follows:
 $$\dot{k}_t \approx \left.\frac{\partial \dot{k}_t}{\partial k_t}\right|_{x_t=x^*}(k_t-k^*) + \left. \frac{\partial \dot{k}_t}{\partial c_t}\right|_{x_t=x^*}(c_t-c^*)$$
 where the notation $\left. \frac{\partial y_t}{\partial z_t}\right|_{x_t=x^*}$ means: "take the derivative of $y$ with respect to $z$ and take $x$ to be equal to $x^*$". Here, $x=(k,c)$ encompasses the two variables $k$ and $c$.
 
@@ -316,7 +318,7 @@ But this allows only to solve the problem in the $c$-$k$ space, not the dynamic 
 
 ## Divergence in time simulations
 
-This part of the notebook is here to illustrate one drawback of the model: it is very hard to simulate the time-series of $c_t$ and $k_t$ that lead to a stable point. 
+This part of the notebook is here to illustrate one drawback of the model: it is very hard to simulate the time-series of $c_t$ and $k_t$ that lead to a stable point. This was much easier with the Solow model, but there was no **control variable**, only a **state variable**.
 
 First, we initialize some parameters.
 
