@@ -26,8 +26,8 @@ font-size: 0.78em;
 }
 
 .center{
-  margin: 0!important;
-  height: 30px;
+margin: 0!important;
+height: 30px;
 }
 ```
 
@@ -51,6 +51,7 @@ library(latex2exp)  # Package for LaTeX expressions
 library(quantmod)   # Package for stock data extraction
 library(plotly)     # For interactive plots
 library(ggsci)      # For addition color palettes
+library(WDI)        # World Bank data!
 ```
 
 $\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous ones have have not been executed. 
@@ -65,39 +66,39 @@ Its content is divided into the following sections:
 
 * __Growth Theory__   
 
-  - <span style="color:#20C779">Growth theory preliminaries</span>      
-  - <span style="color:#20C779">The neoclassical growth model</span>    
-  - <span style="color:#20C779">An application: The small open economy</span>     
-  - <span style="color:#20C779">Endogenous growth models I: Escaping diminishing returns (with human capital)</span>    
-  - <span style="color:#20C779">Endogenous growth models II: Technological change</span>   
-  - <span style="color:#20C779">Proximate and fundamental causes of growth</span>    
-  
+- <span style="color:#20C779">Growth theory preliminaries</span>      
+- <span style="color:#20C779">The neoclassical growth model</span>    
+- <span style="color:#20C779">An application: The small open economy</span>     
+- <span style="color:#20C779">Endogenous growth models I: Escaping diminishing returns (with human capital)</span>    
+- <span style="color:#20C779">Endogenous growth models II: Technological change</span>   
+- <span style="color:#20C779">Proximate and fundamental causes of growth</span>    
+
 * __Overlapping Generations Models__   
 
-  - <span style="color:#20C779">Overlapping generations models</span>   
-  - <span style="color:#20C779">An application: Pension systems and transitions</span>   
-  - <span style="color:#20C779">Unified growth theory</span>    
+- <span style="color:#20C779">Overlapping generations models</span>   
+- <span style="color:#20C779">An application: Pension systems and transitions</span>   
+- <span style="color:#20C779">Unified growth theory</span>    
 
 * __Consumption and Investment__   
 
-  - <span style="color:#20C779">Consumption</span>    
-  - <span style="color:#20C779">Consumption under uncertainty and macro finance</span>    
-  - Investment   
+- <span style="color:#20C779">Consumption</span>    
+- <span style="color:#20C779">Consumption under uncertainty and macro finance</span>    
+- Investment   
 
 * __Short Term Fluctuations__  
 
-  - <span style="color:#20C779">Real business cycles</span>    
-  - <span style="color:#20C779">(New) Keynesian theories of fluctuations: A primer</span>       
-  - Unemployment    
+- <span style="color:#20C779">Real business cycles</span>    
+- <span style="color:#20C779">(New) Keynesian theories of fluctuations: A primer</span>       
+- Unemployment    
 
 * __Monetary and Fiscal Policy__  
 
-  - Fiscal policy I: Public debt and the effectiveness of fiscal policy  
-  - Fiscal policy II: The long-run determinants of fiscal policy  
-  - Monetary policy: An introduction   
-  - Rules vs Discretion  
-  - Recent debates in monetary policy 
-  - New developments in monetary and fiscal policy   
+- Fiscal policy I: Public debt and the effectiveness of fiscal policy  
+- Fiscal policy II: The long-run determinants of fiscal policy  
+- Monetary policy: An introduction   
+- Rules vs Discretion  
+- Recent debates in monetary policy 
+- New developments in monetary and fiscal policy   
 
 :::
 
@@ -129,9 +130,11 @@ We mention for instance:
 - the [**World Bank**](https://data.worldbank.org/);    
 - the [**Federal Reserve of Saint Louis**](https://fred.stlouisfed.org/);    
 - the [**OECD**](https://data.oecd.org/);    
-- the [**International Monteary Fund**](https://www.imf.org/external/datamapper/datasets), see also [here](https://www.imf.org/en/Publications/WEO/weo-database/2023/October/download-entire-database) for instance;    
+- the [**International Monteary Fund**](https://data.imf.org/en), see also [here](https://www.imf.org/en/Publications/WEO/weo-database/2024/October/download-entire-database) for instance;    
 - the [**Bank for International Settlements**](https://data.bis.org/bulkdownload);  
 - [gapminder](https://www.gapminder.org/data). 
+
+Several of these institutions use the [SDMX standard](https://sdmx.org/about-sdmx/welcome/).   
 
 I recommend to have a look at the [econdataverse](https://www.econdataverse.org/), and perhaps the [IMF's World Economic Outlook R package](https://teal-insights.github.io/r-imfweo/) in particular. 
 :::
@@ -162,19 +165,17 @@ The chunk below fetches the data. It can take up to a few minutes to run.
 #| fig.width: 4 
 #| fig.height: 2
 #| cache: true
-
-library(WDI)
 wb_raw = WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
-                            "population" = "SP.POP.TOTL",
-                            "gdp" = "NY.GDP.MKTP.CD",
-                            "gdp_growth" = "NY.GDP.MKTP.KD.ZG",
-                            "inflation" = "FP.CPI.TOTL.ZG",
-                            "debt" = "GC.DOD.TOTL.GD.ZS",
-                            "unemployment" = "SL.UEM.TOTL.ZS"), 
-              #country = c('FR','US'), # here you can specify some countries
-              extra = TRUE,
-              start = 1960, 
-              end = 2025) |>
+                           "population" = "SP.POP.TOTL",
+                           "gdp" = "NY.GDP.MKTP.CD",
+                           "gdp_growth" = "NY.GDP.MKTP.KD.ZG",
+                           "inflation" = "FP.CPI.TOTL.ZG",
+                           "debt" = "GC.DOD.TOTL.GD.ZS",
+                           "unemployment" = "SL.UEM.TOTL.ZS"), 
+             #country = c('FR','US'), # here you can specify some countries
+             extra = TRUE,
+             start = 1960, 
+             end = 2025) |>
   mutate(across(everything(), as.vector)) |>
   select(-status, -lending, -iso2c, -iso3c)
 wb_data <- wb_raw |> filter(country %in% c("France", "United States")) |> arrange(country, year)
@@ -596,7 +597,45 @@ Standard models try to explain sustained growth, but often fail to do so. This i
 
 In short: we have seen the **data** (empirical salient facts), we will then cover (some) (imperfect) **theory**.
 
-```{r}
 
+
+# Fetching data outside the World Bank
+
+For the FRED, you need an API key. But the rest is easy, thanks to the `{fredr}` [package](https://sboysel.github.io/fredr/).   
+IMF really is a mess, not user-friendly at all.
+
+```{r}
+# The example from the IMF website does not even work.
+# https://data.imf.org/en/Resource-Pages/IMF-API
+# library(rsdmx)
+# flowref <- 'IMF.STA,CPI'
+# filter <- 'USA...IX.M'
+# df <- as.data.frame(readSDMX(providerId = 'IMF_DATA',
+#                              resource = 'data',
+#                              flowRef = flowref,
+#                              key = filter))
 ```
+
+With the `{imfweo}` [package](https://github.com/Teal-Insights/r-imfweo): [**World Economic Outlook**](https://www.imf.org/en/Publications/WEO) data.   
+Which series are available?
+
+```{r}
+library(imfweo)
+weo_get_series() |> head(8)
+```
+
+Fetching some data for particular countries. 
+
+```{r}
+weo_get(
+  entities = c("USA", "GBR", "DEU"),
+  start_year = 2000,
+  end_year = 2025,
+  year = 2025,
+  release = "Spring"
+) |> head(8)
+```
+
+
+
 
