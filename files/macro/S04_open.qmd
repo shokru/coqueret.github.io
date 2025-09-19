@@ -1,0 +1,250 @@
+---
+title: "Open economies"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)   # Package for data wrangling
+library(readxl)      # Package to import MS Excel files
+library(latex2exp)   # Package for LaTeX expressions
+library(quantmod)    # Package for stock data extraction
+library(highcharter) # Package for reactive plots
+library(WDI)         # World Bank data!
+```
+
+
+# Context
+
+Until now, we have studied closed economies, i.e., in which there are **no interactions** with other economic systems. These interactions can be of various types, including trade, corporate investment, savings, etc.
+
+We start with a few notions of **macroeconomic accounting**.
+
+
+- **GDP**: Gross Domestic Product: amount of goods produced in a given country.  
+- **GNI**: Gross National Income (or Product): amount of money paid to a country's residents.
+
+$$GNI = GDP + rB,$$
+where $B$ is the position of assets held by residents in foreign assets minus the local assets held by foreigners; $r$ is the rate paid on these assets. $rB$ is the **net** payment of foreigners made to residents (it can be negative!). 
+
+Now, we can decompose GDP (using the [expenditure approach](https://en.wikipedia.org/wiki/Gross_domestic_product#Expenditure_approach)) 
+$$GDP=C+I+G+X-M.$$
+Where $C$ is consumption (private expenditures), $I$ investment (from corporations and individuals, e.g., in housing), $G$ government expenditures, $X$ exports and $M$ imports. The last term is very important, as $G$, $I$ and $C$ include importations, hence we must not count them as domestic.
+
+Let's see if this decomposition works in the data. The values are in current LCU (local currency unit, not adjusted for inflation). The World Bank provides all fields, except **investment**. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+
+wb_raw <- WDI(indicator = c("gdp" = "NY.GDP.MKTP.CN",      
+                            "expenses" = "GC.XPN.TOTL.GD.ZS", # (% of GDP)
+                            "consumption" = "NE.CON.TOTL.CN",
+                            "imports" = "NE.IMP.GNFS.CN",
+                            "exports" = "NE.EXP.GNFS.CN",
+                            "inflation" = "FP.CPI.TOTL.ZG",
+                            "debt" = "GC.DOD.TOTL.GD.ZS",
+                            "lend" = "FR.INR.LEND",           # lending rate
+                            "risk_premium" = "FR.INR.RISK",   # = lending - treasury
+                            "real_interest" = "FR.INR.RINR"), 
+              #country = 'US', # here you can specify some countries
+              extra = TRUE, start = 1960, end = 2024) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) 
+```
+
+Values are shown below in trillions of dollars. It seems investment is marginal because the red bars almost entirely compensate the green overshoot. Now, upon verification, this is not entirely true: two sources ([BEA](https://apps.bea.gov/iTable/?reqid=19&step=3&isuri=1&categories=survey&nipa_table_list=1&Series=A&select_all_years=1) and [FRED](https://fred.stlouisfed.org/series/GPDI)) point to values close to $6T in recent years. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 4
+
+wb_raw |> 
+  filter(country == "United States") |> na.omit() |>
+  mutate(expenses = expenses * gdp / 100) |>
+  pivot_longer(expenses:exports, names_to = "field", values_to = "value") |>
+  mutate(field = field |> recode_factor(imports = "imports", exports = "exports", 
+                                        expenses = "expenses", consumption = "consumption",
+                                        .ordered = T)) |>
+  ggplot() + geom_col(aes(x = year, y = value/10^12, fill = field)) + 
+  theme_classic() + 
+  theme(legend.position = c(0.2,0.8), 
+        axis.title = element_blank(),
+        legend.title = element_blank()) + 
+  scale_fill_manual(values = c("#E83544", "#26662C", "#3B8F42", "#9FE3A5")) + 
+  geom_line(aes(x = year, y = gdp/10^12), linewidth = 1)
+```
+
+# The Ramsey with debt/bond
+## Formulation
+
+For simplicity, we fix $n=0$ and $L_0=1$ so that population remains contants and all terms cann be viewed as *per capita*. As in the Ramsey model, the utility is 
+$$U=\int_0^\infty e^{-\rho t} u(c_t)dt.$$
+We also have $\dot{k}_t=f(k_t)-c_t$ (simplified dynamic for capital), and the representative inhabitant/agent has access to a bond which pays a payoff rate of $r$: $\dot{b}_t=rb_t$, with $b_t$ being the value of the bond (or amount detained in the economy). 
+
+The total assets (per capita) in the economy are $a_t=k_t+b_t$, hence
+$$\dot{a}=f(k_t)+rb_t-c_t= f(k_t)+r(a_t-k_t)-c_t$$ {#eq-a_dot}
+
+The Hamiltonian in the optimization of consumption with the above constraint is
+$$H = u(c_t)+\lambda_t (f(k_t)+r(a_t-k_t)-c_t)$$
+The first order conditions are then
+$$u'(c_t)=\lambda_t \quad (\text{derivative w.r.t.  } c_t)$$ {#eq-cond_c}
+$$f'(k_t)=r \quad (\text{derivative w.r.t.  } k_t)$$
+$$ \frac{\partial H}{\partial a}+ \dot{\lambda}_t = \rho \lambda_t \quad \Leftrightarrow \quad \dot{\lambda}_t=(\rho-r) \lambda_t \quad (\text{co-state variable)}$$
+Imagine $\lambda_t$ is an asset, then the l.h.s. is the marginal income of investing in this asset (from dividend/utility plus capital gains). The r.h.s. is the rate at which is makes **exactly** sense to hold the asset: it must precisely compensate for the **discount rate** $\rho$. 
+
+Differentiating the last equation w.r.t. time and plugging @eq-cond_c, we get
+$$\dot{c}_tu''(c_t)=(\rho-r)u'(c_t),$$
+
+so that 
+$$\frac{\dot{c}_t}{c_t}=\sigma (r-\rho) \quad (\text{recall} \quad \sigma = -\frac{u'(c_t)}{c_tu''(c_t)}).$$ {#eq-const_c}
+
+This is **magic**! It does not depend on $k_t$, basically, it is constant! There are not dynamics... 
+
+The balanced growth path thus imposes $r=\rho$. Then, **all** quantities in the model are constant. In particular, the equilibrium capital satisfies $f'(k^*)=r$ (from the second FOC above) and total output is $y=f(k^*).$
+
+Furthermore, note that, integrating @eq-a_dot, we get 
+$$a_te^{-rt}-a_0 = \frac{1-e^{-rt}}{r}(f'(k^*)-rk^*-c^*),$$
+
+so that, as $t\rightarrow \infty$ and under non-explosive assumptions, we get
+$$c^* = ra_0+f'(k^*)-rk^*.$$
+
+## Some comments on the model
+
+The most salient property of the model in @eq-const_c. At the optimum (equilibrium), any deviation from $k^*$ or $c^*$ is immediately corrected. The trick is that the residents of the home country are able to adjust by purchasing any amount of required capital - thanks to the bond. This does not affect the national assets, because $a=k+b$, hence reducing $b$ by the same amount that $k$ increases leaves $a$ unchanged. 
+
+
+
+# Sustainability of public debt
+
+We leave growth aside for now to focus on the law of motion of **public debt** (from [François Geerolf's lecture notes](https://fgeerolf.com/econ102/public-debt.html)). We write:   
+
+- $G_t$ for government spending (at time $t$)    
+- $T_t$ the taxes collected at time $t$   
+- $r_t$ the interest rate paid at time $t$ (unique for simplicity)
+
+The debt then follows the following process
+
+$$D_t = G_t-T_t+(1+r_t)D_{t-1},$$
+where the state has to reimburse interest rates on the previous debt $D_{t-1}$.   
+
+The deficit follows
+
+$$\Delta D_t = D_t-D_{t-1}=\underbrace{G_t-T_t}_{\text{primary deficit}}+\underbrace{r_tD_{t-1}}_{\text{interest payment}}.$$
+
+If we divide by GDP $Y_t$,
+$$\frac{D_t}{Y_t}=(1+r_t)\frac{Y_{t-1}}{Y_{t}}\frac{D_{t-1}}{Y_{t-1}}+\frac{G_t-T_t}{Y_t},$$
+
+and if $d_t=D_t/Y_t$,
+$$d_t = \frac{1+r_t}{1+g_Y}d_{t-1}+\frac{G_t-T_t}{Y_t},$$ {#eq-d}
+
+where $g_Y$ is the deterministic growth rate of the economy. 
+
+Let's make some simplifications and assume:  
+
+- a constant rate $r_t=r$;     
+- moreover, we suppose that $\mathbb{E}\left[\frac{G_t-T_t}{Y_t}\right]=\mathbb{E}[\epsilon]=0$ (innovation term). 
+
+Then, $d_t$ follows a [first order autoregressive model](https://en.wikipedia.org/wiki/Autoregressive_model) (AR(1)). It is well-behaved only if $r<g_Y$, i.e., if GDP growth is able to finance the debt. If not, the debt explodes. If $r=g_Y$, then the debt/DGP ratio is a random walk. If the right term of @eq-d is zero and not random, then the ratio is constant. 
+
+
+## A look at the data
+
+Let's see how that translates into actual rates.  
+
+Then compute the desired quantities from the World Bank data and plot them.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 3
+
+wb_raw |>
+  na.omit() |>
+  filter(country %in% c("Thailand", "United States", "Brazil"),
+         year > 2005) |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(interest_rate = lend - risk_premium,
+         debt_growth = 100*(debt / lag(debt) - 1)) |>
+  select(country, year, interest_rate, debt_growth) |>
+  pivot_longer(-c(country, year), values_to = "value", names_to = "rate") |>
+  ggplot(aes(x = year, y = value, color = country, linetype = rate)) + geom_line() +
+  theme_classic() +
+  theme(axis.title = element_blank())
+
+```
+
+The series oscillate a lot.
+
+And what if we consider a variety of countries...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+
+wb_raw |>
+  na.omit() |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(interest_rate = lend - risk_premium,
+         n = n(),                               # Counting countries
+         debt_growth = 100*(debt / lag(debt) - 1)) |>
+  filter(n > 20) |>                             # We want at least 20 obs.
+  summarise(r = mean(interest_rate, na.rm = T),
+            g = mean(debt_growth, na.rm = T),
+            g_r = g-r) |>
+  arrange(g_r)
+```
+
+Lots of different situations... 
+
+
+
