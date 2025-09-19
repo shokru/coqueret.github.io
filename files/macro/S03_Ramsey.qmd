@@ -281,10 +281,13 @@ $$\begin{bmatrix} \frac{\partial \hat{k}_t}{\partial t} \\ \frac{\partial \hat{c
 
 ## Analytical solution
 
-The solution of the [matrix differential equation](https://en.wikipedia.org/wiki/Matrix_differential_equation) takes the form^[This is in fact an approximation: it should depend on the eignevectors too - but we omit this for now.] 
+The solution of the [matrix differential equation](https://en.wikipedia.org/wiki/Matrix_differential_equation) takes the form
 $$\hat{k}_t=\hat{k}^* + \psi_1 e^{\beta_1 t} + \psi_2 e^{\beta_2t}, $$
 
-where the $\beta_i$ are the **eigenvalues** of the transition matrix above and the $\psi_i$ are some constants. In the usual parameter configuration, the eigenvalues have opposite signs. Because we are interested in equilibria, the system must not blow up, hence the $\psi_i$ associated with the positive eigenvalue must be zero. To identify the remaining constant, it suffices to take $t=0$. In the end, the dynamics of the log of capital per capita is
+where the $\beta_i$ are the **eigenvalues** of the transition matrix above and the $\psi_i$ are some constants. This is in fact an approximation: it should depend on the eignevectors too - but we omit this for now.
+
+
+In the usual parameter configuration, the eigenvalues have opposite signs. Because we are interested in equilibria, the system must not blow up, hence the $\psi_i$ associated with the positive eigenvalue must be zero. To identify the remaining constant, it suffices to take $t=0$. In the end, the dynamics of the log of capital per capita is
 $$\hat{k}_t=\hat{k}^*+(\hat{k}_0-\hat{k}^*)e^{\beta t},$$
 with $\beta$ being the negative eigenvalue. 
 
