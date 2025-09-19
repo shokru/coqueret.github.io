@@ -85,7 +85,8 @@ wb_raw <- WDI(indicator = c("gdp" = "NY.GDP.MKTP.CN",
               #country = 'US', # here you can specify some countries
               extra = TRUE, start = 1960, end = 2024) |>
   mutate(across(everything(), as.vector)) |>
-  select(-status, -lending, -iso2c, -iso3c) 
+  select(-status, -lending, -iso2c, -iso3c) |> 
+  filter(region != "Aggregates", income != "Aggregates") 
 ```
 
 Values are shown below in trillions of dollars. It seems investment is marginal because the red bars almost entirely compensate the green overshoot. Now, upon verification, this is not entirely true: two sources ([BEA](https://apps.bea.gov/iTable/?reqid=19&step=3&isuri=1&categories=survey&nipa_table_list=1&Series=A&select_all_years=1) and [FRED](https://fred.stlouisfed.org/series/GPDI)) point to values close to $6T in recent years. 
