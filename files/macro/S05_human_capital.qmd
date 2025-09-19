@@ -1,0 +1,350 @@
+---
+title: "Human capital and knowledge"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)     # Package for data wrangling
+library(readxl)        # Package to import MS Excel files
+library(latex2exp)     # Package for LaTeX expressions
+library(quantmod)      # Package for stock data extraction
+library(highcharter)   # Package for reactive plots
+library(ggrepel)       # Better labels on plots 
+library(WDI)           # To access World Bank data
+impute <- function(v){ # Imputation function
+    n <- 12
+    for(j in 1:n){
+        ind <- which(is.na(v))
+        if(length(ind) > 0){if(ind[1]==1) {ind <- ind[-1]}}
+        v[ind] <- v[ind-1]
+    }
+    return(v)
+} 
+```
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+# Context & motivation
+
+The models we have covered so far do not allow for strictly positive growth in equilibrium. There are several ways in which they can be changed in order to try to foster **endogenous growth**.
+
+But first, let's see if the Human Capital Index from the World Bank can explain cross-sectional variations in growth across countries. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 4 
+#| fig.height: 2
+#| cache: true
+
+library(WDI)
+wb_raw <- WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
+                            "population" = "SP.POP.TOTL",
+                            "gdp" = "NY.GDP.MKTP.CD",
+                            "human_capital" = "HD.HCI.OVRL",
+                            "gdp_growth" = "NY.GDP.MKTP.KD.ZG"), 
+              #country = c('FR','US'), # here you can specify some countries
+              extra = TRUE,
+              start = 1960, 
+              end = 2025) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) |> 
+  filter(region != "Aggregates", income != "Aggregates") |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(across(everything(), impute)) |>
+  ungroup()
+```
+
+Now, let's compute the average growth rate and GDP per capita of countries and plot them against **human capital**.   
+**NOTE**: the data is relatively sparse and the last point is in 2020. But still...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 4
+
+wb_raw |>
+  filter(is.finite(human_capital), ) |>
+  group_by(country) |>
+  summarise(avg_growth = mean(gdp_growth, na.rm = T),
+            avg_wealth = mean(gdp_per_capita, na.rm = T),
+            avg_human_capital = mean(human_capital, na.rm = T)) |>
+  ggplot(aes(x = avg_human_capital, y = avg_wealth)) + geom_point() +
+  theme_classic() + ylab("Average GDP per capita") + xlab("Average Human Capital Index (HCI)") +
+  geom_text_repel(aes(label = country))
+```
+
+The relationship is this case is pretty clear.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 4
+
+wb_raw |>
+  filter(is.finite(human_capital)) |>
+  group_by(country) |>
+  summarise(avg_growth = mean(gdp_growth, na.rm = T),
+            avg_wealth = mean(gdp_per_capita, na.rm = T),
+            avg_human_capital = mean(human_capital, na.rm = T)) |>
+  filter(avg_growth < 10) |>
+  ggplot(aes(x = avg_human_capital, y = avg_growth)) + geom_point() +
+  theme_classic() + ylab("Average GDP growth rate") + xlab("Average Human Capital Index (HCI)") +
+  geom_text_repel(aes(label = country))
+```
+
+Things are much less clear for **economic growth**...
+
+
+# The model
+
+## Production
+
+In this section, the change comes from the **production function**:
+
+$$Y = K^\alpha H^\beta (AL)^\gamma,$$
+
+where $H$ stands for **human capital** and returns to scale are constant, increasing or decreasing if $\alpha+\beta+\gamma$ is equal to one, strictly above, or strictly below. The productivity (or technological) factor $A$ is associated to labor in this case. Dividing by $L$ under CRS, we get the per-capita version:
+
+$$y = A^\gamma k^\alpha h^\beta ,$$ {#eq-prod_human}
+
+## Evolution through saving & depreciation
+
+As in the simpler models (e.g., à la Solow), we assume savings rates for physical and human capital $s_k$ and $s_h$; as well as depreciation rates, too: $\delta_k$ and $\delta_h$. 
+
+::: {.callout-note collapse="false"}
+## Side note
+
+Whether human capital depreciates should be open to debate...
+
+:::
+
+
+Then, time-variations are given by 
+
+$$\dot{K} = s_kY-\delta_k K \quad \Leftrightarrow \quad \frac{\dot{K}}{L}=s_ky-\delta_kk$$
+$$\dot{H} = s_hY-\delta_h H \quad \Leftrightarrow \quad \frac{\dot{H}}{L}=s_hy-\delta_hh. $$
+Moreover, by definition, $\dot{k}=\dot{K}/L-nk$ and $\dot{h}=\dot{H}/L-nh$, where $n$ is the constant growth rate of the population $(L)$. Plugging this into the above expressions, we get
+$$\dot{k}=s_k A^\gamma k^\alpha h^\beta-(\delta_k+n)k, \quad \text{and} \quad \dot{h}=s_h A^\gamma k^\alpha h^\beta-(\delta_h+n)h,$$
+and the corresponding **relative growth rates** are:
+$$\gamma_k=\frac{\dot{k}}{k}=s_k A^\gamma k^{\alpha-1} h^\beta-(\delta_k+n)$$
+$$\gamma_h=\frac{\dot{h}}{h}=s_h A^\gamma k^{\alpha} h^{\beta-1}-(\delta_h+n).$$
+
+## Steady states
+
+The balanced growth path requires that $\gamma_k$ and $\gamma_h$ be constant. Since $\delta_k+n$ and $\delta_h+n$ are already constant, we need that $s_k A^\gamma k^{\alpha-1} h^\beta$ and $s_h A^\gamma k^{\alpha} h^{\beta-1}$ be constant. To simplify these quantities, we take their log (they, too, have to be constant), and we differentiate with respect to time (log($s_k$), log($A^\gamma$), and log($s_h$) are constant so they vanish):
+$$\frac{\partial}{\partial t} \left((\alpha-1) \log(k)+\beta \log(h) \right)=(\alpha-1) \frac{\dot{k}}{k}+\beta \frac{\dot{h}}{h}=(\alpha-1)\gamma_k+\beta \gamma_h=0$$
+$$\frac{\partial}{\partial t} \left(\alpha \log(k)+(\beta-1) \log(h) \right)=\alpha \frac{\dot{k}}{k}+(\beta-1) \frac{\dot{h}}{h}=\alpha\gamma_k+(\beta-1) \gamma_h=0.$$
+Both l.h.s. expressions have to be equal to zero, i.e, from the second equation, $\gamma_h=\frac{\alpha}{1-\beta}\gamma_k$ and substituting this into the first equation,
+$$\left((\alpha-1)+\frac{\beta \alpha}{1-\beta}\right) \gamma_k=\frac{(\alpha-1)(1-\beta)+\alpha \beta}{1-\beta}\gamma_k=\frac{\alpha+\beta-1}{1-\beta} \gamma_k=0.$$
+If we assume **constant returns to scale**, $\alpha+\beta < 1$ because else $\gamma=0$ (and labor and productivity are out of the game). And obviously, $\beta > 0$ for the same reason (human capital), hence this imposes $\gamma_k=0$. 
+
+::: {.callout-important collapse="false"}
+Again, this means **zero growth in equilibrium**!   
+:::
+
+We are not really more advanced - but this was to be expected.
+
+## Another model
+
+This section follows Barro and Sala-ì-Martin, Section 5.1.   
+The production is of **Cobb-Douglas** type:
+
+$$Y=AK^aH^{1-a}, \quad a \in (0,1),$$
+with $H$ being **human capital**. The resource constraint is:
+$$Y=C+I_K+I_H,$$
+where $I_K$ and $I_H$ are the investments in capital and in the workforce. Importantly, consumption remains the only **control variable**, while investments are **state variables**. 
+Moreover, 
+$$\dot{K}=I_K-\delta_KK, \quad \dot{H}=I_H-\delta_HH.$$
+
+The population seeks to maximize utility across generations: $\int_0^\infty e^{-\rho t}u(C_t)dt$.   
+Given the 3 constraints listed above, the **Hamiltonian** is
+$$J=e^{-\rho t}u(C)+\nu(I_K-\delta_KK)+\mu(I_H-\delta_HH)+\omega(AK^aH^{1-a}-C-I_K-I_H).$$
+
+The model then assumes a CRRA utility function, written as $u(x)=x^{1-\theta}/(1-\theta)$. 
+We have
+
+$$\frac{\partial J}{\partial C}=e^{-\rho t}C^{-\theta} -\omega, \quad \frac{\partial J}{\partial I_K}=\nu -\omega, \quad \frac{\partial J}{\partial I_H}=\mu -\omega $$
+and setting all these expressions to zero, we get 
+$$\omega = \nu = \mu = e^{-\rho t}C^{-\theta}.$$
+Hence, differentiating with respect to *t*, we obtain (equating with $\partial J/\partial K$ and $\partial J/\partial H$ because of the **FOC for state variables**),
+
+$$\dot{\nu}=-\rho e^{-\rho t}C^{-\theta}-\theta e^{-\rho t}C^{-\theta-1} \dot{C}=\frac{\partial J}{\partial K}=\nu \delta_K-\omega a A K^{a-1}H^{1-a}$$
+
+$$\dot{\mu}=-\rho e^{-\rho t}C^{-\theta}-\theta e^{-\rho t}C^{-\theta-1} \dot{C}=\frac{\partial J}{\partial H}=-\mu \delta_H-\omega (1-a) A K^{a}H^{-a}$$
+
+And since $\omega = \nu=\mu$, it must hold that
+$$\frac{\dot{\nu}}{\nu}=\delta_K-aAK^{a-1}H^{1-a}, \quad \frac{\dot{\mu}}{\mu}=-\delta_H+(1-a)AK^{a}H^{-a}.$$
+At the same time, from the expressions of $\dot{\nu}$ and $\dot{\mu}$, we derive
+$$\frac{\dot{\nu}}{\nu}=-\rho -\theta  \frac{\dot{C}}{C}, \quad \frac{\dot{\mu}}{\mu}=-\rho -\theta  \frac{\dot{C}}{C}.$$
+
+Hence, 
+
+$$\frac{\dot{C}}{C}=\theta^{-1}(aA(K/H)^{a-1}-\delta_K-\rho)=\theta^{-1}((a-1)A(K/H)^{a}-\delta_H-\rho)$$ {#eq-cons}
+
+If we set $\delta_K=\delta_H$ (big assumption!), it must hold that $aA(K/H)^{a-1}=(a-1)A(K/H)^{a}$, i.e., 
+$$K/H=a/(1-a).$$ {#eq-cond} 
+We can then plug this in the above equation to get:
+
+$$\frac{\dot{C}}{C}=\theta^{-1}(Aa^a(1-a)^{1-a}-\delta-\rho)$$
+
+If $Y=AK^aH^{1-a}= AK (K/H)^{a-1}$ and @eq-cond holds, we have
+$$Y=AK\left(\frac{a}{1-a} \right)^{a-1}$$
+$\rightarrow$ The __*AK* model__! More on that soon.
+
+If $\delta_H \neq \delta_K$, 
+
+$$aA(K/H)^{a-1}-\delta_K=(a-1)A(K/H)^{a}-\delta_H,$$
+and $K/H$ does not have a simple expression (algebraic equation). 
+
+
+# Two imperfect avenues towards growth 
+
+## Returns to scale
+
+One reason why growth is not possible in the extended Solow model is the assumption of **constant returns to scale**. Indeed, if we allow $\alpha+\beta=1$ (and $\gamma >0$, so that **total** returns to scale are increasing), then $\gamma_k \neq 0$. Ok, but that's an easy one. 
+
+And, in practice, at the aggregate level, returns seem to be close to, or slightly smaller than, **one** (but with **sector heterogeneity**), see for instance:   
+
+- [Returns to Scale in U.S. Production: Estimates and Implications](https://www.journals.uchicago.edu/doi/abs/10.1086/262073)     
+- [On the estimation of returns to scale, technical progress and monopolistic markups](https://www.sciencedirect.com/science/article/abs/pii/S0304407608000584)     
+- [On estimating optimal α-returns to scale](https://www.tandfonline.com/doi/abs/10.1080/01605682.2017.1418148)      
+
+
+
+## Exogenous growth
+
+If $\gamma_k= s_k y/k-(\delta_k+n)$ and $\gamma_h=s_h y/h-(\delta_h+n)$ are constant, then $k/y$ and $h/y$ are constant and all variables grow at the same pace. Let's take log-output:
+
+$$\log(y)=\gamma \log(A) + \alpha \log(k) +\beta \log(h), $$
+
+hence, differentiating with respect to time (recalling a Cobb-Douglas function $y=A^\gamma k^\alpha h^\beta$),
+$$\frac{\dot{y}}{y} = \gamma \frac{\dot{A}}{A}+\alpha \frac{\dot{k}}{k} + \beta \frac{\dot{h}}{h}$$
+
+Since $x = \frac{\dot{y}}{y} =\frac{\dot{k}}{k} = \frac{\dot{h}}{h}$, if we write $g$ for the relative growth rate of $A$ we get
+$$x = \gamma g + \alpha x + \beta x,$$
+and assuming constant returns to scale $1-\alpha-\beta=\gamma$, we get $x=g$, i.e., all growth rates are equal to $g$, the rate of increase of the productivity factor $A$. But this is not **endogenous** growth...
+
+
+
+
+# The AK model
+
+## Assumptions and BGP
+
+This is a special model because it assumes
+
+$$y=Ak,$$
+hence its name. As in the **Ramsey model**, if we assume $n=0$, capital evolves as:
+$$\dot{k}_t=y_t-c_t=Ak_t-c_t.$$ {#eq-AK_capital}
+
+We then set the **utility function**:
+$$u(c_t)=\left(\frac{\sigma}{\sigma-1} \right)c_t^{(\sigma-1)/\sigma},$$
+which implies $u'(c_t)=c_t^{-1/\sigma}$ and $u''(c_t)=-\sigma^{-1}c_t^{-1-1/\sigma}$ so that indeed $-\frac{u'(c)}{u''(c)c}=\sigma$.
+
+As before, the representative agent seeks to maximize **discounted utility** over an infinite horizon: $\int_0^\infty u(c_t)e^{-\rho t}dt$.
+
+The corresponding **Hamiltonian** is 
+$$H=\left( \frac{\sigma}{\sigma - 1} \right)c_t^{(\sigma-1)/\sigma}+\lambda_t (A k_t - c_t),$$
+leading to 
+
+
+$$\frac{\partial H}{\partial c_t}=c_t^{-1/\sigma}-\lambda_t=0$$
+and, for the **co-state** variable, to 
+$$\dot{\lambda}_t=-\frac{\partial H}{\partial k_t}+\rho \lambda_t=(\rho-A)\lambda_t.$$
+
+The first FOC implies $\lambda_t=c_t^{-1/\sigma}$, hence $\dot{\lambda}_t=-\sigma^{-1}c_t^{-1-1/\sigma} \dot{c}_t$. If we divide this by the FOC, we get
+
+$$\frac{\dot{\lambda}_t}{\lambda_t}=-\sigma^{-1} \frac{\dot{c}_t}{c_t}$$
+
+From the second FOC, this implies
+$$\frac{\dot{c}_t}{c_t}=\sigma(A-\rho).$$ {#eq-cdiff}
+
+
+For the BGP, the variables need to grow at constant speed. This is already the case for **consumption**, but what about **capital**? From @eq-AK_capital, we have 
+$$\frac{\dot{k}_t}{k_t}=A-c_t/k_t,$$ {#eq-Akck}
+hence we need the same growth rate for $c_t$ and $k_t$. In the model, the BGP is such that all variables, including output $y_t$ grow at the same pace, $\sigma(A-\rho)$. In addition, from @eq-Akck, we have 
+$$\sigma(A-\rho)=A-c_t/k_t \Leftrightarrow k_t = c_t (\sigma(A-\rho)-A)$$
+
+Hence, consumption is exactly **proportional** to capital (and output). 
+
+## The transversality condition
+
+
+In the model, the TVC $e^{-\rho t}k_t \lambda_t \rightarrow 0$ is $e^{-\rho t}k_t c^{-\sigma^{-1}_t} \rightarrow 0$. The differential @eq-cdiff has simple solution $c_t=c_0e^{(\sigma(A-\rho))t}$. But remember that this is also true for $k$: $k_t=k_0 e^{(\sigma(A-\rho))t}$, hence the condition becomes $k_0c_0^{-\sigma^{-1}}e^{(\sigma(A-\rho)-A)t}\rightarrow 0$, which requires $\sigma(A-\rho)<A$.
+
+
+
+
+
+# Knowledge & learning by doing
+
+
+To generate growth, one way may be to rely on some form **productivity**. From a **human capital** perspective, the idea here is to assume that **experience** gets workers better at **production**. Below, we follow the survey [*Learning by doing*](https://digitalcommons.fiu.edu/economics_wps/42/), Section 5. 
+
+$$Y=AK^aL^{1-a},$$
+with $A$ being **knowledge**. Labor increases as usual **exogenously** at rate $n$, while $K$ satisfies $\dot{K}=sY$, i.e., via savings and without depreciation. **Knowledge** is linked to cumulative investment (e.g., R&D) via $A=bK^\lambda$.  
+
+We simplify the production function to 
+
+$$y=Ak^a$$ {#eq-prod2}
+
+and laws of motion are (same as in the Solow model below):
+
+$$\frac{\dot{k}}{k}=sAk^{a-1}-n$$ {#eq-kdot}
+
+and 
+$$\frac{\dot{A}}{A}=\lambda n+\lambda \frac{\dot{k}}{k}.$$ {#eq-Adot}
+
+Indeed, $\dot{A}=b\lambda K^{\lambda-1}\dot{K}=\lambda A \frac{\dot{K}}{K}=\lambda A(\dot{k}/k+n)$ where the final equality comes from $\dot{K}/K=sY/K=sA(L/K)^{1-a}=sAk^{a-1}=\dot{k}/k+n$ (from @eq-kdot). 
+
+This implies
+
+$$\frac{\dot{y}}{y}=\frac{\dot{A}k^a+Aa k^{a-1}\dot{k}}{Ak^a}=\frac{\dot{A}}{A}+a\frac{\dot{k}}{k}=\lambda n+(\lambda +a)(sAk^{a-1}-n).$$
+In short, we have $\frac{\dot{y}}{y}=\lambda n+ (\lambda+a)\frac{\dot{k}}{k}$: output growth is an **affine function** of capital growth. 
+If we assume $\frac{\dot{k}}{k}=0$, then growth comes from learning only. We can find a situation where all growths are positive. It corresponds to $\frac{\dot{y}}{y}=\frac{\dot{k}}{k}$ and $\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}$. This yields
+$$\frac{\dot{k}}{k}=\frac{\dot{y}}{y}=\frac{\lambda n}{1-a-\lambda}$$
+Note that $n=0$ implies $a+\lambda=1$ (constant returns to scale). If population grows, then it must hold that $a+\lambda<1$ (DRS). 
+
+**NOTE**: a simple alternative model can be found in *Economic Growth*, by Barro and Sala-i-Martin, Section 4.3.

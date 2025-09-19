@@ -228,7 +228,8 @@ wb_growth <- WDI(                           # World Bank data
   arrange(country, year) |>
   mutate(capital_percap = capital_formation / labor)
 
-wb_growth <- wb_growth |> filter(region != "Aggregates") # Remove continents & co. 
+wb_growth <- wb_growth |> 
+  filter(region != "Aggregates", income != "Aggregates") # Remove continents & co. 
 
 wb_growth |>
   ggplot(aes(x = labor, y = gdp, color = region)) + geom_point(size = 0.3, alpha = 0.5) + 
