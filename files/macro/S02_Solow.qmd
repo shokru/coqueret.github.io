@@ -208,6 +208,7 @@ Below, we import the data and take a look at the univariate link between workfor
 #| column: 'margin'
 #| fig.width: 5 
 #| fig.height: 7
+#| cache: true
 wb_growth <- WDI(                           # World Bank data
   indicator = c(
     "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
