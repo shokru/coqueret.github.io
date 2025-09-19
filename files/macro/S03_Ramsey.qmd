@@ -136,9 +136,9 @@ One is feasible, the other is not. Recall that the profit is $R-10$, hence the o
 The solution of the consumer's problem is complicated because she has to determine at time 0 the best **path** of future consumption. To solve this, we must resort to [**optimal control theory**](https://en.wikipedia.org/wiki/Optimal_control). We seek to optimize with respect to the **control variable** $c_t$; whereas $k_t$ is the underlying **state variable**. We define the Hamiltonian
 $$H=u(c_t)e^{nt}+\lambda_t(f(k_t)-nk_t-c_t),$$
 
-which is the dynamic equivalent of the Lagrangian in static optimization - modulo the fact that the multiplier is associated with the expression of $\dot{k}_t$ (and not to that of the budget constraint, this can be proven usingintegration by parts, [but is far from obvious](https://en.wikipedia.org/wiki/Hamiltonian_(control_theory)#Derivation_from_the_Lagrangian)). $\lambda_t$ is the co-state variable, the counterpart of the Lagragian multiplier. The first order conditions (FOCs) are then, for the control variable:
+which is the dynamic equivalent of the Lagrangian in static optimization - modulo the fact that the multiplier is associated with the expression of $\dot{k}_t$ (and not to that of the budget constraint, this can be proven using integration by parts, [but is far from obvious](https://en.wikipedia.org/wiki/Hamiltonian_(control_theory)#Derivation_from_the_Lagrangian)). $\lambda_t$ is the co-state variable, the counterpart of the Lagragian multiplier. The **first order conditions** (FOCs) are then, for the **control variable**:
 $$\frac{\partial H}{\partial c_t}=e^{nt}u'(c_t)-\lambda_t=0 \quad \Leftrightarrow \quad u'(c_t)e^{nt}=\lambda_t$$
-and for the state variable, the condition reads (not equal to zero):
+and for the **state variable**, the condition reads (not equal to zero):
 $$\frac{\partial H}{\partial k_t}=\lambda_t(f'(k_t)-n) = -\dot{\lambda}_t +\rho \lambda_t \quad \Leftrightarrow \quad \dot{\lambda}_t =\lambda_t(n + \rho -f'(k_t)) $$ {#eq-lambda} 
 
 Lastly, we mention an additional requirement, the so-called **transversality condition** (TVC):
