@@ -182,6 +182,7 @@ wb_data <- wb_raw |> filter(country %in% c("France", "United States")) |> arrang
 wb_eu <- wb_raw |> filter(country %in% c("Spain", "Italy", "Poland", "Slovenia", "Venezuela, RB")) |> arrange(country, year)
 ```
 
+Again, for pythonistas, the equivalent kind of request can be found in this [colab notebook](https://colab.research.google.com/drive/1qvbbAYaXNz5FP4Q5zyY21qkZvUIPF1P9#scrollTo=dbfsXGCNsCsq).
 
 ```{r}
 #| message: false
