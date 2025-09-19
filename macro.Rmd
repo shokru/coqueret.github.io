@@ -15,17 +15,18 @@ Topics
 The links below lead to html **slides** and course **material**.
 
 
-01. <a href="files/macro/S01_intro.html" target="_blank">**Introduction, data and basic salient facts**</a>, <a href="files/macro/S01_intro.qmd" target="_blank">[quarto notebook]</a>   
-02. <a href="files/macro/S02_Solow.html" target="_blank">**The Solow model** and extensions</a>, <a href="files/macro/S02_Solow.qmd" target="_blank">[quarto notebook]</a>    
-03. <a href="files/macro/S03_Ramsey.html" target="_blank">**The Ramsey model**</a> (<a href="files/macro/S03_Ramsey.qmd" target="_blank">[quarto notebook]</a>) and <a href="files/macro/S4_open.html" target="_blank">**open economies** (short)</a>,   
-04. <a href="files/macro/S5_human_capital.html" target="_blank">**Human capital**</a>   
-05. <a href="files/macro/S6_technology.html" target="_blank">**Technological change**</a>   
-06. Growth in the cross-section of countries     
-07. Models with overlapping generations     
-08. <a href="files/macro/S7_unified_theory.html" target="_blank">**Unified growth theory**</a>      
-09. <a href="files/macro/S8_Simulations.html" target="_blank">**Simulations**</a>       
-10. Consumption
-11. <a href="files/macro/S9_finance.html" target="_blank">**Some financial economics**</a>
+01. <a href="files/macro/S01_intro.html" target="_blank">**Introduction, data and basic salient facts**</a> - <a href="files/macro/S01_intro.qmd" target="_blank">[quarto nb]</a>   
+02. <a href="files/macro/S02_Solow.html" target="_blank">**The Solow model** and extensions</a> - <a href="files/macro/S02_Solow.qmd" target="_blank">[quarto nb]</a>    
+03. <a href="files/macro/S03_Ramsey.html" target="_blank">**The Ramsey model**</a> - <a href="files/macro/S03_Ramsey.qmd" target="_blank">[quarto nb]</a>    
+04. <a href="files/macro/S4_open.html" target="_blank">**Open economies**</a> - <a href="files/macro/S04_open.qmd" target="_blank">[quarto nb]</a>    
+05. <a href="files/macro/S5_human_capital.html" target="_blank">**Human capital**</a>   
+06. <a href="files/macro/S6_technology.html" target="_blank">**Technological change**</a>   
+07. Growth in the cross-section of countries     
+08. Models with overlapping generations     
+09. <a href="files/macro/S7_unified_theory.html" target="_blank">**Unified growth theory**</a>      
+10. <a href="files/macro/S8_Simulations.html" target="_blank">**Simulations**</a>       
+11. Consumption
+12. <a href="files/macro/S9_finance.html" target="_blank">**Some financial economics**</a>
 
 ---------
 
