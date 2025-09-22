@@ -41,6 +41,8 @@ library(quantmod)      # Package for stock data extraction
 library(highcharter)   # Package for reactive plots
 library(ggrepel)       # Better labels on plots 
 library(WDI)           # To access World Bank data
+library(broom)         # Neat regression output
+
 impute <- function(v){ # Imputation function
     n <- 12
     for(j in 1:n){
@@ -85,8 +87,11 @@ wb_raw <- WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
   arrange(country, year) |>
   group_by(country) |>
   mutate(across(everything(), impute)) |>
+  mutate(HC_change = human_capital/lag(human_capital) - 1) |>
   ungroup()
 ```
+
+## In the cross-section
 
 Now, let's compute the average growth rate and GDP per capita of countries and plot them against **human capital**.   
 **NOTE**: the data is relatively sparse and the last point is in 2020. But still...
@@ -137,6 +142,42 @@ wb_raw |>
 
 Things are much less clear for **economic growth**...
 
+
+## Time-series
+
+Let us now turn to single-country time-related links.   
+We estimate the following model:
+$$\Delta GDP_{t+1} = a + b X_t+ e_{t+1},$$
+where $X_t$ is the variable of interest and $\Delta GDP$ is in fact growth of GDP **per capita**.   
+This should measure the **correlation** (not causality!) between a high human capital at time $t$ and high growth at time $t+1$. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+lm(gdp_growth ~ lag(human_capital), data = wb_raw |> filter(country == "United States")) |> broom::tidy()
+```
+
+The link (as measured through the $t$-statistics), is weak.  
+
+We could also investigate the link between growth and **change** in human capital. Indeed, there is a problem in the above model: the **independent variable** (human capital) is **persistent**. Given the fact that the regression is [**predictive**](https://www.sciencedirect.com/science/article/pii/S0304405X99000410), this causes **autocorrelation in residuals** and thus perturbs inference (the standard errors are under-estimated). 
+
+One "simple" solution to this is to instead consider **variations** in human capital (when it improves or deteriorates and the effect this has on future economic output).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+lm(gdp_growth ~ lag(HC_change), data = wb_raw |> filter(country == "United States")) |> broom::tidy()
+```
+
+The results is not really more compelling.   
+
+Let us nonetheless turn to some theory!
 
 # The model
 
