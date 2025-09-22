@@ -19,8 +19,8 @@ The links below lead to html **slides** and course **material**.
 02. <a href="files/macro/S02_Solow.html" target="_blank">**The Solow model** and extensions</a> - <a href="files/macro/S02_Solow.qmd" target="_blank">[quarto nb]</a>    
 03. <a href="files/macro/S03_Ramsey.html" target="_blank">**The Ramsey model**</a> - <a href="files/macro/S03_Ramsey.qmd" target="_blank">[quarto nb]</a>    
 04. <a href="files/macro/S04_open.html" target="_blank">**Open economies**</a> - <a href="files/macro/S04_open.qmd" target="_blank">[quarto nb]</a>    
-05. <a href="files/macro/S05_human_capital.html" target="_blank">**Human capital**</a> - <a href="files/macro/S05_human_capital.qmd" target="_blank">[quarto nb]</a>   
-06. <a href="files/macro/S6_technology.html" target="_blank">**Technological change**</a>   
+05. <a href="files/macro/S05_human_capital.html" target="_blank">**Human capital**</a> - <a href="files/macro/S05_human_capital.qmd" target="_blank">[quarto nb]</a>    
+06. <a href="files/macro/S06_technology.html" target="_blank">**Technological change**</a> - <a href="files/macro/S06_technology.qmd" target="_blank">[quarto nb]</a>    
 07. Growth in the cross-section of countries     
 08. Models with overlapping generations     
 09. <a href="files/macro/S7_unified_theory.html" target="_blank">**Unified growth theory**</a>      

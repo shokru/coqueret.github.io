@@ -19,8 +19,8 @@
 I am a professor of finance at <a href="https://www.em-lyon.com/en/" target="_blank">em**lyon business school**</a>.  
 My research interests include 
 
-- <span style="color:#2BB833">**sustainable equity investing**</span>,  
-- **supervised learning for financial economics** and 
+- **supervised learning for financial economics**    
+- **sustainable equity investing** and   
 - **the impact of AI on organizations more generally**. 
 
 ------  
@@ -34,7 +34,7 @@ Senior Quantitative Researcher, **EDHEC-Risk Institute** (2013 - 2015)
 
 See also my <a href="https://www.linkedin.com/in/guillaumecoqueret/" target="_blank"> **LinkedIn** profile</a>. 
 
-I am an affiliated professor at the **ENS de Lyon**, within the [CERGIC](https://www.cergic-lyon.fr/). 
+I am also an affiliated professor at the [**ENS de Lyon**](https://www.ens-lyon.fr/en/), within the [CERGIC](https://www.cergic-lyon.fr/). 
 
 ------  
 
@@ -81,5 +81,5 @@ coqueret/at/em-lyon.com
 
 
 ------  
-Updated in July 2025
+Updated in Sept. 2025
 
