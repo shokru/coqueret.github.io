@@ -56,9 +56,9 @@ The content of the notebook is heavily inspired from the book [**Advanced Macro-
 
 # Context & motivation
 
-The models we have covered so far do not allow for strictly positive growth in equilibrium. There are several ways in which they can be changed in order to try to foster **endogenous growth**.
+The models we have covered so far do not allow for strictly positive growth in equilibrium. There are several ways in which they can be changed in order to try to foster **endogenous growth**. One might be that we can include some human capital into the model and can expect that better health and education can improve productivity. 
 
-But first, let's see if the Human Capital Index from the World Bank can explain cross-sectional variations in growth across countries. 
+But first, let's see if the [**Human Capital Index**](https://datacatalog.worldbank.org/search/dataset/0038030/human-capital-index) from the World Bank can explain cross-sectional variations in growth across countries. 
 
 ```{r}
 #| message: false
@@ -102,13 +102,14 @@ Now, let's compute the average growth rate and GDP per capita of countries and p
 
 wb_raw |>
   filter(is.finite(human_capital), ) |>
-  group_by(country) |>
+  group_by(country, region) |>
   summarise(avg_growth = mean(gdp_growth, na.rm = T),
-            avg_wealth = mean(gdp_per_capita, na.rm = T),
+            avg_wealth = mean(gdp_per_capita/1000, na.rm = T),
             avg_human_capital = mean(human_capital, na.rm = T)) |>
   ggplot(aes(x = avg_human_capital, y = avg_wealth)) + geom_point() +
-  theme_classic() + ylab("Average GDP per capita") + xlab("Average Human Capital Index (HCI)") +
-  geom_text_repel(aes(label = country))
+  geom_smooth(se = F) + scale_y_log10() + 
+  theme_classic() + ylab("Average GDP per capita ($K, log-scale)") + xlab("Average Human Capital Index (HCI)") +
+  geom_text_repel(aes(label = country)) 
 ```
 
 The relationship is this case is pretty clear.
@@ -131,7 +132,7 @@ wb_raw |>
   filter(avg_growth < 10) |>
   ggplot(aes(x = avg_human_capital, y = avg_growth)) + geom_point() +
   theme_classic() + ylab("Average GDP growth rate") + xlab("Average Human Capital Index (HCI)") +
-  geom_text_repel(aes(label = country))
+  geom_text_repel(aes(label = country)) + geom_smooth(se = F, method = "lm")
 ```
 
 Things are much less clear for **economic growth**...
@@ -348,3 +349,10 @@ $$\frac{\dot{k}}{k}=\frac{\dot{y}}{y}=\frac{\lambda n}{1-a-\lambda}$$
 Note that $n=0$ implies $a+\lambda=1$ (constant returns to scale). If population grows, then it must hold that $a+\lambda<1$ (DRS). 
 
 **NOTE**: a simple alternative model can be found in *Economic Growth*, by Barro and Sala-i-Martin, Section 4.3.
+
+::: {.callout-note collapse="false"}
+
+In the models above, production depends on human capital or knowledge.    
+But the reverse causal relationship my also hold...
+  
+:::
