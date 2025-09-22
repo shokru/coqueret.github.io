@@ -1,0 +1,280 @@
+---
+title: "Technological change"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)    # Package for data wrangling
+library(readxl)       # Package to import MS Excel files
+library(latex2exp)    # Package for LaTeX expressions
+library(quantmod)     # Package for stock data extraction
+library(highcharter)  # Package for reactive plots
+library(ggcorrplot)   # Package for correlation plots
+library(ggrepel)      # Package for neat annotations
+library(plm)          # Package for panel models
+library(WDI)          # Package for World Bank data
+library(broom)        # Package for neat regression output
+```
+
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+# Context & motivation
+
+It's not easy to explain growth **endogenously**. Adding new factors (human capital) to the production function does not help if CRS are assumed. 
+
+How about **technology**? What does the data say? It's not obvious to proxy for technology. To introduce new variables from the World Bank datasets, we will focus below on R&D (as % of GDP) and researchers (counted per million inhabitants). 
+
+## In the cross-section
+
+Can technology-related variables explain difference of growth/wealth between countries?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+impute <- function(v, n = 12){     # Imputation function
+  for(j in 1:n){
+    ind <- which(is.na(v))
+    if(length(ind)>0){
+      if(ind[1]==1){ind <- ind[-1]}
+      v[ind] <- v[ind-1]
+    }
+  }
+  return(v)
+}
+
+wb_growth <- WDI(                           # World Bank data
+  indicator = c(
+    "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
+    "pop" = "SP.POP.TOTL",                  # Population
+    "gdp_percap" = "NY.GDP.PCAP.CD",        # GDP per capita
+    "R_D" = "GB.XPD.RSDV.GD.ZS",            # R&D (%GDP)
+    "nb_researchers" = "SP.POP.SCIE.RD.P6", # Nb researchers per million inhab.
+    "gdp" = "NY.GDP.MKTP.CD"                # Gross Domestic Product (GDP)
+  ), 
+  extra = TRUE,
+  start = 1960,
+  end = 2024) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) |>  
+  filter(region != "Aggregates", income != "Aggregates") |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(across(everything(), impute)) |>
+  mutate(gdp_growth = gdp_percap/dplyr::lag(gdp_percap) - 1) |>
+  ungroup() |>
+  filter(lastupdated == max(lastupdated))
+```
+
+Let us visualize the link between growth and these two variables.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 4
+
+wb_growth |>
+  filter(is.finite(R_D), is.finite(gdp_growth)) |>
+  group_by(country) |>
+  mutate(n = n()) |>
+  filter(n > 18) |>
+  summarise(RD = mean(R_D, na.rm = T),
+            growth = mean(gdp_growth)) |>
+  ggplot(aes(x = RD, y = growth)) + geom_point() +
+  theme_classic() + xlab("R&D expenditures (%GDP)") +
+  geom_text_repel(aes(label = country))
+```
+
+The link is either far from obvious, or potentially negative, which is not what we would expect, intuitively...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 4
+wb_growth |>
+  filter(is.finite(nb_researchers), is.finite(gdp_growth)) |>
+  group_by(country) |>
+  mutate(n = n()) |>
+  filter(n > 15) |>
+  summarise(nb_R = mean(nb_researchers, na.rm = T),
+            growth = mean(gdp_growth)) |>
+  ggplot(aes(x = nb_R, y = growth)) + geom_point() +
+  theme_classic() + xlab("Number of researchers (per million inhab.)") +
+  geom_text_repel(aes(label = country))
+```
+
+Same conclusion here... not very convincing!
+
+
+## Time-series
+
+Let us now turn to single-country time-related links.   
+We estimate the following model:
+$$\Delta GDP_{t+1} = a + b X_t+ e_{t+1},$$
+where $X_t$ is the variable of interest and $\Delta GDP$ is in fact growth of GDP **per capita**.
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+lm(gdp_growth ~ lag(R_D), data = wb_growth |> filter(country == "United States")) |> tidy()
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+lm(gdp_growth ~ lag(nb_researchers), data = wb_growth |> filter(country == "United States")) |> tidy()
+```
+
+The link is positive but weak with **R&D**.    
+It is also positive and slightly stronger (though not "strong") with the **number of researchers**.    
+All in all, the evidence is not overwhelmingly compelling. 
+
+What if we look at **variations**?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+lm(gdp_growth ~ lag(D_R_D), 
+   data = wb_growth |> 
+     filter(country == "United States") |>
+     mutate(D_R_D = R_D / dplyr::lag(R_D) - 1)) |> tidy()
+```
+Not particularly convincing, either... (and with a negative sign!)
+
+
+Let us now turn fo **theoretical** models.   
+Many models seek to integrate technological change in "equilibrium growth", but many of them are quite sophisticated and hence out of the scope of an introductory course. We nonetheless present several approaches below.
+
+
+
+## Back to Solow
+
+Recall a Cobb-Douglas production function, $y=Ak^\alpha$. Suppose now that **technology** allow $A$ to grow, i.e., $\dot{A}_t/A_t=\gamma_A$ ($A_t=A_0e^{\gamma_A t}$). 
+Then, 
+
+$$\dot{y}_t= \dot{A}_t k_t^\alpha + A_t\alpha \dot{k}_tk_t^{\alpha-1}$$ 
+
+and 
+$$\frac{\dot{y}_t}{y_t}= \frac{\dot{A}_t}{A_t}+\alpha \frac{\dot{k}_t}{k_t}=\gamma_A + \alpha \gamma_k.$$
+The trick is that technology does not enter the **budget constraint** (unlike capital). This is why it can have a nonzero growth rate upon equilibrium.  Capital remains constant, but technology grows indefinitely.  
+
+This is *cheating*, i.e., growth is **exogenous**. 
+
+
+# A seemingly segmented economy
+
+One possible "way out" is to posit a novel form of the production function. Here we follow Romer's [Endogenous Technological Change](https://www.journals.uchicago.edu/doi/abs/10.1086/261725). Originally, the model assumes a **variety of products**, $X(i)$ - $i$ being the index. Now, there are also different types of products: the final ones and the intermediate (or raw) ones, which serve as inputs for final output. $X(i)$ refers to the quantity of intermediate input of variety $i$ used by the economy. But in fact, in the end (as we'll see), the only thing that matters is the dichotomy between intermediate products and the final output. Indeed, the production function is seemingly more intricate:   
+
+$$Y(X)=\left(\int_0^M X(i)^\alpha di \right)^{1/\alpha}, \quad \alpha \in (0,1)$$
+where $M$ is the range of varieties (basically, the integral is a sum). Another way to see this is to imagine sectors that are infinitely small (hence the integral). Labor is left out to ease the computations - but can also be viewed as already incorporated in the $X(i)$.  
+
+The firms that produce the final output take the prices of intermediate products ($p(i)$) as given. They seek to minimize costs for a given unit of good produced, i.e.,
+
+$$\min_{X(i)} \int_0^Mp(i)X(i)di, \quad s.t. \quad \int_0^MX(i)^\alpha di=1$${#eq-opt}
+
+The Lagrange formulation is
+
+$$L=\int_0^Mp(i)X(i)di - \lambda \left(\int_0^MX(i)^\alpha di-1 \right)$$
+
+and
+
+$$\frac{\partial L}{\partial X(i)}=p(i)-\lambda \alpha X(i)^{\alpha-1}$$
+
+so that the FOCs lead to 
+$$X(i)=\left(\frac{\alpha \lambda}{p(i)} \right)^{1/(1-\alpha)}.$$
+
+Demand is logically **downward sloping**: if variety $i$ costs more, then demand for it will shrink. 
+
+
+But in fact, upon simplifying assumption on the lack of heterogeneity in the cross-section of intermediate products, **the distinction vanishes**. Indeed, upon setting $X(i)=Z/M$ where $Z$ represents the total resources required to produce the intermediate inputs, we get
+
+$$Y=(M(Z/M)^\alpha)^{1/\alpha}=ZM^{1/\alpha-1},$$
+
+which, from the perspective of $Z$, is equivalent to the $AK$ model.
+
+Importantly, the varieties are not fixed once and for all; they may change, due to innovations and R&D. Hence, while $Z$ is fixed, $M$ is not and for simplicity, we assume $\dot{M}_t=\gamma_M M_t$ (i.e., $M_t=M_0e^{\gamma_M t}$ with $\gamma_M>0$). It holds that 
+
+$$\dot{Y}_t=Z\dot{M}_t (1/\alpha-1)M_t^{1/\alpha}$$
+so
+
+$$\frac{\dot{Y}_t}{Y_t}=(1/\alpha-1)\frac{\dot{M}_t}{M_t}=(1/\alpha-1)\gamma_M >0 \quad \text{if} \quad \alpha \in (0,1).$$
+In the original paper, $\gamma_M$ depends on $\alpha$, on labor and, crucially, on the **productivity of innovation**. It is linearly increasing in the latter two variables. 
+
+
+
+# Semi-endogenous growth
+
+Here we follow [**R&D-based models of economic growth**](https://www-leland.stanford.edu/~chadj/JonesJPE95.pdf).
+
+Here, the total labor force is split in two: $L_Y$ for the labor that directly produces output and $L_A$ for the workforce that works in R&D... The production function is
+
+$$Y=K^{1-a}(AL_Y)^a,$$
+and the interesting part here is the evolution of $A$, which is defined as the **productivity of knowledge**. We know that specifying $\dot{A}/A=\delta$ is cheating as this leads to **exogenous** growth. Instead, suppose
+$$\dot{A}=\tilde{\delta} L_A^\lambda, \quad \lambda \in (0,1],$$
+i.e., change in innovation is driven by the R&D headcount but possibly at a power smaller than one. $\tilde{\delta}$ is the rate at which "scientists" discover new ideas and products. This rate could depend on the level of knowledge in the economy. Here we assume that
+$$\tilde{\delta}=\delta A^\phi,$$
+where $\phi$ determines the returns of knowledge. Note that it can be negative! In the end,
+$$\dot{A}=\delta A^\phi L_A^\lambda \quad \Leftrightarrow \quad \gamma_A= \frac{\dot{A}}{A}=\delta A^{\phi-1}L_A^\lambda. $$
+If we differentiate with respect to $t$, we get
+$$\frac{\partial \gamma_A}{\partial t}=\delta(\lambda L_A^{\lambda-1}A^{\phi-1}\dot{L}_A+\dot{A}(\phi-1)A^{\phi-2}L_A^\lambda).$$
+If the growth rate of $A$ remains constant, this means the above quantity is zero, i.e., 
+$$\frac{\lambda}{1-\phi}\frac{\dot{L_A}}{L_A}=\frac{\dot{A}}{A}.$$
+If the growth rate of $L_A$ is $n$, then we have 
+$$\gamma_A=\frac{\lambda n}{1-\phi},$$ {#eq-growth_A}
+hence the parameter $\phi$ plays a crucial role. This is all the more evident if we recall that under standard assumptions, it holds that production factors follow dynamics such as:
+$$ \gamma_x= \frac{\dot{x}_t}{x_t}=s\frac{y_t}{x_t}-(\delta+n),$$
+hence if $\gamma_x$ is constant, it means that the ratio $y_t/x_t$ should be constant too, i.e., that all quantities grow at the same rate, which will be given by @eq-growth_A in the model. A strictly positive growth requires $\lambda>0$ and $n>0$ - the latter being less and less obvious empirically. 
+
+
