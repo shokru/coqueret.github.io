@@ -3487,7 +3487,7 @@ Side note
 </section>
 <section id="steady-states" class="level2">
 <h2 class="anchored" data-anchor-id="steady-states">Steady states</h2>
-<p>The balanced growth path requires that <span class="math inline">\(\gamma_k\)</span> and <span class="math inline">\(\gamma_h\)</span> be constant. Since <span class="math inline">\(\delta_k+n\)</span> and <span class="math inline">\(\delta_h+n\)</span> are already constant, we need that <span class="math inline">\(s_k A^\gamma k^{\alpha-1} h^\beta\)</span> and <span class="math inline">\(s_h A^\gamma k^{\alpha} h^{\beta-1}\)</span> be constant. To simplify these quantities, we take their log (they, too, have to be constant), and we differentiate with respect to time (log(<span class="math inline">\(s_k\)</span>), log(<span class="math inline">\(A^\gamma\)</span>), and log(<span class="math inline">\(s_h\)</span>) are constant so they vanish): <span class="math display">\[\frac{\partial}{\partial t} \left((\alpha-1) \log(k)+\beta \log(h) \right)=(\alpha-1) \frac{\dot{k}}{k}+\beta \frac{\dot{h}}{h}=(\alpha-1)\gamma_k+\beta \gamma_h=0\]</span> <span class="math display">\[\frac{\partial}{\partial t} \left(\alpha \log(k)+(\beta-1) \log(h) \right)=\alpha \frac{\dot{k}}{k}+(\beta-1) \frac{\dot{h}}{h}=\alpha\gamma_k+(\beta-1) \gamma_h=0.\]</span> Both l.h.s. expressions have to be equal to zero, i.e, from the second equation, <span class="math inline">\(\gamma_h=\frac{\alpha}{1-\beta}\gamma_k\)</span> and substituting this into the first equation, <span class="math display">\[\left((\alpha-1)+\frac{\beta \alpha}{1-\beta}\right) \gamma_k=\frac{(\alpha-1)(1-\beta)+\alpha \beta}{1-\beta}\gamma_k=\frac{\alpha+\beta-1}{1-\beta} \gamma_k=0.\]</span> If we assume <strong>constant returns to scale</strong>, <span class="math inline">\(\alpha+\beta &lt; 1\)</span> because else <span class="math inline">\(\gamma=0\)</span> (and labor and productivity are out of the game). And obviously, <span class="math inline">\(\beta &gt; 0\)</span> for the same reason (human capital), hence this imposes <span class="math inline">\(\gamma_k=0\)</span>.</p>
+<p>The balanced growth path requires that <span class="math inline">\(\gamma_k\)</span> and <span class="math inline">\(\gamma_h\)</span> be constant. Since <span class="math inline">\(\delta_k+n\)</span> and <span class="math inline">\(\delta_h+n\)</span> are already constant, we need that <span class="math inline">\(s_k A^\gamma k^{\alpha-1} h^\beta\)</span> and <span class="math inline">\(s_h A^\gamma k^{\alpha} h^{\beta-1}\)</span> be constant. To simplify these quantities, we take their log (they, too, have to be constant), and we differentiate with respect to time (log(<span class="math inline">\(s_k\)</span>), log(<span class="math inline">\(A^\gamma\)</span>), and log(<span class="math inline">\(s_h\)</span>) are constant so they vanish): <span class="math display">\[\frac{\partial}{\partial t} \left((\alpha-1) \log(k)+\beta \log(h) \right)=(\alpha-1) \frac{\dot{k}}{k}+\beta \frac{\dot{h}}{h}=(\alpha-1)\gamma_k+\beta \gamma_h=0\]</span> <span class="math display">\[\frac{\partial}{\partial t} \left(\alpha \log(k)+(\beta-1) \log(h) \right)=\alpha \frac{\dot{k}}{k}+(\beta-1) \frac{\dot{h}}{h}=\alpha\gamma_k+(\beta-1) \gamma_h=0.\]</span> Both l.h.s. expressions have to be equal to zero, i.e, from the second equation, <span class="math inline">\(\gamma_h=\frac{\alpha}{1-\beta}\gamma_k\)</span> and substituting this into the first equation, <span class="math display">\[\left((\alpha-1)+\frac{\beta \alpha}{1-\beta}\right) \gamma_k=\frac{(\alpha-1)(1-\beta)+\alpha \beta}{1-\beta}\gamma_k=\frac{\alpha+\beta-1}{1-\beta} \gamma_k=0.\]</span> If we assume <strong>constant returns to scale</strong>, <span class="math inline">\(\alpha+\beta &lt; 1\)</span> (because else <span class="math inline">\(\gamma=0\)</span> and in this case, labor and productivity are out of the game, which is not what we want!). And obviously, <span class="math inline">\(\beta &gt; 0\)</span> for the same reason (human capital), hence this imposes <span class="math inline">\(\gamma_k=0\)</span>.</p>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -3504,7 +3504,7 @@ Important
 </div>
 </div>
 </div>
-<p>We are not really more advanced - but this was to be expected.</p>
+<p>We are not really more advanced - but this was to be expected because the model is too Solow-like (the basic mechanisms are the same).</p>
 </section>
 <section id="another-model" class="level2">
 <h2 class="anchored" data-anchor-id="another-model">Another model</h2>
@@ -3522,9 +3522,9 @@ Given the 3 constraints listed above, the <strong>Hamiltonian</strong> is <span 
 <p><span id="eq-cons"><span class="math display">\[\frac{\dot{C}}{C}=\theta^{-1}(aA(K/H)^{a-1}-\delta_K-\rho)=\theta^{-1}((a-1)A(K/H)^{a}-\delta_H-\rho) \tag{2}\]</span></span></p>
 <p>If we set <span class="math inline">\(\delta_K=\delta_H\)</span> (big assumption!), it must hold that <span class="math inline">\(aA(K/H)^{a-1}=(a-1)A(K/H)^{a}\)</span>, i.e., <span id="eq-cond"><span class="math display">\[K/H=a/(1-a). \tag{3}\]</span></span> We can then plug this in the above equation to get:</p>
 <p><span class="math display">\[\frac{\dot{C}}{C}=\theta^{-1}(Aa^a(1-a)^{1-a}-\delta-\rho)\]</span></p>
-<p>If <span class="math inline">\(Y=AK^aH^{1-a}= AK (K/H)^{a-1}\)</span> and <a href="#eq-cond" class="quarto-xref">Equation 3</a> holds, we have <span class="math display">\[Y=AK\left(\frac{a}{1-a} \right)^{a-1}\]</span> <span class="math inline">\(\rightarrow\)</span> The <strong><em>AK</em> model</strong>! More on that soon.</p>
+<p>If <span class="math inline">\(Y=AK^aH^{1-a}= AK (K/H)^{a-1}\)</span> and <a href="#eq-cond" class="quarto-xref">Equation 3</a> holds, we have <span class="math display">\[Y=AK\left(\frac{a}{1-a} \right)^{a-1}.\]</span> <span class="math inline">\(\rightarrow\)</span> The <strong><em>AK</em> model</strong>! More on that soon.</p>
 <p>If <span class="math inline">\(\delta_H \neq \delta_K\)</span>,</p>
-<p><span class="math display">\[aA(K/H)^{a-1}-\delta_K=(a-1)A(K/H)^{a}-\delta_H,\]</span> and <span class="math inline">\(K/H\)</span> does not have a simple expression (algebraic equation).</p>
+<p><span class="math display">\[aA(K/H)^{a-1}-\delta_K=(a-1)A(K/H)^{a}-\delta_H,\]</span> and <span class="math inline">\(K/H\)</span> does not have a simple expression (when end up with an algebraic equation).</p>
 </section>
 </section>
 <section id="two-imperfect-avenues-towards-growth" class="level1">
@@ -3553,8 +3553,23 @@ Given the 3 constraints listed above, the <strong>Hamiltonian</strong> is <span 
 <h1>The AK model</h1>
 <section id="assumptions-and-bgp" class="level2">
 <h2 class="anchored" data-anchor-id="assumptions-and-bgp">Assumptions and BGP</h2>
-<p>This is a special model because it assumes</p>
-<p><span class="math display">\[y=Ak,\]</span> hence its name. As in the <strong>Ramsey model</strong>, if we assume <span class="math inline">\(n=0\)</span>, capital evolves as: <span id="eq-AK_capital"><span class="math display">\[\dot{k}_t=y_t-c_t=Ak_t-c_t. \tag{4}\]</span></span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+This is a special model because it assumes
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p><span class="math display">\[y=Ak,\]</span> hence its name.</p>
+</div>
+</div>
+</div>
+<p>As in the <strong>Ramsey model</strong>, if we assume <span class="math inline">\(n=0\)</span>, capital evolves as: <span id="eq-AK_capital"><span class="math display">\[\dot{k}_t=y_t-c_t=Ak_t-c_t. \tag{4}\]</span></span></p>
 <p>We then set the <strong>utility function</strong>: <span class="math display">\[u(c_t)=\left(\frac{\sigma}{\sigma-1} \right)c_t^{(\sigma-1)/\sigma},\]</span> which implies <span class="math inline">\(u&#39;(c_t)=c_t^{-1/\sigma}\)</span> and <span class="math inline">\(u&#39;&#39;(c_t)=-\sigma^{-1}c_t^{-1-1/\sigma}\)</span> so that indeed <span class="math inline">\(-\frac{u&#39;(c)}{u&#39;&#39;(c)c}=\sigma\)</span>.</p>
 <p>As before, the representative agent seeks to maximize <strong>discounted utility</strong> over an infinite horizon: <span class="math inline">\(\int_0^\infty u(c_t)e^{-\rho t}dt\)</span>.</p>
 <p>The corresponding <strong>Hamiltonian</strong> is <span class="math display">\[H=\left( \frac{\sigma}{\sigma - 1} \right)c_t^{(\sigma-1)/\sigma}+\lambda_t (A k_t - c_t),\]</span> leading to</p>
@@ -3581,10 +3596,10 @@ Given the 3 constraints listed above, the <strong>Hamiltonian</strong> is <span 
 <p>and <span id="eq-Adot"><span class="math display">\[\frac{\dot{A}}{A}=\lambda n+\lambda \frac{\dot{k}}{k}. \tag{9}\]</span></span></p>
 <p>Indeed, <span class="math inline">\(\dot{A}=b\lambda K^{\lambda-1}\dot{K}=\lambda A \frac{\dot{K}}{K}=\lambda A(\dot{k}/k+n)\)</span> where the final equality comes from <span class="math inline">\(\dot{K}/K=sY/K=sA(L/K)^{1-a}=sAk^{a-1}=\dot{k}/k+n\)</span> (from <a href="#eq-kdot" class="quarto-xref">Equation 8</a>).</p>
 <p>This implies</p>
-<p><span class="math display">\[\frac{\dot{y}}{y}=\frac{\dot{A}k^a+Aa k^{a-1}\dot{k}}{Ak^a}=\frac{\dot{A}}{A}+a\frac{\dot{k}}{k}=\lambda n+(\lambda +a)(sAk^{a-1}-n).\]</span> In short, we have <span class="math inline">\(\frac{\dot{y}}{y}=\lambda n+ (\lambda+a)\frac{\dot{k}}{k}\)</span>: output growth is an <strong>affine function</strong> of capital growth. If we assume <span class="math inline">\(\frac{\dot{k}}{k}=0\)</span>, then growth comes from learning only. We can find a situation where all growths are positive. It corresponds to <span class="math inline">\(\frac{\dot{y}}{y}=\frac{\dot{k}}{k}\)</span> and <span class="math inline">\(\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}\)</span>. This yields <span class="math display">\[\frac{\dot{k}}{k}=\frac{\dot{y}}{y}=\frac{\lambda n}{1-a-\lambda}\]</span> Note that <span class="math inline">\(n=0\)</span> implies <span class="math inline">\(a+\lambda=1\)</span> (constant returns to scale). If population grows, then it must hold that <span class="math inline">\(a+\lambda&lt;1\)</span> (DRS).</p>
+<p><span class="math display">\[\frac{\dot{y}}{y}=\frac{\dot{A}k^a+Aa k^{a-1}\dot{k}}{Ak^a}=\frac{\dot{A}}{A}+a\frac{\dot{k}}{k}=\lambda n+(\lambda +a)(sAk^{a-1}-n).\]</span> In short, we have <span class="math inline">\(\frac{\dot{y}}{y}=\lambda n+ (\lambda+a)\frac{\dot{k}}{k}\)</span>: output growth is an <strong>affine function</strong> of capital growth. If we assume <span class="math inline">\(\frac{\dot{k}}{k}=0\)</span>, then growth comes from learning only. We can find a situation where all growth rates are positive. It corresponds to <span class="math inline">\(\frac{\dot{y}}{y}=\frac{\dot{k}}{k}\)</span> and <span class="math inline">\(\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}\)</span>. This yields <span class="math display">\[\frac{\dot{k}}{k}=\frac{\dot{y}}{y}=\frac{\lambda n}{1-a-\lambda}\]</span> Note that <span class="math inline">\(n=0\)</span> implies <span class="math inline">\(a+\lambda=1\)</span> (constant returns to scale). If population grows, then it must hold that <span class="math inline">\(a+\lambda&lt;1\)</span> (DRS).</p>
 <p><strong>NOTE</strong>: a simple alternative model can be found in <em>Economic Growth</em>, by Barro and Sala-i-Martin, Section 4.3.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -3593,10 +3608,10 @@ Note
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>In the models above, production depends on human capital or knowledge.<br>
-But the reverse causal relationship my also hold…</p>
+<p>In the models above, production depends on <strong>human capital</strong> or <strong>knowledge</strong>.<br>
+But the reverse causal relationship my also hold (output <span class="math inline">\(\rightarrow\)</span> human capital)…</p>
 </div>
 </div>
 </div>

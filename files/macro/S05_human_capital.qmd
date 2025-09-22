@@ -220,13 +220,13 @@ $$\frac{\partial}{\partial t} \left((\alpha-1) \log(k)+\beta \log(h) \right)=(\a
 $$\frac{\partial}{\partial t} \left(\alpha \log(k)+(\beta-1) \log(h) \right)=\alpha \frac{\dot{k}}{k}+(\beta-1) \frac{\dot{h}}{h}=\alpha\gamma_k+(\beta-1) \gamma_h=0.$$
 Both l.h.s. expressions have to be equal to zero, i.e, from the second equation, $\gamma_h=\frac{\alpha}{1-\beta}\gamma_k$ and substituting this into the first equation,
 $$\left((\alpha-1)+\frac{\beta \alpha}{1-\beta}\right) \gamma_k=\frac{(\alpha-1)(1-\beta)+\alpha \beta}{1-\beta}\gamma_k=\frac{\alpha+\beta-1}{1-\beta} \gamma_k=0.$$
-If we assume **constant returns to scale**, $\alpha+\beta < 1$ because else $\gamma=0$ (and labor and productivity are out of the game). And obviously, $\beta > 0$ for the same reason (human capital), hence this imposes $\gamma_k=0$. 
+If we assume **constant returns to scale**, $\alpha+\beta < 1$ (because else $\gamma=0$ and in this case, labor and productivity are out of the game, which is not what we want!). And obviously, $\beta > 0$ for the same reason (human capital), hence this imposes $\gamma_k=0$. 
 
 ::: {.callout-important collapse="false"}
 Again, this means **zero growth in equilibrium**!   
 :::
 
-We are not really more advanced - but this was to be expected.
+We are not really more advanced - but this was to be expected because the model is too Solow-like (the basic mechanisms are the same).
 
 ## Another model
 
@@ -272,13 +272,13 @@ We can then plug this in the above equation to get:
 $$\frac{\dot{C}}{C}=\theta^{-1}(Aa^a(1-a)^{1-a}-\delta-\rho)$$
 
 If $Y=AK^aH^{1-a}= AK (K/H)^{a-1}$ and @eq-cond holds, we have
-$$Y=AK\left(\frac{a}{1-a} \right)^{a-1}$$
+$$Y=AK\left(\frac{a}{1-a} \right)^{a-1}.$$
 $\rightarrow$ The __*AK* model__! More on that soon.
 
 If $\delta_H \neq \delta_K$, 
 
 $$aA(K/H)^{a-1}-\delta_K=(a-1)A(K/H)^{a}-\delta_H,$$
-and $K/H$ does not have a simple expression (algebraic equation). 
+and $K/H$ does not have a simple expression (when end up with an algebraic equation). 
 
 
 # Two imperfect avenues towards growth 
@@ -315,10 +315,15 @@ and assuming constant returns to scale $1-\alpha-\beta=\gamma$, we get $x=g$, i.
 
 ## Assumptions and BGP
 
-This is a special model because it assumes
+::: {.callout-note collapse="false"}
+## This is a special model because it assumes
 
 $$y=Ak,$$
-hence its name. As in the **Ramsey model**, if we assume $n=0$, capital evolves as:
+hence its name. 
+:::
+
+
+As in the **Ramsey model**, if we assume $n=0$, capital evolves as:
 $$\dot{k}_t=y_t-c_t=Ak_t-c_t.$$ {#eq-AK_capital}
 
 We then set the **utility function**:
@@ -330,7 +335,6 @@ As before, the representative agent seeks to maximize **discounted utility** ove
 The corresponding **Hamiltonian** is 
 $$H=\left( \frac{\sigma}{\sigma - 1} \right)c_t^{(\sigma-1)/\sigma}+\lambda_t (A k_t - c_t),$$
 leading to 
-
 
 $$\frac{\partial H}{\partial c_t}=c_t^{-1/\sigma}-\lambda_t=0$$
 and, for the **co-state** variable, to 
@@ -385,7 +389,7 @@ This implies
 
 $$\frac{\dot{y}}{y}=\frac{\dot{A}k^a+Aa k^{a-1}\dot{k}}{Ak^a}=\frac{\dot{A}}{A}+a\frac{\dot{k}}{k}=\lambda n+(\lambda +a)(sAk^{a-1}-n).$$
 In short, we have $\frac{\dot{y}}{y}=\lambda n+ (\lambda+a)\frac{\dot{k}}{k}$: output growth is an **affine function** of capital growth. 
-If we assume $\frac{\dot{k}}{k}=0$, then growth comes from learning only. We can find a situation where all growths are positive. It corresponds to $\frac{\dot{y}}{y}=\frac{\dot{k}}{k}$ and $\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}$. This yields
+If we assume $\frac{\dot{k}}{k}=0$, then growth comes from learning only. We can find a situation where all growth rates are positive. It corresponds to $\frac{\dot{y}}{y}=\frac{\dot{k}}{k}$ and $\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}$. This yields
 $$\frac{\dot{k}}{k}=\frac{\dot{y}}{y}=\frac{\lambda n}{1-a-\lambda}$$
 Note that $n=0$ implies $a+\lambda=1$ (constant returns to scale). If population grows, then it must hold that $a+\lambda<1$ (DRS). 
 
@@ -393,7 +397,7 @@ Note that $n=0$ implies $a+\lambda=1$ (constant returns to scale). If population
 
 ::: {.callout-note collapse="false"}
 
-In the models above, production depends on human capital or knowledge.    
-But the reverse causal relationship my also hold...
+In the models above, production depends on **human capital** or **knowledge**.    
+But the reverse causal relationship my also hold (output $\rightarrow$ human capital)...
   
 :::
