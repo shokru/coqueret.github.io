@@ -54,7 +54,9 @@ The content of the notebook is heavily inspired from the book [**Advanced Macro-
 
 It's not easy to explain growth **endogenously**. Adding new factors (human capital) to the production function does not help if CRS are assumed. 
 
-How about **technology**? What does the data say? It's not obvious to proxy for technology. To introduce new variables from the World Bank datasets, we will focus below on R&D (as % of GDP) and researchers (counted per million inhabitants). 
+How about **technology**? This could be an interesting factor: a country with access to advanced technologies should be able to improve productivity and be more competitive, both **in time** and **in comparison with other countries**.
+
+But: what does the data say? It's not obvious to proxy for technology. To introduce new variables from the World Bank datasets, we will focus below on R&D (as % of GDP) and researchers (counted per million inhabitants). 
 
 ## In the cross-section
 
@@ -155,6 +157,7 @@ We estimate the following model:
 $$\Delta GDP_{t+1} = a + b X_t+ e_{t+1},$$
 where $X_t$ is the variable of interest and $\Delta GDP$ is in fact growth of GDP **per capita**.
 
+For simplicity, we test the case of the US only, but it's easy (codewise) to adapt to other countries. 
 
 ```{r}
 #| message: false
@@ -195,11 +198,11 @@ Not particularly convincing, either... (and with a negative sign!)
 
 
 Let us now turn fo **theoretical** models.   
-Many models seek to integrate technological change in "equilibrium growth", but many of them are quite sophisticated and hence out of the scope of an introductory course. We nonetheless present several approaches below.
+Many models seek to distill technological change in "equilibrium growth", but many of them are quite sophisticated and hence out of the scope of an introductory course. We nonetheless present several approaches below.
 
 
 
-## Back to Solow
+## Back to Solow?
 
 Recall a Cobb-Douglas production function, $y=Ak^\alpha$. Suppose now that **technology** allow $A$ to grow, i.e., $\dot{A}_t/A_t=\gamma_A$ ($A_t=A_0e^{\gamma_A t}$). 
 Then, 
@@ -235,7 +238,7 @@ $$\frac{\partial L}{\partial X(i)}=p(i)-\lambda \alpha X(i)^{\alpha-1}$$
 so that the FOCs lead to 
 $$X(i)=\left(\frac{\alpha \lambda}{p(i)} \right)^{1/(1-\alpha)}.$$
 
-Demand is logically **downward sloping**: if variety $i$ costs more, then demand for it will shrink. 
+Demand is logically **downward sloping**: if variety $i$ costs more, then demand for it will shrink (we exclude the case of [Giffen](https://en.wikipedia.org/wiki/Giffen_good) and [Veblen](https://en.wikipedia.org/wiki/Veblen_good) goods). 
 
 
 But in fact, upon simplifying assumption on the lack of heterogeneity in the cross-section of intermediate products, **the distinction vanishes**. Indeed, upon setting $X(i)=Z/M$ where $Z$ represents the total resources required to produce the intermediate inputs, we get
@@ -275,6 +278,6 @@ If the growth rate of $L_A$ is $n$, then we have
 $$\gamma_A=\frac{\lambda n}{1-\phi},$$ {#eq-growth_A}
 hence the parameter $\phi$ plays a crucial role. This is all the more evident if we recall that under standard assumptions, it holds that production factors follow dynamics such as:
 $$ \gamma_x= \frac{\dot{x}_t}{x_t}=s\frac{y_t}{x_t}-(\delta+n),$$
-hence if $\gamma_x$ is constant, it means that the ratio $y_t/x_t$ should be constant too, i.e., that all quantities grow at the same rate, which will be given by @eq-growth_A in the model. A strictly positive growth requires $\lambda>0$ and $n>0$ - the latter being less and less obvious empirically. 
+hence if $\gamma_x$ is constant, it means that the ratio $y_t/x_t$ should be constant too, i.e., that all quantities grow at the same rate, which will be given by @eq-growth_A in the model. A strictly positive growth requires $\lambda>0$ and $n>0$ - the latter being less and less obvious recently (post 2025).  
 
 
