@@ -44,6 +44,16 @@ library(ggrepel)      # Package for neat annotations
 library(plm)          # Package for panel models
 library(WDI)          # Package for World Bank data
 library(broom)        # Package for neat regression output
+impute <- function(v, n = 6){     # Imputation function
+  for(j in 1:n){
+    ind <- which(is.na(v))
+    if(length(ind)>0){
+      if(ind[1]==1){ind <- ind[-1]}
+      v[ind] <- v[ind-1]
+    }
+  }
+  return(v)
+}
 ```
 
 
@@ -68,17 +78,6 @@ Can technology-related variables explain difference of growth/wealth between cou
 #| class-source: my_class
 #| classes: my_class
 #| cache: true
-impute <- function(v, n = 12){     # Imputation function
-  for(j in 1:n){
-    ind <- which(is.na(v))
-    if(length(ind)>0){
-      if(ind[1]==1){ind <- ind[-1]}
-      v[ind] <- v[ind-1]
-    }
-  }
-  return(v)
-}
-
 wb_growth <- WDI(                           # World Bank data
   indicator = c(
     "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
