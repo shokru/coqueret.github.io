@@ -42,9 +42,19 @@ library(highcharter)   # Package for reactive plots
 library(ggrepel)       # Better labels on plots 
 library(WDI)           # To access World Bank data
 library(broom)         # Neat regression output
+```
 
+
+::: {.callout-note collapse="false"}
+## Side note
+
+The function below will be used to fill in **missing data points**, on a country-by-country basis (via grouping).   
+We allow copy-pasting the most recent value up to a maximum of six years.   
+This assumes some form of stability/persistence in the imputed variable.
+
+```{r}
 impute <- function(v){ # Imputation function
-    n <- 12
+    n <- 6
     for(j in 1:n){
         ind <- which(is.na(v))
         if(length(ind) > 0){if(ind[1]==1) {ind <- ind[-1]}}
@@ -53,6 +63,8 @@ impute <- function(v){ # Imputation function
     return(v)
 } 
 ```
+
+:::
 
 The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
 
@@ -90,6 +102,24 @@ wb_raw <- WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
   mutate(HC_change = human_capital/lag(human_capital) - 1) |>
   ungroup()
 ```
+
+Checking if **imputation** has worked.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4 
+#| fig.height: 2
+wb_raw |> 
+  select(country, year, population, gdp, human_capital) |>
+  tail(7)
+```
+
+Population and GDP have been updated in the data, but human capital has not...
+
 
 ## In the cross-section
 
