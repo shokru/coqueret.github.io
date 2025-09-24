@@ -15,9 +15,9 @@ description: "Research projects of Guillaume Coqueret"
 details > summary {
   padding: 9px;
   width: 100%;
-  background-color: #ecf5ec;
+  background-color: #EBF3FF;
   border: none;
-  box-shadow: 1px 1px 2px #bbbbbb;
+  box-shadow: 1px 1px 2px #3B60A2;
   cursor: pointer;
 }
 
@@ -31,12 +31,12 @@ br2 {
 
 
 
-### <font color="#9AAD98">**Ongoing research** (working papers)</font>  
+### <font color="#3B60A2">**Ongoing research** (working papers)</font>  
 
 - Overparametrized models with posterior drift (with M. Laguerre) <a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a>    
 - Persistent anomalies and nonstandard errors (with C. Pérignon) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank">[SSRN]</a>  
-- Global p-values in multi-design studies (with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier)   
-- Incentives in corporate energy mix decisions (with B. Qiu)    
+- Global p-values in multi-design studies (with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier)  <a href="https://arxiv.org/abs/2507.03815" target="_blank">[arXiv]</a>  
+- Can corporate incentives deliver decarbonization? (with B. Qiu)    
 - Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">[SSRN]</a> <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">[SSRN]</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">[SSRN]</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
@@ -46,7 +46,7 @@ br2 {
 
 _____ 
 
-### <font color="#9AAD98">**Main Publications**</font> 
+### <font color="#3B60A2">**Main Publications**</font> 
 
 The full list of articles can be found below.
 
@@ -59,7 +59,7 @@ The full list of articles can be found below.
 
 _____ 
 
-### <font color="#9AAD98">**Books**</font>
+### <font color="#3B60A2">**Books**</font>
 
 #### **Perspectives in sustainable equity investing**
 CRC / Chapman Hall - March 2022   
@@ -78,7 +78,7 @@ or <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathem
 
 _____ 
 
-### <font color="#9AAD98">**Complete list of Published Academic Articles**</font> 
+### <font color="#3B60A2">**Complete list of Published Academic Articles**</font> 
 
 Articles are grouped into **research themes** below.
 
@@ -162,7 +162,7 @@ Articles are grouped into **research themes** below.
 
 _____ 
 
-### <font color="#9AAD98">**In the Practitioner Press**</font> 
+### <font color="#3B60A2">**In the Practitioner Press**</font> 
 
 
 <details>
@@ -196,7 +196,7 @@ _____
 _____ 
 
 
-### <font color="#9AAD98">**Book Chapters**</font> 
+### <font color="#3B60A2">**Book Chapters**</font> 
 - Enhancing Environment-driven Portfolios with Traditional Factors, In **Climate and Sustainable Investing** edited by E. Jurczenko, 2023, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip)   
 - Ensemble learning applied to quant equity: gradient boosting in a multifactor framework, In **Big Data and Machine Learning in Quantitative Investment** edited by T. Guida, 2018 (with T. Guida)    
 
@@ -204,7 +204,7 @@ _____
 _____ 
 
 
-### <font color="#9AAD98">**Book Review**</font> 
+### <font color="#3B60A2">**Book Review**</font> 
 Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bilokon), <span style="color:#3B60A2">**Quantitative Finance**</span>, 2020  <a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1828609" target="_blank">[Link]</a>
 
  
@@ -212,7 +212,7 @@ Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bil
 _____ 
 
 
-### <font color="#9AAD98">**Permanent Working Papers**</font>   
+### <font color="#3B60A2">**Permanent Working Papers**</font>   
 * Forking paths in empirical studies: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a> -                   <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R Notebook (first study)</a>   <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R Notebook (second study)</a>   
 * Boosting ESG-Based Optimization With Asset Pricing Characteristics, 2021 (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242" target="_blank">[SSRN]</a>   
 * Stock returns and the cross-section of characteristics: a tree-based approach, 2018 (with T. Guida)  <a href="papers/TAPA.pdf" target="_blank">[PDF]</a>    
@@ -225,7 +225,7 @@ _____
 
 _____
 
-### <font color="#9AAD98">**Research presentations**</font>
+### <font color="#3B60A2">**Research presentations**</font>
 
 * Explaining green returns (2022) <a href="files/SLIDES/Explaining_green_returns.pdf" target="_blank">[pdf]</a>   
 * Advances in asset pricing (2020) <a href="files/SLIDES/AAP/AAP.html" target="_blank">[html]</a>   
@@ -233,6 +233,6 @@ _____
 _____ 
 
 
-### <font color="#9AAD98">**Academic profiles**</font>
+### <font color="#3B60A2">**Academic profiles**</font>
 <a href="http://orcid.org/0000-0002-1596-4086" target="_blank">ORCID</a> &emsp;  <a href="https://www.researchgate.net/profile/Guillaume_Coqueret" target="_blank">Researchgate</a> &emsp;  <a href="https://publons.com/researcher/1352687/guillaume-coqueret" target="_blank">Publons</a>    
   
