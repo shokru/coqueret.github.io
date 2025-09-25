@@ -206,11 +206,11 @@ The question here pertains to the relative growth rates of the economy versus th
 
 $$Y=\left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{\epsilon/(\epsilon-1)}, \quad \epsilon \ge 0.$$ {#eq-CES}
 
-The **marginal rate of substitution** is^[This comes from
-$\frac{\partial Y}{\partial K}=\beta (1-1/\epsilon)\frac{\epsilon}{(\epsilon-1)} K^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}$ and 
-$\frac{\partial Y}{\partial (AL)}=\alpha (AL)^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}$] 
-
+The **marginal rate of substitution** is
 $$MRS = \frac{\frac{\partial Y}{\partial (AL)}}{\frac{\partial Y}{\partial K}}=\frac{\alpha}{\beta}\left(\frac{AL}{K}\right)^{-1/\epsilon}. $$
+This comes from $\frac{\partial Y}{\partial K}=\beta (1-1/\epsilon)\frac{\epsilon}{(\epsilon-1)} K^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}$ and 
+$\frac{\partial Y}{\partial (AL)}=\alpha (AL)^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}$. 
+
 
 The **elasticity of substitution** is the percentage change in the capital-labor ratio K/(AL) resulting from a percentage change in the MRS:
 
@@ -223,7 +223,8 @@ $$\Pi = Y - wL - \varsigma,$$
 where $w$ is the wage level and $\varsigma$ are the costs linked to capital (not to be confused with consumption - apologies for the notation). To maximize profit, we differentiate with respect to $L$:
 $$\frac{\partial \Pi}{\partial L}=\alpha A (AL)^{-1/\epsilon} \left(\beta K^{1-1/\epsilon} + \alpha  (AL)^{1-1/\epsilon} \right)^{1/(\epsilon-1)}-w$$
 
-Hence, upon equilibrium, the labor share is 
+Hence, noticing $Y^{-1+1/\epsilon}= \left(\beta K^{1-1/\epsilon} + \alpha (AL)^{1-1/\epsilon} \right)^{-1}$,
+upon equilibrium, the labor share is 
 $$\frac{wL}{Y}=\alpha \left( \frac{AL}{Y}\right)^{1-1/\epsilon} \in (0,1)$$
 $\rightarrow$ The long-term dynamics depend on $A$ and $\epsilon$.
 
@@ -362,7 +363,8 @@ And $\Omega$ from @eq-Omega:
 #| class-source: my_class
 #| classes: my_class
 
-Omega <- matrix(c(rho - n, -1, -sigma*c_star*A*alpha*(1-alpha)*k_star^(alpha-2), 0), 
+Omega <- matrix(c(rho - n, -1, 
+                  -sigma*c_star*A*alpha*(1-alpha)*k_star^(alpha-2), 0), 
                 nrow = 2, byrow = T)
 Omega
 ```
@@ -394,9 +396,9 @@ We recall that we generate the paths according to @eq-budget and @eq-euler.
 #| classes: my_class
 
 n_steps <- 1000
-k_0 <- k_star * 0.9  
-c_0 <- c_star * 0.9
-dt <- 0.1
+k_0 <- k_star * 0.95  
+c_0 <- c_star * 0.95
+dt <- 0.05
 
 path_generator <- function(n_steps, A, alpha, rho, k_0, c_0, dt){
   x_dot <- matrix(0, nrow = n_steps, ncol = 2)
@@ -410,7 +412,7 @@ path_generator <- function(n_steps, A, alpha, rho, k_0, c_0, dt){
   x
 }
 
-x <- path_generator(n_steps, A, alpha, rho, k_star*0.9, 0.9*c_star, dt)
+x <- path_generator(n_steps, A, alpha, rho, k_0, c_0, dt)
 ```
 
 Note that the initial points are taken close to the steady state. 
@@ -434,7 +436,6 @@ bind_cols(t = 1:n_steps, k = x[,1], c = x[,2]) |>
   facet_wrap(vars(series), scales = "free") + theme_classic() +
   geom_hline(data = intercept, aes(yintercept = value), color = "red")
 ```
-
 
 
 With the linearization technique, the paths are similar. But unfortunately, they do not converge to the steady state... (shown in red).
