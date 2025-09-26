@@ -64,9 +64,11 @@ The content of the notebook is heavily inspired from the book [**Advanced Macro-
 
 It's not easy to explain growth **endogenously**. Adding new factors (human capital) to the production function does not help if CRS are assumed. 
 
-How about **technology**? This could be an interesting factor: a country with access to advanced technologies should be able to improve productivity and be more competitive, both **in time** and **in comparison with other countries**.
+How about **technology**? This could be an interesting factor: a country with access to advanced technologies should be able to improve productivity and be more competitive, both **in time** and **in comparison with other countries**.   
 
-But: what does the data say? It's not obvious to proxy for technology. To introduce new variables from the World Bank datasets, we will focus below on R&D (as % of GDP) and researchers (counted per million inhabitants). 
+We first refer to a recent piece on the drivers of productivity in manufacturing: [Why Is Manufacturing Productivity Growth So Low?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5515863). Therein, the authors report: "*while productivity growth slowdowns are observed in multiple manufacturing industries, most of the measured sector-wide stagnation is quantitatively explained by productivity changes in Computer and Electronic Products Manufacturing (NAICS 334). In fact, nearly all of the manufacturing sector’s productivity growth since 1987—and its deceleration since 2009—can be attributed to this single 3-digit industry.*" 
+
+But: what does the (World Bank) data say for the aggregate economy, knowing that, in developed countries, the manufacturing sector has **considerably shrunk** and represents a minority of output? It's not obvious to proxy for technology. To introduce new variables from the World Bank datasets, we will focus below on R&D (as % of GDP) and researchers (counted per million inhabitants). 
 
 ## In the cross-section
 
@@ -83,6 +85,8 @@ wb_growth <- WDI(                           # World Bank data
     "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
     "pop" = "SP.POP.TOTL",                  # Population
     "gdp_percap" = "NY.GDP.PCAP.CD",        # GDP per capita
+    "high_tech_exp" = "TX.VAL.TECH.MF.ZS",  # High tech exports (%)
+    "patent_app" = "IP.PAT.RESD",           # Patent applications => need to be scaled
     "R_D" = "GB.XPD.RSDV.GD.ZS",            # R&D (%GDP)
     "nb_researchers" = "SP.POP.SCIE.RD.P6", # Nb researchers per million inhab.
     "gdp" = "NY.GDP.MKTP.CD"                # Gross Domestic Product (GDP)
@@ -146,7 +150,8 @@ wb_growth |>
   geom_text_repel(aes(label = country))
 ```
 
-Same conclusion here... not very convincing!
+Same conclusion here... not very convincing!    
+**High technology exports** (as % of manufactured exports) => to do in class!
 
 
 ## Time-series
