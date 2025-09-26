@@ -131,8 +131,10 @@ We mention for instance:
 - the [**Federal Reserve of Saint Louis**](https://fred.stlouisfed.org/);    
 - the [**OECD**](https://data.oecd.org/);    
 - the [**International Monteary Fund**](https://data.imf.org/en), see also [here](https://www.imf.org/en/Publications/WEO/weo-database/2024/October/download-entire-database) for instance;    
-- the [**Bank for International Settlements**](https://data.bis.org/bulkdownload);  
-- [gapminder](https://www.gapminder.org/data). 
+- the [**Bank for International Settlements**](https://data.bis.org/bulkdownload);   
+- the [**UTI datahub**](https://datahub.itu.int/) on Information and Communication Technologies;      
+- the [**Energy Institute annual review**](https://www.energyinst.org/statistical-review/resources-and-data-downloads) for energy data; 
+- the [**gapminder** (foundation)](https://www.gapminder.org/data). 
 
 Several of these institutions use the [SDMX standard](https://sdmx.org/about-sdmx/welcome/).   
 
