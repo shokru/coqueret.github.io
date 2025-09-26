@@ -1,0 +1,569 @@
+---
+title: "Growth in the cross-section (of countries)"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+---
+
+
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)    # Package for data wrangling
+library(readxl)       # Package to import MS Excel files
+library(latex2exp)    # Package for LaTeX expressions
+library(quantmod)     # Package for stock data extraction
+library(highcharter)  # Package for reactive plots
+library(ggcorrplot)   # Package for correlation plots
+library(ggrepel)      # Package for neat annotations
+library(plm)          # Package for panel models
+library(fixest)       # Other Package for panels
+library(reactable)    # Package for neat tables
+library(WDI)          # Package for World Bank data
+library(broom)        # Package for neat regression output
+library(tidyfit)      # Package for grouped regressions
+impute <- function(v, n = 6){     # Imputation function
+  for(j in 1:n){
+    ind <- which(is.na(v))
+    if(length(ind)>0){
+      if(ind[1]==1){ind <- ind[-1]}
+      v[ind] <- v[ind-1]
+    }
+  }
+  return(v)
+}
+```
+
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+
+# Introduction
+
+Until now, we have sought to explain growth through particular lenses (human capital, technology) but have mostly failed to do so.   
+
+In this session/notebook, we are interested in a broader and much more data-centric approach. We seek to analyze a large cross-section of countries as well as **many explanatory factors** at the **same time**.
+
+# Foundations
+
+::: {.callout-note collapse="false"}
+## Theory (sort of)
+
+Suppose that in all generality, the **production function** is a generalization of the Cobb-Douglas multiplicative form:
+
+$$Y=\prod_{n=1}^N X_n^{a_n}, \quad X_n >0$$
+so that we envision $N$ different **factors** contributing to the economic output. Taking the logarithm:
+$$\log(Y) = \sum_{n=1}^N a_n \log(X_n)$$
+and differentiating yields
+
+$$\frac{\dot{Y}}{Y} = \sum_{n=1}^N a_n \frac{\dot{X}}{X}.$$
+
+This is a sound grounding for simple (linear) **regression models** which we'll cover below.
+:::
+
+## Fetching & wrangling the data
+
+
+Below, we extract a sufficient number (~10) of potential predictors of growth and **impute** a few points along the way (to increase sample size).
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+wb_raw <- WDI(                              # World Bank data
+  indicator = c(
+    "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
+    "savings_rate" = "NY.GDS.TOTL.ZS",      # Savings rate (% GDP)
+    "inflation" = "FP.CPI.TOTL.ZG",         # Inflation rate
+    "trade" = "NE.TRD.GNFS.ZS",             # Trade as % of GDP 
+    "pop" = "SP.POP.TOTL",                  # Population
+    "pop_growth" = "SP.POP.GROW",           # Population growth
+    "capital_formation" = "NE.GDI.TOTL.ZS", # Gross capital formation (% GDP)
+    "gdp_percap" = "NY.GDP.PCAP.CD",        # GDP per capita
+    "RD_percap" = "GB.XPD.RSDV.GD.ZS",      # R&D per capita
+    "educ_level" = "SE.SEC.CUAT.LO.ZS",     # % pop reachiing second. educ. level
+    "educ_spending" = "SE.XPD.TOTL.GD.ZS",  # Education spending (%GDP)
+    "nb_researchers" = "SP.POP.SCIE.RD.P6", # Nb researchers per million inhab.
+    "debt" = "GC.DOD.TOTL.GD.ZS",           # Central gov. debt (% of GDP)
+    "gdp" = "NY.GDP.MKTP.CD"                # Gross Domestic Product (GDP)
+  ), 
+  extra = TRUE,
+  start = 1960,
+  end = 2024) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) |>  
+  filter(region != "Aggregates", income != "Aggregates") |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(across(everything(), impute)) |>
+  mutate(gdp_percap = log(lag(gdp_percap))) |>       # log-lag transformation
+  ungroup() |>
+  filter(lastupdated == max(lastupdated)) |>
+  arrange(country, year) |>
+  mutate(capital_percap = capital_formation / labor, .before = "region")
+```
+
+We make a few adjustments to the data, adding GDP per capita growth. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+
+wb_growth <- wb_raw |> 
+  filter(region != "Aggregates", income != "Aggregates") |> # Remove continents & co. 
+  group_by(country) |>
+  mutate(gdp_growth = gdp_percap/dplyr::lag(gdp_percap) - 1, .before = "region") |>
+  ungroup()
+
+wb_growth |> tail(3)
+```
+
+
+## First analyses
+
+Let's have a look at missing data, **after imputation**!. In some cases, when no data exists, forward-filling is not possible.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+vars <- c("gdp_percap", "savings_rate", "inflation", "trade", "debt", "capital_formation" , 
+          "pop_growth", "RD_percap", "educ_level", "educ_spending")
+
+wb_growth |> select(all_of(vars)) |> is.na() |> colMeans()
+```
+
+**Debt** and **R&D** cost a lot of data depletion.  
+Which countries are the most represented in the sample (with no missing point, *after imputation*)?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 7
+
+vars <- c("gdp_percap", "savings_rate", "inflation", "trade", "debt", "capital_formation" , 
+          "pop_growth", "RD_percap", "educ_level", "educ_spending")
+wb_growth |>
+  select(all_of(c(vars, "country"))) |>
+  na.omit() |>
+  group_by(country) |>
+  count(sort = T) |>
+  head(13)
+```
+
+Many large and developed countries do not make it to the top, mostly due to the R&D, but also debt variables.    
+
+
+Next, let us look if there is **colinearity** among variables. Indeed, high correlations between independent variables are likely to perturb inference. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 6 
+#| fig.height: 5
+
+wb_growth |>
+  select(all_of(vars)) |>
+  #na.omit() |>
+  cor(use = "pairwise.complete") |>
+  ggcorrplot(lab = TRUE, digits = 1L) +
+  scale_fill_viridis_c(alpha = 0.7) +
+  theme(legend.position = "none")
+```
+
+Usually, a correlation of 0.5 (in absolute value) is considered already high. A value above 0.7 is prohibitive...  
+So here, it seems we are relatively fine.
+
+
+
+# Panel models
+
+We now turn to an exploration of the concepts and variables seen and mentioned until today. Indeed, models are only worthwhile if they are able to explain and predict salient empirical properties of the economy.
+
+::: {.callout-note collapse="false"}
+## Note 
+
+We follow here a panel approach from [Economic Growth in a Cross Section of Countries](https://academic.oup.com/qje/article-abstract/106/2/407/1905452), though we apply it to GDP percapita and not to *raw* GDP:
+
+$$g_{t,i}=\textbf{X}_{t,i}\boldsymbol{\beta}+a \log(y_{t-1,i}) + e_{t,i},$$
+
+where $g_{t,i}$ is the growth rate of country $i$ at date (year) $t$ and $y_{t,i}$ is GDP per capita. The matrix $\textbf{X}_{t,i}$ embeds all variables of interest. 
+
+:::
+
+
+## Baseline estimation
+
+As a first attempt, we proceed with the traditional two-ways fixed effect model, meaning that the equation is:
+$$g_{t,i}=\textbf{X}_{t,i}\boldsymbol{\beta}+a \log(y_{t-1,i}) + b_i + c_t + e_{t,i},$$
+where the errors have zero means and the $b_i$ and $c_t$ are dummy variables that code the **company** and **year** rows, respectively. 
+
+The `{plm}` package is likely the most used for panel models in R. We use it below. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+plm_data <- wb_growth |> dplyr::select(all_of(c("country", "year", "gdp_growth", vars))) |> 
+  na.omit() |> group_by(country) |> mutate(n = n()) |> filter(n > 8) |> select(-n)
+fit_two_way <- plm(formula = gdp_growth ~ . , 
+                   data = plm_data,
+                   model = "within", effect = "twoways", 
+                   index = c("country", "year"))$coef |> data.frame() |> 
+  rownames_to_column(var = "variable") |> 
+  mutate(type = "two_way")
+colnames(fit_two_way)[2] <- "estimate"
+```
+
+To detect which variables matter, we look at *p*-values: they indicate the probability to obtain a value as "extreme" as the one observed under the assumption that the coefficient is equal to zero (this hypothesis is called the **null**). Hence if a *p*-value is close to zero, it signals support for the assumption that there is a link (not necessarily causal) between the dependent and independent variables.
+
+Here, the **savings rate**, **capital formation** both have significant positive coefficients... **education** and **population growth** have *negative* coefficients.   
+
+
+## Mono effect models
+
+Below, we test to see the results remain robust if we only consider one dimension of effects.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+fit_indiv <- plm(formula = gdp_growth ~ . , 
+                 data = plm_data,
+                 model = "within", effect = "individual",
+                 index = c("country", "year"))$coef |> data.frame() |> 
+  rownames_to_column(var = "variable") |> 
+  mutate(type = "indiv")
+colnames(fit_indiv)[2] <- "estimate"
+fit_time <- plm(formula = gdp_growth ~ . , 
+                data = plm_data,
+                model = "within", effect = "time",
+                index = c("country", "year"))$coef |> data.frame() |> 
+  rownames_to_column(var = "variable") |> 
+  mutate(type = "time")
+colnames(fit_time)[2] <- "estimate"
+```
+
+Let's see the **differences** between models.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+fit_two_way |> 
+  bind_rows(fit_indiv) |>
+  bind_rows(fit_time) |> 
+  filter(variable %in% vars) |> select(variable, estimate, type) |>
+  pivot_wider(names_from = type, values_from = estimate) 
+```
+
+The values are *identical*. This should not be the case; there must be a **problem** here!  
+We thus repeat this exercise, but with another library, the `{fixest}` package.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+fml_0 <- "gdp_growth ~ gdp_percap + savings_rate + inflation + trade + debt + "
+fml_0 <- paste(fml_0, "capital_formation + pop_growth + RD_percap + educ_level + educ_spending")
+fml <- as.formula(paste(fml_0, "| year"))
+fit_time <- ((feols(fml, data = plm_data)$coefficients)/sqrt(diag(feols(fml, data = plm_data)$cov.iid))) |> 
+  data.frame() |> rownames_to_column(var = "variable") |> mutate(type = "time")
+colnames(fit_time)[2] <- "statistic"
+
+fml <- as.formula(paste(fml_0, "| country"))
+fit_indiv <- ((feols(fml, data = plm_data)$coefficients)/sqrt(diag(feols(fml, data = plm_data)$cov.iid))) |> 
+  data.frame() |> rownames_to_column(var = "variable") |> mutate(type = "indiv")
+colnames(fit_indiv)[2] <- "statistic"
+
+fml <- as.formula(paste(fml_0, "| country + year"))
+fit_twoway <- ((feols(fml , data = plm_data)$coefficients)/sqrt(diag(feols(fml, data = plm_data)$cov.iid))) |> 
+  data.frame() |> rownames_to_column(var = "variable") |> mutate(type = "two_way")
+colnames(fit_twoway)[2] <- "statistic"
+```
+
+**NOTE** that we store test statistics here and not raw coefficients. The former carry more information...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+fit_twoway |> 
+  bind_rows(fit_time) |>
+  bind_rows(fit_indiv) |>
+  pivot_wider(names_from = type, values_from = statistic)
+```
+
+Ok, so now we do find some differences in **test statistics**. The good news is that signs are mostly consistent across most variables.  
+But there are a few conflicts, too: **trade**, **RD_percap** and **education**. One subtlety: for **GDP per capita**, signs remain the same, but the significance changes drastically, passing above usual threshold when only time fixed effects are included. The same thing happens for **capital formation**, though here it it the TWFE model that rejects the null.
+
+These results suggest that **population growth** and the **savings rate** are the only solid drivers of growth in wealth. 
+
+## Grouping
+
+Until now, we have run the models on *all* of the data, but we could also consider sub-groups, either geographical ones, or income clusters. We could use grouping below, but in fact, for lower income countries, **we do not have enough data points** to proceed with estimation...
+
+Indeed, if we look at the full sample, 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+wb_growth |> group_by(income) |> count()
+```
+
+It may seem manageable; but if we impose non-missing points...   
+Then the story is a bit different.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+wb_growth |> na.omit() |> group_by(income) |> count()
+```
+
+The sample size becomes too small. Indeed, recall that with fixed effects, when estimated with OLS, the **number of columns** increases by a lot (+ number of countries + number of years in the sample).
+
+Let's proceed with *manual* filters.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+plm_rich <- wb_growth |> filter(income == "High income") |>
+  dplyr::select(all_of(c("country", "year", "gdp_growth", vars))) |> 
+  na.omit() |> group_by(country) |> mutate(n = n()) |> filter(n > 8) |> select(-n)
+fit_rich <- ((feols(fml, data = plm_rich)$coefficients)/sqrt(diag(feols(fml, data = plm_rich)$cov.iid))) |> 
+  data.frame() |> rownames_to_column(var = "variable") |> mutate(income = "rich")
+colnames(fit_rich)[2] <- "statistic"
+
+plm_mid <- wb_growth |> filter(income == "Upper middle income") |>
+  dplyr::select(all_of(c("country", "year", "gdp_growth", vars))) |> 
+  na.omit() |> group_by(country) |> mutate(n = n()) |> filter(n > 8) |> select(-n)
+fit_mid <- ((feols(fml, data = plm_mid)$coefficients)/sqrt(diag(feols(fml, data = plm_mid)$cov.iid))) |> 
+  data.frame() |> rownames_to_column(var = "variable") |> mutate(income = "middle")
+colnames(fit_mid)[2] <- "statistic"
+
+fit_rich |> bind_rows(fit_mid) |> pivot_wider(names_from = income, values_from = statistic)
+```
+
+Pretty consistent! Except perhaps for one variable (education)...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+
+```
+
+
+
+## Predictive models
+
+The above regression model seeks to link growth with **contemporaneous** variables. But we could also be interested in lagged predictors. To examine if some characteristics of nations imply future growth. Because most features are persistent (highly autocorrelated), we should not see too much difference. But the devil can be in the details...
+
+
+```{r}
+# To be done in class
+```
+
+
+
+# Country-specific estimates
+
+Until now, estimations were **grouped**: we used the information in the cross-section of firms (and chronology) to see the "global" effect of some variables on growth. But perhaps is this effect country-specific? (or even maybe time-dependent). 
+
+Below, we run the same regressions (in terms of 'independent' variables), but we will display results one variable at a time.
+The models are nevertheless **multivariate**. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+fit_countries <- wb_growth |> 
+  dplyr::select(all_of(c("country", "year", "gdp_growth", vars))) |> 
+  na.omit() |>
+  group_by(country) |>
+  mutate(n = n()) |>
+  filter(n > 20) |>
+  select(-year) |>
+  regress(gdp_growth ~ ., m("lm")) |>
+  coef()
+```
+
+Let's have a look at a few variables.  
+
+First, **population growth**. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4
+#| fig.height: 3
+fit_countries |>
+  filter(term == "pop_growth") |>
+  ggplot(aes(x = estimate, y = reorder(country, estimate))) + geom_col() +
+  theme_classic() + theme(axis.title.y = element_blank()) +
+  xlab("estimate (population growth)")
+```
+
+A majority of estimates are negative, with a handful of exceptions, including France.  
+
+What about **capital formation**? 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4
+#| fig.height: 3
+fit_countries |>
+  filter(term == "capital_formation") |>
+  ggplot(aes(x = estimate, y = reorder(country, estimate))) + geom_col() +
+  theme_classic() + theme(axis.title.y = element_blank()) +
+  xlab("estimate (capital formation)")
+```
+
+Here again, a majority (~2/3) of countries with similar sign of coefficient, and France remains a clear outlier.   
+
+Finally, a focus on the **savings rate**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4
+#| fig.height: 3
+fit_countries |>
+  filter(term == "savings_rate") |>
+  ggplot(aes(x = estimate, y = reorder(country, estimate))) + geom_col() +
+  theme_classic() + theme(axis.title.y = element_blank()) +
+  xlab("estimate (savings rate)")
+```
+
+Again, a split that is not evenly balanced; which both suggest some consistency and some exceptions.  
+Hard to find a pattern, though (Eastern Europe is represented for the negative coefficients, but nothing jumps to the eye).  
+
+
+
+# Convergence?
+
+[**Convergence**](https://en.wikipedia.org/wiki/Convergence_(economics)) in economics refers to the idea that poor countries will eventually catch-up with rich ones; that rich countries would stagnate in terms of wealth whereas developing countries, with cheaper labor force would benefit from higher growth rates, resulting in a reduction of inequalities. This line of reasoning may be subject to conditions, naturally.  
+
+This is something that we can test, too. First, let's seen if countries with **low income** have growth rates superior to those with **high income**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+t.test(wb_growth |> filter(income == "High income") |> pull(gdp_growth),
+       wb_growth |> filter(income == "Low income") |> pull(gdp_growth))
+```
+
+What does this mean?
+
+What about dynamic patterns?  
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.height: 4
+#| fig.width: 4
+wb_growth |> 
+  filter(income %in% c("High income", "Low income")) |>
+  ggplot(aes(x = year, y = gdp_growth, color = income)) + 
+  geom_point(aes(alpha = income)) + geom_smooth(se = F) +
+  theme_classic() +
+  theme(legend.position = c(0.8, 0.95),
+        legend.title = element_blank(),
+        axis.title = element_blank()) + 
+  scale_color_manual(values = c("#4A4443", "#63E693")) + 
+  scale_alpha_manual(values = c(0.2, 0.4)) + 
+  ylim(-0.065, 0.065)
+```
+
+Hard to make a clear case...   
+
+- the 2000-2015 period speaks in favor of convergence;     
+- but since then, things have reverted;    
+- the most recent points (2024) indicate a status-quo. 
+
+# A step back: heuristic sources of growth
+
+(see [CSV](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/), section 7.2)
+
+- **luck**: initial conditions may have an impact.  
+- **geography**: natural resources (minerals, grains, cattle, etc.) are a key driver of growth. Diseases are also more frequent in some parts of the globe.    
+- **culture** (customary beliefs and values): they can drive economic decisions, but are also hard to measure.   
+- **institutions**: property rights, labor markets, regulation.
