@@ -419,9 +419,9 @@ This implies
 
 $$\frac{\dot{y}}{y}=\frac{\dot{A}k^a+Aa k^{a-1}\dot{k}}{Ak^a}=\frac{\dot{A}}{A}+a\frac{\dot{k}}{k}=\lambda n+(\lambda +a)(sAk^{a-1}-n).$$
 In short, we have $\frac{\dot{y}}{y}=\lambda n+ (\lambda+a)\frac{\dot{k}}{k}$: output growth is an **affine function** of capital growth. 
-If we assume $\frac{\dot{k}}{k}=0$, then growth comes from learning only. We can find a situation where all growth rates are positive. It corresponds to $\frac{\dot{y}}{y}=\frac{\dot{k}}{k}$ and $\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}$. This yields
+If we assume $\frac{\dot{k}}{k}=0$, then growth comes from learning only if $n>0$. We can find a situation where all growth rates are positive. It corresponds to $\frac{\dot{y}}{y}=\frac{\dot{k}}{k}$ and $\frac{\dot{A}}{A}=(1-a)\frac{\dot{k}}{k}$. This yields
 $$\frac{\dot{k}}{k}=\frac{\dot{y}}{y}=\frac{\lambda n}{1-a-\lambda}$$
-Note that $n=0$ implies $a+\lambda=1$ (constant returns to scale). If population grows, then it must hold that $a+\lambda<1$ (DRS). 
+Note that $n=0$ requires $a+\lambda=1$ (constant returns to scale) to obtain nonzero growth. If population grows, then it must hold that $a+\lambda<1$ (DRS). 
 
 **NOTE**: a simple alternative model can be found in *Economic Growth*, by Barro and Sala-i-Martin, Section 4.3.
 
