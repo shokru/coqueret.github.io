@@ -119,7 +119,7 @@ wb_raw |>
 # The Ramsey with debt/bond
 ## Formulation
 
-For simplicity, we fix $n=0$ and $L_0=1$ so that population remains contants and all terms cann be viewed as *per capita*. As in the Ramsey model, the utility is 
+For simplicity, we fix $n=0$ and $L_0=1$ so that population remains constant and all terms can be viewed as *per capita*. As in the **Ramsey model**, the utility is 
 $$U=\int_0^\infty e^{-\rho t} u(c_t)dt.$$
 We also have $\dot{k}_t=f(k_t)-c_t$ (simplified dynamic for capital), and the representative inhabitant/agent has access to a bond which pays a payoff rate of $r$: $\dot{b}_t=rb_t$, with $b_t$ being the value of the bond (or amount detained in the economy). 
 
@@ -128,13 +128,13 @@ $$\dot{a}=f(k_t)+rb_t-c_t= f(k_t)+r(a_t-k_t)-c_t$$ {#eq-a_dot}
 
 The Hamiltonian in the optimization of consumption with the above constraint is
 $$H = u(c_t)+\lambda_t (f(k_t)+r(a_t-k_t)-c_t)$$
-The first order conditions are then
+The first order conditions are then (assuming $\lambda_t\neq 0$)
 $$u'(c_t)=\lambda_t \quad (\text{derivative w.r.t.  } c_t)$$ {#eq-cond_c}
 $$f'(k_t)=r \quad (\text{derivative w.r.t.  } k_t)$$
 $$ \frac{\partial H}{\partial a}+ \dot{\lambda}_t = \rho \lambda_t \quad \Leftrightarrow \quad \dot{\lambda}_t=(\rho-r) \lambda_t \quad (\text{co-state variable)}$$
 Imagine $\lambda_t$ is an asset, then the l.h.s. is the marginal income of investing in this asset (from dividend/utility plus capital gains). The r.h.s. is the rate at which is makes **exactly** sense to hold the asset: it must precisely compensate for the **discount rate** $\rho$. 
 
-Differentiating the last equation w.r.t. time and plugging @eq-cond_c, we get
+Differentiating the first equation w.r.t. time and plugging @eq-cond_c, we get
 $$\dot{c}_tu''(c_t)=(\rho-r)u'(c_t),$$
 
 so that 
@@ -144,7 +144,7 @@ This is **magic**! It does not depend on $k_t$, basically, it is constant! There
 
 The balanced growth path thus imposes $r=\rho$. Then, **all** quantities in the model are constant. In particular, the equilibrium capital satisfies $f'(k^*)=r$ (from the second FOC above) and total output is $y=f(k^*).$
 
-Furthermore, note that, integrating @eq-a_dot, we get 
+Furthermore, note that, multiplying @eq-a_dot by $e^{-rt}$ and integrating, we get 
 $$a_te^{-rt}-a_0 = \frac{1-e^{-rt}}{r}(f'(k^*)-rk^*-c^*),$$
 
 so that, as $t\rightarrow \infty$ and under non-explosive assumptions, we get
@@ -152,7 +152,7 @@ $$c^* = ra_0+f'(k^*)-rk^*.$$
 
 ## Some comments on the model
 
-The most salient property of the model in @eq-const_c. At the optimum (equilibrium), any deviation from $k^*$ or $c^*$ is immediately corrected. The trick is that the residents of the home country are able to adjust by purchasing any amount of required capital - thanks to the bond. This does not affect the national assets, because $a=k+b$, hence reducing $b$ by the same amount that $k$ increases leaves $a$ unchanged. 
+The most salient property of the model is @eq-const_c. At the optimum (equilibrium), any deviation from $k^*$ or $c^*$ is immediately corrected. The trick is that the residents of the home country are able to adjust by purchasing any amount of required capital - thanks to the bond. This does not affect the national assets, because $a=k+b$, hence reducing $b$ by the same amount that $k$ increases leaves $a$ unchanged. 
 
 
 
