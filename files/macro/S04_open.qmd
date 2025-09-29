@@ -147,7 +147,7 @@ The balanced growth path thus imposes $r=\rho$. Then, **all** quantities in the 
 Furthermore, note that, multiplying @eq-a_dot by $e^{-rt}$ and integrating, we get 
 $$a_te^{-rt}-a_0 = \frac{1-e^{-rt}}{r}(f'(k^*)-rk^*-c^*),$$
 
-so that, as $t\rightarrow \infty$ and under non-explosive assumptions, we get
+so that, as $t\rightarrow \infty$ and under non-explosive assumptions, we get an expression for optimal **consumption**:
 $$c^* = ra_0+f'(k^*)-rk^*.$$
 
 ## Some comments on the model
