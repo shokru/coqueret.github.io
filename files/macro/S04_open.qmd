@@ -73,11 +73,11 @@ Let's see if this decomposition works in the data. The values are in current LCU
 #| cache: true
 
 wb_raw <- WDI(indicator = c("gdp" = "NY.GDP.MKTP.CN",      
+                            "gdp_growth" = "NY.GDP.MKTP.KD.ZG",  
                             "expenses" = "GC.XPN.TOTL.GD.ZS", # (% of GDP)
                             "consumption" = "NE.CON.TOTL.CN",
                             "imports" = "NE.IMP.GNFS.CN",
                             "exports" = "NE.EXP.GNFS.CN",
-                            "inflation" = "FP.CPI.TOTL.ZG",
                             "debt" = "GC.DOD.TOTL.GD.ZS",
                             "lend" = "FR.INR.LEND",           # lending rate
                             "risk_premium" = "FR.INR.RISK",   # = lending - treasury
@@ -210,9 +210,10 @@ wb_raw |>
          year > 2005) |>
   arrange(country, year) |>
   group_by(country) |>
-  mutate(interest_rate = lend - risk_premium,
-         debt_growth = 100*(debt / lag(debt) - 1)) |>
-  select(country, year, interest_rate, debt_growth) |>
+  mutate(interest_rate = lend - risk_premium#,
+         #debt_growth = 100*(debt / lag(debt) - 1)
+         ) |>
+  select(country, year, interest_rate, gdp_growth) |>
   pivot_longer(-c(country, year), values_to = "value", names_to = "rate") |>
   ggplot(aes(x = year, y = value, color = country, linetype = rate)) + geom_line() +
   theme_classic() +
@@ -237,10 +238,11 @@ wb_raw |>
   group_by(country) |>
   mutate(interest_rate = lend - risk_premium,
          n = n(),                               # Counting countries
-         debt_growth = 100*(debt / lag(debt) - 1)) |>
+         #debt_growth = 100*(debt / lag(debt) - 1)
+         ) |>
   filter(n > 20) |>                             # We want at least 20 obs.
   summarise(r = mean(interest_rate, na.rm = T),
-            g = mean(debt_growth, na.rm = T),
+            g = mean(gdp_growth, na.rm = T),
             g_r = g-r) |>
   arrange(g_r)
 ```
