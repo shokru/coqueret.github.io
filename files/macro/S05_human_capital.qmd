@@ -228,7 +228,8 @@ As in the simpler models (e.g., à la Solow), we assume savings rates for physic
 ::: {.callout-note collapse="false"}
 ## Side note
 
-Whether human capital depreciates should be open to debate...
+Whether human capital depreciates could be open to debate...    
+Schools, research labs, yes; but if we think of worker experience, then less so.
 
 :::
 
@@ -390,14 +391,14 @@ Hence, consumption is exactly **proportional** to capital (and output).
 
 In the model, the TVC $e^{-\rho t}k_t \lambda_t \rightarrow 0$ is $e^{-\rho t}k_t c^{-\sigma^{-1}_t} \rightarrow 0$. The differential @eq-cdiff has simple solution $c_t=c_0e^{(\sigma(A-\rho))t}$. But remember that this is also true for $k$: $k_t=k_0 e^{(\sigma(A-\rho))t}$, hence the condition becomes $k_0c_0^{-\sigma^{-1}}e^{(\sigma(A-\rho)-A)t}\rightarrow 0$, which requires $\sigma(A-\rho)<A$.
 
+## Simulations
 
-
-
+TO DO !! (in class?)
 
 # Knowledge & learning by doing
 
 
-To generate growth, one way may be to rely on some form **productivity**. From a **human capital** perspective, the idea here is to assume that **experience** gets workers better at **production**. Below, we follow the survey [*Learning by doing*](https://digitalcommons.fiu.edu/economics_wps/42/), Section 5. 
+To generate growth, one way may be to rely on some form **productivity**. From a **human capital** perspective, the idea here is to assume that **experience** gets workers better at **production**. Below, we follow the survey [*Learning by doing*](https://digitalcommons.fiu.edu/economics_wps/42/), Section 5. See also [On the mechanics of economic development](https://www.sciencedirect.com/science/article/abs/pii/0304393288901687) by Lucas, wherein **technology** is put forward as driver of **human capital** (good transition with the next session!).
 
 $$Y=AK^aL^{1-a},$$
 with $A$ being **knowledge**. Labor increases as usual **exogenously** at rate $n$, while $K$ satisfies $\dot{K}=sY$, i.e., via savings and without depreciation. **Knowledge** is linked to cumulative investment (e.g., R&D) via $A=bK^\lambda$.  
