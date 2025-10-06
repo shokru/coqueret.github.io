@@ -428,25 +428,22 @@ fit_rich |> bind_rows(fit_mid) |> pivot_wider(names_from = income, values_from =
 
 Pretty consistent! Except perhaps for a few variables...
 
-```{r}
-#| message: false
-#| warning: false
-#| class-source: my_class
-#| classes: my_class
-#| column: margin
-
-```
-
 
 
 ## Predictive models
 
 The above regression model seeks to link growth with **contemporaneous** variables. But we could also be interested in **lagged** predictors. To examine if some characteristics of nations imply **future** growth. Because most features are persistent (highly autocorrelated), we should not see too much difference. But the devil can be in the details... and in the lags!
 
-
 ```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
 # To be done/discussed in class => grouping!
 ```
+
+
 
 
 
@@ -546,10 +543,13 @@ The [Energy Institute](https://www.energyinst.org/statistical-review/resources-a
 #| classes: my_class
 url <- "https://www.energyinst.org/__data/assets/excel_doc/0006/1656348/Statistical-Review-of-World-Energy-Data.xlsx"
 GET(url, write_disk(tf <- tempfile(fileext = ".xlsx")))
-df <- read_excel(tf) |> 
+df <- read_excel(tf) 
+data_energy <- df |> 
   select(-ISO3166_alpha3, -ISO3166_numeric, -ISO3166_numeric, -CIS) |>
-  filter(Var %in% c("oilcons_ej", "gascons_ej", "coalcons_ej", "renewables_ej"))
-head(df)
+  mutate(Var = Var |> str_replace_all("_ej", "")) |>
+  filter(Var %in% c("oilcons", "gascons", "coalcons", "renewables"))
+colnames(data_energy) <- tolower(colnames(data_energy))
+head(data_energy)
 ```
 
 **NOTE**: "ej" means **exajoules** (=$10^{18}$J).  
@@ -562,9 +562,9 @@ head(df)
 #| column: margin
 #| fig.width: 4
 #| fig.height: 3
-df |> 
-  filter(Country == "Total World") |>
-  ggplot(aes(x = Year, y = Value, fill = Var)) + geom_area() +
+data_energy |> 
+  filter(country == "Total World") |>
+  ggplot(aes(x = year, y = value, fill = var)) + geom_area() +
   theme_classic() + 
   theme(axis.title = element_blank(),
         legend.title = element_blank(),
@@ -572,14 +572,35 @@ df |>
   scale_fill_viridis_d()
 ```
 
-We then need to **join** this data with the WB data...
+We then need to **join** this data with the WB data...   
+(with a snapshot at the outome)
 
 ```{r}
 #| message: false
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
+#| column: margin
+data_join <- wb_growth |> select(-region) |> 
+  full_join(data_energy |> pivot_wider(names_from = var, values_from = value), 
+            by = c("year", "country"))
+data_join |> select(-region, -income, -subregion) |>  na.omit() |> head()
 ```
+
+We build a model omitting a few variables.    
+(this is just for illustration)
+
+```{r}
+#| label: join_model
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+fml_0 <- "gdp_growth ~ gdp_percap + savings_rate + pop_growth + RD_percap + educ_level + oilcons + gascons + coalcons + renewables"
+fml <- as.formula(paste(fml_0, "| year + country"))
+feols(fml, data = data_join) |> summary()
+```
+
 
 
 
