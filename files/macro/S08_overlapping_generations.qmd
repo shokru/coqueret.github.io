@@ -1,0 +1,386 @@
+---
+title: "Overlapping generations models"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)   # Package for data wrangling
+library(purrr)       # Package for functional programming
+library(readxl)      # Package to import MS Excel files
+library(latex2exp)   # Package for LaTeX expressions
+library(quantmod)    # Package for stock data extraction
+library(highcharter) # Package for reactive plots
+```
+
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+# Context
+
+Generations are linked in multiple fashions:   
+
+- An obvious example is the **environment**: as the saying goes, "*we do not inherit the earth from our ancestors; we borrow it from our children*".   
+- Another example (especially in French politics) pertains to **fiscal policy** and **the burden of debt** (who should carry it).    
+- Finally, a last illustration is the **transmission of knowledge**. Shifting economic needs and to much reliance on technological change can lead to a loss of skills and know-how.      
+
+# Models
+
+## Chronological setup
+
+Time $t$ is discrete here (but could be continuous, leading to different developments). Each generation lives through two phases only: **work** and **retirement** (children don't count!).
+
+![](ogm_chronology.png)
+
+In the baseline model this won't have too many implications in fact (at least in terms of differences between generations).
+
+
+## Individuals
+
+The population is such that there are $L_t=L_0(1+n)^t$ individuals born at time $t$. Agents born at time $t$ maximize the following utility function based on **consumption** (note, this is a two-period setup):
+
+$$ \left(\frac{\sigma}{\sigma-1} \right)\left(c_{t, \text{work}}^{1-1/\sigma} + \frac{1}{1+\rho}c_{t+1, retire}^{1-1/\sigma}\right),$$ {#eq-utility_ogm}
+
+where $\rho$ is the **discounting rate** (preference over time) and $\sigma$ controls **risk aversion**.
+@eq-utility_ogm is optimized under the following constraints:
+$$w_t = c_{t, \text{work}}+ s_t ,$$ {#eq-constr1}
+that is: the wage $w_t$ at time $t$ is spent either in **consumption** or in **savings** $s_t$, as well as:
+$$c_{t+1, \text{retire}}=(1+r_{t+1})s_t,$$  {#eq-constr2}
+that is: upon retirement, the agent can only consume what he has saved (invested in a product that delivers a rate of $r_{t+1}$, which is the **rental rate of capital**: what you get from lending money to the firm so that it can invest for production purposes). 
+
+Replacing $c_{t+1,retire}$ and $s_t$ from the constraints, we get that the first order condition is
+
+$$\frac{\partial}{\partial c_{t,\text{work}}} \left(\left(\frac{\sigma}{\sigma-1} \right)\left(c_{t, \text{work}}^{1-1/\sigma} + \frac{1}{1+\rho}((1+r_{t+1})(w_t-c_{t,\text{work}}))^{1-1/\sigma}\right) \right)=0$$
+i.e., (again keeping in mind the value of $c_{t+1, retire}$):
+$$c_{t, \text{work}}^{-1/\sigma}-\frac{1+r_{t+1}}{1+\rho}c_{t+1,\text{retire}}^{-1/\sigma}=0,$$
+
+which simplifies to
+$$\frac{c_{t,\text{work}}}{c_{t+1, \text{retire}}}=\left(\frac{1+r_{t+1}}{1+\rho} \right)^{\sigma}.$$
+This can be viewed as the **Euler equation** for the generation "*born*" at time $t$.
+
+If we divide @eq-constr2 by $c_{t,work}$ in @eq-constr1, we also get the same ratio, hence
+
+$$\frac{(1+r_{t+1})s_t}{w_t- s_t}=\left(\frac{1+r_{t+1}}{1+\rho} \right)^{\sigma} \ \Leftrightarrow \ s_t=w_t\left(\frac{1}{1+(1+\rho)^{\sigma}(1+r_{t+1})^{1-\sigma}}\right).$$ {#eq-savings}
+This is the **savings function** and it is proportional to the **income**. All quantities in the denominator are positive, hence the ratio $s_t/w_t$ is smaller than one. 
+
+## Firms 
+
+::: {.callout-tip collapse="false"}
+## We assume:    
+
+- a simple production function with **constant returns to scale**, hence the model is mainly defined by the output per worker: $y=f(k)$, with $k$ being the capital/labor ratio.   
+- that these firms rent capital until the marginal product of capital is equal to the lending rate of capital. The reason for this is that we can set the (per-worker CRS) **profit function** to $\pi(k)=f(k)-r_{t}k$ (production minus cost of capital), hence the FOC is
+$$f'(k)=r_t.$$ {#eq-FOC_capital}    
+- that firms also equate the marginal product of labor to its **cost**, $w_t$: $\pi(L)= Lf(K/L)- w_tL$, hence $\frac{\partial  \{Lf(K/L)- w_tL\}}{\partial L}=f(k) -LK \frac{f'(K/L)}{L^2}-w_t=0$ implies 
+$$f(k_t)-k_tf'(k_t)=w_t.$$ {#eq-FOC_labor}    
+- finally, that the capital available at time $t+1$ is equal to the **total savings of the young generation** (the old generation is retired so it only consumes). Hence:
+$$K_{t+1}= L_ts_t \ \Leftrightarrow \ s_t = (1+n)k_{t+1}$${#eq-k_savings}
+:::
+
+
+::: {.callout-important collapse="false"}
+Because of this last expression, most of the focus in what comes next is on **savings**. Indeed:
+$$\text{savings} \rightarrow \text{capital} \rightarrow \text{production (in CRS model)}$$
+:::
+
+
+## A neat example
+
+### The model
+
+As usual, let's consider a Cobb-Douglas production function: $y=k^\alpha$ with $\alpha \in (0,1)$, and log-preferences ($\sigma=1$). This yields that the savings are simply equal to
+$$s_t=(2+\rho)^{-1} w_t.$$
+
+Interestingly, the interest rate has disappeared from the expression (this comes from the myopic log-utility). From @eq-FOC_capital, we get
+$$r_t = \alpha k_t^{\alpha-1},$$
+and from @eq-FOC_labor,
+$$w_t = k_t^{\alpha}(1-\alpha) = (1-\alpha)y_t,$$
+
+so that the wage is a **fraction of the per-worker production**. The link between capital and savings from @eq-k_savings then allows to write:
+$$k_{t+1}=\frac{s_t}{1+n}=\frac{w_t}{(1+n)(2+\rho)}=\frac{(1-\alpha)k_t^\alpha}{(1+n)(2+\rho)}.$${#eq-ksimulable}
+
+
+::: {.callout-note collapse="false"}
+## The solution
+
+Hence, the **steady-state** capital that verifies $k^*=k_t=k_{t+1}$ is 
+$$k^*=\left( \frac{1-\alpha}{(1+n)(2+\rho)} \right)^{1/(1-\alpha)} \ \Rightarrow y^* = \left( \frac{1-\alpha}{(1+n)(2+\rho)} \right)^{\alpha/(1-\alpha)}.$$
+Both quantities are **decreasing** in $n$ and $\rho$. If the population grows faster, the optimal ratio $K/L$ decreases. If the discounting rate increases, the optimal $k$ also decreases because **optimal savings**, too, would be lower.   
+
+Moreover, we can derive the steady-state **interest rate**:
+$$r^* = f'(k^*)= \frac{\alpha}{1-\alpha}(2+\rho)(1+n),$$
+which increases with all parameters. 
+:::
+
+With reasonable values, what kind of rate does this imply?
+
+### Convergence to the steady state
+
+We have that 
+$$k_{t+1}=\frac{s_t}{1+n}=\frac{s(w_t,r_{t+1})}{1+n} =\frac{s(f(k_t)-k_tf'(k_t), f'(k_{t+1}))}{1+n}$$
+because the saving rate $s_t$ depends both on $w_t$ and on $r_{t+1}$ and both depend on $k$ via @eq-FOC_labor and @eq-FOC_capital.
+Hence,
+$$(1+n)\frac{\partial k_{t+1}}{\partial k_t}= \frac{\partial s}{\partial w}\frac{\partial w}{\partial k_t}+\frac{\partial s}{\partial r}\frac{\partial r}{\partial k_t}$$
+Hence,
+$$(1+n)\frac{\partial k_{t+1}}{\partial k_t}= s_w \times (f'(k_t)-f'(k_t)-k_tf''(k_t)) + s_r \times f''(k_{t+1})\frac{\partial k_{t+1}}{\partial k_t} $$
+so that, gathering the pieces, 
+$$\frac{\partial k_{t+1}}{\partial k_t} = \frac{-s_w(k_t) k_tf''(k_t)}{1+n-s_r(k_{t+1})f''(k_{t+1})},$$
+and basically, we want this quantity to be smaller than one in absolute value so that the system does not explode. 
+
+
+## Numerical simulations
+
+In all generality, it is impossible to simulate the model because the variation $\frac{\partial k_{t+1}}{\partial k_t}$ depends on $k_{t+1}$! This is because of the savings rate which appears everywhere with its time index at $t+1$. 
+
+However, as we have seen in the previous example with Cobb-Douglas production and logarithmic utility, $r_{t+1}$ vanishes from the expression of $k_{t+1}$ in @eq-ksimulable. 
+
+So let's give it a try...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 4
+#| fig.height: 4
+
+rho <- 0.02
+n <- 0.01
+alpha <- 0.5
+n_periods <- 20
+k_star <- function(alpha, rho, n){
+  k <- 1
+  for(i in 2:n_periods){
+    k[i] <- k[i-1]^alpha * (1-alpha)/(2+rho)/(1+n)
+  }
+  k
+}
+
+ggplot() + 
+  geom_line(data = tibble(t = 1:n_periods, k = k_star(0.4, 0.02, 0.01)), 
+            aes(x = t, y = k, color = "alpha = 0.4")) + 
+  geom_line(data = tibble(t = 1:n_periods, k = k_star(0.6, 0.02, 0.01)), 
+            aes(x = t, y = k, color = "alpha = 0.6")) +
+  theme_classic() + 
+  theme(legend.position = c(0.7, 0.7), 
+        legend.title = element_blank())
+```
+
+
+We do achieve convergence (and quite rapidly).
+
+
+# Overlapping generations and pension systems
+
+**Generational solidarity** is at the heart of some pension systems, at least this is the case in France. The elderly depend on the younger workers to pay for their income. In some countries (e.g., the US), this is less the case and each individual must save throughout his/her entire active/working life and then rely on savings upon retirement. This is a challenge potentially, as it requires a crucial unknown information: the time of death! [Pension schemes](https://www.gov.uk/pension-types) can be complex and subject to debate.
+ 
+## The model
+
+### Setup
+
+We write:    
+
+- $d_t$ for the **contribution** of a young worker at time $t$;    
+- $b_t$ the the **benefits** received by an old retiree at time $t$.
+
+For simplicity, we assume only two periods.
+
+::: {.callout-note collapse="false"}
+## We want to compare two systems:    
+
+- **pay-as-you go**: the young (working) generations are "taxed" to pay for future retirement benefits (ex: France). In this case, 
+$$b_t=(1+n)d_t$$ {#eq-payg}
+The $(1+n)$ term reflect the potential **difference in population sizes**. If the population grows ($n>0$), then there are more active workers than retirees and the latter can comfortably benefit from a larger benefit. Otherwise (where many developed countries are headed), it's more complicated!
+- **fully funded**: the young must save on their own and can consume upon retirement to proceedings of their savings (ex: the United States). Then, straightforwardly,
+$$b_{t+1}= (1+r_{t+1})d_t.$$ {#eq-ff}
+:::
+
+
+### Consumption & savings
+
+As in the simplified model above, the agents' problem is to maximize
+$$\log(c_{\text{young}, t})+\frac{\log(c_{\text{old}, t+1})}{1+\rho},$$
+under the constraints:
+$$c_{\text{young},t}+s_t+d_t=w_t$$ {#eq-income2}
+and 
+$$c_{\text{old}, t+1}=(1+r_{t+1})s_t+b_{t+1}.$$ {#eq-consum2}
+The first is the use of income (wage): **consumption**, **savings** and **contribution**. The second shows where the money comes from: either **savings**, or the **pension benefits**.
+
+The FOC remains:
+$$c_{\text{old}, t+1}=\frac{1+r_{t+1}}{1+\rho}c_{\text{young}, t}.$$
+
+Then, plugging @eq-income2 and @eq-consum2 in the FOC equation, we get
+$$(1+r_{t+1})s_t+b_{t+1}=\frac{1+r_{t+1}}{1+\rho}(w_t-s_t-d_t),$$
+and factoring out the savings, we get
+$$s_t=\frac{(1+r_{t+1})(w_t-d_t)-b_{t+1}(1+\rho)}{(1+r_{t+1})(2+\rho)}.$$ {#eq-savings_pensions}
+
+Savings **increase with income** (as expected), but **decrease with contributions** and (future) benefit. As before, with Cobb-Douglas production, $r_t=\alpha k_t^{\alpha -1}$ and $w_t=(1-\alpha)y_t$. 
+
+
+## Implications for pensions schemes
+
+### Digression on $n$ (population growth)
+
+One important parameter that is sometimes overlooked is $n$. In the model, it measures the relative size change between active workers (young generation) versus retirees (old generation). Let's have a look at what the data says...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)    # Package for data wrangling
+library(readxl)       # Package to import MS Excel files
+library(WDI)          # To access World Bank data
+library(ggsci)        # Color scales
+library(plm)          # Panel models
+```
+
+We extract the data from the **World Bank**, as usual, with some new fields.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 5 
+#| fig.height: 7
+wb_labor <- WDI(                                   # World Bank data
+  indicator = c(
+    "labor" = "SL.TLF.TOTL.IN",                    # Labor force (# of individuals)
+    "pop" = "SP.POP.TOTL",                         # Population
+    "pop_growth" = "SP.POP.GROW",                  # Population growth
+    "pop_65_percent" = "SP.POP.65UP.TO.ZS",        # Population > 65yo (%)
+    "age_dep_ratio" = "SP.POP.DPND"                # Age dependency ratio
+  ), 
+  extra = TRUE, start = 1960, end = 2024) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) |>
+  filter(lastupdated == max(lastupdated)) |>
+  arrange(country, year)
+
+wb_labor <- wb_labor |> filter(region != "Aggregates") # Remove continents & co. 
+```
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5 
+#| fig.height: 5
+wb_labor |>
+  mutate(n = 100 * labor / (pop_65_percent) / pop) |>
+  filter(country %in% c("France", "Italy", "United States", "India", "China", "Nigeria"), 
+         year > 1990) |>
+  ggplot(aes(x = year, y = n, color = country)) + geom_line(linewidth = 1.2) +
+  theme_classic() + 
+  theme(legend.position = c(0.85,0.70), 
+        legend.title = element_blank()) 
+```
+
+The ratio of active-to-retired is **shrinking** for most economies.   
+This means that in pay-as-you-go systems, this will:   
+
+- either put more pressure on the working share of the population; or    
+- reduce the benefits of retirees (hard to sell - there is a "social contract")
+
+### The fully-funded system
+
+We just need to plug @eq-ff into @eq-savings_pensions to get
+$$s_t=\frac{w_t}{2+\rho} - d_t.$$
+Hence, there is a one-to-(minus)one relationship between savings and contribution. Each unit that is contributed is subtracted from savings. Here, there is only one interest rate for savings and the agent does not care where the benefits will come from. 
+
+
+::: {.callout-important collapse="false"}
+Importantly, the **total savings** depend on income only:
+$$s_t^{\text{total}} = s_t + d_t = \frac{w_t}{2+\rho}$$
+Since $\rho$ is roughly negligible compared to 2, then in means that total savings should represent **roughly half of income**! That's a lot...
+:::
+
+### Pay-as-you-go
+
+If we however insert @eq-payg into @eq-savings_pensions, the expression is more involved:
+
+$$s_t = \frac{w_t}{2+\rho} - \frac{(1+r_{t+1})d_t+(1+\rho)(1+n)d_{t+1}}{(2+\rho)(1+r_{t+1})}. $$ {#eq-PAYG}
+To ease interpretation, we can assume a constant contribution $d_{t+1}=d_t=d$:
+
+$$s_t=\frac{w_t}{2+\rho} - d \frac{(1+r_{t+1}) + (1+\rho)(1+n)}{(2+\rho)(1+r_{t+1})} $$ {#eq-savings}
+
+In this case, each unit of contribution reduces savings by $\frac{(1+r_{t+1}) + (1+\rho)(1+n)}{(2+\rho)(1+r_{t+1})}$. How big is this figure compared to one (the fully-funded benchmark)? Let's try to calibrate with simple values: with $r_{t+1}=0.04$, $\rho=0.02$, $n=0.01$ (low population growth), we get a (derivative) value of $\approx 0.985$, which is slightly below the fully-funded one.  
+
+Since the values are close to the FF system, it also means a level of savings close to half of income.
+
+
+
+## Shifting from PAYG to FF
+
+With the ratio of working-to-retired population growing thinner in most economies, the **burden of contributions** in PAYG systems is becoming unbearable for the younger generations. Hence, a shift towards hybrid or pure fully-funded systems seems unavoidable. But what kind of transition does this imply, and how can it be funded?
+
+### Taxing the young
+
+Obviously, the retired no longer have income, hence funding can only come from the young. In this case, their income is split as follows
+$$w_t=c_{\text{young}, t} + s_t+d+\tau_t,$$ {#eq-switch}
+
+- **consumption**;   
+- standard **savings**;      
+- **contribution** (for retirement);    
+- new **tax** (to fund the transition).  
+
+Future consumption upon retirement will be
+
+$$c_{\text{old}, t+1} = (1+r_{t+1})s_t + (1+r_{t+1})d = (1+r_{t+1})(s_t+d).$$
+
+Combined with the Euler equation $c_{\text{old},t+1}=\frac{1+r_{t+1}}{1+\rho}c_{\text{young},t}$, the above equation implies
+$s_t+d=\frac{c_{\text{young},t+1}}{1+\rho}$. Plugging $c_{\text{young},t}$ in @eq-switch:
+$$w_t = (1+\rho)(s_t+d)+s_t+d+\tau_t=(2+\rho)(s_t+d)+\tau_t$$
+Aggregate savings are then equal to
+$$s_t+d  = \frac{w_t-\tau_t}{2+\rho}.$$
+
+If we assume zero population growth ($n=0$) in @eq-savings, it can be shown ($\rightarrow$ exercise!) that this quantity is higher than in the PAYG system of @eq-PAYG (setting $\tau_t=d$: taxes are 100\% used to fund the older generation).
+
+
+
+### Issuing debt
+
+Taxing the young is not a socially acceptable solution. Resorting to debt seems more reasonable:
+
+$$w_t = c_{\text{young},t} + s_t + d + g_{\text{debt}},$$
+where $g_{\text{debt}}$ is an external asset that the young generation can buy. In this case, the consumption of retirees becomes
+$$c_{\text{old},t+1}= (1+r_{t+1})s_t + (1+r_{t+1})d + (1+r_{t+1})g_{\text{debt}}$$
+and **total savings** are now:
+$$s_t+d = \frac{w_t}{2+\rho}-g_{\text{debt}} = \frac{w_t}{2+\rho}-d,$$
+which is lower than @eq-PAYG when $r>n$. Hence this seems like a pleasant solution! 
