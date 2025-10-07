@@ -1,0 +1,137 @@
+---
+title: "Unified theory of growth"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)   # Package for data wrangling
+library(readxl)      # Package to import MS Excel files
+library(latex2exp)   # Package for LaTeX expressions
+library(quantmod)    # Package for stock data extraction
+library(highcharter) # Package for reactive plots
+```
+
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+# Context
+
+In physics, scientists have tried for decades to build a [**theory of everything**](https://en.wikipedia.org/wiki/Theory_of_everything). There are two theories:   
+- **quantum mechanics**, which tries to explain what happens at very small scales (sub-atomic) - it is based on the strong nuclear, weak nuclear, and electromagnetic forces;  
+- **general relativity**, which seeks to explain what drives stellar bodies at very large scales (based on gravity mostly)
+
+$\rightarrow$ But **reconciling the two is incredibly hard**. 
+
+
+Here the aim is similar, but for economics. Indeed, we have sought to study models that could explain the post-industrial revolution growth.  
+
+At the same time, if a model wants to be exhaustive, it should also explain the centuries of stagnation that occurred before the 18th century (Malthusian stagnation).  
+
+# The model
+
+## Production and utility
+
+We start with the production function
+
+$$Y_t=H_t^a(A_tX)^{1-a},$$
+
+where $H_t$ is the (total) efficiency of labor, $A_t$ is **productivity** and $X$ is the **land** used for production (assumed to be constant...). If we divide by labor $L_t$, with $x_t=A_tX/L_t$,
+$$y_t=h_t^ax_t^{1-a}$$
+
+**Utility** is defined as
+$$u_t=c_t^{1-\gamma}(n_th_{t+1})^\gamma,$$ {#eq-u_t}
+with $c_t$ being consumption, $n_t$ the number of children and $h_{t+1}$ their future efficiency (or "*quality*"). This idea comes from a family of models that consider **overlapping generations**.
+
+The constraint of the model is built as follows. The consumption is bound by income, a wage $w_t$ times quality $h_t$. However, the total time dedicated to work is split between a unit of time, minus the number of children multiplied by the average time required to raise one chlid $\tau$ plus a potential additional effort if the parent wants to increase $h_{t+1}$ for the offspring; this effort is $e_{t+1}$. The (saturated) constraint is then
+$$c_t=w_th_t(1-\underbrace{n_t(\tau+e_{t+1})}_{\text{time for kids}}).$$ {#eq-c_t}
+Basically, potential income $w_th_t$ is split between consumption - or raising children.
+
+Human capital is a function of two components:
+$$h_{t+1}=h(e_{t+1}, g_{t+1}),$$ {#eq-h_t}
+where $g_{t+1}=A_{t+1}/A_t-1$ is the **rate of technological progress** and $e_{t+1}$ is the effort put into **education**.
+
+
+
+## Solution
+
+We plug the consumption value @eq-c_t and human capital @eq-h_t in @eq-u_t:
+$$u_t= (w_th_t(1-n_t(\tau+e_{t+1})))^{1-\gamma}(n_t h(e_{t+1}, g_{t+1}))^\gamma$$
+
+Parents optimize their utility by chosing the number of children $n_t$ and the intensity of education $e_{t+1}$. We have
+\begin{align}
+\frac{\partial u_t}{\partial n_t}=-(1-\gamma)(\tau+e_{t+1}) w_th_t (w_th_t(1-n_t(\tau+e_{t+1})))^{-\gamma}(n_t h(e_{t+1}, g_{t+1}))^\gamma \\ +\gamma n_t^{\gamma-1}(w_th_t(1-n_t(\tau+e_{t+1})))^{1-\gamma} h(e_{t+1}, g_{t+1})^\gamma
+\end{align}
+
+Hence the FOC is
+
+$$(1-\gamma)(\tau+e_{t+1})w_th_t=\gamma n_t^{-1} w_th_t(1-n_t(\tau+e_{t+1}))$$
+
+i.e., given the definition of $c_t$ in @eq-c_t,
+$$\frac{1-\gamma}{\gamma}(\tau+e_{t+1})w_th_t=\frac{c_t}{n_t} \quad \Leftrightarrow \quad  \frac{c_t}{w_th_t}=n_t \frac{1-\gamma}{\gamma}(\tau+e_{t+1}) $$ {#eq-foc1}
+
+But from @eq-c_t, $c_t/(w_th_t)=(1-n_t(\tau+e_{t+1}))$, hence
+
+$$1-n_t(\tau+e_{t+1})=n_t \frac{1-\gamma}{\gamma}(\tau+e_{t+1}) \quad \Leftrightarrow \quad \gamma=n_t(\tau+e_{t+1}),$$
+i.e., the parents will dedicate a proportion $\gamma$ to raising their child(ren).   
+
+Moreover, with respect to **education**, it holds that
+
+\begin{align}\frac{\partial u_t}{\partial e_{t+1}}=-(1-\gamma)w_tn_th_t  (w_th_t(1-n_t(\tau+e_{t+1})))^{-\gamma} (n_th(e_{t+1}, g_{t+1}))^\gamma \\ + \gamma n_t h_e(e_{t+1}, g_{t+1})(w_th_t(1-n_t(\tau+e_{t+1})))^{1-\gamma} (n_th(e_{t+1}, g_{t+1}))^{\gamma-1}
+\end{align}
+
+where $h_e$ is the derivative of *h* w.r.t. *e*. The FOC reduces to
+
+$$(1-\gamma)w_tn_th_t =\gamma c_th_e(e_{t+1}, g_{t+1}) h(e_{t+1}, g_{t+1})^{-1}$$
+
+i.e.,
+
+$$\frac{1-\gamma}{\gamma h_e(e_{t+1}, g_{t+1})} n_t h(e_{t+1}, g_{t+1}) = \frac{c_t}{w_t h_t}  $$
+
+and plugging @eq-foc1, we get
+
+$$\frac{1-\gamma}{\gamma h_e(e_{t+1}, g_{t+1})} n_t h(e_{t+1}, g_{t+1}) =n_t \frac{1-\gamma}{\gamma}(\tau+e_{t+1}) $$
+i.e., 
+$$\frac{h(e_{t+1}, g_{t+1})}{ h_e(e_{t+1}, g_{t+1})}  =\tau+e_{t+1}.$$
+
+A natural assumption is that *h* increases with *e* : **human capital benefits from education**. However, it also makes sense to consider that $h_g<0$ because **technology increases knowledge obsolescence**. Hence, parents will/should invest in education more when technology grows faster to limit the erosion of their child's capabilities.
+
+
+## Closing the loop
+
+The interesting feature of the model is the interplay between technology, population and human capital (investment). These are, in the model: $n_t$ for **population growth** (via $n_t=L_{t+1}/L_t$), $e_t$ for investment in education and $g_t$ for technological growth. The latter has not formally been treated until now. We can make assumptions: $g:=g(e,L)$, that is: technology progress is driven by how much we invest in education (well trained work-force or R&D) and by the population size.
+
+From @eq-foc1, if the left-hand side is fixed, increasing quality via $\tau+e_{t+1}$ imposes to **reduce quantity**, which is a feature observed in many developed countries since the beginning of the XXIst century. The transition from a Malthusian economy to sustainable growth is depicted below. 
+
+![](unified_theory.png)
