@@ -68,6 +68,8 @@ How about **technology**? This could be an interesting factor: a country with ac
 
 We first refer to a recent piece on the drivers of productivity in manufacturing: [Why Is Manufacturing Productivity Growth So Low?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5515863). Therein, the authors report: "*while productivity growth slowdowns are observed in multiple manufacturing industries, most of the measured sector-wide stagnation is quantitatively explained by productivity changes in Computer and Electronic Products Manufacturing (NAICS 334). In fact, nearly all of the manufacturing sector’s productivity growth since 1987—and its deceleration since 2009—can be attributed to this single 3-digit industry.*" 
 
+![](TFP.png)
+
 But: what does the (World Bank) data say for the aggregate economy, knowing that, in developed countries, the manufacturing sector has **considerably shrunk** and represents a minority of output? It's not obvious to proxy for technology. To introduce new variables from the World Bank datasets, we will focus below on R&D (as % of GDP) and researchers (counted per million inhabitants). 
 
 ## In the cross-section
@@ -125,7 +127,8 @@ wb_growth |>
             growth = mean(gdp_growth)) |>
   ggplot(aes(x = RD, y = growth)) + geom_point() +
   theme_classic() + xlab("R&D expenditures (%GDP)") +
-  geom_text_repel(aes(label = country))
+  geom_text_repel(aes(label = country)) +
+  geom_smooth(se = F)
 ```
 
 The link is either far from obvious, or potentially negative, which is not what we would expect, intuitively...
@@ -147,7 +150,8 @@ wb_growth |>
             growth = mean(gdp_growth)) |>
   ggplot(aes(x = nb_R, y = growth)) + geom_point() +
   theme_classic() + xlab("Number of researchers (per million inhab.)") +
-  geom_text_repel(aes(label = country))
+  geom_text_repel(aes(label = country)) +
+  geom_smooth(se = F)
 ```
 
 Same conclusion here... not very convincing!    
@@ -208,7 +212,7 @@ Many models seek to distill technological change in "equilibrium growth", but ma
 
 ## Back to Solow?
 
-Recall a Cobb-Douglas production function, $y=Ak^\alpha$. Suppose now that **technology** allow $A$ to grow, i.e., $\dot{A}_t/A_t=\gamma_A$ ($A_t=A_0e^{\gamma_A t}$). 
+Recall a Cobb-Douglas production function, $y=Ak^\alpha$. Suppose now that **technology** allows $A$ to grow, i.e., $\dot{A}_t/A_t=\gamma_A$ ($A_t=A_0e^{\gamma_A t}$). 
 Then, 
 
 $$\dot{y}_t= \dot{A}_t k_t^\alpha + A_t\alpha \dot{k}_tk_t^{\alpha-1}$$ 
@@ -263,7 +267,7 @@ In the original paper, $\gamma_M$ depends on $\alpha$, on labor and, crucially, 
 
 # Semi-endogenous growth
 
-Here we follow [**R&D-based models of economic growth**](https://www-leland.stanford.edu/~chadj/JonesJPE95.pdf).
+Here we follow [**R&D-based models of economic growth**](https://www-leland.stanford.edu/~chadj/JonesJPE95.pdf), by Jones.
 
 Here, the total labor force is split in two: $L_Y$ for the labor that directly produces output and $L_A$ for the workforce that works in R&D... The production function is
 
@@ -272,7 +276,7 @@ and the interesting part here is the evolution of $A$, which is defined as the *
 $$\dot{A}=\tilde{\delta} L_A^\lambda, \quad \lambda \in (0,1],$$
 i.e., change in innovation is driven by the R&D headcount but possibly at a power smaller than one. $\tilde{\delta}$ is the rate at which "scientists" discover new ideas and products. This rate could depend on the level of knowledge in the economy. Here we assume that
 $$\tilde{\delta}=\delta A^\phi,$$
-where $\phi$ determines the returns of knowledge. Note that it can be negative! In the end,
+where $\phi$ determines the returns of **knowledge**. Note that it can be negative! In the end,
 $$\dot{A}=\delta A^\phi L_A^\lambda \quad \Leftrightarrow \quad \gamma_A= \frac{\dot{A}}{A}=\delta A^{\phi-1}L_A^\lambda. $$
 If we differentiate with respect to $t$, we get
 $$\frac{\partial \gamma_A}{\partial t}=\delta(\lambda L_A^{\lambda-1}A^{\phi-1}\dot{L}_A+\dot{A}(\phi-1)A^{\phi-2}L_A^\lambda).$$
