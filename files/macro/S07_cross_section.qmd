@@ -129,6 +129,8 @@ wb_raw <- WDI(                              # World Bank data
   arrange(country, year) |>
   group_by(country) |>
   mutate(across(everything(), impute)) |>
+  mutate(gdp_growth = gdp_percap/dplyr::lag(gdp_percap) - 1, 
+        .before = "region") |>   
   mutate(gdp_percap = log(lag(gdp_percap))) |>       # log-lag transformation
   ungroup() |>
   filter(lastupdated == max(lastupdated)) |>
@@ -146,10 +148,7 @@ We make a few adjustments to the data, adding GDP per capita growth.
 #| column: 'margin'
 
 wb_growth <- wb_raw |> 
-  filter(region != "Aggregates", income != "Aggregates") |> # Remove continents & co. 
-  group_by(country) |>
-  mutate(gdp_growth = gdp_percap/dplyr::lag(gdp_percap) - 1, .before = "region") |>
-  ungroup()
+  filter(region != "Aggregates", income != "Aggregates") 
 
 wb_growth |> tail(3)
 ```
@@ -220,6 +219,16 @@ wb_growth |>
 Usually, a correlation of 0.5 (in absolute value) is considered already high. A value above 0.7 is prohibitive...  
 So here, it seems we are relatively fine (education and GDP per capita are close, though).
 
+
+Let's have a brief look at numbers; take inflation.  
+Are there outliers or false values?
+
+```{r, message = F, warning = F}
+wb_raw |>
+  group_by(country) |>
+  summarise(avg_inflation = mean(inflation, na.rm = T)) |>
+  na.omit()
+```
 
 
 # Panel models
@@ -552,7 +561,7 @@ colnames(data_energy) <- tolower(colnames(data_energy))
 head(data_energy)
 ```
 
-**NOTE**: "ej" means **exajoules** (=$10^{18}$J).  
+**NOTE**: "ej" means [**exajoules**](https://en.wikipedia.org/wiki/Joule#History) (=$10^{18}$J). It's an important unit in physics and energy-related data.  
 
 ```{r}
 #| message: false
@@ -572,6 +581,25 @@ data_energy |>
   scale_fill_viridis_d()
 ```
 
+Let us also look at **correlations**...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+
+data_energy_wide <- data_energy |> 
+  pivot_wider(names_from = var, values_from = value)
+cor(data_energy_wide |> select(coalcons, gascons, oilcons, renewables),
+    use = "pairwise.complete")
+```
+
+Basically, we should only keep renewables and gas...
+But let's continues anyway out of curiosity.  
+
+
 We then need to **join** this data with the WB data...   
 (with a snapshot at the outome)
 
@@ -581,9 +609,8 @@ We then need to **join** this data with the WB data...
 #| class-source: my_class
 #| classes: my_class
 #| column: margin
-data_join <- wb_growth |> select(-region) |> 
-  full_join(data_energy |> pivot_wider(names_from = var, values_from = value), 
-            by = c("year", "country"))
+data_join <- wb_growth |> select(-region) |>
+  full_join(data_energy_wide, by = c("year", "country"))
 data_join |> select(-region, -income, -subregion) |>  na.omit() |> head()
 ```
 
@@ -601,7 +628,8 @@ fml <- as.formula(paste(fml_0, "| year + country"))
 feols(fml, data = data_join) |> summary()
 ```
 
-
+The negative coefficient on oilcons is troublesome.   
+Any idea where it comes from?
 
 
 # Convergence?
@@ -631,6 +659,7 @@ What about dynamic patterns?
 #| column: margin
 #| fig.height: 4
 #| fig.width: 4
+#| fig.cap: "Growth across income groups"
 wb_growth |> 
   filter(income %in% c("High income", "Low income")) |>
   ggplot(aes(x = year, y = gdp_growth, color = income)) + 
