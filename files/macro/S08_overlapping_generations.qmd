@@ -41,6 +41,7 @@ library(readxl)      # Package to import MS Excel files
 library(latex2exp)   # Package for LaTeX expressions
 library(quantmod)    # Package for stock data extraction
 library(highcharter) # Package for reactive plots
+library(ggsci)       # Package for color palettes
 ```
 
 
@@ -83,11 +84,13 @@ Replacing $c_{t+1,retire}$ and $s_t$ from the constraints, we get that the first
 
 $$\frac{\partial}{\partial c_{t,\text{work}}} \left(\left(\frac{\sigma}{\sigma-1} \right)\left(c_{t, \text{work}}^{1-1/\sigma} + \frac{1}{1+\rho}((1+r_{t+1})(w_t-c_{t,\text{work}}))^{1-1/\sigma}\right) \right)=0$$
 i.e., (again keeping in mind the value of $c_{t+1, retire}$):
-$$c_{t, \text{work}}^{-1/\sigma}-\frac{1+r_{t+1}}{1+\rho}c_{t+1,\text{retire}}^{-1/\sigma}=0,$$
+$$c_{t, \text{work}}^{-1/\sigma}-\frac{1+r_{t+1}}{1+\rho}c_{t+1,\text{retire}}^{-1/\sigma}=0.$$
 
-which simplifies to
-$$\frac{c_{t,\text{work}}}{c_{t+1, \text{retire}}}=\left(\frac{1+r_{t+1}}{1+\rho} \right)^{\sigma}.$$
-This can be viewed as the **Euler equation** for the generation "*born*" at time $t$.
+::: {.callout-note collapse="false"}
+## This simplifies to
+$$\frac{c_{t+1, \text{retire}}}{c_{t,\text{work}}}=\left(\frac{1+r_{t+1}}{1+\rho} \right)^{\sigma},$$
+which can be viewed as the **Euler equation** for the generation "*born*" at time $t$.
+:::
 
 If we divide @eq-constr2 by $c_{t,work}$ in @eq-constr1, we also get the same ratio, hence
 
@@ -114,8 +117,9 @@ Because of this last expression, most of the focus in what comes next is on **sa
 $$\text{savings} \rightarrow \text{capital} \rightarrow \text{production (in CRS model)}$$
 :::
 
+The focus is to understand the effort (of the young generation) that is required to keep the system going. 
 
-## A neat example
+## A tractable example
 
 ### The model
 
@@ -143,7 +147,31 @@ $$r^* = f'(k^*)= \frac{\alpha}{1-\alpha}(2+\rho)(1+n),$$
 which increases with all parameters. 
 :::
 
-With reasonable values, what kind of rate does this imply?
+With reasonable parameter values, what kind of rate does this imply?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 5
+#| fig.height: 3
+rho <- 0.05
+n <- 0.02
+ggplot() + xlim(c(0, 1)) +
+  geom_function(fun = ~ (.x)^(1-.x)*(2+rho)*(1+n), 
+                size = 1, aes(color = paste("n =", n))) +
+  geom_function(fun = ~ (.x)^(1-.x)*(2+rho)*(1-n), 
+                size = 1, aes(color = paste0("n = -", n))) +
+  theme_classic() + xlab("alpha") + ylab("rate") +
+  scale_color_aaas(name = "") + 
+  theme(legend.position = c(0.8,0.2))
+```
+
+These values are *not* plausible for $\alpha > 0.1$.  
+Also, the curves are not too sensitive to $n$ (makes sense, given the formula, but surprising in spirit). 
+
 
 ### Convergence to the steady state
 
@@ -215,14 +243,14 @@ We write:
 - $d_t$ for the **contribution** of a young worker at time $t$;    
 - $b_t$ the the **benefits** received by an old retiree at time $t$.
 
-For simplicity, we assume only two periods.
+For simplicity, we assume only two periods, as before.
 
 ::: {.callout-note collapse="false"}
 ## We want to compare two systems:    
 
 - **pay-as-you go**: the young (working) generations are "taxed" to pay for future retirement benefits (ex: France). In this case, 
 $$b_t=(1+n)d_t$$ {#eq-payg}
-The $(1+n)$ term reflect the potential **difference in population sizes**. If the population grows ($n>0$), then there are more active workers than retirees and the latter can comfortably benefit from a larger benefit. Otherwise (where many developed countries are headed), it's more complicated!
+The $(1+n)$ term reflect the potential **difference in population sizes**. If the population grows ($n>0$), then there are more active workers than retirees and the latter can comfortably benefit from a larger benefit. Otherwise (where many developed countries are headed), it's more complicated!(see below)
 - **fully funded**: the young must save on their own and can consume upon retirement to proceedings of their savings (ex: the United States). Then, straightforwardly,
 $$b_{t+1}= (1+r_{t+1})d_t.$$ {#eq-ff}
 :::
@@ -383,4 +411,4 @@ where $g_{\text{debt}}$ is an external asset that the young generation can buy. 
 $$c_{\text{old},t+1}= (1+r_{t+1})s_t + (1+r_{t+1})d + (1+r_{t+1})g_{\text{debt}}$$
 and **total savings** are now:
 $$s_t+d = \frac{w_t}{2+\rho}-g_{\text{debt}} = \frac{w_t}{2+\rho}-d,$$
-which is lower than @eq-PAYG when $r>n$. Hence this seems like a pleasant solution! 
+which is lower than @eq-PAYG when $r>n$. Hence this seems like a pleasant solution (politically speaking)! 
