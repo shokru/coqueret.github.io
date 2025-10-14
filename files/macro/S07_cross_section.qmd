@@ -165,13 +165,11 @@ In some cases, when no data exists, **forward-filling** is not possible.
 #| class-source: my_class
 #| classes: my_class
 
-vars <- c("gdp_percap", "savings_rate", "inflation", "trade", "debt", "capital_formation" , 
-          "pop_growth", "RD_percap", "educ_level", "educ_spending")
-
-wb_growth |> select(all_of(vars)) |> is.na() |> colMeans()
+wb_growth |> select() |> is.na() |> colMeans()
+vars <- c("gdp_percap", "savings_rate", "inflation", "trade", "capital_formation" , "pop_growth", "educ_level", "educ_spending")
 ```
 
-**Debt** and **R&D** cost a lot of data depletion.  
+**Debt** and **R&D** cost a lot of data depletion: we will remove them from the analysis.  
 Which countries are the most represented in the sample (with no missing point, *after imputation*)?
 
 ```{r}
@@ -182,9 +180,6 @@ Which countries are the most represented in the sample (with no missing point, *
 #| column: 'margin'
 #| fig.width: 5 
 #| fig.height: 7
-
-vars <- c("gdp_percap", "savings_rate", "inflation", "trade", "debt", "capital_formation" , 
-          "pop_growth", "RD_percap", "educ_level", "educ_spending")
 wb_growth |>
   select(all_of(c(vars, "country"))) |>
   na.omit() |>
@@ -227,7 +222,7 @@ Are there outliers or false values?
 wb_raw |>
   group_by(country) |>
   summarise(avg_inflation = mean(inflation, na.rm = T)) |>
-  na.omit()
+  na.omit() |> head(9)
 ```
 
 
@@ -264,13 +259,13 @@ This reduces the number of countries to just 14.
 #| class-source: my_class
 #| classes: my_class
 #| column: margin
-plm_data <- wb_growth |> dplyr::select(all_of(c("country", "year", "gdp_growth", vars))) |> 
-  na.omit() |> group_by(country) |> mutate(n = n()) |> filter(n > 21) |> select(-n)
+plm_data <- wb_growth |> dplyr::select(all_of(c("country", "year", "gdp_growth", "pop", vars))) |> 
+  na.omit() |> group_by(country) |> mutate(n = n()) |> filter(n > 21) |> select(-n) |> ungroup()
 fit_two_way <- plm(formula = gdp_growth ~ . , 
                    data = plm_data,
                    model = "within", effect = "twoways", 
                    index = c("country", "year"))
-summary(fit_two_way)
+# summary(fit_two_way) # PLM hints towards singularity, upon verification, this is false...
 ```
 
 We also store the results for future use. 
@@ -341,8 +336,8 @@ We thus repeat this exercise, but with another library, the `{fixest}` package.
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
-fml_0 <- "gdp_growth ~ gdp_percap + savings_rate + inflation + trade + debt + "
-fml_0 <- paste(fml_0, "capital_formation + pop_growth + RD_percap + educ_level + educ_spending")
+fml_0 <- "gdp_growth ~ gdp_percap + savings_rate + inflation + trade + "
+fml_0 <- paste(fml_0, "capital_formation + pop_growth + educ_level + educ_spending")
 fml <- as.formula(paste(fml_0, "| year"))
 fit_time <- ((feols(fml, data = plm_data)$coefficients)/sqrt(diag(feols(fml, data = plm_data)$cov.iid))) |> 
   data.frame() |> rownames_to_column(var = "variable") |> mutate(type = "time")
@@ -379,7 +374,7 @@ But there are a few conflicts, too. There can be of two types:
 - either the sign changes between the models;     
 - or the significance level changes (e.g., if some models have t-stats above 2 in absolute values, while others do not). 
 
-These results suggest that **population growth** and the **savings rate** (to a slightly lower extent) are solid drivers of growth in wealth. 
+These results suggest that **population growth**, **inflation** and the **savings rate** (to a slightly lower extent) are solid drivers of growth in wealth. 
 
 ## Grouping
 
@@ -394,6 +389,7 @@ Indeed, if we look at the full sample,
 #| classes: my_class
 #| column: margin
 wb_growth |> group_by(income) |> count()
+# wb_growth |> group_by(region) |> count()
 ```
 
 It may seem manageable; but if we impose non-missing points...   
@@ -406,6 +402,7 @@ Then the story is a bit different.
 #| classes: my_class
 #| column: margin
 wb_growth |> na.omit() |> group_by(income) |> count()
+# wb_growth |> na.omit() |> group_by(region) |> count()
 ```
 
 The sample size becomes too small. Indeed, recall that with fixed effects, when estimated with OLS, the **number of columns** increases by a lot (+ number of countries + number of years in the sample).
@@ -451,7 +448,6 @@ The above regression model seeks to link growth with **contemporaneous** variabl
 
 # To be done/discussed in class => grouping!
 ```
-
 
 
 
@@ -573,32 +569,13 @@ head(data_energy)
 #| fig.height: 3
 data_energy |> 
   filter(country == "Total World") |>
-  ggplot(aes(x = year, y = value, fill = var)) + geom_area() +
+  ggplot(aes(x = year, y = value, fill = var)) + geom_area(alpha = 0.8) +
   theme_classic() + 
   theme(axis.title = element_blank(),
         legend.title = element_blank(),
         legend.position = c(0.2, 0.8)) +
   scale_fill_viridis_d()
 ```
-
-Let us also look at **correlations**...
-
-```{r}
-#| message: false
-#| warning: false
-#| class-source: my_class
-#| classes: my_class
-#| column: margin
-
-data_energy_wide <- data_energy |> 
-  pivot_wider(names_from = var, values_from = value)
-cor(data_energy_wide |> select(coalcons, gascons, oilcons, renewables),
-    use = "pairwise.complete")
-```
-
-Basically, we should only keep renewables and gas...
-But let's continues anyway out of curiosity.  
-
 
 We then need to **join** this data with the WB data...   
 (with a snapshot at the outome)
@@ -609,10 +586,44 @@ We then need to **join** this data with the WB data...
 #| class-source: my_class
 #| classes: my_class
 #| column: margin
-data_join <- wb_growth |> select(-region) |>
+data_energy_wide <- data_energy |> 
+  pivot_wider(names_from = var, values_from = value)
+data_join <- plm_data |> 
   full_join(data_energy_wide, by = c("year", "country"))
-data_join |> select(-region, -income, -subregion) |>  na.omit() |> head()
+data_join |> na.omit() |> select(-region, -subregion) |> head()
 ```
+
+We need to scale emissions by a proxy for the size of the country. This will reduce **colinearity** due to size. 
+
+Let us thus look at **correlations**...
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 5
+data_join <- data_join |>
+  mutate(oilcons = oilcons / pop * 10^9,
+         coalcons = coalcons / pop * 10^9,
+         gascons = gascons / pop * 10^9,
+         renewables = renewables / pop * 10^9) |>
+  select(year, country, gdp_growth, coalcons, gascons, oilcons, renewables, vars) |>
+  ungroup() |>
+  distinct()
+
+cor(data_join |> dplyr::select(all_of(c(vars, "coalcons", "gascons", "oilcons", "renewables"))), 
+    use = "pairwise.complete") |>
+  ggcorrplot() + 
+  theme(text = element_text(size = 15),
+        axis.text = element_text(size = 15))
+```
+
+Energy variables remain quite correlated.  
+Basically, we should only keep two, say renewables and gas...
+But let's continue anyway with all four variables, out of curiosity.  
 
 We build a model omitting a few variables.    
 (this is just for illustration)
@@ -623,13 +634,12 @@ We build a model omitting a few variables.
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
-fml_0 <- "gdp_growth ~ gdp_percap + savings_rate + pop_growth + RD_percap + educ_level + oilcons + gascons + coalcons + renewables"
+fml_0 <- "gdp_growth ~ gdp_percap + savings_rate + pop_growth + educ_level + coalcons + renewables"
 fml <- as.formula(paste(fml_0, "| year + country"))
-feols(fml, data = data_join) |> summary()
+(feols(fml, data = data_join))$coeftable 
 ```
 
-The negative coefficient on oilcons is troublesome.   
-Any idea where it comes from?
+Energy not very significant in the end...
 
 
 # Convergence?
@@ -673,11 +683,8 @@ wb_growth |>
   ylim(-0.065, 0.065)
 ```
 
-Hard to make a clear case...   
-
-- the 2000-2015 period speaks in favor of convergence;     
-- but since then, things have reverted;    
-- the most recent points (2024) indicate a status-quo. 
+- the 1960-2010 period argues **against** convergence;         
+- the most recent points (2024) indicate a status-quo, or a reversion...? 
 
 # A step back: heuristic sources of growth
 
