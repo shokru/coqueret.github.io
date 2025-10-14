@@ -97,6 +97,18 @@ If we divide @eq-constr2 by $c_{t,work}$ in @eq-constr1, we also get the same ra
 $$\frac{(1+r_{t+1})s_t}{w_t- s_t}=\left(\frac{1+r_{t+1}}{1+\rho} \right)^{\sigma} \ \Leftrightarrow \ s_t=w_t\left(\frac{1}{1+(1+\rho)^{\sigma}(1+r_{t+1})^{1-\sigma}}\right).$$ {#eq-savings}
 This is the **savings function** and it is proportional to the **income**. All quantities in the denominator are positive, hence the ratio $s_t/w_t$ is smaller than one. 
 
+::: {.callout-tip collapse="false"}
+## Discussion on $\rho$ and $r$
+
+In most of what we covered so far, the time step is usually the year, for simplicity.    
+Here, because we are talking about **generations**, the lag can be substantially larger, for instance 30 years.
+Hence, the parameter values should reflect this. When we imagined $\rho=5\%$, over 30 years, this makes $\rho \approx 330\%$!
+Same for returns, if we imagine an annual rate of 4%, then $r=225\%$...
+
+It's important to keep this in mind for numerical applications. 
+:::
+
+
 ## Firms 
 
 ::: {.callout-tip collapse="false"}
@@ -157,7 +169,7 @@ With reasonable parameter values, what kind of rate does this imply?
 #| column: 'margin'
 #| fig.width: 5
 #| fig.height: 3
-rho <- 0.05
+rho <- 2
 n <- 0.02
 ggplot() + xlim(c(0, 1)) +
   geom_function(fun = ~ (.x)^(1-.x)*(2+rho)*(1+n), 
@@ -169,7 +181,7 @@ ggplot() + xlim(c(0, 1)) +
   theme(legend.position = c(0.8,0.2))
 ```
 
-These values are *not* plausible for $\alpha > 0.1$.  
+These values are plausible for $\alpha > 0.1$ only in a **long-term** perspective.  
 Also, the curves are not too sensitive to $n$ (makes sense, given the formula, but surprising in spirit). 
 
 
@@ -193,7 +205,7 @@ In all generality, it is impossible to simulate the model because the variation 
 
 However, as we have seen in the previous example with Cobb-Douglas production and logarithmic utility, $r_{t+1}$ vanishes from the expression of $k_{t+1}$ in @eq-ksimulable. 
 
-So let's give it a try...
+So let's give it a try... (with short-term parameter values)
 
 ```{r}
 #| message: false
@@ -204,7 +216,7 @@ So let's give it a try...
 #| fig.width: 4
 #| fig.height: 4
 
-rho <- 0.02
+rho <- 0.02 
 n <- 0.01
 alpha <- 0.5
 n_periods <- 20
@@ -368,7 +380,7 @@ To ease interpretation, we can assume a constant contribution $d_{t+1}=d_t=d$:
 
 $$s_t=\frac{w_t}{2+\rho} - d \frac{(1+r_{t+1}) + (1+\rho)(1+n)}{(2+\rho)(1+r_{t+1})} $$ {#eq-savings}
 
-In this case, each unit of contribution reduces savings by $\frac{(1+r_{t+1}) + (1+\rho)(1+n)}{(2+\rho)(1+r_{t+1})}$. How big is this figure compared to one (the fully-funded benchmark)? Let's try to calibrate with simple values: with $r_{t+1}=0.04$, $\rho=0.02$, $n=0.01$ (low population growth), we get a (derivative) value of $\approx 0.985$, which is slightly below the fully-funded one.  
+In this case, each unit of contribution reduces savings by $\frac{(1+r_{t+1}) + (1+\rho)(1+n)}{(2+\rho)(1+r_{t+1})}$. How big is this figure compared to one (the fully-funded benchmark)? Let's try to calibrate with simple values: with $r_{t+1}=2.4$, $\rho=3$, $n=0.0$ (zero population growth), we get a (derivative) value of $\approx 0.435$, which is well below the fully-funded one.  
 
 Since the values are close to the FF system, it also means a level of savings close to half of income.
 
