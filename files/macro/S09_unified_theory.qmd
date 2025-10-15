@@ -151,3 +151,46 @@ From @eq-foc1, if the left-hand side is fixed, increasing quality via $\tau+e_{t
 
 **Demographics** AND **technology** are key!
 :::
+
+
+# Digression on demographics
+
+We rely on [UN data/projections](https://population.un.org/wpp/) below (fetched from Gapminder).  
+Note that in the UN files, population trends depend on **scenarios**...
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+library(httr)
+url <- "https://github.com/shokru/coqueret.github.io/raw/refs/heads/master/files/misc/gapminder_pop.xlsx"
+temp_file <- tempfile(fileext = ".xlsx")
+req <- GET(url, write_disk(path = temp_file))
+pop <- read_excel(temp_file, sheet = 4) 
+delta <- pop |> filter(time == 2025 | time == 2100) |>
+  pivot_wider(names_from = time, values_from = Population) |>
+  group_by(name) |>
+  summarise(delta_per_year = (`2100`-`2025`)/75/10^6,
+            delta_relative = (`2100`-`2025`)/`2025`) |>
+  na.omit() |>
+  arrange(delta_per_year)
+delta |> head(9)
+```
+Challenging times ahead for China... (fertility is not something easy to incentivize). 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+delta |> tail(9)
+```
+
+A first major question will be that of demographic transition for African countries (will it occur?).    
+A second one may be **climate change**: how it will affect fertility and mortality is an important unknown. 
+
+
+

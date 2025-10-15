@@ -2324,12 +2324,13 @@ window.Quarto = {
   <li><a href="#solution" id="toc-solution" class="nav-link" data-scroll-target="#solution">Solution</a></li>
   <li><a href="#closing-the-loop" id="toc-closing-the-loop" class="nav-link" data-scroll-target="#closing-the-loop">Closing the loop</a></li>
   </ul></li>
+  <li><a href="#digression-on-demographics" id="toc-digression-on-demographics" class="nav-link" data-scroll-target="#digression-on-demographics">Digression on demographics</a></li>
   </ul>
 </nav>
 </div>
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -2452,6 +2453,152 @@ Bottomline
 </div>
 </div>
 </section>
+</section>
+<section id="digression-on-demographics" class="level1 page-columns page-full">
+<h1>Digression on demographics</h1>
+<p>We rely on <a href="https://population.un.org/wpp/">UN data/projections</a> below (fetched from Gapminder).<br>
+Note that in the UN files, population trends depend on scenarios…</p>
+<div class="cell my_class page-columns page-full">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r my_class code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;https://github.com/shokru/coqueret.github.io/raw/refs/heads/master/files/misc/gapminder_pop.xlsx&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>temp_file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">&quot;.xlsx&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>req <span class="ot">&lt;-</span> <span class="fu">GET</span>(url, <span class="fu">write_disk</span>(<span class="at">path =</span> temp_file))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(temp_file, <span class="at">sheet =</span> <span class="dv">4</span>) </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>delta <span class="ot">&lt;-</span> pop <span class="sc">|&gt;</span> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">2025</span> <span class="sc">|</span> time <span class="sc">==</span> <span class="dv">2100</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> time, <span class="at">values_from =</span> Population) <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(name) <span class="sc">|&gt;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">delta_per_year =</span> (<span class="st">`</span><span class="at">2100</span><span class="st">`</span><span class="sc">-</span><span class="st">`</span><span class="at">2025</span><span class="st">`</span>)<span class="sc">/</span><span class="dv">75</span><span class="sc">/</span><span class="dv">10</span><span class="sc">^</span><span class="dv">6</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">delta_relative =</span> (<span class="st">`</span><span class="at">2100</span><span class="st">`</span><span class="sc">-</span><span class="st">`</span><span class="at">2025</span><span class="st">`</span>)<span class="sc">/</span><span class="st">`</span><span class="at">2025</span><span class="st">`</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">na.omit</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(delta_per_year)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>delta <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<div class="no-row-height column-margin column-container"><div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">delta_per_year</th>
+<th style="text-align: right;">delta_relative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">China</td>
+<td style="text-align: right;">-10.4363731</td>
+<td style="text-align: right;">-0.5527365</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Brazil</td>
+<td style="text-align: right;">-0.6593112</td>
+<td style="text-align: right;">-0.2323565</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Japan</td>
+<td style="text-align: right;">-0.6167665</td>
+<td style="text-align: right;">-0.3757610</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">South Korea</td>
+<td style="text-align: right;">-0.3975765</td>
+<td style="text-align: right;">-0.5771231</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Thailand</td>
+<td style="text-align: right;">-0.3475306</td>
+<td style="text-align: right;">-0.3639325</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ukraine</td>
+<td style="text-align: right;">-0.3171063</td>
+<td style="text-align: right;">-0.6101268</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Italy</td>
+<td style="text-align: right;">-0.3169259</td>
+<td style="text-align: right;">-0.4018756</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Turkey</td>
+<td style="text-align: right;">-0.2979596</td>
+<td style="text-align: right;">-0.2548538</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Poland</td>
+<td style="text-align: right;">-0.2508143</td>
+<td style="text-align: right;">-0.4931993</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div></div>
+<p>Challenging times ahead for China… (fertility is not something easy to incentivize).</p>
+<div class="cell my_class page-columns page-full">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r my_class code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>delta <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">9</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+<div class="no-row-height column-margin column-container"><div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">name</th>
+<th style="text-align: right;">delta_per_year</th>
+<th style="text-align: right;">delta_relative</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Egypt</td>
+<td style="text-align: right;">1.113722</td>
+<td style="text-align: right;">0.7056857</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Sudan</td>
+<td style="text-align: right;">1.136381</td>
+<td style="text-align: right;">1.6497303</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Afghanistan</td>
+<td style="text-align: right;">1.151635</td>
+<td style="text-align: right;">1.9699938</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Angola</td>
+<td style="text-align: right;">1.480074</td>
+<td style="text-align: right;">2.8433766</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Tanzania</td>
+<td style="text-align: right;">2.563851</td>
+<td style="text-align: right;">2.7257282</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ethiopia</td>
+<td style="text-align: right;">3.090901</td>
+<td style="text-align: right;">1.7111835</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nigeria</td>
+<td style="text-align: right;">3.189600</td>
+<td style="text-align: right;">1.0071243</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pakistan</td>
+<td style="text-align: right;">3.410414</td>
+<td style="text-align: right;">1.0022001</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Congo, Dem. Rep.</td>
+<td style="text-align: right;">4.238360</td>
+<td style="text-align: right;">2.8172472</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></div></div>
+<p>A first major question will be that of demographic transition for African countries (will it occur?).<br>
+A second one may be <strong>climate change</strong>: how it will affect fertility and mortality is an important unknown.</p>
 </section>
 
 </main>
