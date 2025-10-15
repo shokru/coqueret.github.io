@@ -1,0 +1,480 @@
+---
+title: "Unemployment"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)   # Package for data wrangling
+library(readxl)      # Package to import MS Excel files
+library(latex2exp)   # Package for LaTeX expressions
+library(quantmod)    # Package for stock data extraction
+library(highcharter) # Package for reactive plots
+library(WDI)         # Package for World Bank data
+library(ggsci)       # Package for cool color palettes
+```
+
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+# Context
+
+## Motivation
+
+**Unemployment** is going to be a major concern in the years to come. In particular because of the **effect of AI** on the **labor market**, see for instance:
+
+- [Canaries in the Coal Mine? Six Facts about the Recent Employment Effects of Artificial Intelligence](https://digitaleconomy.stanford.edu/publications/canaries-in-the-coal-mine/)   
+- [Generative AI as Seniority-Biased Technological Change: Evidence from U.S. Résumé and Job Posting Data](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5425555)
+
+From the first paper:  
+
+![](canaries.png){width=500 fig-align="center"}
+
+
+And from the second one (*Time Series of Junior and Senior Employment in Sample Firms*, normalized in 2015): 
+
+![](seniority_bias.png){width=500 fig-align="center"}
+
+## Trends & salient facts
+
+We first download the data from the [World Bank](https://data.worldbank.org/).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 4 
+#| fig.height: 2
+#| cache: true
+wb_raw = WDI(indicator = c("unemp_advanced" = "SL.UEM.ADVN.ZS",     # Advanced education (% LF with Adv Ed.)
+                           "unemp_female" = "SL.UEM.TOTL.FE.ZS",    # % of female LF
+                           "unemp_male" = "SL.UEM.TOTL.MA.ZS",      # % of male LF
+                           "unemp" = "SL.UEM.TOTL.ZS",
+                           "pop" = "SP.POP.TOTL"
+                           ), 
+             #country = c('FR','US'), # here you can specify some countries
+             extra = TRUE,
+             start = 1960, 
+             end = 2025) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c)
+```
+
+We then start with a brief **overview** over the past decades (the data starts in 1990).   
+We easily identify major economic/financial shocks/events. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4 
+#| fig.height: 3
+wb_raw |> 
+  filter(country == "World", year > 1995) |> 
+  ggplot(aes(x = year, y = unemp)) + geom_line() +
+  theme_classic() + 
+  theme(legend.position = c(0.2, 0.3),
+        title = element_text(face = "bold"),
+        legend.title = element_blank(),
+        axis.title = element_blank()) +
+  annotate("text", x = 2020, y = 6.8, label = "Covid", color = "blue") +
+  annotate("text", x = 2009, y = 6.7, label = "Great\nDepression", color = "blue") +
+  annotate("text", x = 2002, y = 6.7, label = "Tech\nBubble", color = "blue") +
+  ggtitle("Unemployment rate (%)")
+```
+
+Second, let's take a look at **gender parity**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4 
+#| fig.height: 3
+wb_raw |> 
+  filter(country == "World", year > 1995) |> 
+  pivot_longer(unemp_female:unemp_male, names_to = "gender", values_to = "value") |>
+  ggplot(aes(x = year, y = value, color = gender)) + geom_line() +
+  theme_classic() + 
+  theme(legend.position = c(0.2, 0.3),
+        title = element_text(face = "bold"),
+        legend.title = element_blank(),
+        axis.title = element_blank()) +
+  scale_color_d3(labels = c("female", "male")) +
+  ggtitle("Unemployment rate (%)")
+```
+
+Covid had a strong effect on the employment bias. But since then, it's back to business-as-usual. Though, worldwide, female unemployment is at an all-time low, too.   
+
+A snapshot at the **educated** workforce (in the US this time).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin 
+#| fig.width: 4 
+#| fig.height: 3
+wb_raw |> 
+  filter(country == "United States", year > 1995) |>
+  pivot_longer(c(unemp_advanced,unemp), names_to = "type", values_to = "value") |>
+  ggplot(aes(x = year, y = value, color = type)) + geom_line() +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.82,0.89)) +
+  scale_color_aaas(labels = c("total population", "advanced educ.")) + 
+  ggtitle("Unemployment rate (%)")
+```
+
+Education does seem worthwhile on the job market!   
+
+Finally, what about the impact of income? (mind the population-weighted average in the code)  
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin 
+#| fig.width: 4 
+#| fig.height: 3
+wb_raw |>
+  filter(year > 1980, is.finite(unemp), !(income %in% c("Aggregates", "Not classified"))) |> 
+  group_by(year, income) |>
+  mutate(weight = pop / sum(pop)) |>
+  summarise(unemp = sum(unemp * weight)) |> na.omit() |>
+  ggplot(aes(x = year, y = unemp, color = income)) + geom_line() +
+  theme_classic() + 
+  theme(axis.title = element_blank(), legend.position = "bottom") + 
+  guides(color=guide_legend(nrow=2,byrow=TRUE))
+```
+
+Situations have changed a lot. The rate is much more stable for lower income economies. 
+
+
+# A model of job search with reserve wage
+
+A standard (the only!) reference for this section is [Search-Theoretic Models of the Labor Market: A Survey
+](https://www.aeaweb.org/articles?id=10.1257/002205105775362014). 
+
+
+## Discrete time
+
+An agent seeks a **job** that will pay a **wage** $w$. Now, $w$ is considered to be a positive **random variable** with cumulative distribution function $F$.  The agent seeks to maximize the **average discounted cash flows** she will receive:
+$$\mathbb{E}\left[\sum_{t=0}^\infty \beta^t x_t  \right],$$
+where 
+$$x_t = \left\{ \begin{array}{l l} w & \text{if she takes the job} \\ b & \text{if she remains unemployed} \end{array} \right.$$
+where $b$ is some constant that comes from country specific welfare programs. $\beta=(1+\rho)^{-1}$ is the **discounting factor**.  
+
+The value of taking the job, if we assume that the agent takes the job **forever** (a big assumption) is 
+$$W(w) = w + \beta W(w),$$
+where the first term comes the first wage and the second one comes from the fact that in period two, the value will remain the same, but discounted at rate $\beta$. When $w$ is fixed, the lifetime value yield exactly this result:
+$$W = w \sum_{t=1}^\infty \beta^t =\frac{w}{1-\beta}.$$
+
+The value of **not taking** the job is a bit more complex to evaluate. For the first period, the gain is $b$, but for the second period, the agent will have to choose between refusing the job again (remaining unemployed), or accepting it, hence:
+$$U = b + \beta \mathbb{E}[\max(U, W(w))].$$ {#eq-U}
+
+Now, because $W$ is linearly increasing with $w$, there is a wage $w_R$, called the **reservation wage** that satisfies
+$$W(w_R)=U;$$
+
+implied that the searcher will accept the job offer if $w>w_R$ (the wage is attractive) or decline it otherwise (it's more convenient not to work). In particular, this implies that
+$$U=\frac{w_R}{1-\beta}.$$
+
+Plugging this in @eq-U, we infer
+$$\frac{w_R}{1-\beta} = b + \frac{\beta}{1-\beta}\mathbb{E}[\max(w,w_R)]$$
+
+If we subtract $\frac{w_R\beta}{1-\beta}$ from each side, we get:
+
+\begin{align}
+w_R & = b + \frac{\beta(1-w_R)}{1-\beta} \int_0^\infty\max(w,w_R)dF(w)  \\
+& = b + \frac{\beta}{1-\beta}\left( \int_0^{w_R} w_R dF(w) +  \int_{w_R}^\infty w dF(w) - w_R  \right) \\
+& = b + \frac{\beta}{1-\beta}\left( \int_{w_R}^\infty(w-w_R) dF(w) +      \right)
+\end{align}
+
+::: {.callout-note collapse="false"}
+## Expression for the reservation wage
+
+Finally, using **integration by part**, we reach the following expression
+$$w_R=b+\frac{\beta}{1-\beta}\int_{w_R}^\infty(1-F(w))dw.$$
+
+An interesting feature of the above expression is that $w_R$ increases with $\beta$. A small $\beta$ (preference for the present, meaning that waiting is painful) implies a **smaller reservation wage**. The searcher is more **impatient** in this case. 
+
+:::
+
+## Towards continuous time
+
+If we generalize to any time step $\Delta$ with $\beta = (1+\Delta r)^{-1}$. Then, we get, for the value of accepting:
+$$W(w) = \Delta w + \beta W(w).$$
+Next, suppose that the worker gets a job offer with wage $w$ with probability $\alpha \Delta$ in each period, then the value for declining the offer is
+$$U = \Delta b + \underbrace{\frac{\alpha \Delta}{1+r\Delta} \mathbb{E}[\max(U,W(w))]}_{\text{if there is an offer}} + \underbrace{\frac{(1-\alpha \Delta))}{1+r\Delta}U}_{\text{if there is no offer}}.$$
+**Note**: $\alpha$ can be interpreted as a **search intensity**.   
+Hence,
+$$rW(w)=(1+r\Delta)w$$ {#eq-W_baseline}
+and 
+$$rU = (1+r\Delta)b + \alpha \int_0^\infty \max(0, W(w)-U)dF(w).$$ {#eq-U_baseline}
+In the limit ($\Delta \rightarrow 0$), in **continuous time**, the objective becomes $\mathbb{E}\left[\sum_{t=0}^\infty e^{-rt} x_t  \right]$ and $W=w \int_0^\infty e^{-rt}dt=w/r$ (equivalent to @eq-W_baseline). Moreover,
+the above equation reduces to 
+$$rU = b + \alpha \int_0^\infty \max(0, W(w)-U)dF(w).$$
+Since, again, $W(w_R)=U$ and $W(w_R)=w_R/r$, $rU=w_R$, so
+$$w_R =b+ \frac{\alpha}{r} \int_{w_R}^\infty(w-w_R)dF(w)$$
+Again integrating by parts, we end up with
+$$w_R = b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw$$
+Here, the search intensity $\alpha$ is exogenous but it could be optimized by the job seeker, modulo a cost, say $g(\alpha)$ - for instance to pay an online service to get access to more postings. The objective of the seeker is to maximize the reserve wage (minus the cost $g(\alpha)$):
+$$b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw - g(\alpha).$$ {#eq-eq1}
+The FOC associated to this is (differentiating w.r.t. $\alpha$):
+$$\int_{w_R}^\infty(1-F(w))dw=rg'(\alpha).$$ {#eq-eq2}
+The full model requires to solve @eq-eq1 and @eq-eq2.
+
+In this model, the **duration of unemployment** can be characterized. The probability that the searcher has not found a job after time $t$ is $e^{-Ht}$ with $H=\alpha(1-F(w_R))$ being the **hazard rate**, the product of the **contract arrival rate** $(\alpha)$ and the **probability of acceptance**.  
+
+
+## Layoff risk
+
+In the previous model, a job was eternal. This is unlikely in practice, especially in the modern labor market, see, e.g., in the US:    
+
+- [state level separation rates from the **BLS**](https://www.bls.gov/charts/state-job-openings-and-labor-turnover/state-total-separations-rates.htm)  
+- [national separation rate from the **FRED**](https://fred.stlouisfed.org/series/JTSTSR)  
+- [**JOLTS** from the **BLS**](https://www.bls.gov/jlt/): Job Openings and Labor Turnover Survey.
+
+Each month, ~3-4% of workers lose or change jobs. 
+
+![](separations_FRED.png)
+
+This makes a reasonable rotation (except for Covid!).    
+An important distinction being whether **departures** are **voluntary** or not...
+
+
+In the previous model, we can add a parameter that will code **job termination** (for whatever reason): $\lambda$ is the Poisson intensity that parametrizes the occurrence of the termination of the working contract. Hence, over a period $\Delta$, the probability of losing/changing jobs is $\lambda \Delta$. 
+
+The equivalent of @eq-W_baseline is now
+
+$$W(w) = \Delta w + \frac{W(w)}{1+r\Delta} (1-\lambda \Delta)+ \frac{U\lambda \Delta}{1+r\Delta}$$
+
+Hence,
+$$(1+r\Delta)W(w) = \Delta w + W(w)(1-\lambda \Delta)+U\lambda \Delta$$
+and thus,
+$$rW(w) = w + \lambda(U-W(w)).$$ {#eq-W2}
+The likelihood of job loss does not affect @eq-U_baseline (there is no job to lose). This implies:
+$$W(w) = \frac{w + \lambda U}{r + \lambda}$$ {#eq-W3}
+
+Plus, it still holds that $U=W(w_R)=\frac{w_R+\lambda U}{r+\lambda}$, so that, again, $w_R=rU$. With @eq-U_baseline, this yields:
+$$w_R= b+ \alpha \int_{0}^\infty \max\left( 0,\frac{w+\lambda U}{r+\lambda}-U \right)dF(w),  $$
+which is equivalent to
+$$w_R = b + \frac{\alpha}{r+\lambda}\int_{w_R}^\infty (w-w_R) dF(w)$$
+Hence: there is no big chance, except that $\lambda$ **reduces** the reservation wage! Indeed, if there is more **layoff uncertainty**, it is logical that the job seeker will accept a slightly **lower salary**. 
+
+
+## Job transitions and equilibrium unemployment
+
+We now dig a bit deeper into the details of **turnover**. We add the new hypothesis that new job offers arrive at rate $\alpha_0$ when a worker is unemployed and at rate $\alpha_1$ when she is employed. The wage of the offer is again distributed according to $F$. Job loss still occurs at rate $\lambda$. 
+The "value" of **unemployment** is
+$$rU = b + \alpha_0 \int_{w_R}^\infty (W(w)-U)dF(w),$$
+while the value of **work** reads
+
+$$rW(w) = w + \alpha_1\int_0^\infty \max(0,W(w')-W(w))dF(w') + \lambda (U-W(w)),$$
+where the integral part pertains to the choice of **switching job** (& accepting a higher wage $w'$) and the last part relates to **job loss**. 
+
+::: {.callout-tip, collapse = "false"}
+## Side note
+
+Differentiating the above equality w.r.t. $w$ leads to 
+$$rW'(w) = 1 - \alpha_1\left(\int_w^\infty W'(w) dF(w') \right)-\lambda W'(w), $$
+i.e., 
+$$W'(w)=(z+\lambda+\alpha_1(1-F(w)))^{-1}$$ {#eq-Wprime}
+:::
+
+It still holds that $U=W(w_R)$. If we set $w=w_R$ in the above equation and combine it with the value of unemployment (the two are equal), we reach 
+
+$$w_R=b+(\alpha_0-\alpha_1)\int_{w_R}^\infty (W(w')-W(w_r))dF(w').$$
+The reservation wage is attractive (compared to $b$) only if $\alpha_O>\alpha_1$: receiving offers more frequently when employed *reduces* $w_R$. 
+
+Using integration by parts as well as @eq-Wprime, we finally reach
+$$w_R = b + (\alpha_0-\alpha_1)\int_{w_R}^\infty \left(\frac{1-F(w)}{r+\lambda+\alpha_1(1-F(w))} \right)dw$$
+With a few final assumptions, we can derive an **equilibrium unemployment rate**. Suppose unemployed workers find and accept a job at rate $\alpha_0 (1-F(w_R))=\alpha_0 \mathbb{P}[w>w_R]$ and employed workers lose theirs at rate $\lambda$, then the dynamics of **un**employment are given by
+$$\dot{u}=\lambda (1-u) - \alpha_0(1-F(w_R))u$$
+
+::: {.callout-important}
+## Long-term unemployment rate
+Hence, $u$ is stable if $\dot{u}=0$, i.e., if
+$$u^*=\frac{\lambda}{\lambda + \alpha_0(1-F(w_R))}.$$
+:::
+
+Long-term unemployment decreases with $\alpha_0$, which makes perfectly sense, and increases with $\lambda$ (likelihood of losing job), which is also entirely logical. 
+
+# Matching
+
+This section lays out a line of thinking in the spirit of the contributions that obtained the [2010 Nobel prize](https://www.nobelprize.org/prizes/economic-sciences/2010/summary/): the Diamond-Mortensen-Pissarides model. 
+
+## Notations
+
+- On the supply side of labor, let $E$ and $U$ denote the number of employed and unemployed workers so that the total labor force if $L=E+U$.    
+- On the demand side, the number of filled jobs is $F$ and the number of vacant ones is $V$.   
+
+Hence, the economy needs to **match** $U$ with $V$. The number of matches is modeled à la **Cobb-Douglas**,
+
+$$M(U,V)=KU^\beta V^\gamma, \quad (\beta, \gamma) \in (0,1)^2.$$ {#eq-matches}
+
+We assume that when there is a match, a contract is signed, and both $U$ and $V$ are reduced by one unit.   
+The variation in employed workers is then given by
+
+$$\dot{E} = M(U,V)-bE,$$
+where $b$ is an exogenous rate of job destruction. Moreover, we write
+
+$$a_U = \frac{M(U,V)}{U}, \quad a_V = \frac{M(U,V)}{V}$$
+
+for the rates at which **unemployed workers** find a job and at which **vacancies** are filled. 
+
+## Optimizations
+
+Now let's dive into the details.
+
+### Setup
+
+- The firm proposes a wage $w$ to the worker who derives a lifetime utility of $W(w)$ from this wage. $W$ stands for the value of work.  
+- On the other end of the contract, the firm will be able to produce an output of value $y$ from the worker and thus derive a profit of $\pi=y-w$ and we write $J=\mathbb{E}[\pi]$ for the average of this (expected) profit. $J$ is the value of the work for the firm. 
+
+If the **contract** is not signed, then the worker's payoff (or utility) decreases to that of $U$ (as before), and for the firm, it decreases to $V$, the value of the vacancy. Hence "things will happen" only if $W>U$ and $J>V$ and this is entirely determined through $w$: the worker will of course accept an extra large salary and, on the other hand, the firm would naturally welcome worker who work for free. And this is when **bargaining** comes into play. 
+
+To blend the two utilies, we consider their product and try to solve the following program:
+
+$$w^* = \underset{w}{\arg \max} \ (W(w)-U)^\theta (J(y-w)-V)^{1-\theta},$$
+where $\theta \in (0,1)$ tunes the relative importance towards one or the other participant. It can be viewed as the **bargaining power of the worker**. 
+
+
+::: {.callout-note collapse="false"}
+## The first order condition
+
+Differentiating w.r.t. $w$ to get the FOC, we reach:
+\begin{align}
+& \theta W'(w) (W(w)-U)^{\theta-1}(J(y-w)-V)^{1-\theta} \\
+=& (1-\theta)J'(y-w)(W(w)-U)^\theta(J(y-w)-V)^{-\theta},
+\end{align}
+
+which simplifies to 
+$$\theta W'(w) (J(y-w)-V)= (1-\theta)J'(y-w)(W(w)-U).$$ {#eq-FOC}
+:::
+
+### Solving the bargain
+
+If we further assume that matches end (exogenously) at rate $\lambda$ as before, then, we get @eq-W2. On the firm's side, the value of the contract satisfies
+$$J(\pi) = \Delta \pi + \frac{J(\pi)}{1+r\Delta} (1-\lambda \Delta)+ \frac{V\lambda \Delta}{1+r\Delta},$$
+which translates to 
+$$rJ(\pi)= \pi + \lambda(V-J(\pi)), $$
+i.e., exactly the same form as @eq-W2. If we differentiate either of these expression w.r.t. $w$, we get: $r J'(\pi) = -\lambda J'(\pi)$, thus, $W' = J' = (r + \lambda)^{-1}.$ Substituting into @eq-FOC, we get:
+$$\theta (J(y-w)-V) = (1-\theta) (W(w)-U), $$
+i.e., 
+$$W(w) = U  + \theta(J(y-w)+W(w) - U - V) = U+\theta S,$$ {#eq-W4}
+with 
+$$S = J-V+W-U  $$ {#eq-S}
+being a **surplus**. $S$ can be interpreted as the **joint payoff** (for both the firm and the worker). Thanks to @eq-W2 and its equivalent for $J$, we have that $W(w)= \frac{w+\lambda U}{r+\lambda}$ and $J = \frac{\pi+\lambda V}{r+\lambda}$. Plugging this into the above equation, the surplus equals
+\begin{align*}
+S &=  \frac{\pi+\lambda V}{r+\lambda} +  \frac{w+\lambda U}{r+\lambda}-U-V \\
+&= \frac{y - r(U+V)}{r+\lambda}
+\end{align*}
+which is surprisingly **independent from the wage**! 
+
+Again from @eq-W3 and recalling $w_R = rU$, we have that $W(w)-U= \frac{w+\lambda U}{r+\lambda}-U = \frac{w- w_R}{r+\lambda}$ and similarly
+$$J-V=\frac{\pi - \pi_R}{r+\lambda},$$
+
+with $\pi_R$ acting as **reservation** (or target) **profit** for the firm. The optimization function then becomes
+$$\underset{w}{\arg \max} (w-w_R)^\theta(y-w-\pi_R)^{1-\theta}.$$
+
+::: {.callout-note collapse="false"}
+## Solution for $w$
+
+In the end, the FOC leads to 
+$$w=w_R+\theta(y-\pi_R-w_R).$$
+:::
+
+The worker will thus only accept the contract if $y>\pi_R+w_R$, that is, if her production potential exceeds the sum of reservation (wage+profit). This last part naturally comes from the objective of the firm that wants to extract sufficient value from the worker (=bargain!). 
+
+## Combining matching & bargaining
+
+For the firm, the value of posting a vacancy is (obtained similarly as all the above examples, left as exercise here)
+$$rV = -k + \alpha_V (J-V),$$
+
+where $k$ is the cost of recruiting and $\alpha_V$ is the frequency of posting. 
+
+
+
+::: {.callout-note collapse="false"}
+## We then assume a **free-entry condition**: 
+
+There is no cost for firms to enter the market; vacancies are created until their value decreases to zero. This greatly simplifies the model, as we now have 
+$$\alpha_V J = k.$$ 
+:::
+
+On the other side, the *value* of **unemployment** is
+$$rU = b + \alpha_U(W(w)-U).$$
+
+Combined with @eq-W4, this gives 
+$$rU=b+\alpha_U \theta S.$$ {#eq-U2} 
+We recall the expression for the **surplus**: $rU=y-(r+\lambda)S$. Equating the two yields
+$$y-b = (r+\lambda + \alpha_U \theta)S,$$ {#eq-eq}
+
+Output minus the value of unemployment is proportional to the surplus. Now let us determine the **wage**. @eq-W2 implies (subtracting $rU$ on both sides) $$W-U=\frac{w-rU}{r+\lambda},$$
+and since bargaining leads to $W-U=\theta S$ (@eq-W4), it holds that
+$$w-rU=(r+\lambda)\theta S.$$
+
+But we also have from @eq-U2, so that
+$$w=b+\alpha_U\theta S + (r+\lambda)\theta S.$$
+and 
+$$y-w = y - b - (\alpha_U+r+\lambda)\theta S$$
+
+Moreover, plugging @eq-eq into the above gives
+$$y-w = (r+\lambda+\alpha_U \theta)S - (\alpha_U+r+\lambda)\theta S.$$
+
+::: {.callout-note collapse="false"}
+## Finally, we arrive at (upon rearranging)
+$$w = y-(r+\lambda)(1-\theta)S.$$
+:::
+
+## Heterogenous productivity
+
+In the above model, matching is stylized in that we assume that each contact leads to a match and that worker productivity $(y)$ is fixed. But what if we relax this assumption and assume that $y$ is a random variable, again with distribution $F$? (though not the same as the previous one!) Henceforth, we index quantities with $y$ to underline this dependence.  
+
+
+
+
+
+
+
+
