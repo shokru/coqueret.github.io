@@ -686,6 +686,11 @@ wb_growth |>
 - the 1960-2010 period argues **against** convergence;         
 - the most recent points (2024) indicate a status-quo, or a reversion...? 
 
+This is supported by [What Remains of Cross-Country Convergence?
+](https://www.aeaweb.org/articles?id=10.1257/jel.20181207):
+
+![](convergence.png)
+
 # A step back: heuristic sources of growth
 
 (see [CSV](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/), section 7.2)
