@@ -95,6 +95,7 @@ Let us depict the growth rate of the **world's GDP**.
 wb_raw |>
   filter(country == "World") |>
   ggplot(aes(x = year, y = gdp_growth)) + geom_hline(yintercept = 0, linetype = 2, color = "gray") + 
+  geom_hline(yintercept = 3.46, linetype = 3, color = "red", alpha = 0.5) +  # Sample average
   geom_line(linewidth = 1.2) +
   ggtitle("GDP growth rate (%) - World") + 
   theme_classic() + 
@@ -152,9 +153,9 @@ where $\psi$ determines the relative importance of work versus leisure (and $\rh
 The trade-off between leisure and work is obtained by seeing that 
 $$c_t = w_t(1-h_t) + (1+r_t)k_t-c_t-k_{t+1},$$
 and plugging this in the utility and differentiating w.r.t. $h_t$ leads to 
-$$w_t(1-\phi)u'(c_t)=\phi v'(h_t),$$
+$$w_t(1-\psi)u'(c_t)=\psi v'(h_t),$$
 so that if we assume **log-utility**,
-$$w_t(1-\phi)h_t=\phi c_t.$$
+$$w_t(1-\psi)h_t=\psi c_t.$$
 
 
 We recall the **Euler equation**:
@@ -164,9 +165,10 @@ which, under **logarithmic utility** (again) gives
 $$c_t^{-1} = \frac{1+r_{t}}{1+\rho} \mathbb{E}_t[c_{t+1}^{-1}],$$
 
 
-As the model is anyway impossible o solve numerically, we can instead try to exploit it via **simulations**. We can thus imagine an **auto-regressive process** for consumption as well:
-$$c_{t+1}=\frac{1+r_{t}}{1+\rho}c_t + \sigma \epsilon_{t+1}$$
+As the model is anyway impossible to solve numerically, we can instead try to exploit it via **simulations**. We can thus imagine an **auto-regressive process** for consumption as well:
+$$c_{t+1}=\frac{1+r_{t}}{1+\rho}c_t + \sigma \epsilon_{t+1},$$
 
+though, as we will see, in this case the autoregressive parameter should be larger than one (consumption grows steadily). One corollary is that we cannot estimate an AR(1) process for this.
 
 # Digressions via ILO data
 
@@ -205,7 +207,7 @@ ilo_hours |>
   ggplot(aes(x = year, y = value, color = gender)) + geom_line(linewidth = 1.2) + 
   theme_classic() + 
   ggtitle("Weekly hours worked in the US") + 
-  theme(legend.position = c(0.9, 0.95),
+  theme(legend.position = c(0.9, 0.98),
         axis.title = element_blank(),
         title = element_text(face = "bold"),
         legend.text = element_text(size = 10),
@@ -258,25 +260,8 @@ ilo_wages |>
 
 ## Calibration
 
-Thanks to World Bank data, we can try to estimate some of these quantities.
-
-```{r}
-#| message: false
-#| warning: false
-#| class-source: my_class
-#| classes: my_class
-wb_data |>
-  filter(country == "United States") |>
-  mutate(c_growth = consumption/dplyr::lag(consumption) - 1) |>
-  pull(c_growth) |>
-  sd(na.rm = T)
-```
-
-
-
-# Simulations
-
-Below, we assume $r_t=0$ for simplicity and exogenous wages $w_t=e^{r_wt}$ following deterministic inflation. We start by setting the parameters and initializing the variables.
+Thanks to World Bank data, we can try to estimate some of these quantities.  
+For instance, for the volatility of consumption... or its shocks. 
 
 ```{r}
 #| message: false
@@ -284,34 +269,73 @@ Below, we assume $r_t=0$ for simplicity and exogenous wages $w_t=e^{r_wt}$ follo
 #| class-source: my_class
 #| classes: my_class
 #| column: margin
-rho <- 0.02    # Discounting factor
-sigma <- 0.1   # Vol of consumption innovations
-phi <- 0.8     # Autoregressive parameter (memory of shocks)
-r <- 0.0       # Zero interest rate
-r_w <- 0.01    # Growth rate of wages
-
-n <- 100       # Number of periods
-z <- 1         # Initialization of productivity
-c <- 1         # Initialization of consumption
-w <- 1         # Initialization of wages
-k <- 1         # Initialization of capital 
-h <- 1         # Initialization of leisure
+#| fig.width: 3.5
+#| fig.height: 3
+wb_data |> 
+   filter(country == "United States") |>
+  ggplot(aes(x = year, y = consumption/10^9)) + geom_line() + 
+  theme(axis.title.x = element_blank())
 ```
 
-Next, we launch the loop. 
 
 ```{r}
 #| message: false
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
+wb_data |>
+   filter(country == "United States") |>
+   mutate(c_growth = consumption/dplyr::lag(consumption) - 1) |>
+   summarise(m = mean(c_growth, na.rm = T),
+             s = sd(c_growth, na.rm = T))
+```
 
+
+So consumption grows at a rate of 6.5% per year with a 2.8% standard deviation for its growth. 
+
+Given this other [dataset of the World Bank](https://data360.worldbank.org/en/dataset/WB_ASPD), we can also estimate that the **total productivity factor** (TPF) grows at a rate of 0.6% per year, with a variance of 1%.
+
+
+# Simulations
+
+Below, we assume fixed $r_t$ for simplicity (which drives consumption and capital dynamics), as well as exogenous wages $w_t=e^{r_wt}$ following deterministic inflation. We start by setting the parameters and initializing the variables. Note that we impose $(1+r)/(1+\rho)\approx 1.06$. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+rho <- 0.01       # Discounting factor
+sigma_c <- 0.03   # Vol of consumption innovations
+sigma_A <- 0.005  # Vol of TPF schocks
+psi <- 0.5        # Relative work/leisure preference
+phi <- 0.003      # Growth rate of TPF
+r <- 0.07         # Interest rate
+r_w <- 0.06       # Growth rate of wages
+
+n <- 100          # Number of periods
+z <- 1            # Initialization of productivity
+c <- 1            # Initialization of consumption
+w <- 5            # Initialization of wages
+k <- 6            # Initialization of capital 
+h <- 0.5          # Initialization of leisure
+```
+
+Next, we launch the loop and plot the resulting time-series. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+set.seed(42)
 for(t in 1:(n-1)){ 
-  w[t+1] <- (1+r_w) * w[t]                       # Deterministic wages
-  z[t+1] <- phi * z[t] + rnorm(1)                # Productivity shock
-  c[t+1] <- 1/(1+rho) * c[t] + sigma * rnorm(1)  # Consumption with shock
-  h[t+1] <- phi/(1-phi)*c[t+1]/w[t+1]            # Leisure from log-utility
-  k[t+1] <- (1-h[t])*w[t] + (1+r)*k[t] - c[t]    # Motion of capital
+  w[t+1] <- (1+r_w) * w[t]                                # Deterministic wages
+  z[t+1] <- (1+phi + sigma_A * rnorm(1)) * z[t]             # Productivity shock
+  c[t+1] <- ((1+r)/(1+rho) + sigma_c * rnorm(1)) * c[t]   # Consumption with shock
+  h[t+1] <- psi/(1-psi)*c[t+1]/w[t+1]                     # Leisure from log-utility
+  k[t+1] <- (1-h[t])*w[t] + (1+r)*k[t] - c[t]             # Motion of capital
 }
 data.frame(t = 1:n, wage = w, productivity = z, consumption = c, leisure = h, capital = k) |>
   pivot_longer(-t, names_to = "variable", values_to = "value") |>
@@ -320,6 +344,9 @@ data.frame(t = 1:n, wage = w, productivity = z, consumption = c, leisure = h, ca
   theme(axis.title.y = element_blank())
 ```
 
+This can seem a bit simplistic, but some matches a few patterns in the data.   
+For productivity, the trend is exactly that from the data (makes sense), but for leisure, it's hard to tell.   
+Maybe the model serves as a tool to determine reasonable values for $l$!
 
 
 
