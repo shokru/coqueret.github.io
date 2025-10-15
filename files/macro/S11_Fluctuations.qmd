@@ -1,0 +1,485 @@
+---
+title: "Fluctuations"
+format: 
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em    
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+    
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries. 
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)   # Package for data wrangling
+library(readxl)      # Package to import MS Excel files
+library(latex2exp)   # Package for LaTeX expressions
+library(quantmod)    # Package for stock data extraction
+library(highcharter) # Package for reactive plots
+library(WDI)         # Package for World Bank data
+library(ggsci)       # Package for color palettes
+```
+
+
+The content of the notebook is heavily inspired from the book [**Advanced Macro-economics - An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/).
+
+
+# Context
+
+Until now, we have mostly been working on **equilibrium** models that are supposed to characterize **long-term** trends (e.g., growth). But, "in practice", all economic indicators fluctuate, and in some cases, sharp variations occurs, for instance during crises. 
+
+So studying the short-term evolution of the economy is also useful (some could suggest it is even more useful!). 
+
+Let's illustrate this rapidly with some data.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 4 
+#| fig.height: 2
+#| cache: true
+wb_raw = WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
+                           "population" = "SP.POP.TOTL",
+                           "gdp" = "NY.GDP.MKTP.CD",
+                           "consumption" = "NE.CON.TOTL.CD",
+                           "gdp_growth" = "NY.GDP.MKTP.KD.ZG",
+                           "unemployment" = "SL.UEM.TOTL.ZS"), 
+             #country = c('FR','US'), # here you can specify some countries
+             extra = TRUE,
+             start = 1960, 
+             end = 2025) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c)
+wb_data <- wb_raw |> filter(country %in% c("France", "United States")) |> arrange(country, year)
+wb_eu <- wb_raw |> 
+  filter(country %in% c("Spain", "Italy", "Poland", "Slovenia", "Venezuela, RB")) |> 
+  arrange(country, year)
+```
+
+Let us depict the growth rate of the **world's GDP**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4 
+#| fig.height: 2
+wb_raw |>
+  filter(country == "World") |>
+  ggplot(aes(x = year, y = gdp_growth)) + geom_hline(yintercept = 0, linetype = 2, color = "gray") + 
+  geom_line(linewidth = 1.2) +
+  ggtitle("GDP growth rate (%) - World") + 
+  theme_classic() + 
+  theme(axis.title = element_blank()) 
+```
+
+Growth does oscillate a lot (around 2.5%).
+
+Same for **unemployment**... in the US.   
+Worldwide, things are much **smoother** (aggregation effect, perhaps!).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4 
+#| fig.height: 3
+wb_raw |>
+  filter(country == c("World", "United States"), year > 1990) |>
+  ggplot(aes(x = year, y = unemployment, color = country)) + 
+  geom_line(linewidth = 1.2) +
+  theme_classic() + 
+  ggtitle("Unemployment rate (%)") + 
+  theme(axis.title = element_blank(), 
+        legend.title = element_blank(),
+        legend.position = "bottom") 
+```
+
+
+# Real business cycle (RBC) models
+
+::: {.callout-note collapse="false"}
+## We extend the [**Ramsey model**](https://www.gcoqueret.com/files/macro/S03_Ramsey.html) in two directions:  
+
+- Following [Time to Build and Aggregate Fluctuations](https://www.jstor.org/stable/1913386?seq=15), we assume that the representative agent can choose between working and **leisure time**. Working provides **labor** $l_t$, whereas leisure is denoted $h_t$. Because time is limited (it is impossible to increase $l_t$ and $h_t$ indefinitely), we introduce the (normalizing) constraint
+$$l_t+h_t=1.$$
+Here for instance, one means "one day awake". So let's say 16 hours: this could mean 8+8, meaning $l_t=h_t=0.5$.
+- We assume that, in the **production function** $y_t = z_tk_t^\alpha l_t^{1-\alpha}$, the productivity factor is subject to **shocks** which will generate fluctuations:
+$$z_t = \phi z_{t-1}+e_t, \quad |\phi|<1,$$
+$e_t$ representing iid shocks.
+
+:::
+
+We moreover posit that the agent owns the capital $k_t$ and rents it to the firm at rate $r_t$, so that the budget constraint reads:
+$$k_{t+1} = l_tw_t + (1+r_t)k_t-c_t,$$
+
+i.e., future available capital will be the proceeds  of investment in prior capital (net of depreciation) plus **income from working** ($w_t$ is the wage) minus **consumption**.  
+
+The **utility** of the agent is
+$$U=\sum_{t=0}^\infty (1+\rho)^{-t}\left((1-\psi)u(c_t) + \psi v(h_t) \right),$$
+where $\psi$ determines the relative importance of work versus leisure (and $\rho$ the time preferences). 
+
+The trade-off between leisure and work is obtained by seeing that 
+$$c_t = w_t(1-h_t) + (1+r_t)k_t-c_t-k_{t+1},$$
+and plugging this in the utility and differentiating w.r.t. $h_t$ leads to 
+$$w_t(1-\phi)u'(c_t)=\phi v'(h_t),$$
+so that if we assume **log-utility**,
+$$w_t(1-\phi)h_t=\phi c_t.$$
+
+
+We recall the **Euler equation**:
+$$u'(c_t) = \frac{1+r_{t}}{1+\rho} \mathbb{E}_t[u'(c_{t+1})],$$
+which, under **logarithmic utility** (again) gives
+
+$$c_t^{-1} = \frac{1+r_{t}}{1+\rho} \mathbb{E}_t[c_{t+1}^{-1}],$$
+
+
+As the model is anyway impossible o solve numerically, we can instead try to exploit it via **simulations**. We can thus imagine an **auto-regressive process** for consumption as well:
+$$c_{t+1}=\frac{1+r_{t}}{1+\rho}c_t + \sigma \epsilon_{t+1}$$
+
+
+# Digressions via ILO data
+
+## Data (working hours)
+
+We exploit amazing data from the [ILO](https://ilostat.ilo.org/topics/working-time/) on **working hours**.   
+
+The data is highly granular sector-wise and by age but we focus on the economy as a whole and not on particular industries or age groups (for simplicity).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+url <- "https://rplumber.ilo.org/data/indicator/?id=HOW_TEMP_SEX_AGE_ECO_NB_A&lang=en&type=label&format=.csv&channel=ilostat&title=mean-weekly-hours-actually-worked-per-employed-person-by-sex-age-and-economic-activity-annual"
+ilo_hours <- read_csv(url) |>
+  filter(classif2.label == "Economic activity (Broad sector): Total",
+         classif1.label == "Age (Aggregate bands): Total") |>
+  select(ref_area.label, sex.label, time, obs_value) 
+colnames(ilo_hours) <- c("country", "gender", "year", "value")
+```
+
+Values for **gender**: Total, Male, Female, Other.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.height: 3
+#| fig.width: 4
+ilo_hours |> 
+  filter(gender != "Other", country == "United States of America") |>
+  ggplot(aes(x = year, y = value, color = gender)) + geom_line(linewidth = 1.2) + 
+  theme_classic() + 
+  ggtitle("Weekly hours worked in the US") + 
+  theme(legend.position = c(0.9, 0.95),
+        axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.text = element_text(size = 10),
+        legend.title = element_blank())
+```
+
+
+## Data (wages)
+
+Average hourly earnings of employees (local currency).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+url <- "https://rplumber.ilo.org/data/indicator/?id=SDG_0851_SEX_OCU_NB_A&lang=en&type=label&format=.csv&channel=ilostat&title=sdg-indicator-851-average-hourly-earnings-of-employees-by-sex-local-currency-annual"
+ilo_wages <- read_csv(url) |>
+  select(ref_area.label, sex.label, classif1.label, time, obs_value)
+colnames(ilo_wages) <- c("country", "gender", "occupation", "year", "value")
+```
+
+We can directly see tne **gender gap**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 4
+ilo_wages |>
+  filter(country %in% c("United States of America", "France"), 
+         occupation == "Occupation (Skill level): Total") |>
+  ggplot(aes(x = year, y = value, color = gender, linetype = country)) + 
+  geom_line(linewidth = 1.0) +
+  theme_minimal() + ggtitle("Avg. hourly earning($)") + 
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.spacing.y = unit(-1, "pt"),
+        legend.background = element_rect(fill = "white", color = "white"),
+        legend.position = c(0.27, 0.75))
+
+```
+
+
+
+## Calibration
+
+Thanks to World Bank data, we can try to estimate some of these quantities.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+wb_data |>
+  filter(country == "United States") |>
+  mutate(c_growth = consumption/dplyr::lag(consumption) - 1) |>
+  pull(c_growth) |>
+  sd(na.rm = T)
+```
+
+
+
+# Simulations
+
+Below, we assume $r_t=0$ for simplicity and exogenous wages $w_t=e^{r_wt}$ following deterministic inflation. We start by setting the parameters and initializing the variables.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+rho <- 0.02    # Discounting factor
+sigma <- 0.1   # Vol of consumption innovations
+phi <- 0.8     # Autoregressive parameter (memory of shocks)
+r <- 0.0       # Zero interest rate
+r_w <- 0.01    # Growth rate of wages
+
+n <- 100       # Number of periods
+z <- 1         # Initialization of productivity
+c <- 1         # Initialization of consumption
+w <- 1         # Initialization of wages
+k <- 1         # Initialization of capital 
+h <- 1         # Initialization of leisure
+```
+
+Next, we launch the loop. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+for(t in 1:(n-1)){ 
+  w[t+1] <- (1+r_w) * w[t]                       # Deterministic wages
+  z[t+1] <- phi * z[t] + rnorm(1)                # Productivity shock
+  c[t+1] <- 1/(1+rho) * c[t] + sigma * rnorm(1)  # Consumption with shock
+  h[t+1] <- phi/(1-phi)*c[t+1]/w[t+1]            # Leisure from log-utility
+  k[t+1] <- (1-h[t])*w[t] + (1+r)*k[t] - c[t]    # Motion of capital
+}
+data.frame(t = 1:n, wage = w, productivity = z, consumption = c, leisure = h, capital = k) |>
+  pivot_longer(-t, names_to = "variable", values_to = "value") |>
+  ggplot(aes(x = t, y = value)) + geom_line() + 
+  facet_wrap(vars(variable), scales = "free") +
+  theme(axis.title.y = element_blank())
+```
+
+
+
+
+
+# Keynesian models
+
+::: {.callout-note collapse="false"}
+## Disclaimer
+This subsection was partly generated by generative AI.
+:::
+
+## Introduction to IS-LM   
+
+
+## Setup and hypotheses
+
+### Notations
+
+We work in discrete time, with periods indexed by $t = 0, 1, 2, ...$, moreover:
+
+$x_t$ : output gap (deviation of output from its natural level $y^n_t$ if there were no price rigidity - see below)    
+$\pi_t$ : inflation rate    
+$i_t$ : nominal interest rate set by the central bank (on bonds)    
+$r_t^n$ : natural (real) rate of interest     
+$\mathbb{E}_t$ : expectations operator conditional on information available at time $t$    
+$\beta$ : subjective discount factor ($\beta\in(0,1)$)     
+$\sigma$ : intertemporal elasticity of substitution (inverse of the coefficient of relative risk aversion)    
+$\kappa$ : slope of the New Keynesian Phillips curve     
+$\phi_{\pi}$, $\phi_x$ : policy rule coefficients (response of interest rate to inflation and output gap)    
+$\varepsilon_t$ : monetary policy shock   
+
+
+### Assumptions
+
+- Households maximize expected lifetime utility
+$$\mathbb{E}_t \left[ ∑_{s=0}^{∞} β^s [ u(C_{t+s}) - v(L_{t+s}) ] \right]$$
+subject to the **intertemporal budget constraint**:
+$$P_t C_t + B_t = W_t L_t + (1 + i_{t-1}) B_{t-1} + \Pi_t,$$
+(l.h.s. is expenses/investment and r.h.s is income), where 
+
+- $P_t$: price level     
+- $C_t$: consumption     
+- $B_t$: nominal bond holdings        
+- $W_t$: nominal wage           
+- $L_t$: labor supply     
+- $i_{t-1}$: nominal interest rate on previous period's bonds     
+- $\Pi_t$: profits from firms.  
+
+
+- Firms operate under monopolistic competition and face [Calvo](https://www.sciencedirect.com/science/article/abs/pii/0304393283900600) price rigidity:
+In each period, only a fraction ($1 - θ$) of firms can reset prices optimally; the rest keep their previous price.
+
+- The **monetary authority** sets the nominal interest rate using a [**Taylor-type**](https://en.wikipedia.org/wiki/Taylor_rule) rule:
+$$i_t = r_t^n + \phi_{\pi} \pi_t + \phi_x x_t + \varepsilon_t$$
+
+- Market clearing implies that aggregate demand equals aggregate supply in equilibrium: the output gap (i.e., actual minus **potential** output) is equal to the consumption gap $x_t = y_t - y_t^n = c_t-c^n_t$.    
+
+### Core equations 
+
+#### Dynamic IS Curve
+
+Households choose consumption to satisfy the usual **Euler equation**:
+
+$$ \frac{1}{ C_t} = β \mathbb{E}_t \left[ \frac{1}{C_{t+1}}  \frac{1 + i_t}{1 + \pi_{t+1}}  \right]$$
+Assuming output and consumption move together (small open economy approximation or closed economy with flexible labor supply):
+
+$$x_t ≈ c_t - c_t^n$$
+
+Linearizing around steady state and defining output gap $x_t$ leads to:
+
+$$x_t = \mathbb{E}_t [x_{t+1}] - (1 / \sigma)  ( i_t - \mathbb{E}_t [\pi_{t+1}] - r_t^n )$$
+
+
+**Intuition**:
+The output gap today depends positively on expected future output and negatively on the real interest rate ($i_t - E_t [\pi_{t+1}]$).
+If monetary policy raises the real rate, consumption and output fall.
+
+#### New Keynesian Phillips Curve (NKPC)
+
+$$\pi_t = \beta \mathbb{E}_t [\pi_{t+1}] + \kappa x_t$$
+
+Intuition:
+Firms set prices based on expected future inflation and current marginal costs (proxied by $x_t$).
+The parameter $\kappa$ measures how sensitive inflation is to real activity.
+If output is above potential (x_t > 0), inflation tends to rise.
+
+#### Monetary Policy Rule (Taylor Rule)
+
+$$i_t = r_t^n + \phi_{\pi} \pi_t + \phi_x x_t + \varepsilon_t$$
+
+Intuition:
+The central bank adjusts the nominal interest rate in response to deviations of inflation and output from targets.
+Typically, $\phi_{\pi} > 1$ ensures that monetary policy is stabilizing (the Taylor principle).
+
+
+### Solution
+
+Combining the three equations, we get a linear system in ($x_t, \pi_t$):
+
+$$x_t = E_t x_{t+1} - (1 / \sigma) * ( \phi_{\pi} \pi_t + \phi_x x_t + \varepsilon_t - E_t \pi_{t+1} - r_t^n )$$
+
+$$\pi_t = \beta E_t [\pi_{t+1}] + \kappa x_t$$
+
+This can be written more compactly as a forward-looking system:
+
+$$A  E_t [ y_{t+1} ] = B  y_t + C  s_t$$
+
+where
+$y_t = (x_t, \pi_t)'$ and $s_t = (r_t^n, \varepsilon_t)'$.
+
+The equilibrium paths of $x_t$ and $\pi_t$ depend on expectations of future conditions and policy parameters.
+
+Under rational expectations and suitable parameter restrictions (notably $\phi_{\pi} > 1$), the system has a unique stable solution where inflation and output return to steady state after shocks.
+
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+# Parameters
+beta <- 0.99
+sigma <- 1
+kappa <- 0.1
+phi_pi <- 1.5
+phi_x <- 0.5
+T <- 40
+```
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+# Shocks
+set.seed(42)
+eps <- rnorm(T, 0, 0.002)     # monetary shocks
+r_n <- rep(0, T)
+r_n[5] <- -0.01               # temporary fall in natural rate (demand shock)
+
+# Initialization
+x <- pi <- i <- rep(0, T)
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+# Expectations: assume perfect foresight (for simplicity)
+for (t in 1:(T-1)) {
+  # Taylor rule
+  i[t] <- r_n[t] + phi_pi * pi[t] + phi_x * x[t] + eps[t]
+  # IS curve (simplified, using next period as expectation)
+  x[t+1] <- x[t] - (1/sigma) * (i[t] - pi[t+1] - r_n[t])
+  # Phillips curve
+  pi[t+1] <- beta * pi[t] + kappa * x[t]
+}
+```
+
+
