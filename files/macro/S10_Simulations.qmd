@@ -45,6 +45,7 @@ library(latex2exp)   # Package for LaTeX expressions
 library(quantmod)    # Package for stock data extraction
 library(highcharter) # Package for reactive plots
 library(patchwork)   # Package for plot layout
+library(plotly)      # Library for interactive plots (3D!)
 ```
 
 
@@ -65,8 +66,8 @@ $$Y=AK^aN^{1-a}, \quad a \in(0,1),$$ {#eq-prod}
 where $N$ is labour/employment/active population. Next, the real **wages** 
 $$w=(1-a)A(K/N)^a$$ {#eq-wages}
 This comes from the **labour demand** of profit-maximizing firms. Indeed, the profit is
-$$\Pi(N)=AK^aN^{1-a}-wN-\text{other costs},$$ {#eq-prof}
-hence the FOC is $\frac{\partial \Pi}{\partial N}=(1-a)A(K/N)^a-w=0$ *QED*.    
+$$\Pi(N)=AK^aN^{1-a}-wN-\text{(other costs)},$$ {#eq-prof}
+hence the FOC is $\frac{\partial \Pi}{\partial N}=(1-a)A(K/N)^a-w=0 \quad $  -  *QED*.    
 
 
 Government expenditures are tied by: $G=T+B$, i.e., **taxes** plus **debt**. But the future value is $G^f=T^f-(1+r)B$ because the **interest** of the debt must be reimbursed (no default here!). Solving for $B$ gives 
@@ -100,9 +101,9 @@ Solving for $S$,
 
 $$C^f=Y^f-T^f+(1+r)(Y-T-C),$$
 where we can replace **taxes** by **government spending** thanks to @eq-gov:
-$$C^f=Y^f-G^f+(1+r)(Y-G-C),$$
+$$C^f=Y^f-G^f+(1+r)(Y-G-C).$$
 
-Hence the utility becomes
+Hence, the utility becomes
 
 $$U(C,N)=\log(C+b_1\log(1-N))+b_2\log(Y^f-G^f+(1+r)(Y-G-C))$$
 
@@ -127,7 +128,7 @@ $$C+b_1\log(1-N)=w\frac{(1-N)(C+b_1\log(1-N))}{b_1} \Leftrightarrow b_1/w = (1-N
 
 # The code
 
-In fact, the original code has some unnecessary parts if we are only interested in production or consumption.   
+In fact, the original code has some unnecessary parts if we are only interested in **production** or **consumption**.   
 Below, we keep only the required rows. 
 
 ## Initializing variables
@@ -145,10 +146,10 @@ G0 <- vector(length=S) # government expenditures
 A <- vector(length=S)  # productivity
 Yf <- vector(length=S) # expected future income
 b1 <- vector(length=S) # household preference for leisure
-G0[]=1
-A[]=2
-Yf[]=1
-b1[]=0.4
+G0[] <- 1
+A[] <- 2
+Yf[] <- 1
+b1[] <- 0.4
 ```
 
 
@@ -185,7 +186,6 @@ C = I = Y = r = N = P = w
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
-#Solve this system numerically through 1000 iterations based on the initialization
 for (i in 1:S){
   for (t in 2:nb_sim){
     #Model equations
@@ -207,10 +207,15 @@ Let's plot the result!
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
 bind_cols(t = 1:nb_sim, as_tibble(Y)) |>
   pivot_longer(-t, names_to = "scenario", values_to = "production") |>
   ggplot(aes(x = t, y = production, color = scenario)) + geom_line() +
-  theme_classic() + theme(legend.position.inside = c(0.5,0.5))
+  theme_classic() + 
+  theme(legend.position = "top",
+        axis.title.x = element_blank())
 ```
 
 Some scenarios are redundant (initial choices have no impact). 
@@ -222,10 +227,15 @@ Let's have a look at **consumption**...
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
 bind_cols(t = 1:nb_sim, as_tibble(C)) |>
   pivot_longer(-t, names_to = "scenario", values_to = "consumption") |>
   ggplot(aes(x = t, y = consumption, color = scenario)) + geom_line() +
-  theme_classic() + theme(legend.position.inside = c(0.5,0.5))
+  theme_classic() + 
+  theme(legend.position = "top",
+        axis.title.x = element_blank())
 ```
 
 Ok, some curves stop early... what happened? At time $t=3$, the variable $I$ became negative because $G$ is too large!
@@ -237,7 +247,9 @@ What if we add a little noise on the production side? With small shocks to **lab
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
-#Solve this system numerically through 1000 iterations based on the initialization
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
 for (i in 1:S){
   for (t in 2:nb_sim){
     #Model equations
@@ -249,7 +261,9 @@ for (i in 1:S){
 bind_cols(t = 1:nb_sim, as_tibble(Y)) |>
   pivot_longer(-t, names_to = "scenario", values_to = "production") |>
   ggplot(aes(x = t, y = production, color = scenario)) + geom_line() +
-  theme_classic() + theme(legend.position.inside = c(0.5,0.5))
+  theme_classic() + 
+  theme(legend.position = "top",
+        axis.title.x = element_blank())
 ```
 
 Ok, so we still have **convergence** (mostly).   
@@ -260,7 +274,9 @@ What if the shocks are ten times larger?
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
-#Solve this system numerically through 1000 iterations based on the initialization
+#| column: margin
+#| fig.width: 3.5
+#| fig.height: 3
 set.seed(42)
 for (i in 1:S){
   for (t in 2:nb_sim){
@@ -273,7 +289,150 @@ for (i in 1:S){
 bind_cols(t = 1:nb_sim, as_tibble(Y)) |>
   pivot_longer(-t, names_to = "scenario", values_to = "production") |>
   ggplot(aes(x = t, y = production, color = scenario)) + geom_line() +
-  theme_classic() + theme(legend.position.inside = c(0.5,0.5))
+  theme_classic() + 
+  theme(legend.position = "top",
+        axis.title.x = element_blank())
 ```
 
 Rocky, but still relatively consistent. 
+
+
+
+
+# Calibration
+
+## Introduction
+
+Modern economic models are complex. The dominating paradigm is that of [dynamic stochastic general equilibrium](https://en.wikipedia.org/wiki/Dynamic_stochastic_general_equilibrium) (DSGE) models. The problem is that their complexity raises issues with respect to parameter estimation. If we follow [Estimating DSGE Models: Recent Advances and Future Challenges](https://www.annualreviews.org/content/journals/10.1146/annurev-economics-081020-044812), then we write
+$$\textbf{Y}_t=f(\textbf{S}_t,\textbf{V}_t, \boldsymbol{\theta}),$$
+
+where 
+
+- $\textbf{Y}_t$ is a vector of **observables** (GDP, inflation, etc.);     
+- $\textbf{S}_t$ is a vector of **state variables** (we could assume they are observable for simplicity);     
+- $\textbf{V}_t$ is a vector of **shocks**;        
+- $\boldsymbol{\theta}$ is a vector of **parameters**.
+
+This makes a lot! The aim is to find reasonable (plausible) values for $\theta$. As discussed in the aforementioned paper, there are many ways to do so. But let's here take a simple route.
+
+
+## Toy example
+
+Let's recycle the model we played with above, but with no shocks.  
+There is no scenario, parameters belong to the function, as described earlier.  
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+model <- function(A, a, b1, K, nb_sim){
+  Y <- 1
+  w <- 0.5
+  N <- 0.5
+  for (t in 2:nb_sim){
+    Y[t] <- A * (K^a) * N[t-1]^(1-a)                  # (1) Cobb-Douglass production function  
+    w[t] <- A * (1-a) * (K^a) * N[t-1]^(-a)           # (2) Labor demand 
+    N[t] <- 1 - b1 / w[t-1]                           # (3) Labor supply
+  }
+  cbind(Y, w, N)#[nb_sim]
+}
+model(1, 0.5, 0.3, 1, 15)
+```
+
+It seems we are close to convergence after 15 rounds.
+We are interested in **output**, Y (the terminal value after convergence).   
+We want to target a given level $Y^*=2$ (for instance) that matches, say, observations in the data. 
+But to do so, we only need one parameter. We we wanted to capture more features (inflation, unemployment, etc.), we could potentially use more parameters (if they have a significant impact on the desired outcome).   
+
+Below, we allow the function to take $A$ in vector form (it's linear basically).  
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+
+model <- function(A, a, b1, K, nb_sim){
+  Y <- matrix(1, nrow = nb_sim, ncol = length(A))
+  w <- matrix(0.5, nrow = nb_sim, ncol = length(A))
+  N <- matrix(0.5, nrow = nb_sim, ncol = length(A))
+  for (t in 2:nb_sim){
+    Y[t,] <- A * (K^a) * N[t-1,]^(1-a)                  # (1) Cobb-Douglass production function  
+    w[t,] <- A * (1-a) * (K^a) * N[t-1,]^(-a)           # (2) Labor demand 
+    N[t,] <- 1 - b1 / w[t-1,]                           # (3) Labor supply
+  }
+  Y[nb_sim,]
+}
+model(A = 1:5, a = 0.5, b1 = 0.3, K = 1, nb_sim = 20)
+
+ggplot() + xlim(1, 5) + geom_function(fun = model, 
+                                      args = list(a = 0.5, b1 = 0.3, K = 1, nb_sim = 15)) +
+  theme_classic() + 
+  geom_hline(yintercept = 2, linetype = 2, color = "gray")
+```
+
+If we have a target production of $Y^*$, then the value of $A$ that satisfies this condition is where the two lines meet.
+Note that in some case, it may be possible that $\boldsymbol{\theta}$ does not allow to perfectly match the data (desired targets).   
+In this case, one must resort to error minimization:
+
+$$\underset{\boldsymbol{\theta}}{\min} \ \sum_\textbf{S} || f(\textbf{S, }\boldsymbol{\theta}) - f_{\text{observed}}(\textbf{S}) ||.  $$
+
+
+What happens if we have 2 degrees of freedom? Say $A$ and $a$...
+We need to plot the outcome in 3D. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+model <- function(A, a, b1, K, nb_sim){
+  Y <- matrix(1, nrow = nb_sim, ncol = length(A))
+  w <- matrix(0.5, nrow = nb_sim, ncol = length(A))
+  N <- matrix(0.5, nrow = nb_sim, ncol = length(A))
+  for (t in 2:nb_sim){
+    Y[t,] <- A * (K^a) * N[t-1,]^(1-a)                  # (1) Cobb-Douglass production function  
+    w[t,] <- A * (1-a) * (K^a) * N[t-1,]^(-a)           # (2) Labor demand 
+    N[t,] <- 1 - b1 / w[t-1,]                           # (3) Labor supply
+  }
+  Y[nb_sim,]
+}
+A <- seq(0.5, 2, by = 0.1)
+a <- seq(0.1, 0.9, by = 0.02)
+pars <- expand_grid(A, a)
+AA <- pars$A
+aa <- pars$a
+
+prod <- model(AA, aa, 0.3, 1, 15) |> matrix(ncol = length(A))
+plot_ly(type = 'surface',
+        x = ~A,
+        y = ~a,
+        z = prod)
+```
+
+Here, we have only focused on **production**, but we could plot $w$ as well...
+And in 2D it's also possible!
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+data.frame(prod = model(AA, aa, 0.3, 1, 15)) |> 
+  bind_cols(pars) |>
+  ggplot(aes(x = a, y = prod, color = as.factor(A))) + geom_line() +
+  theme_classic() + labs(color = "A") + 
+  theme(axis.title.y = element_blank())
+```
+
+It shows that some parameter values do not lead to **convergence**...
