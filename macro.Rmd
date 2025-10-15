@@ -25,8 +25,8 @@ The links below lead to html **slides** and course **material**.
 08. <a href="files/macro/S08_overlapping_generations.html" target="_blank">**Models with overlapping generations**</a> - <a href="files/macro/S08_overlapping_generations.qmd" target="_blank">[quarto nb]</a>     
 09. <a href="files/macro/S09_unified_theory.html" target="_blank">**Unified growth theory**</a> - <a href="files/macro/S09_unified_theory.qmd" target="_blank">[quarto nb]</a>            
 10. <a href="files/macro/S10_Simulations.html" target="_blank">**Simulations**</a> - <a href="files/macro/S10_Simulations.qmd" target="_blank">[quarto nb]</a>        
-11. Fluctuations     
-12. Unemployment      
+11. <a href="files/macro/S11_Fluctuations.html" target="_blank">**Fluctuations**</a> - <a href="files/macro/S11_Fluctuations.qmd" target="_blank">[quarto nb]</a>          
+12. <a href="files/macro/S12_Unemployment.html" target="_blank">**Unemployment**</a> - <a href="files/macro/S12_Unemployment.qmd" target="_blank">[quarto nb]</a>           
 13. <a href="files/macro/S13_finance.html" target="_blank">**Some financial economics**</a>
 
 ---------
