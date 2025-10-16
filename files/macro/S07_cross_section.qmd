@@ -691,6 +691,14 @@ This is supported by [What Remains of Cross-Country Convergence?
 
 ![](convergence.png)
 
+Another related paper: [Growth, Interrupted: How Crises delay Global Convergence](https://www.imf.org/en/Publications/WP/Issues/2025/06/13/Growth-Interrupted-How-Crises-delay-Global-Convergence-567257):
+
+![](transitions.png). 
+
+The above table shows the transitions from income groups in periods **with and without crises**. It shows that moving upward (to a higher income group) is much more likely outside crisis periods, but that the probability of moving downwards increases during downturns. 
+
+
+
 # A step back: heuristic sources of growth
 
 (see [CSV](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/), section 7.2)
