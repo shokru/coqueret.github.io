@@ -142,9 +142,11 @@ However, it also makes sense to consider that $h_g<0$ because **technology incre
 
 The interesting feature of the model is the interplay between technology, population and human capital (investment). These are, in the model: $n_t$ for **population growth** (via $n_t=L_{t+1}/L_t$), $e_t$ for **investment in education** and $g_t$ for **technological growth**. The latter has not formally been treated until now. We can make assumptions on $g:=g(e,L)$, that is: technological progress is driven by how much we invest in education (well trained work-force or R&D) and by the population size (more researchers imply more innovation - potentially).
 
-From @eq-foc1, if the left-hand side is fixed, increasing quality via $\tau+e_{t+1}$ imposes to **reduce quantity** (for fixed $\gamma$), which is a feature observed in many developed countries since the beginning of the XXIst century (again: **demoagraphics** is **key**!). The transition from a Malthusian economy to sustainable growth is depicted below. 
+From @eq-foc1, if the left-hand side is fixed, increasing quality via $\tau+e_{t+1}$ imposes to **reduce quantity** (for fixed $\gamma$), which is a feature observed in many developed countries since the beginning of the XXIst century (again: **demographics** is **key**!). The transition from a Malthusian economy to sustainable growth is depicted below. 
 
 ![](unified_theory.png)
+
+If growth **stagnates** (due to shrinking population or limited resources, among other reasons), then we will need a fourth regime!
 
 ::: {.callout-note collapse="false"}
 ## Bottomline
@@ -156,7 +158,7 @@ From @eq-foc1, if the left-hand side is fixed, increasing quality via $\tau+e_{t
 # Digression on demographics
 
 We rely on [UN data/projections](https://population.un.org/wpp/) below (fetched from Gapminder).  
-Note that in the UN files, population trends depend on **scenarios**...
+Note that in the UN files, population trends depend on **scenarios**... (this reflects forecast uncertainty - as it should)
 
 ```{r}
 #| message: false
@@ -189,8 +191,8 @@ Challenging times ahead for China... (fertility is not something easy to incenti
 delta |> tail(9)
 ```
 
-A first major question will be that of demographic transition for African countries (will it occur?).    
-A second one may be **climate change**: how it will affect fertility and mortality is an important unknown. 
+1. A first major question will be that of demographic transition for African countries (will it occur?).     
+2. A second one may be **climate change**: how it will affect fertility and mortality is an important unknown.   
 
 
 
