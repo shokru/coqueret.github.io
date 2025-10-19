@@ -58,7 +58,14 @@ $\rightarrow$ But **reconciling the two is incredibly hard**.
 
 Here the aim is similar, but for economics. Indeed, we have sought to study models that could explain the post-industrial revolution growth.  
 
-At the same time, if a model wants to be exhaustive, it should also explain the centuries of stagnation that occurred before the 18th century (Malthusian stagnation).  
+At the same time, if a model wants to be exhaustive, it should also explain the centuries of stagnation that occurred before the 18th century (Malthusian stagnation).     
+
+To illustrate the two regimes, we refer to "**macrohistory**", see e.g., the posts by Luke Muehlhauser:   
+
+- [Three wild speculations from amateur quantitative macrohistory](https://lukemuehlhauser.com/three-wild-speculations-from-amateur-quantitative-macrohistory/)    
+- [How big a deal was the Industrial Revolution?](https://lukemuehlhauser.com/industrial-revolution/)
+
+![](macro_history.png)
 
 # The model
 
