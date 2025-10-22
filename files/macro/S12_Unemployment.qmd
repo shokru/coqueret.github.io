@@ -225,7 +225,7 @@ If we subtract $\frac{w_R\beta}{1-\beta}$ from each side, we get:
 \begin{align}
 w_R & = b + \frac{\beta(1-w_R)}{1-\beta} \int_0^\infty\max(w,w_R)dF(w)  \\
 & = b + \frac{\beta}{1-\beta}\left( \int_0^{w_R} w_R dF(w) +  \int_{w_R}^\infty w dF(w) - w_R  \right) \\
-& = b + \frac{\beta}{1-\beta}\left( \int_{w_R}^\infty(w-w_R) dF(w) +      \right)
+& = b + \frac{\beta}{1-\beta}\left( \int_{w_R}^\infty(w-w_R) dF(w)       \right)
 \end{align}
 
 ::: {.callout-note collapse="false"}
@@ -245,7 +245,7 @@ $$W(w) = \Delta w + \beta W(w).$$
 Next, suppose that the worker gets a job offer with wage $w$ with probability $\alpha \Delta$ in each period, then the value for declining the offer is
 $$U = \Delta b + \underbrace{\frac{\alpha \Delta}{1+r\Delta} \mathbb{E}[\max(U,W(w))]}_{\text{if there is an offer}} + \underbrace{\frac{(1-\alpha \Delta))}{1+r\Delta}U}_{\text{if there is no offer}}.$$
 **Note**: $\alpha$ can be interpreted as a **search intensity**.   
-Hence,
+Hence, upon simplification,
 $$rW(w)=(1+r\Delta)w$$ {#eq-W_baseline}
 and 
 $$rU = (1+r\Delta)b + \alpha \int_0^\infty \max(0, W(w)-U)dF(w).$$ {#eq-U_baseline}
@@ -253,9 +253,9 @@ In the limit ($\Delta \rightarrow 0$), in **continuous time**, the objective bec
 the above equation reduces to 
 $$rU = b + \alpha \int_0^\infty \max(0, W(w)-U)dF(w).$$
 Since, again, $W(w_R)=U$ and $W(w_R)=w_R/r$, $rU=w_R$, so
-$$w_R =b+ \frac{\alpha}{r} \int_{w_R}^\infty(w-w_R)dF(w)$$
+$$w_R =b+ \frac{\alpha}{r} \int_{w_R}^\infty(w-w_R)dF(w).$$
 Again integrating by parts, we end up with
-$$w_R = b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw$$
+$$w_R = b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw.$$
 Here, the **search intensity** $\alpha$ is exogenous but it could be optimized by the job seeker, modulo a cost, say $g(\alpha)$ - for instance to pay an online service to get access to more postings. The objective of the seeker is to maximize the reserve wage (minus the cost $g(\alpha)$):
 $$b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw - g(\alpha).$$ {#eq-eq1}
 The FOC associated to this is (differentiating w.r.t. $\alpha$):
@@ -298,7 +298,7 @@ Plus, it still holds that $U=W(w_R)=\frac{w_R+\lambda U}{r+\lambda}$, so that, a
 $$w_R= b+ \alpha \int_{0}^\infty \max\left( 0,\frac{w+\lambda U}{r+\lambda}-U \right)dF(w),  $$
 which is equivalent to
 $$w_R = b + \frac{\alpha}{r+\lambda}\int_{w_R}^\infty (w-w_R) dF(w).$$
-Hence: there is no big chance, except that $\lambda$ **reduces** the reservation wage! Indeed, if there is more **layoff uncertainty**, it is logical that the job seeker will accept a slightly **lower salary**. 
+Hence: there is no big change, except that (a higher) $\lambda$ **reduces** the reservation wage! Indeed, if there is more **layoff uncertainty**, it is logical that the job seeker will accept a slightly **lower salary**. 
 
 
 ## Job transitions and equilibrium unemployment
@@ -342,7 +342,7 @@ $$u^*=\frac{\lambda}{\lambda + \alpha_0(1-F(w_R))}.$$
 
 Long-term unemployment decreases with $\alpha_0$, which makes perfectly sense, and increases with $\lambda$ (likelihood of losing job), which is also entirely logical. 
 
-
+Why not try a calibration exercise?
 
 # Matching
 
