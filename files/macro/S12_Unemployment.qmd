@@ -16,7 +16,6 @@ format:
     embed-resources: true
     code-block-size: 0.5em
     code-copy: true
-    
 ---
 
 ```{css, echo=FALSE}
@@ -59,12 +58,12 @@ The content of the notebook is heavily inspired from the book [**Advanced Macro-
 
 From the first paper:  
 
-![](canaries.png){width=500 fig-align="center"}
+![](canaries.png){width=600 fig-align="center"}
 
 
 And from the second one (*Time Series of Junior and Senior Employment in Sample Firms*, normalized in 2015): 
 
-![](seniority_bias.png){width=500 fig-align="center"}
+![](seniority_bias.png){width=600 fig-align="center"}
 
 ## Trends & salient facts
 
@@ -202,7 +201,7 @@ An agent seeks a **job** that will pay a **wage** $w$. Now, $w$ is considered to
 $$\mathbb{E}\left[\sum_{t=0}^\infty \beta^t x_t  \right],$$
 where 
 $$x_t = \left\{ \begin{array}{l l} w & \text{if she takes the job} \\ b & \text{if she remains unemployed} \end{array} \right.$$
-where $b$ is some constant that comes from country specific welfare programs. $\beta=(1+\rho)^{-1}$ is the **discounting factor**.  
+where $b$ is some constant that comes from country specific welfare programs. $\beta=(1+\rho)^{-1}\in(0,1)$ is the **discounting factor**.  
 
 The value of taking the job, if we assume that the agent takes the job **forever** (a big assumption) is 
 $$W(w) = w + \beta W(w),$$
@@ -241,7 +240,7 @@ An interesting feature of the above expression is that $w_R$ increases with $\be
 
 ## Towards continuous time
 
-If we generalize to any time step $\Delta$ with $\beta = (1+\Delta r)^{-1}$. Then, we get, for the value of accepting:
+If we generalize to any time step $\Delta$ with $\beta = (1+\Delta r)^{-1}$. Then, we get, for the **value of accepting**:
 $$W(w) = \Delta w + \beta W(w).$$
 Next, suppose that the worker gets a job offer with wage $w$ with probability $\alpha \Delta$ in each period, then the value for declining the offer is
 $$U = \Delta b + \underbrace{\frac{\alpha \Delta}{1+r\Delta} \mathbb{E}[\max(U,W(w))]}_{\text{if there is an offer}} + \underbrace{\frac{(1-\alpha \Delta))}{1+r\Delta}U}_{\text{if there is no offer}}.$$
@@ -257,7 +256,7 @@ Since, again, $W(w_R)=U$ and $W(w_R)=w_R/r$, $rU=w_R$, so
 $$w_R =b+ \frac{\alpha}{r} \int_{w_R}^\infty(w-w_R)dF(w)$$
 Again integrating by parts, we end up with
 $$w_R = b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw$$
-Here, the search intensity $\alpha$ is exogenous but it could be optimized by the job seeker, modulo a cost, say $g(\alpha)$ - for instance to pay an online service to get access to more postings. The objective of the seeker is to maximize the reserve wage (minus the cost $g(\alpha)$):
+Here, the **search intensity** $\alpha$ is exogenous but it could be optimized by the job seeker, modulo a cost, say $g(\alpha)$ - for instance to pay an online service to get access to more postings. The objective of the seeker is to maximize the reserve wage (minus the cost $g(\alpha)$):
 $$b+\frac{\alpha}{r} \int_{w_R}^\infty(1-F(w))dw - g(\alpha).$$ {#eq-eq1}
 The FOC associated to this is (differentiating w.r.t. $\alpha$):
 $$\int_{w_R}^\infty(1-F(w))dw=rg'(\alpha).$$ {#eq-eq2}
@@ -268,7 +267,7 @@ In this model, the **duration of unemployment** can be characterized. The probab
 
 ## Layoff risk
 
-In the previous model, a job was eternal. This is unlikely in practice, especially in the modern labor market, see, e.g., in the US:    
+In the previous model, a job was eternal. This is unlikely in practice, especially in the modern labor market, see, e.g., in the US where turnover (employee rotation) is quite high:    
 
 - [state level separation rates from the **BLS**](https://www.bls.gov/charts/state-job-openings-and-labor-turnover/state-total-separations-rates.htm)  
 - [national separation rate from the **FRED**](https://fred.stlouisfed.org/series/JTSTSR)  
@@ -282,7 +281,7 @@ This makes a reasonable rotation (except for Covid!).
 An important distinction being whether **departures** are **voluntary** or not...
 
 
-In the previous model, we can add a parameter that will code **job termination** (for whatever reason): $\lambda$ is the Poisson intensity that parametrizes the occurrence of the termination of the working contract. Hence, over a period $\Delta$, the probability of losing/changing jobs is $\lambda \Delta$. 
+Within the previous model, we can add a parameter that will code **job termination** (for whatever reason): $\lambda$ is the **Poisson intensity** that parametrizes the occurrence of the termination of the working contract. Hence, over a period $\Delta$, the probability of losing/changing jobs is $\lambda \Delta$. 
 
 The equivalent of @eq-W_baseline is now
 
@@ -293,12 +292,12 @@ $$(1+r\Delta)W(w) = \Delta w + W(w)(1-\lambda \Delta)+U\lambda \Delta$$
 and thus,
 $$rW(w) = w + \lambda(U-W(w)).$$ {#eq-W2}
 The likelihood of job loss does not affect @eq-U_baseline (there is no job to lose). This implies:
-$$W(w) = \frac{w + \lambda U}{r + \lambda}$$ {#eq-W3}
+$$W(w) = \frac{w + \lambda U}{r + \lambda}.$$ {#eq-W3}
 
 Plus, it still holds that $U=W(w_R)=\frac{w_R+\lambda U}{r+\lambda}$, so that, again, $w_R=rU$. With @eq-U_baseline, this yields:
 $$w_R= b+ \alpha \int_{0}^\infty \max\left( 0,\frac{w+\lambda U}{r+\lambda}-U \right)dF(w),  $$
 which is equivalent to
-$$w_R = b + \frac{\alpha}{r+\lambda}\int_{w_R}^\infty (w-w_R) dF(w)$$
+$$w_R = b + \frac{\alpha}{r+\lambda}\int_{w_R}^\infty (w-w_R) dF(w).$$
 Hence: there is no big chance, except that $\lambda$ **reduces** the reservation wage! Indeed, if there is more **layoff uncertainty**, it is logical that the job seeker will accept a slightly **lower salary**. 
 
 
@@ -312,14 +311,18 @@ while the value of **work** reads
 $$rW(w) = w + \alpha_1\int_0^\infty \max(0,W(w')-W(w))dF(w') + \lambda (U-W(w)),$$
 where the integral part pertains to the choice of **switching job** (& accepting a higher wage $w'$) and the last part relates to **job loss**. 
 
-::: {.callout-tip, collapse = "false"}
+
+::: {.callout-tip collapse = "false"}
 ## Side note
 
 Differentiating the above equality w.r.t. $w$ leads to 
+
 $$rW'(w) = 1 - \alpha_1\left(\int_w^\infty W'(w) dF(w') \right)-\lambda W'(w), $$
+
 i.e., 
-$$W'(w)=(z+\lambda+\alpha_1(1-F(w)))^{-1}$$ {#eq-Wprime}
+$$W'(w)=(z+\lambda+\alpha_1(1-F(w)))^{-1}.$$ {#eq-Wprime}
 :::
+
 
 It still holds that $U=W(w_R)$. If we set $w=w_R$ in the above equation and combine it with the value of unemployment (the two are equal), we reach 
 
@@ -339,9 +342,11 @@ $$u^*=\frac{\lambda}{\lambda + \alpha_0(1-F(w_R))}.$$
 
 Long-term unemployment decreases with $\alpha_0$, which makes perfectly sense, and increases with $\lambda$ (likelihood of losing job), which is also entirely logical. 
 
+
+
 # Matching
 
-This section lays out a line of thinking in the spirit of the contributions that obtained the [2010 Nobel prize](https://www.nobelprize.org/prizes/economic-sciences/2010/summary/): the Diamond-Mortensen-Pissarides model. 
+This section lays out a line of thinking in the spirit of the contributions that obtained the [2010 Nobel prize](https://www.nobelprize.org/prizes/economic-sciences/2010/summary/): the **Diamond-Mortensen-Pissarides** model. 
 
 ## Notations
 
@@ -368,7 +373,7 @@ Now let's dive into the details.
 
 ### Setup
 
-- The firm proposes a wage $w$ to the worker who derives a lifetime utility of $W(w)$ from this wage. $W$ stands for the value of work.  
+- The firm proposes a wage $w$ to the worker who derives a lifetime utility of $W(w)$ from this wage. $W$ stands for the **value of work**.  
 - On the other end of the contract, the firm will be able to produce an output of value $y$ from the worker and thus derive a profit of $\pi=y-w$ and we write $J=\mathbb{E}[\pi]$ for the average of this (expected) profit. $J$ is the value of the work for the firm. 
 
 If the **contract** is not signed, then the worker's payoff (or utility) decreases to that of $U$ (as before), and for the firm, it decreases to $V$, the value of the vacancy. Hence "things will happen" only if $W>U$ and $J>V$ and this is entirely determined through $w$: the worker will of course accept an extra large salary and, on the other hand, the firm would naturally welcome worker who work for free. And this is when **bargaining** comes into play. 
@@ -464,16 +469,52 @@ $$y-w = (r+\lambda+\alpha_U \theta)S - (\alpha_U+r+\lambda)\theta S.$$
 
 ::: {.callout-note collapse="false"}
 ## Finally, we arrive at (upon rearranging)
-$$w = y-(r+\lambda)(1-\theta)S.$$
+$$w = y-(r+\lambda)(1-\theta)S,$$ {#eq-w6}
+with: $\theta$ the bargaining power of the worker, $y$ her productivity, $r$ is a discounting rate (for time preference), $\lambda$ the job loss rate and $S$ the surplus (@eq-S). 
+
 :::
 
 ## Heterogenous productivity
 
-In the above model, matching is stylized in that we assume that each contact leads to a match and that worker productivity $(y)$ is fixed. But what if we relax this assumption and assume that $y$ is a random variable, again with distribution $F$? (though not the same as the previous one!) Henceforth, we index quantities with $y$ to underline this dependence.  
+In the above model, matching is stylized in that we assume that each contact leads to a match and that worker productivity $(y)$ is fixed. But what if we relax this assumption and assume that $y$ is a random variable, again with distribution $F$? (though not the same as the previous one!)   
+
+
+In the end (See Section 4.4 of [Rogerson et al.](https://www.aeaweb.org/articles?id=10.1257/002205105775362014)), we obtain:
+
+$$w(y) = b + \frac{\alpha_U \theta k}{\alpha_V (1-\theta)} +\theta \left(y -  b - \frac{\alpha_U \theta k}{\alpha_V (1-\theta)} \right)$$
+The wage is clearly associated with the productivity of the worker. If the worker has more bargaining power (higher $\theta$), then, naturally her wage increases with $y$. Here, the cost of recruiting $k$ increases the wage.
+
+
+## An attempt at calibration
+
+Can we ground these formulae into real-world data? Let's consider @eq-w6 applied to US.
+
+- $w$: (target) **wage** - World Bank or [ILO Data](https://rshiny.ilo.org/dataexplorer39/?lang=en&segment=indicator&id=EAR_4HRL_SEX_ECO_CUR_NB_A): roughly 40$ per hour on average;      
+- $y$: **labor productivity** - [ILO Data](https://ilostat.ilo.org/topics/labour-productivity/): roughly 80$ per hour;
+- $r$: **discount rate** - let's say 3% annually, so 0.0015% hourly (assuming 2,000h worked);    
+- $\lambda$: **job loss frequency** - this one, too must be adapted to frequency, if rotation is 4% per month, this makes roughly 0.025% per hour.
+- $\theta$: employee **bargaining power** - let's assume that companies have more and set $\theta = 0.25$;    
+- $S$: the **surplus** - this is the big unknown. 
+
+In the end, we get:
+
+$$40\$/h = 80\$/h - (0.0015\% + 0.025\% )/h \times 0.75 \times S \$  $$
+
+This implies $S \approx 200,000\$$, which is very high. We recall that 
+$$S=J-V+W-U,$$
+
+with
+
+- J: average expected profit (value of work for the firm);     
+- V: value of the vacancy (squeezed to zero);    
+- W: value of work for the employee;    
+- U: value of unemployment (idleness);    
 
 
 
+```{r}
 
+```
 
 
 
