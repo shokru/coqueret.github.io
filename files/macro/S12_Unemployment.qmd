@@ -342,7 +342,11 @@ $$u^*=\frac{\lambda}{\lambda + \alpha_0(1-F(w_R))}.$$
 
 Long-term unemployment decreases with $\alpha_0$, which makes perfectly sense, and increases with $\lambda$ (likelihood of losing job), which is also entirely logical. 
 
-Why not try a calibration exercise?
+Why not try a calibration exercise? Remember:
+
+- $\lambda$ is job loss frequency;   
+- $\alpha_0$ is job arrival rate for the unemployed;    
+- $1-F(w_R)$ is the probability of acceptance of the reservation wage. 
 
 # Matching
 
