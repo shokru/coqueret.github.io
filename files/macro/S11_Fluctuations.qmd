@@ -622,7 +622,7 @@ When both shifts occur at the same time, the new equilibrium is favorable to gro
 
 The [**Taylor Rule**](https://en.wikipedia.org/wiki/Taylor_rule) is a simple yet powerful guideline for how a **central bank** (like the Federal Reserve or the European Central Bank) should **set its short-term nominal interest rate** in response to changes in **inflation** and **economic activity**.
 
-It was introduced by economist John B. Taylor (1992) as a way to describe and formalize the behavior of monetary policy under an **inflation-targeting framework**.
+It was introduced by economist John B. Taylor (in 1992) as a way to describe and formalize the behavior of monetary policy under an **inflation-targeting framework**.
 
 
 
@@ -856,7 +856,7 @@ for(t in 1:(TT-1)){
 data.frame(t = 1:(TT-1), output_gap = x[1:(TT-1)], inflation = pi[1:(TT-1)], rate = i[1:(TT-1)]) |>
   pivot_longer(-t, names_to = "variable", values_to = "value") |>
   ggplot(aes(x = t, y = value)) + geom_line() +
-  ggtitle("NK Model Simulation with Expectations") +
+  ggtitle("NK model simulation with naive expectations") +
   facet_grid(rows = vars(variable)) +
   theme_minimal() +
   theme(axis.title = element_blank(), title = element_text(face = "bold"))
