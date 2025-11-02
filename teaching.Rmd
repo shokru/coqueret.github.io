@@ -2,10 +2,10 @@
 ---
 <br/>  
 <br/>  
-<br/>  
 
 
 
+### Current courses
 
 Course and links | Institution & program | Years 
 ------ | ----- | --   
@@ -13,9 +13,17 @@ Course and links | Institution & program | Years
 - **Time-series analysis with R** (crash course): [R & data](https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html) | **emlyon** business school, MSc in Data Science | 2025 - present    
 - [**Introductory macroeconomics**](https://www.gcoqueret.com/macro.html) | **Ecole Normale Supérieure** de Lyon | 2024 - present   
 - **Financial macroeconomics**: [C-CAPM](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S1_consumption.html), [Extreme risks](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S2_rare_events.html), [Heterogeneous agents](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S3_HAMs.html), [Degrowth & sustainability](https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S4_alt_growth.html) | **Ecole Normale Supérieure** de Lyon | 2024 - present   
-- **Finance** & **data analysis** (ML) in R: [fraud detection](https://www.gcoqueret.com/files/ML_course/fraud_detection.html), [credit scoring](https://www.gcoqueret.com/files/ML_course/credit_risk.html), [time-series and crypto](https://www.gcoqueret.com/files/ML_course/ts_crypto.html)  | **emlyon** business school, MSc. in Data Science | 2022 - present <hr> <hr>  
 - [**Green finance**: concepts & quantitative methods](http://www.greenfinance.education) | **emlyon** business school, Master in Management | 2022 - present     
 - [**Machine Learning for Factor Investing**](ml_factor.html) |  **emlyon** business school, MSc. in Finance | 2019 - present    
+
+
+<hr>
+
+### Past courses
+
+Course and links | Institution & program | Years 
+------ | ----- | --   
+- **Finance** & **data analysis** (ML) in R: [fraud detection](https://www.gcoqueret.com/files/ML_course/fraud_detection.html), [credit scoring](https://www.gcoqueret.com/files/ML_course/credit_risk.html), [time-series and crypto](https://www.gcoqueret.com/files/ML_course/ts_crypto.html)  | **emlyon** business school, MSc. in Data Science | 2022 - 2025 <hr> <hr> 
 - [**Dynamic Dashboards with Shiny**](shiny.html) |**emlyon** business school, Master in Management, **emlyon** MSc Digital Market & Data Science | 2018-2025   
 - Crash course on **climate change** + **finance** ([energy-emissions-economy-environment](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb) &  [sustainable investing](https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb)) | **emlyon** business school, Master in Management | 2021    <br>  <hr>      
 - [**Machine Learning for Factor Investing**](ml_factor.html) |  **Imperial College** Business School, MSc. in Finance | 2019      
@@ -23,3 +31,6 @@ Course and links | Institution & program | Years
 - Non-Gaussian processes in finance | **emlyon** business school, Master in Quant. Finance | 2018     
 - Introduction to big data and business analytics  | **Montpellier Business School**, Master of Management | 2015-2017   
 - Numerical methods in finance |**Univ. Paris I Pantheon-Sorbonne**, Master of Market Finance | 2008-2010   
+
+
+
