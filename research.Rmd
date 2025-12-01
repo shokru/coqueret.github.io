@@ -37,7 +37,7 @@ br2 {
 - Persistent anomalies and nonstandard errors (with C. Pérignon) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank">[SSRN]</a>  
 - Global p-values in multi-design studies (with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier)  <a href="https://arxiv.org/abs/2507.03815" target="_blank">[arXiv]</a>  
 - Can corporate incentives deliver decarbonization? (with B. Qiu)    
-- Sustainable commodity factors (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">[SSRN]</a> <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
+- An anatomy of decarbonizing firms (with T. Giroux and B. Qiu)    
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">[SSRN]</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">[SSRN]</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
 - Interactions in Asset Pricing (with G. Chevalier, M. Laguerre & T. Raffinot): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">[SSRN]</a>   
@@ -49,6 +49,9 @@ _____
 ### <font color="#3B60A2">**Main Publications**</font> 
 
 The full list of articles can be found below.
+
+* Sustainability in commodity markets (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">[SSRN]</a>, <br/> <span style="color:#3B60A2">**Journal of Banking & Finance**</span> Forthcoming <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))     
+
 
 * Unexpected opportunities in misspecified predictive regressions,  <br/> <span style="color:#3B60A2">**European Journal of Operational Research**</span> Vol. 318, No. 2 (2024), pp. 686-700 (with R. Deguest): <a href="https://www.sciencedirect.com/science/article/pii/S0377221724004235" target="_blank">[Link - Open Access]</a> - <a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a>    
 * Procedural Rationality, Asset Heterogeneity and Market Selection,  <br/> <span style="color:#3B60A2">**Journal of Mathematical Economics**</span>, Vol. 82 (2019), pp. 125-149 (with B. Tavin) <a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank">[Link]</a>   <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2952659" target="_blank">[Working paper]</a>   <br/>
@@ -98,7 +101,7 @@ Articles are grouped into **research themes** below.
 
 <details>
   <summary>**SUSTAINABLE FINANCE**</summary>
-
+* Sustainability in commodity markets (with B. Tavin and Y. Zhou) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4698258" target="_blank">[SSRN]</a>, <br/> <span style="color:#3B60A2">**Journal of Banking & Finance**</span> Forthcoming <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))    
 * The biodiversity premium, <br/>
 <span style="color:#3B60A2">**Ecological Economics**</span>, Vol. 228 (2025) (with T. Giroux & O.D. Zerbib): <a href="https://www.sciencedirect.com/science/article/pii/S092180092400332X" target="_blank">[Link - Open Access]</a> - <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>     
 * ESG news spillovers across the value chain, <br/>
@@ -168,7 +171,7 @@ _____
 <details>
   <summary>**SUSTAINABLE INVESTING**</summary>
 
-* Cross-Asset Climate Betas, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Forthcoming (2025), pp. xxx-xxx (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5073529" target="_blank">[Working Paper]</a>    
+* Cross-Asset Climate Betas, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Vol. 51, No. 5 (2025), pp. 143-163 (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank">[Link]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5073529" target="_blank">[Working Paper]</a>    
 * The impact of climate change risk on long-term asset allocation, <br> <span style="color:#3B60A2">**Journal of Portfolio Management**</span>, Vol. 50, No. 5 (2024), pp. 238-263 (with JC Bertrand, N. McLoughlin and S. Mesnard) <a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank">[Link]</a> <a href="papers/climate_risk_alloc.pdf" target="_blank">[Working Paper]</a>    
 * International market exposure to sovereign ESG, <br/> <span style="color:#3B60A2">**Journal of Sustainable Finance & Investment**</span>, Vol. 14, No. 4, (2024), pp 968-987, (with C. Morgenstern & J. Kelly) <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open Access]</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working Paper]</a>   
 * Tuning trend following strategies with macro ESG data, <br/> <span style="color:#3B60A2">**Journal of Impact & ESG Investing**</span>, Vol. 2, No. 2 (2021), pp. 117-136 (with C. Morgenstern & J. Kelly) <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a>  
