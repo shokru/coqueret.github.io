@@ -48,6 +48,12 @@
 
     .size-toggle:hover { border-color: #a78bfa; }
 
+    select.size-toggle {
+      appearance: none;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c4b5fd'/%3E%3C/svg%3E") no-repeat right 12px center;
+      padding-right: 30px;
+    }
+
     .piano-wrapper {
       max-width: 95vw;
       overflow-x: auto;
@@ -140,9 +146,17 @@
 <body>
   <h1>Piano</h1>
   <p class="hint">Press keys or tap to play</p>
-  <div style="display:flex;gap:10px;margin-bottom:20px">
+  <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;justify-content:center">
     <button class="size-toggle" id="toggle">Switch to Large</button>
     <button class="size-toggle" id="layout-toggle">AZERTY</button>
+    <select class="size-toggle" id="instrument">
+      <option value="piano">Piano</option>
+      <option value="guitar">Electric Guitar</option>
+      <option value="saxophone">Saxophone</option>
+      <option value="strings">Strings</option>
+      <option value="organ">Organ</option>
+      <option value="flute">Flute</option>
+    </select>
   </div>
   <div class="piano-wrapper"><div class="piano" id="piano"></div></div>
   <div class="active-notes" id="active-notes"></div>
@@ -194,6 +208,7 @@
     const activeKeys = new Set();
     let mode = 'small';
     let layout = 'azerty';
+    let instrument = 'piano';
 
     function freq(note, oct) {
       return 440 * Math.pow(2, ((oct + 1) * 12 + NOTES.indexOf(note) - 69) / 12);
@@ -261,23 +276,203 @@
       piano.appendChild(el);
     }
 
+    function addOsc(nodes, master, f, ratio, vol, type, now, attack, decay) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(f * ratio, now);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(vol, now + attack);
+      if (decay > 0) {
+        gain.gain.exponentialRampToValueAtTime(vol * 0.3, now + decay * 0.3);
+        gain.gain.exponentialRampToValueAtTime(vol * 0.05, now + decay);
+      }
+      osc.connect(gain);
+      gain.connect(master);
+      osc.start(now);
+      nodes.push({ osc, gain });
+    }
+
+    function addNoise(master, f, now, vol, duration, filterFreq, q) {
+      const noise = audioCtx.createBufferSource();
+      const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * duration, audioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+      noise.buffer = buf;
+      const ng = audioCtx.createGain();
+      const nf = audioCtx.createBiquadFilter();
+      nf.type = 'bandpass';
+      nf.frequency.value = filterFreq;
+      nf.Q.value = q;
+      ng.gain.setValueAtTime(vol, now);
+      ng.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      noise.connect(nf);
+      nf.connect(ng);
+      ng.connect(master);
+      noise.start(now);
+    }
+
+    function addVibrato(osc, f, rate, depth, delay, now) {
+      const lfo = audioCtx.createOscillator();
+      const lfoGain = audioCtx.createGain();
+      lfo.frequency.value = rate;
+      lfoGain.gain.setValueAtTime(0, now);
+      lfoGain.gain.linearRampToValueAtTime(f * depth, now + delay);
+      lfo.connect(lfoGain);
+      lfoGain.connect(osc.frequency);
+      lfo.start(now);
+      return { osc: lfo, gain: lfoGain };
+    }
+
+    const INSTRUMENTS = {
+      piano(f, oct, now, nodes, master) {
+        const decay = Math.max(0.8, 4 - oct * 0.5);
+        [
+          [1, 0.4, 'sine'], [2, 0.15, 'sine'], [3, 0.08, 'sine'],
+          [4, 0.04, 'sine'], [5, 0.02, 'sine'], [1, 0.08, 'triangle'],
+        ].forEach(([r, g, t]) => addOsc(nodes, master, f, r, g, t, now, 0.005, decay));
+        addOsc(nodes, master, f, 1.002, 0.12, 'sine', now, 0.005, decay);
+        addNoise(master, f, now, 0.15, 0.06, f * 2, 2);
+        return { release: 0.3 };
+      },
+
+      guitar(f, oct, now, nodes, master) {
+        // electric guitar: sawtooth through distortion + amp sim
+        master.disconnect();
+
+        // distortion waveshaper
+        const dist = audioCtx.createWaveShaper();
+        const samples = 44100;
+        const curve = new Float32Array(samples);
+        const drive = 8;
+        for (let i = 0; i < samples; i++) {
+          const x = (i * 2) / samples - 1;
+          curve[i] = ((Math.PI + drive) * x) / (Math.PI + drive * Math.abs(x));
+        }
+        dist.curve = curve;
+        dist.oversample = '4x';
+
+        // amp cabinet EQ
+        const cabLow = audioCtx.createBiquadFilter();
+        cabLow.type = 'lowpass';
+        cabLow.frequency.value = Math.min(5000, f * 8);
+        cabLow.Q.value = 0.7;
+
+        const cabHigh = audioCtx.createBiquadFilter();
+        cabHigh.type = 'highpass';
+        cabHigh.frequency.value = 80;
+
+        const cabMid = audioCtx.createBiquadFilter();
+        cabMid.type = 'peaking';
+        cabMid.frequency.value = 800;
+        cabMid.gain.value = 4;
+        cabMid.Q.value = 1.5;
+
+        master.connect(dist);
+        dist.connect(cabHigh);
+        cabHigh.connect(cabLow);
+        cabLow.connect(cabMid);
+        cabMid.connect(audioCtx.destination);
+
+        [
+          [1, 0.25, 'sawtooth'], [1.003, 0.2, 'sawtooth'],
+          [2, 0.08, 'square'], [0.5, 0.06, 'square'],
+        ].forEach(([r, g, t]) => addOsc(nodes, master, f, r, g, t, now, 0.003, 0));
+
+        // pick attack noise
+        addNoise(master, f, now, 0.3, 0.02, f * 4, 4);
+
+        return { release: 0.2, filter: cabMid };
+      },
+
+      saxophone(f, oct, now, nodes, master) {
+        [
+          [1, 0.3, 'sawtooth'], [2, 0.15, 'sawtooth'], [3, 0.1, 'sine'],
+          [4, 0.05, 'sine'],
+        ].forEach(([r, g, t]) => {
+          addOsc(nodes, master, f, r, g, t, now, 0.08, 0);
+        });
+        const mainOsc = nodes[0].osc;
+        const vib = addVibrato(mainOsc, f, 5.5, 0.003, 0.3, now);
+        nodes.push(vib);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = f * 4;
+        filter.Q.value = 3;
+        master.disconnect();
+        master.connect(filter);
+        filter.connect(audioCtx.destination);
+        addNoise(master, f, now, 0.06, 0.12, f * 5, 1);
+        return { release: 0.12, filter };
+      },
+
+      strings(f, oct, now, nodes, master) {
+        const attack = 0.15;
+        [
+          [1, 0.25, 'sawtooth'], [1.002, 0.25, 'sawtooth'],
+          [0.998, 0.2, 'sawtooth'], [2, 0.08, 'sine'],
+        ].forEach(([r, g, t]) => addOsc(nodes, master, f, r, g, t, now, attack, 0));
+        const mainOsc = nodes[0].osc;
+        const vib = addVibrato(mainOsc, f, 5, 0.004, 0.5, now);
+        nodes.push(vib);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = f * 3;
+        filter.Q.value = 1;
+        master.disconnect();
+        master.connect(filter);
+        filter.connect(audioCtx.destination);
+        return { release: 0.5, filter };
+      },
+
+      organ(f, oct, now, nodes, master) {
+        [
+          [0.5, 0.15, 'sine'], [1, 0.35, 'sine'], [2, 0.2, 'sine'],
+          [3, 0.1, 'sine'], [4, 0.08, 'sine'], [6, 0.04, 'sine'],
+          [8, 0.03, 'sine'],
+        ].forEach(([r, g, t]) => addOsc(nodes, master, f, r, g, t, now, 0.01, 0));
+        const mainOsc = nodes[0].osc;
+        const vib = addVibrato(mainOsc, f * 0.5, 6, 0.002, 0.01, now);
+        nodes.push(vib);
+        return { release: 0.08 };
+      },
+
+      flute(f, oct, now, nodes, master) {
+        addOsc(nodes, master, f, 1, 0.3, 'sine', now, 0.06, 0);
+        addOsc(nodes, master, f, 2, 0.08, 'sine', now, 0.06, 0);
+        addOsc(nodes, master, f, 3, 0.02, 'sine', now, 0.06, 0);
+        const mainOsc = nodes[0].osc;
+        const vib = addVibrato(mainOsc, f, 5, 0.005, 0.2, now);
+        nodes.push(vib);
+        addNoise(master, f, now, 0.04, 0.15, f * 2, 0.5);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = f * 6;
+        filter.Q.value = 0.5;
+        master.disconnect();
+        master.connect(filter);
+        filter.connect(audioCtx.destination);
+        return { release: 0.1, filter };
+      },
+    };
+
     function playNote(note) {
       if (activeOsc[note]) return;
       if (audioCtx.state === 'suspended') audioCtx.resume();
 
       const m = note.match(/^([A-G]#?)(\d)$/);
       if (!m) return;
+      const f = freq(m[1], +m[2]);
+      const oct = +m[2];
+      const now = audioCtx.currentTime;
 
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.value = freq(m[1], +m[2]);
-      gain.gain.setValueAtTime(0, audioCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
-      osc.connect(gain).connect(audioCtx.destination);
-      osc.start();
+      const master = audioCtx.createGain();
+      master.connect(audioCtx.destination);
 
-      activeOsc[note] = { osc, gain };
+      const nodes = [];
+      const result = INSTRUMENTS[instrument](f, oct, now, nodes, master);
+
+      activeOsc[note] = { nodes, master, release: result.release, filter: result.filter };
       const el = document.querySelector(`.key[data-note="${note}"]`);
       if (el) el.classList.add('active');
       activeKeys.add(note);
@@ -287,8 +482,18 @@
     function stopNote(note) {
       const e = activeOsc[note];
       if (!e) return;
-      e.gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
-      setTimeout(() => e.osc.stop(), 200);
+      const now = audioCtx.currentTime;
+      const rel = e.release || 0.3;
+      e.nodes.forEach(n => {
+        n.gain.gain.cancelScheduledValues(now);
+        n.gain.gain.setValueAtTime(n.gain.gain.value, now);
+        n.gain.gain.exponentialRampToValueAtTime(0.0001, now + rel);
+        n.osc.stop(now + rel + 0.05);
+      });
+      setTimeout(() => {
+        e.master.disconnect();
+        if (e.filter) e.filter.disconnect();
+      }, (rel + 0.1) * 1000);
       delete activeOsc[note];
       const el = document.querySelector(`.key[data-note="${note}"]`);
       if (el) el.classList.remove('active');
@@ -312,6 +517,11 @@
       layout = layout === 'qwerty' ? 'azerty' : 'qwerty';
       document.getElementById('layout-toggle').textContent = layout.toUpperCase();
       buildPiano();
+    });
+
+    document.getElementById('instrument').addEventListener('change', (e) => {
+      instrument = e.target.value;
+      Object.keys(activeOsc).forEach(n => stopNote(n));
     });
 
     document.addEventListener('keydown', (e) => {
