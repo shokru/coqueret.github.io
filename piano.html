@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Piano</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -16,6 +16,7 @@
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: #e0e0e0;
+      touch-action: none;
     }
 
     h1 {
@@ -28,16 +29,36 @@
     }
 
     .hint {
-      margin-bottom: 32px;
+      margin-bottom: 16px;
       font-size: 13px;
       color: #888;
+    }
+
+    .size-toggle {
+      margin-bottom: 20px;
+      padding: 8px 20px;
+      background: none;
+      border: 1px solid #555;
+      border-radius: 20px;
+      color: #c4b5fd;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .size-toggle:hover { border-color: #a78bfa; }
+
+    .piano-wrapper {
+      max-width: 95vw;
+      overflow-x: auto;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
     }
 
     .piano {
       display: flex;
       position: relative;
-      border-radius: 0 0 8px 8px;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+      width: max-content;
     }
 
     .key {
@@ -48,10 +69,10 @@
 
     .key .label {
       position: absolute;
-      bottom: 12px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       pointer-events: none;
       text-transform: uppercase;
@@ -60,17 +81,17 @@
 
     .key .note-name {
       position: absolute;
-      bottom: 30px;
+      bottom: 26px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 10px;
+      font-size: 9px;
       pointer-events: none;
       opacity: 0.4;
     }
 
     .white {
-      width: 52px;
-      height: 200px;
+      width: 48px;
+      height: 180px;
       background: linear-gradient(to bottom, #f8f8f8, #fff);
       border: 1px solid #ccc;
       border-radius: 0 0 5px 5px;
@@ -80,8 +101,6 @@
     .white .label { color: #666; }
     .white .note-name { color: #999; }
 
-    .white:hover { background: linear-gradient(to bottom, #f0f0f0, #f5f5f5); }
-
     .white.active {
       background: linear-gradient(to bottom, #c4b5fd, #a78bfa) !important;
       transform: scaleY(0.98);
@@ -90,20 +109,17 @@
     }
 
     .black {
-      width: 34px;
-      height: 130px;
+      width: 32px;
+      height: 115px;
       background: linear-gradient(to bottom, #333, #111);
       border: 1px solid #000;
       border-radius: 0 0 4px 4px;
       position: absolute;
       z-index: 2;
-      margin-left: -17px;
     }
 
-    .black .label { color: #aaa; bottom: 10px; font-size: 10px; }
-    .black .note-name { color: #888; bottom: 26px; font-size: 9px; }
-
-    .black:hover { background: linear-gradient(to bottom, #444, #222); }
+    .black .label { color: #aaa; bottom: 8px; font-size: 9px; }
+    .black .note-name { color: #888; bottom: 22px; font-size: 8px; }
 
     .black.active {
       background: linear-gradient(to bottom, #7c3aed, #5b21b6) !important;
@@ -112,13 +128,8 @@
       box-shadow: 0 2px 8px rgba(124, 58, 237, 0.5);
     }
 
-    .octave {
-      display: flex;
-      position: relative;
-    }
-
     .active-notes {
-      margin-top: 32px;
+      margin-top: 20px;
       font-size: 14px;
       color: #a78bfa;
       min-height: 24px;
@@ -128,150 +139,189 @@
 </head>
 <body>
   <h1>Piano</h1>
-  <p class="hint">Press keys on your keyboard to play</p>
-  <div class="piano" id="piano"></div>
+  <p class="hint">Press keys or tap to play</p>
+  <div style="display:flex;gap:10px;margin-bottom:20px">
+    <button class="size-toggle" id="toggle">Switch to Large</button>
+    <button class="size-toggle" id="layout-toggle">AZERTY</button>
+  </div>
+  <div class="piano-wrapper"><div class="piano" id="piano"></div></div>
   <div class="active-notes" id="active-notes"></div>
 
   <script>
-    const NOTE_FREQS = {
-      'C3': 130.81, 'C#3': 138.59, 'D3': 146.83, 'D#3': 155.56,
-      'E3': 164.81, 'F3': 174.61, 'F#3': 185.00, 'G3': 196.00,
-      'G#3': 207.65, 'A3': 220.00, 'A#3': 233.08, 'B3': 246.94,
-      'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13,
-      'E4': 329.63, 'F4': 349.23, 'F#4': 369.99, 'G4': 392.00,
-      'G#4': 415.30, 'A4': 440.00, 'A#4': 466.16, 'B4': 493.88,
-      'C5': 523.25,
+    const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const BLACK = new Set(['C#','D#','F#','G#','A#']);
+
+    const SIZES = {
+      small: { startOctave: 4, endOctave: 4, whiteW: 48, whiteH: 180, blackW: 32, blackH: 115 },
+      large: { startOctave: 3, endOctave: 5, whiteW: 34, whiteH: 150, blackW: 22, blackH: 95 },
     };
 
-    const KEY_MAP = {
-      'a': 'C3', 'w': 'C#3', 's': 'D3', 'e': 'D#3', 'd': 'E3',
-      'f': 'F3', 't': 'F#3', 'g': 'G3', 'y': 'G#3', 'h': 'A3',
-      'u': 'A#3', 'j': 'B3',
-      'k': 'C4', 'o': 'C#4', 'l': 'D4', 'p': 'D#4', ';': 'E4',
+    const LAYOUTS = {
+      qwerty: {
+        small: {
+          'a':'C4','w':'C#4','s':'D4','e':'D#4','d':'E4',
+          'f':'F4','t':'F#4','g':'G4','y':'G#4','h':'A4','u':'A#4','j':'B4',
+          'k':'C5',
+        },
+        large: {
+          'a':'C3','w':'C#3','s':'D3','e':'D#3','d':'E3',
+          'f':'F3','t':'F#3','g':'G3','y':'G#3','h':'A3','u':'A#3','j':'B3',
+          'k':'C4','o':'C#4','l':'D4','p':'D#4',';':'E4',
+          "'":'F4',']':'F#4',
+          'z':'G4','x':'A4','c':'B4','v':'C5','b':'D5','n':'E5','m':'F5',
+        },
+      },
+      azerty: {
+        small: {
+          'q':'C4','z':'C#4','s':'D4','e':'D#4','d':'E4',
+          'f':'F4','t':'F#4','g':'G4','y':'G#4','h':'A4','u':'A#4','j':'B4',
+          'k':'C5',
+        },
+        large: {
+          'q':'C3','z':'C#3','s':'D3','e':'D#3','d':'E3',
+          'f':'F3','t':'F#3','g':'G3','y':'G#3','h':'A3','u':'A#3','j':'B3',
+          'k':'C4','o':'C#4','l':'D4','p':'D#4','m':'E4',
+          'ù':'F4','$':'F#4',
+          'w':'G4','x':'A4','c':'B4','v':'C5','b':'D5','n':'E5',
+        },
+      },
     };
+
+    function getKeyMap() { return LAYOUTS[layout][mode]; }
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const activeOscillators = {};
+    const activeOsc = {};
     const activeKeys = new Set();
+    let mode = 'small';
+    let layout = 'azerty';
 
-    function createPiano() {
+    function freq(note, oct) {
+      return 440 * Math.pow(2, ((oct + 1) * 12 + NOTES.indexOf(note) - 69) / 12);
+    }
+
+    function buildPiano() {
       const piano = document.getElementById('piano');
+      Object.keys(activeOsc).forEach(n => stopNote(n));
+      piano.innerHTML = '';
 
-      const keysByNote = {};
-      for (const [kb, note] of Object.entries(KEY_MAP)) {
-        keysByNote[note] = kb;
+      const s = SIZES[mode];
+      const km = getKeyMap();
+      let whiteIdx = 0;
+
+      for (let oct = s.startOctave; oct <= s.endOctave; oct++) {
+        for (const n of NOTES) {
+          const noteStr = n + oct;
+          const isBlack = BLACK.has(n);
+          const el = document.createElement('div');
+          el.className = `key ${isBlack ? 'black' : 'white'}`;
+          el.dataset.note = noteStr;
+
+          const noteName = document.createElement('span');
+          noteName.className = 'note-name';
+          noteName.textContent = noteStr;
+          el.appendChild(noteName);
+
+          const kb = Object.keys(km).find(k => km[k] === noteStr);
+          if (kb) {
+            const label = document.createElement('span');
+            label.className = 'label';
+            label.textContent = kb;
+            el.appendChild(label);
+          }
+
+          if (isBlack) {
+            el.style.width = s.blackW + 'px';
+            el.style.height = s.blackH + 'px';
+            el.style.left = (whiteIdx * s.whiteW - s.blackW / 2) + 'px';
+          } else {
+            el.style.width = s.whiteW + 'px';
+            el.style.height = s.whiteH + 'px';
+            whiteIdx++;
+          }
+          piano.appendChild(el);
+        }
       }
-
-      const layout = [
-        { note: 'C3', type: 'white' }, { note: 'C#3', type: 'black' },
-        { note: 'D3', type: 'white' }, { note: 'D#3', type: 'black' },
-        { note: 'E3', type: 'white' },
-        { note: 'F3', type: 'white' }, { note: 'F#3', type: 'black' },
-        { note: 'G3', type: 'white' }, { note: 'G#3', type: 'black' },
-        { note: 'A3', type: 'white' }, { note: 'A#3', type: 'black' },
-        { note: 'B3', type: 'white' },
-        { note: 'C4', type: 'white' }, { note: 'C#4', type: 'black' },
-        { note: 'D4', type: 'white' }, { note: 'D#4', type: 'black' },
-        { note: 'E4', type: 'white' },
-      ];
-
-      let whiteIndex = 0;
-      layout.forEach(({ note, type }) => {
-        const el = document.createElement('div');
-        el.className = `key ${type}`;
-        el.dataset.note = note;
-
-        const noteName = document.createElement('span');
-        noteName.className = 'note-name';
-        noteName.textContent = note;
-        el.appendChild(noteName);
-
-        if (keysByNote[note]) {
-          const label = document.createElement('span');
-          label.className = 'label';
-          label.textContent = keysByNote[note] === ';' ? ';' : keysByNote[note];
-          el.appendChild(label);
-        }
-
-        if (type === 'white') {
-          el.style.marginLeft = whiteIndex === 0 ? '0' : '0';
-          piano.appendChild(el);
-          whiteIndex++;
-        } else {
-          const whiteWidth = 52;
-          const offset = whiteIndex * whiteWidth;
-          el.style.left = offset + 'px';
-          piano.appendChild(el);
-        }
-      });
+      const finalNote = 'C' + (s.endOctave + 1);
+      const el = document.createElement('div');
+      el.className = 'key white';
+      el.dataset.note = finalNote;
+      const noteName = document.createElement('span');
+      noteName.className = 'note-name';
+      noteName.textContent = finalNote;
+      el.appendChild(noteName);
+      const fkb = Object.keys(km).find(k => km[k] === finalNote);
+      if (fkb) {
+        const label = document.createElement('span');
+        label.className = 'label';
+        label.textContent = fkb;
+        el.appendChild(label);
+      }
+      el.style.width = s.whiteW + 'px';
+      el.style.height = s.whiteH + 'px';
+      piano.appendChild(el);
     }
 
     function playNote(note) {
-      if (activeOscillators[note]) return;
-
+      if (activeOsc[note]) return;
       if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      const m = note.match(/^([A-G]#?)(\d)$/);
+      if (!m) return;
 
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
-      const filter = audioCtx.createBiquadFilter();
-
       osc.type = 'triangle';
-      osc.frequency.value = NOTE_FREQS[note];
-
-      filter.type = 'lowpass';
-      filter.frequency.value = 2000;
-
+      osc.frequency.value = freq(m[1], +m[2]);
       gain.gain.setValueAtTime(0, audioCtx.currentTime);
       gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
-
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
+      osc.connect(gain).connect(audioCtx.destination);
       osc.start();
 
-      activeOscillators[note] = { osc, gain };
-
+      activeOsc[note] = { osc, gain };
       const el = document.querySelector(`.key[data-note="${note}"]`);
       if (el) el.classList.add('active');
-
       activeKeys.add(note);
-      updateActiveNotes();
+      updateDisplay();
     }
 
     function stopNote(note) {
-      const entry = activeOscillators[note];
-      if (!entry) return;
-
-      const { osc, gain } = entry;
-      gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
-      setTimeout(() => osc.stop(), 200);
-      delete activeOscillators[note];
-
+      const e = activeOsc[note];
+      if (!e) return;
+      e.gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.15);
+      setTimeout(() => e.osc.stop(), 200);
+      delete activeOsc[note];
       const el = document.querySelector(`.key[data-note="${note}"]`);
       if (el) el.classList.remove('active');
-
       activeKeys.delete(note);
-      updateActiveNotes();
+      updateDisplay();
     }
 
-    function updateActiveNotes() {
-      const display = document.getElementById('active-notes');
-      display.textContent = activeKeys.size
-        ? [...activeKeys].join('  ')
-        : '';
+    function updateDisplay() {
+      document.getElementById('active-notes').textContent =
+        activeKeys.size ? [...activeKeys].join('  ') : '';
     }
+
+    document.getElementById('toggle').addEventListener('click', () => {
+      mode = mode === 'small' ? 'large' : 'small';
+      document.getElementById('toggle').textContent =
+        mode === 'small' ? 'Switch to Large' : 'Switch to Small';
+      buildPiano();
+    });
+
+    document.getElementById('layout-toggle').addEventListener('click', () => {
+      layout = layout === 'qwerty' ? 'azerty' : 'qwerty';
+      document.getElementById('layout-toggle').textContent = layout.toUpperCase();
+      buildPiano();
+    });
 
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return;
-      const note = KEY_MAP[e.key.toLowerCase()];
-      if (note) {
-        e.preventDefault();
-        playNote(note);
-      }
+      const note = getKeyMap()[e.key.toLowerCase()];
+      if (note) { e.preventDefault(); playNote(note); }
     });
 
     document.addEventListener('keyup', (e) => {
-      const note = KEY_MAP[e.key.toLowerCase()];
+      const note = getKeyMap()[e.key.toLowerCase()];
       if (note) stopNote(note);
     });
 
@@ -279,16 +329,44 @@
       const key = e.target.closest('.key');
       if (!key) return;
       playNote(key.dataset.note);
-
-      const onUp = () => {
-        stopNote(key.dataset.note);
-        document.removeEventListener('mouseup', onUp);
-      };
-      document.removeEventListener('mouseup', onUp);
+      const onUp = () => { stopNote(key.dataset.note); document.removeEventListener('mouseup', onUp); };
       document.addEventListener('mouseup', onUp);
     });
 
-    createPiano();
+    const activeTouches = {};
+    function keyFromTouch(t) { const el = document.elementFromPoint(t.clientX, t.clientY); return el ? el.closest('.key') : null; }
+
+    document.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      for (const t of e.changedTouches) {
+        const k = keyFromTouch(t);
+        if (k) { activeTouches[t.identifier] = k.dataset.note; playNote(k.dataset.note); }
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      for (const t of e.changedTouches) {
+        const k = keyFromTouch(t);
+        const prev = activeTouches[t.identifier];
+        const next = k ? k.dataset.note : null;
+        if (prev !== next) {
+          if (prev) stopNote(prev);
+          if (next) { activeTouches[t.identifier] = next; playNote(next); }
+          else delete activeTouches[t.identifier];
+        }
+      }
+    }, { passive: false });
+
+    document.addEventListener('touchend', (e) => {
+      for (const t of e.changedTouches) { if (activeTouches[t.identifier]) stopNote(activeTouches[t.identifier]); delete activeTouches[t.identifier]; }
+    });
+
+    document.addEventListener('touchcancel', (e) => {
+      for (const t of e.changedTouches) { if (activeTouches[t.identifier]) stopNote(activeTouches[t.identifier]); delete activeTouches[t.identifier]; }
+    });
+
+    buildPiano();
   </script>
 </body>
 </html>
