@@ -6,7 +6,6 @@
   <title>Piano</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       background: #1a1a2e;
       display: flex;
@@ -16,9 +15,7 @@
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: #e0e0e0;
-      touch-action: none;
     }
-
     h1 {
       margin-bottom: 8px;
       font-size: 28px;
@@ -27,13 +24,11 @@
       text-transform: uppercase;
       color: #c4b5fd;
     }
-
     .hint {
       margin-bottom: 16px;
       font-size: 13px;
       color: #888;
     }
-
     .size-toggle {
       margin-bottom: 20px;
       padding: 8px 20px;
@@ -44,35 +39,31 @@
       font-size: 13px;
       cursor: pointer;
       transition: border-color 0.2s;
+      touch-action: manipulation;
     }
-
     .size-toggle:hover { border-color: #a78bfa; }
-
     select.size-toggle {
       appearance: none;
       background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c4b5fd'/%3E%3C/svg%3E") no-repeat right 12px center;
       padding-right: 30px;
     }
-
     .piano-wrapper {
       max-width: 95vw;
       overflow-x: auto;
       border-radius: 0 0 8px 8px;
       box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+      touch-action: none;
     }
-
     .piano {
       display: flex;
       position: relative;
       width: max-content;
     }
-
     .key {
       position: relative;
       cursor: pointer;
       transition: background 0.05s, box-shadow 0.05s, transform 0.05s;
     }
-
     .key .label {
       position: absolute;
       bottom: 10px;
@@ -84,7 +75,6 @@
       text-transform: uppercase;
       opacity: 0.5;
     }
-
     .key .note-name {
       position: absolute;
       bottom: 26px;
@@ -94,7 +84,6 @@
       pointer-events: none;
       opacity: 0.4;
     }
-
     .white {
       width: 48px;
       height: 180px;
@@ -103,17 +92,14 @@
       border-radius: 0 0 5px 5px;
       z-index: 1;
     }
-
     .white .label { color: #666; }
     .white .note-name { color: #999; }
-
     .white.active {
       background: linear-gradient(to bottom, #c4b5fd, #a78bfa) !important;
       transform: scaleY(0.98);
       transform-origin: top;
       box-shadow: 0 2px 8px rgba(167, 139, 250, 0.5);
     }
-
     .black {
       width: 32px;
       height: 115px;
@@ -123,17 +109,14 @@
       position: absolute;
       z-index: 2;
     }
-
     .black .label { color: #aaa; bottom: 8px; font-size: 9px; }
     .black .note-name { color: #888; bottom: 22px; font-size: 8px; }
-
     .black.active {
       background: linear-gradient(to bottom, #7c3aed, #5b21b6) !important;
       transform: scaleY(0.97);
       transform-origin: top;
       box-shadow: 0 2px 8px rgba(124, 58, 237, 0.5);
     }
-
     .active-notes {
       margin-top: 20px;
       font-size: 14px;
@@ -160,16 +143,13 @@
   </div>
   <div class="piano-wrapper"><div class="piano" id="piano"></div></div>
   <div class="active-notes" id="active-notes"></div>
-
   <script>
     const NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
     const BLACK = new Set(['C#','D#','F#','G#','A#']);
-
     const SIZES = {
       small: { startOctave: 4, endOctave: 4, whiteW: 48, whiteH: 180, blackW: 32, blackH: 115 },
       large: { startOctave: 3, endOctave: 5, whiteW: 34, whiteH: 150, blackW: 22, blackH: 95 },
     };
-
     const LAYOUTS = {
       qwerty: {
         small: {
@@ -200,29 +180,23 @@
         },
       },
     };
-
     function getKeyMap() { return LAYOUTS[layout][mode]; }
-
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const activeOsc = {};
     const activeKeys = new Set();
     let mode = 'small';
     let layout = 'azerty';
     let instrument = 'piano';
-
     function freq(note, oct) {
       return 440 * Math.pow(2, ((oct + 1) * 12 + NOTES.indexOf(note) - 69) / 12);
     }
-
     function buildPiano() {
       const piano = document.getElementById('piano');
       Object.keys(activeOsc).forEach(n => stopNote(n));
       piano.innerHTML = '';
-
       const s = SIZES[mode];
       const km = getKeyMap();
       let whiteIdx = 0;
-
       for (let oct = s.startOctave; oct <= s.endOctave; oct++) {
         for (const n of NOTES) {
           const noteStr = n + oct;
@@ -230,12 +204,10 @@
           const el = document.createElement('div');
           el.className = `key ${isBlack ? 'black' : 'white'}`;
           el.dataset.note = noteStr;
-
           const noteName = document.createElement('span');
           noteName.className = 'note-name';
           noteName.textContent = noteStr;
           el.appendChild(noteName);
-
           const kb = Object.keys(km).find(k => km[k] === noteStr);
           if (kb) {
             const label = document.createElement('span');
@@ -243,7 +215,6 @@
             label.textContent = kb;
             el.appendChild(label);
           }
-
           if (isBlack) {
             el.style.width = s.blackW + 'px';
             el.style.height = s.blackH + 'px';
@@ -275,7 +246,6 @@
       el.style.height = s.whiteH + 'px';
       piano.appendChild(el);
     }
-
     function addOsc(nodes, master, f, ratio, vol, type, now, attack, decay) {
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
@@ -292,7 +262,6 @@
       osc.start(now);
       nodes.push({ osc, gain });
     }
-
     function addNoise(master, f, now, vol, duration, filterFreq, q) {
       const noise = audioCtx.createBufferSource();
       const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * duration, audioCtx.sampleRate);
@@ -311,7 +280,6 @@
       ng.connect(master);
       noise.start(now);
     }
-
     function addVibrato(osc, f, rate, depth, delay, now) {
       const lfo = audioCtx.createOscillator();
       const lfoGain = audioCtx.createGain();
@@ -323,7 +291,6 @@
       lfo.start(now);
       return { osc: lfo, gain: lfoGain };
     }
-
     const INSTRUMENTS = {
       piano(f, oct, now, nodes, master) {
         const decay = Math.max(0.8, 4 - oct * 0.5);
@@ -335,11 +302,9 @@
         addNoise(master, f, now, 0.15, 0.06, f * 2, 2);
         return { release: 0.3 };
       },
-
       guitar(f, oct, now, nodes, master) {
         // electric guitar: sawtooth through distortion + amp sim
         master.disconnect();
-
         // distortion waveshaper
         const dist = audioCtx.createWaveShaper();
         const samples = 44100;
@@ -351,40 +316,32 @@
         }
         dist.curve = curve;
         dist.oversample = '4x';
-
         // amp cabinet EQ
         const cabLow = audioCtx.createBiquadFilter();
         cabLow.type = 'lowpass';
         cabLow.frequency.value = Math.min(5000, f * 8);
         cabLow.Q.value = 0.7;
-
         const cabHigh = audioCtx.createBiquadFilter();
         cabHigh.type = 'highpass';
         cabHigh.frequency.value = 80;
-
         const cabMid = audioCtx.createBiquadFilter();
         cabMid.type = 'peaking';
         cabMid.frequency.value = 800;
         cabMid.gain.value = 4;
         cabMid.Q.value = 1.5;
-
         master.connect(dist);
         dist.connect(cabHigh);
         cabHigh.connect(cabLow);
         cabLow.connect(cabMid);
         cabMid.connect(audioCtx.destination);
-
         [
           [1, 0.25, 'sawtooth'], [1.003, 0.2, 'sawtooth'],
           [2, 0.08, 'square'], [0.5, 0.06, 'square'],
         ].forEach(([r, g, t]) => addOsc(nodes, master, f, r, g, t, now, 0.003, 0));
-
         // pick attack noise
         addNoise(master, f, now, 0.3, 0.02, f * 4, 4);
-
         return { release: 0.2, filter: cabMid };
       },
-
       saxophone(f, oct, now, nodes, master) {
         [
           [1, 0.3, 'sawtooth'], [2, 0.15, 'sawtooth'], [3, 0.1, 'sine'],
@@ -405,7 +362,6 @@
         addNoise(master, f, now, 0.06, 0.12, f * 5, 1);
         return { release: 0.12, filter };
       },
-
       strings(f, oct, now, nodes, master) {
         const attack = 0.15;
         [
@@ -424,7 +380,6 @@
         filter.connect(audioCtx.destination);
         return { release: 0.5, filter };
       },
-
       organ(f, oct, now, nodes, master) {
         [
           [0.5, 0.15, 'sine'], [1, 0.35, 'sine'], [2, 0.2, 'sine'],
@@ -436,7 +391,6 @@
         nodes.push(vib);
         return { release: 0.08 };
       },
-
       flute(f, oct, now, nodes, master) {
         addOsc(nodes, master, f, 1, 0.3, 'sine', now, 0.06, 0);
         addOsc(nodes, master, f, 2, 0.08, 'sine', now, 0.06, 0);
@@ -455,30 +409,24 @@
         return { release: 0.1, filter };
       },
     };
-
     function playNote(note) {
       if (activeOsc[note]) return;
       if (audioCtx.state === 'suspended') audioCtx.resume();
-
       const m = note.match(/^([A-G]#?)(\d)$/);
       if (!m) return;
       const f = freq(m[1], +m[2]);
       const oct = +m[2];
       const now = audioCtx.currentTime;
-
       const master = audioCtx.createGain();
       master.connect(audioCtx.destination);
-
       const nodes = [];
       const result = INSTRUMENTS[instrument](f, oct, now, nodes, master);
-
       activeOsc[note] = { nodes, master, release: result.release, filter: result.filter };
       const el = document.querySelector(`.key[data-note="${note}"]`);
       if (el) el.classList.add('active');
       activeKeys.add(note);
       updateDisplay();
     }
-
     function stopNote(note) {
       const e = activeOsc[note];
       if (!e) return;
@@ -500,41 +448,34 @@
       activeKeys.delete(note);
       updateDisplay();
     }
-
     function updateDisplay() {
       document.getElementById('active-notes').textContent =
-        activeKeys.size ? [...activeKeys].join('  ') : '';
+        activeKeys.size ? [...activeKeys].join(' ') : '';
     }
-
     document.getElementById('toggle').addEventListener('click', () => {
       mode = mode === 'small' ? 'large' : 'small';
       document.getElementById('toggle').textContent =
         mode === 'small' ? 'Switch to Large' : 'Switch to Small';
       buildPiano();
     });
-
     document.getElementById('layout-toggle').addEventListener('click', () => {
       layout = layout === 'qwerty' ? 'azerty' : 'qwerty';
       document.getElementById('layout-toggle').textContent = layout.toUpperCase();
       buildPiano();
     });
-
     document.getElementById('instrument').addEventListener('change', (e) => {
       instrument = e.target.value;
       Object.keys(activeOsc).forEach(n => stopNote(n));
     });
-
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return;
       const note = getKeyMap()[e.key.toLowerCase()];
       if (note) { e.preventDefault(); playNote(note); }
     });
-
     document.addEventListener('keyup', (e) => {
       const note = getKeyMap()[e.key.toLowerCase()];
       if (note) stopNote(note);
     });
-
     document.addEventListener('mousedown', (e) => {
       const key = e.target.closest('.key');
       if (!key) return;
@@ -542,21 +483,27 @@
       const onUp = () => { stopNote(key.dataset.note); document.removeEventListener('mouseup', onUp); };
       document.addEventListener('mouseup', onUp);
     });
-
     const activeTouches = {};
     function keyFromTouch(t) { const el = document.elementFromPoint(t.clientX, t.clientY); return el ? el.closest('.key') : null; }
-
     document.addEventListener('touchstart', (e) => {
-      e.preventDefault();
+      let handled = false;
       for (const t of e.changedTouches) {
         const k = keyFromTouch(t);
-        if (k) { activeTouches[t.identifier] = k.dataset.note; playNote(k.dataset.note); }
+        if (k) {
+          activeTouches[t.identifier] = k.dataset.note;
+          playNote(k.dataset.note);
+          handled = true;
+        }
       }
+      // Only block default behavior when a piano key was actually touched,
+      // so taps on the buttons / instrument <select> work on iOS.
+      if (handled) e.preventDefault();
     }, { passive: false });
-
     document.addEventListener('touchmove', (e) => {
-      e.preventDefault();
+      let handled = false;
       for (const t of e.changedTouches) {
+        if (!(t.identifier in activeTouches)) continue; // ignore touches that didn't start on a key
+        handled = true;
         const k = keyFromTouch(t);
         const prev = activeTouches[t.identifier];
         const next = k ? k.dataset.note : null;
@@ -566,16 +513,14 @@
           else delete activeTouches[t.identifier];
         }
       }
+      if (handled) e.preventDefault();
     }, { passive: false });
-
     document.addEventListener('touchend', (e) => {
       for (const t of e.changedTouches) { if (activeTouches[t.identifier]) stopNote(activeTouches[t.identifier]); delete activeTouches[t.identifier]; }
     });
-
     document.addEventListener('touchcancel', (e) => {
       for (const t of e.changedTouches) { if (activeTouches[t.identifier]) stopNote(activeTouches[t.identifier]); delete activeTouches[t.identifier]; }
     });
-
     buildPiano();
   </script>
 </body>
