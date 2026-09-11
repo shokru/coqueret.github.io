@@ -172,7 +172,7 @@ wb_raw = WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
                            "gdp" = "NY.GDP.MKTP.CD",
                            "gdp_growth" = "NY.GDP.MKTP.KD.ZG",
                            "inflation" = "FP.CPI.TOTL.ZG",
-                           "debt" = "GC.DOD.TOTL.GD.ZS",
+                           "debt" = "GC.DOD.TOTL.GD.ZS", 
                            "unemployment" = "SL.UEM.TOTL.ZS"), 
              #country = c('FR','US'), # here you can specify some countries
              extra = TRUE,
@@ -181,7 +181,9 @@ wb_raw = WDI(indicator = c("gdp_per_capita" = "NY.GDP.PCAP.KD",
   mutate(across(everything(), as.vector)) |>
   select(-status, -lending, -iso2c, -iso3c)
 wb_data <- wb_raw |> filter(country %in% c("France", "United States")) |> arrange(country, year)
-wb_eu <- wb_raw |> filter(country %in% c("Spain", "Italy", "Poland", "Slovenia", "Venezuela, RB")) |> arrange(country, year)
+wb_eu <- wb_raw |> 
+  filter(country %in% c("Spain", "Italy", "Poland", "Slovenia", "Venezuela, RB")) |> 
+  arrange(country, year)
 ```
 
 Again, for pythonistas, the equivalent kind of request can be found in this [colab notebook](https://colab.research.google.com/drive/1qvbbAYaXNz5FP4Q5zyY21qkZvUIPF1P9#scrollTo=dbfsXGCNsCsq).
@@ -555,7 +557,7 @@ Let's have a look at a sample from the [French debt](https://www.aft.gouv.fr/fr/
 
 ![](dette_2024.png)
 
-![](dette_2025.png)
+![](dette_2026.png)
 
 Short-term debt usually refers to payments that will be due in one year or less.     
 Medium-term is between 1 and 5-10 years and long-term is beyond 5-10 years.  
@@ -624,7 +626,7 @@ Which series are available?
 
 ```{r}
 library(imfweo)
-weo_get_series() |> head(8)
+weo_get_series(year = 2024, release = "Fall") |> head(8)
 ```
 
 Fetching some data for particular countries. 
@@ -640,5 +642,8 @@ weo_get(
 ```
 
 
+```{r}
+
+```
 
 

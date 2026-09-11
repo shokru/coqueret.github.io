@@ -73,7 +73,7 @@ The content of the notebook is heavily inspired from the book [**Advanced Macro-
 
 For decades, economists have sought to understand and explain the **drivers of growth**. Let us understand why by looking at long-run patterns of economic output.
 
-The [**Maddison Project Database**](https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020) compiles data for GDP over **long chronological depths**.
+The [**Maddison Project Database**](https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2020) compiles data for GDP over **long chronological depths**. See the paper [Maddison-style estimates of the evolution of the world economy: A new 2023 update](https://onlinelibrary.wiley.com/doi/10.1111/joes.12618). The [Penn World Tables](https://www.rug.nl/ggdc/productivity/pwt/?lang=en) are also good data sources.
 
 Below, we focus on a subset of countries for which a lot of points are available. 
 
@@ -109,7 +109,14 @@ lt_gdp |>
 What we see is an exponential pattern in growth. And the central question is: **how come**???   
 The purpose of the sessions to come will be to propose theoretical models that seek to reproduce this salient fact. 
 
-**NOTE**: for long term estimates of GDP, we refer to this [**tool**](https://philmkoch.github.io/historicalGDPpc_app/), [**data**](https://github.com/philmkoch/historicalGDPpc), and the corresponding [paper](https://www.pnas.org/doi/10.1073/pnas.2402060121).
+A few interesting additional resources:
+
+- for long term estimates of GDP, we refer to this [**tool**](https://philmkoch.github.io/historicalGDPpc_app/), [**data**](https://github.com/philmkoch/historicalGDPpc), and the corresponding [paper](https://www.pnas.org/doi/10.1073/pnas.2402060121).  
+- see also [When Did Growth Begin? New Estimates of Productivity Growth in England from 1250 to 1870](https://academic.oup.com/qje/article-abstract/140/2/835/7933323): "*We find that productivity growth was zero before 1600. Productivity growth began in 1600—almost a century before the Glorious Revolution. Thus, the onset of productivity growth preceded the bourgeois institutional reforms of seventeenth-century England. We estimate productivity growth of 2% per decade between 1600 and 1800, increasing to 5% per decade between 1810 and 1860. Much of the increase in output growth during the Industrial Revolution is explained by structural change — the falling importance of land in production—rather than faster productivity growth.*"
+- granular GDP growth & per capita values for [European regions](https://ec.europa.eu/eurostat/en/web/products-eurostat-news/w/ddn-20260210-2):
+![](GDP_percap.png)
+
+
 
 # The baseline model
 
@@ -221,7 +228,7 @@ wb_growth <- WDI(                           # World Bank data
   ), 
   extra = TRUE,
   start = 1960,
-  end = 2024) |>
+  end = 2025) |>
   mutate(across(everything(), as.vector)) |>
   select(-status, -lending, -iso2c, -iso3c) |>
   filter(lastupdated == max(lastupdated)) |>
@@ -437,6 +444,7 @@ The dot notation $\dot{L}$ stands for the derivative of the $L$ function with re
 
 Nevertheless, with the advent of big data and nowcasting, higher frequencies are becoming more common. For instance, the OECD used to propose a [**_real-time_** GDP tracker](https://web-archive.oecd.org/sections/weekly-tracker-of-gdp-growth/index.htm) that was updated at a weekly rate, but it seems this project was suspended (until some hypothetical future update). 
 
+The [Atlanta FED](https://www.atlantafed.org/), though, seems to have a [weekly GDP tracker](https://www.atlantafed.org/cqer/research/gdpnow).
 :::
 
 
@@ -501,7 +509,7 @@ tibble(x = 0:10) |>
 
 **Balanced growth paths** (BGP) are parameter combinations that lead to **constant (relative) growth rates**. Because the key quantities (growth rates) do not change anymore, this can be perceived as a form of **equilibrium**. We are interested in these situations as they characterizes stable versions of the model - they are also called **steady states**.
 For instance, in the specification outlined above, this would mean that $\dot{k}/k$ is constant. Given @eq-dotk, it is equal to 
-$$\gamma_k=\frac{\dot{k}}{k}=\frac{sy}{k}-(n+\delta),$$ {#eq-g_capital}
+$$\gamma_k=\frac{\dot{k}}{k}=\frac{sy}{k}-(n+\delta)=Ask^{\alpha-1}-(n+\delta),$$ {#eq-g_capital}
 hence, we see that the relative rate still depends on $k$. For it to be constant, we would need $k$ to be constant too and thus, this requires $\dot{k}=0$ (except in the **exceptional configuration** where $\alpha = 1$)! If $\alpha \neq 1$, the BGP implies that all quantities be constant, which seems rather *unrealistic* in practice, but anyhow, it's an interesting exercise.
 
 ::: {.callout-important collapse="false"}
@@ -847,6 +855,81 @@ $\rightarrow$ The **Solow model** does not generate (steady) growth endogenously
 It is not reable able to produce some of the most salient stylized facts in macroeconomics...   
 The next sessions will try to propose extensions that intend to address these limitations.   
 
+
+# BONUS: the labor share
+
+
+## The data
+
+The figure below plots the labor share of the U.S. corporate sector, defined as
+
+$$
+\text{Labor share}_t = \frac{\text{Compensation of employees}_t}{\text{Gross value added of corporate business}_t} \times 100,
+$$
+
+using annual averages of quarterly data from **BEA NIPA Table 1.14** (*Gross Value Added of Domestic Corporate Business*), retrieved via FRED (series `A442RC1Q027SBEA` and `A451RC1Q027SBEA`).
+
+[](labor_share_corporate.png)
+
+
+Two regimes stand out: a roughly stable band between 62% and 65% from 1947 to 2000, and a sustained decline afterward, from about 64% in 2000 to about 55% in 2025.
+
+### What's driving the decline?
+
+[Zidar and Zwick](https://everywheremillionaire.substack.com/p/why-the-labor-share-keeps-falling) argue that a substantial share of the post-2000 decline in labor's share is a measurement artifact created by the tax code rather than a real shift in production. After the Tax Reform Act of 1986 lowered individual rates relative to corporate rates, owners increasingly converted from C corporations to S corporations and reported income as profit rather than wages; the Affordable Care Act's 3.8% net investment income surtax further strengthened this incentive for high earners. Because national accounts classify S-corporation profits as capital income, this relabeling mechanically reduces the measured labor share without changing underlying production. A related effect is the migration of labor-intensive businesses—such as law firms, consultancies, medical practices, and hedge funds—into partnerships, whose profits rose from 13% of business profits in 1980 to 35% today. Since these firms have higher labor shares than the corporate sector they left, their exit makes corporations appear more capital-intensive. Correcting for both effects, the authors estimate that about one-third of the 1978–2017 decline in the labor share (1.6 of 5.0 percentage points) reflects tax-driven income reclassification rather than a genuine economic shift, and they argue that the 2017 Tax Cuts and Jobs Act's Section 199A deduction—made permanent by the 2025 One Big Beautiful Bill Act—has further reinforced these incentives.
+
+## Why this connects to Cobb-Douglas
+
+The Cobb-Douglas production function,
+
+$$
+Y = A K^{\alpha} L^{1-\alpha}, \qquad 0 < \alpha < 1,
+$$
+
+is the workhorse of growth theory largely *because* it reproduces one of Kaldor's stylized facts: a stable labor share. If firms are price takers and pay each factor its marginal product, the wage bill is
+
+$$
+w L = \frac{\partial Y}{\partial L} L = (1-\alpha) Y,
+$$
+
+so the labor share is exactly the constant exponent $(1-\alpha)$. Under Cobb-Douglas, this ratio is **invariant to capital deepening**: however much $K/L$ rises, $(1-\alpha)$ does not move. This is a direct algebraic property of the unit elasticity of substitution between capital and labor embedded in the Cobb-Douglas form.
+
+The 1947-2000 portion of @fig-labor-share is broadly consistent with this: the labor share fluctuates cyclically but shows no clear trend, which is exactly what a Cobb-Douglas economy with a roughly constant $\alpha$ would predict. The post-2000 decline is not.
+
+## Generalizing with a CES production function
+
+A constant-elasticity-of-substitution (CES) production function nests Cobb-Douglas as a special case and allows the labor share to move with the capital-labor ratio:
+
+$$
+Y = A\left[\alpha K^{\frac{\sigma-1}{\sigma}} + (1-\alpha) L^{\frac{\sigma-1}{\sigma}}\right]^{\frac{\sigma}{\sigma-1}},
+$$
+
+where $\sigma$ is the elasticity of substitution between capital and labor. Cobb-Douglas corresponds to $\sigma \to 1$. Under CES with competitive factor markets, the labor share satisfies
+
+$$
+\frac{wL}{Y} = (1-\alpha)\left(\frac{Y}{AL}\right)^{\frac{1-\sigma}{\sigma}},
+$$
+
+so it depends on labor productivity $Y/L$ whenever $\sigma \neq 1$ (the exponent vanishes exactly when $\sigma = 1$, recovering the constant Cobb-Douglas share $1-\alpha$):
+
+- If $\sigma > 1$, capital and labor are relatively easy substitutes, and a rising capital-labor ratio **lowers** the labor share.
+- If $\sigma < 1$, capital deepening **raises** the labor share.
+
+[Karabarbounis and Neiman (2014)](https://academic.oup.com/qje/article-abstract/129/1/61/1899422) is the reference estimate here: they argue $\sigma > 1$ for the U.S. and attribute much of the observed decline to a falling relative price of investment goods (i.e., cheaper capital equipment), which induces firms to substitute capital for labor.
+
+## Caveats
+
+The CES/substitution story is one candidate explanation among several for the pattern in @fig-labor-share, and it is not the only one, nor is it the explanation favored in the source post this figure is drawn from:
+
+1. **Measurement/tax-classification story.** As discussed above, the tax-driven relabeling of income between wages and profit is a measurement argument, not a production-function argument -- it is not nested in the CES framework above, and it accounts for roughly a third of the 1978-2017 decline on Zidar and Zwick's estimates.
+2. **Rising markups.**[] De Loecker, Eeckhout, and Unger (2020)](https://academic.oup.com/qje/article-abstract/135/2/561/5714769) attribute the decline to rising markups and market power, which lowers the labor share independently of the elasticity of substitution.
+3. **Automation.** Acemoglu and Restrepo model task-level automation (e.g., robots) directly displacing labor, again outside the aggregate CES framework.
+4. **Reallocation to superstar firms.** [Autor et al. (2020)](https://academic.oup.com/qje/article-abstract/135/2/645/5721266) show that the aggregate decline can arise from a compositional shift in output toward high-markup, low-labor-share "superstar" firms, even if no individual firm's technology changes.
+
+These explanations are not mutually exclusive, and disentangling them is largely an empirical exercise in firm- and industry-level data rather than something readable off the aggregate time series alone.
+
+
+**GOING FURTHER**: [A Standard Task-Based Solow Model Delivers AI-Driven Double-Digit Growth](https://benjaminmoll.com/wp-content/uploads/2026/09/task_based_solow.pdf)
 
 
 ```{webr-r}
