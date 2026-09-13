@@ -128,7 +128,7 @@ wb_growth |>
   ggplot(aes(x = RD, y = growth)) + geom_point() +
   theme_classic() + xlab("R&D expenditures (%GDP)") +
   geom_text_repel(aes(label = country)) +
-  geom_smooth(se = F)
+  geom_smooth(se = F) 
 ```
 
 The link is either far from obvious, or potentially negative, which is not what we would expect, intuitively...
@@ -257,7 +257,7 @@ which, from the perspective of $Z$, is equivalent to the $AK$ model.
 
 Importantly, the varieties are not fixed once and for all; they may change, due to innovations and R&D. Hence, while $Z$ is fixed, $M$ is not and for simplicity, we assume $\dot{M}_t=\gamma_M M_t$ (i.e., $M_t=M_0e^{\gamma_M t}$ with $\gamma_M>0$). It holds that 
 
-$$\dot{Y}_t=Z\dot{M}_t (1/\alpha-1)M_t^{1/\alpha}$$
+$$\dot{Y}_t=Z\dot{M}_t (1/\alpha-1)M_t^{1/\alpha-2}$$
 so
 
 $$\frac{\dot{Y}_t}{Y_t}=(1/\alpha-1)\frac{\dot{M}_t}{M_t}=(1/\alpha-1)\gamma_M >0 \quad \text{if} \quad \alpha \in (0,1).$$
