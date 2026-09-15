@@ -531,8 +531,7 @@ For comparison purposes, we stick to the ILO definition, but in this case, the d
 #| fig.width: 4 
 #| fig.height: 2
 
-g <- wb_data |>
-  na.omit() |>
+g <- wb_data |> filter(year > 1985) |>
   ggplot(aes(x = year, y = unemployment, color = country)) + geom_line() +
   theme_classic() + 
   theme(axis.title = element_blank(),
