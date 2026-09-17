@@ -681,11 +681,11 @@ lm(log(gdp_percap) ~ x,
 
 So we have that
 
-$$\frac{\log(A)}{1-\alpha}=5.5, \quad \frac{\alpha}{1-\alpha} = 0.97$$
+$$\frac{\log(A)}{1-\alpha} \approx 5.5, \quad \frac{\alpha}{1-\alpha} \approx 0.97$$
 
-This gives $\alpha=0.49$ and $A=e^{2.7}=14.8$.
+This gives $\alpha \approx 0.49$ and $A=e^{2.7} \approx 14.8$.
 
-If we use time-series data to estimate country-specific $\alpha$ and $A$ (total productivity factor).
+If we use time-series data to estimate country-specific $\alpha$ and $A$ (total productivity factor), from {capital_percap} directly.
 
 ```{r}
 #| message: false
@@ -869,14 +869,16 @@ $$
 
 using annual averages of quarterly data from **BEA NIPA Table 1.14** (*Gross Value Added of Domestic Corporate Business*), retrieved via FRED (series `A442RC1Q027SBEA` and `A451RC1Q027SBEA`).
 
-[](labor_share_corporate.png)
+![](labor_share_corporate.png){#fig-labor-share}
 
 
 Two regimes stand out: a roughly stable band between 62% and 65% from 1947 to 2000, and a sustained decline afterward, from about 64% in 2000 to about 55% in 2025.
 
 ### What's driving the decline?
 
-[Zidar and Zwick](https://everywheremillionaire.substack.com/p/why-the-labor-share-keeps-falling) argue that a substantial share of the post-2000 decline in labor's share is a measurement artifact created by the tax code rather than a real shift in production. After the Tax Reform Act of 1986 lowered individual rates relative to corporate rates, owners increasingly converted from C corporations to S corporations and reported income as profit rather than wages; the Affordable Care Act's 3.8% net investment income surtax further strengthened this incentive for high earners. Because national accounts classify S-corporation profits as capital income, this relabeling mechanically reduces the measured labor share without changing underlying production. A related effect is the migration of labor-intensive businesses—such as law firms, consultancies, medical practices, and hedge funds—into partnerships, whose profits rose from 13% of business profits in 1980 to 35% today. Since these firms have higher labor shares than the corporate sector they left, their exit makes corporations appear more capital-intensive. Correcting for both effects, the authors estimate that about one-third of the 1978–2017 decline in the labor share (1.6 of 5.0 percentage points) reflects tax-driven income reclassification rather than a genuine economic shift, and they argue that the 2017 Tax Cuts and Jobs Act's Section 199A deduction—made permanent by the 2025 One Big Beautiful Bill Act—has further reinforced these incentives.
+[Zidar and Zwick](https://everywheremillionaire.substack.com/p/why-the-labor-share-keeps-falling) argue that a substantial share of the post-2000 decline in labor's share is a measurement artifact created by the tax code rather than a real shift in production. After the Tax Reform Act of 1986 lowered individual rates relative to corporate rates, owners increasingly converted from C corporations to S corporations and reported income as profit rather than wages; the Affordable Care Act's 3.8% net investment income surtax further strengthened this incentive for high earners. Because national accounts classify S-corporation profits as capital income, this relabeling mechanically reduces the measured labor share without changing underlying production. 
+
+A related effect is the migration of labor-intensive businesses (law firms, consultancies, medical practices, and hedge funds) into partnerships, whose profits rose from 13% of business profits in 1980 to 35% today. Since these firms have higher labor shares than the corporate sector they left, their exit makes corporations appear more capital-intensive. Correcting for both effects, the authors estimate that about one-third of the 1978–2017 decline in the labor share (1.6 of 5.0 percentage points) reflects tax-driven income reclassification rather than a genuine economic shift, and they argue that the 2017 Tax Cuts and Jobs Act's Section 199A deduction (made permanent by the 2025 'One Big Beautiful Bill Act') has further reinforced these incentives.
 
 ## Why this connects to Cobb-Douglas
 
