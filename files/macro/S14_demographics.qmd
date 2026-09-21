@@ -1,0 +1,1220 @@
+---
+title: "Demographics: the fertility puzzle"
+format:
+  html:
+    grid:
+      sidebar-width: 150px
+      body-width: 720px
+      margin-width: 350px
+      gutter-width: 0.6em
+    toc: true
+    toc-location: left
+    #page-layout: full
+    df-print: kable
+    theme: cosmo
+    fontsize: 1.2em
+    embed-resources: true
+    code-block-size: 0.5em
+    code-copy: true
+
+---
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.8em;
+}
+```
+
+
+**NOTE**: The present notebook is coded in R. It relies heavily on the [**tidyverse**](https://www.tidyverse.org/) ecosystem of packages. We load the tidyverse below as a prerequisite for the rest of the notebook - along with a few other libraries.
+
+$\rightarrow$ Don't forget that code flows **sequentially**. A random chunk may not work if the previous have have not been executed.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+library(tidyverse)    # Package for data wrangling
+library(readxl)       # Package to import MS Excel files
+library(latex2exp)    # Package for LaTeX expressions
+library(quantmod)     # Package for stock data extraction
+library(highcharter)  # Package for reactive plots
+library(WDI)          # Package for World Bank data
+library(ggsci)        # Package for cool color palettes
+library(ggrepel)      # Package for neat annotations
+library(fixest)       # Package for panel models
+library(httr)         # Package to fetch data online
+impute <- function(v, n = 6){     # Imputation function
+  for(j in 1:n){
+    ind <- which(is.na(v))
+    if(length(ind)>0){
+      if(ind[1]==1){ind <- ind[-1]}
+      v[ind] <- v[ind-1]
+    }
+  }
+  return(v)
+}
+owid <- function(slug){           # Shortcut for Our World in Data files
+  paste0("https://ourworldindata.org/grapher/", slug,
+         ".csv?csvType=full&useColumnShortNames=true")
+}
+```
+
+
+The content of the notebook is inspired by two recent surveys: [**The Economics of Fertility: A New Era**](https://www.nber.org/papers/w29948) (Doepke, Hannusch, Kindermann & Tertilt) and [**Why is Fertility so Low in High Income Countries?**](https://www.nber.org/papers/w33989) (Kearney & Levine).
+
+
+# Context
+
+## Why should a macro-economist care?
+
+Demographics has shown up in **every** model we have seen so far - usually hidden behind one Greek letter:
+
+- in the **Solow** model, the population growth rate $n$ **dilutes** capital per worker: the steady state is $k^*=\left(\frac{s}{n+\delta+g}\right)^{1/(1-\alpha)}$, so a lower $n$ mechanically *raises* capital (and output) per capita;
+- in the **overlapping generations** model, $n$ is the ratio of active workers to retirees and thus determines whether a pay-as-you-go pension system is sustainable ($b_t=(1+n)d_t$);
+- in the **unified growth theory**, the switch from *quantity* to *quality* of children **is** the transition out of the Malthusian regime;
+- in **ideas-based** growth models, people are the input of the R&D sector: fewer researchers, fewer ideas (see the last section of this notebook).
+
+$\rightarrow$ Population is not an exogenous nuisance parameter. It is a **choice variable** - and since roughly 2015, that choice has been changing very fast, almost everywhere, and in a way that **nobody forecast**.
+
+## The headline
+
+::: {.callout-important collapse="false"}
+## Three numbers to keep in mind
+
+- **2.1**: the number of children per woman needed to keep a population constant in the long run (the "**replacement rate**"; it is slightly above 2 because of infant mortality and of the sex ratio at birth).
+- $\approx$ **2.2**: world fertility in 2024, i.e., essentially *at* replacement, having fallen from **5** in 1950.
+- **> 2/3**: the share of humanity now living in a country whose fertility is **below** replacement.
+:::
+
+The point of this session is *not* that population is falling - it is not, yet, because of **demographic momentum** (the age pyramid is still young in many places) and increasing longevity. The point is that the **flow** of births has dropped much faster than *any* institution (the UN included) predicted, and that we do **not** agree on why.
+
+
+
+# Stylized facts
+
+## The global picture
+
+We start with the United Nations [World Population Prospects](https://population.un.org/wpp/), fetched through [**Our World in Data**](https://ourworldindata.org/) (OWID), which mirrors dozens of open datasets behind a stable `csv` interface. The file contains **estimates** (until 2023) *and* the **medium-variant projection** (up to 2100).
+
+```{r}
+#| label: fetch_un_fertility
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+tfr_un <- read_csv(owid("fertility-rate-with-projections"))
+colnames(tfr_un) <- c("country", "code", "year", "estimate", "projection")
+tfr_un <- tfr_un |>
+  pivot_longer(estimate:projection, names_to = "type", values_to = "tfr") |>
+  filter(!is.na(tfr))
+tfr_un |> head(3)
+```
+
+The world series speaks for itself. The red line is the **replacement rate**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+tfr_un |>
+  filter(country == "World") |>
+  ggplot(aes(x = year, y = tfr, linetype = type)) + geom_line(linewidth = 0.9) +
+  geom_hline(yintercept = 2.1, color = "#C0504D") +
+  annotate("text", x = 1975, y = 2.35, label = "replacement", color = "#C0504D") +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold"),
+        legend.title = element_blank(),
+        legend.position = c(0.75, 0.85)) +
+  ggtitle("World fertility (children per woman)")
+```
+
+Two remarks:
+
+- the **level** of the fall is spectacular: from ~5 children per woman in 1950 to ~2.2 today. Most of it comes from the developing world catching up with the **demographic transition**;
+- the UN *projects* the world to settle **below** replacement (~1.8 by the end of the century). This is a projection, not a forecast: as we will see, the UN has been revising it **downwards** at almost every vintage.
+
+## Convergence, at high speed
+
+Aggregates hide the most striking feature: the **speed** of the transition in late-comers. Let's now switch to the [World Bank](https://data.worldbank.org/) and download a large panel of demographic and socio-economic indicators.
+
+::: {.callout-warning collapse="false"}
+## Two traps worth knowing about
+
+**1. The 60 second timeout.** Each of these series is a 4 MB JSON payload covering every country since 1960. R's default download timeout, `getOption("timeout")`, is **60 seconds** - which a slow connection can easily exceed. So we raise it. This single line is the difference between "it works" and a stream of inscrutable failures.
+
+**2. Silent column dropping.** If you pass a **list** of indicators to `WDI()`, the package downloads them one by one and wraps each download in a `tryCatch`. When one of them fails, the corresponding **column is silently missing** from the result, and you only discover it twenty chunks later with a cryptic `object 'xxx' not found`.
+
+We therefore fetch each series **separately**, **retry** with a growing pause, and **stop** with an explicit message if a series really cannot be obtained. Country characteristics (region, income group, ...) come from `WDI_data`, a table shipped with the package, which spares us one more network call.
+:::
+
+This chunk takes a few minutes to run - hence the `cache: true` option, which stores the result on disk so that the download only happens once.
+
+```{r}
+#| label: fetch_wdi
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+indicators <- c(
+  "fertility"      = "SP.DYN.TFRT.IN",   # Fertility rate, total (births per woman)
+  "fertility_teen" = "SP.ADO.TFRT",      # Adolescent fertility (per 1,000 women 15-19)
+  "fertility_want" = "SP.DYN.WFRT",      # Wanted fertility rate (births per woman)
+  "birth_rate"     = "SP.DYN.CBRT.IN",   # Crude birth rate (per 1,000 people)
+  "gdp_percap"     = "NY.GDP.PCAP.PP.KD",# GDP per capita, PPP (constant 2021 $)
+  "lfp_female"     = "SL.TLF.CACT.FE.ZS",# Labor force participation, female (15+, %)
+  "lfp_male"       = "SL.TLF.CACT.MA.ZS",# Labor force participation, male (15+, %)
+  "educ_female"    = "SE.TER.ENRR.FE",   # Tertiary school enrolment, female (gross, %)
+  "contraception"  = "SP.DYN.CONU.ZS",   # Contraceptive prevalence, any method (%)
+  "urban"          = "SP.URB.TOTL.IN.ZS",# Urban population (% of total)
+  "internet"       = "IT.NET.USER.ZS",   # Individuals using the Internet (%)
+  "mobile"         = "IT.CEL.SETS.P2",   # Mobile subscriptions (per 100 people)
+  "mortality_inf"  = "SP.DYN.IMRT.IN",   # Infant mortality (per 1,000 live births)
+  "life_exp"       = "SP.DYN.LE00.IN",   # Life expectancy at birth
+  "old_dep"        = "SP.POP.DPND.OL",   # Old-age dependency ratio (% working-age pop)
+  "pop"            = "SP.POP.TOTL"       # Population
+)
+options(timeout = max(600, getOption("timeout")))     # 60s by default: way too short!
+fetch_one <- function(code, name){                    # one indicator at a time
+  for(j in 1:5){                                      # the WB server is flaky: retry
+    d <- try(WDI(indicator = setNames(code, name), start = 1960, end = 2024),
+             silent = TRUE)
+    if(!inherits(d, "try-error") && name %in% names(d)){
+      return(d |> select(country, iso3c, year, all_of(name)))
+    }
+    Sys.sleep(2 * j)                                  # wait longer at each attempt
+  }
+  stop("The World Bank server did not return ", code, # fail loudly!
+       ". Check https://data.worldbank.org/indicator/", code,
+       " and consider raising options(timeout=).")
+}
+wb_raw <- imap(indicators, fetch_one) |>              # download & merge
+  reduce(full_join, by = c("country", "iso3c", "year")) |>
+  mutate(across(everything(), as.vector)) |>
+  left_join(as_tibble(WDI_data$country) |>            # country characteristics
+              select(iso3c, region, income, capital, longitude, latitude),
+            by = "iso3c") |>
+  rename(code = iso3c) |>                             # kept, to join with OWID files
+  arrange(country, year)
+wb_country <- wb_raw |> filter(region != "Aggregates")  # Remove continents & co.
+wb_country |> select(country, year, fertility, gdp_percap, pop) |> tail(3)
+```
+
+Below, a handful of trajectories. Note that the **vertical distance** travelled by Iran or Korea in thirty years took Europe more than a century.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3.5
+countries <- c("France", "United States", "Korea, Rep.", "China",
+               "Iran, Islamic Rep.", "Nigeria", "Brazil")
+wb_country |>
+  filter(country %in% countries) |>
+  ggplot(aes(x = year, y = fertility, color = country)) + geom_line(linewidth = 1) +
+  geom_hline(yintercept = 2.1, linetype = 2, color = "#C0504D") +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.8, 0.62),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.4, "cm")) +
+  scale_color_d3() +
+  ggtitle("Children per woman")
+```
+
+South Korea (**0.72** in 2023!, with a first tentative rebound to 0.75 in 2024) is the extreme case, but it is not an outlier in *nature*, only in *degree*: it is simply the country that went the furthest, the fastest. For comparison, France is at 1.66 and the United States at 1.62 in 2023.
+
+## How much of humanity is below replacement?
+
+A useful way to summarize the shift: compute, each year, the **share of the world population** living in a country whose fertility is below 2.1.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+below <- wb_country |>
+  filter(!is.na(fertility), !is.na(pop)) |>
+  group_by(year) |>
+  summarise(share_below = sum(pop * (fertility < 2.1)) / sum(pop),
+            nb_below = sum(fertility < 2.1))
+below |>
+  ggplot(aes(x = year, y = share_below)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        title = element_text(face = "bold")) +
+  ggtitle("Share of world pop. below replacement")
+```
+
+In 1960, essentially nobody (4%, five countries). The series has two **jumps**, which are not gradual at all: the early 1990s (**China** crosses below replacement) and around 2020 (**India** does). In between, the *number* of countries keeps rising steadily while the *share of humanity* plateaus - a reminder that population-weighted and country-weighted statistics tell different stories. Today: **117 countries** and **two thirds** of humanity.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+below |> filter(year %in% c(1960, 1980, 2000, 2010, 2020, 2023)) |>
+  mutate(share_below = round(100 * share_below, 1))
+```
+
+## Who stopped having children?
+
+The aggregate number hides *which* ages drive the decline. The UN publishes births by **age group of the mother**; we plot the composition below.
+
+```{r}
+#| label: fetch_births
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+births <- read_csv(owid("births-by-age-of-mother")) |>
+  filter(entity %in% c("World", "High-income countries")) |>
+  pivot_longer(cols = starts_with("births"), names_to = "age", values_to = "births") |>
+  mutate(age = str_extract(age, "age_[0-9]+_[0-9]+") |>
+                str_remove("age_") |> str_replace("_", "-")) |>
+  filter(!is.na(births), year <= 2023)
+births |> head(3)
+```
+
+We regroup the nine age brackets into three and look at **shares**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 7
+#| fig.height: 3
+comp <- births |>
+  mutate(group = case_when(age %in% c("10-14", "15-19", "20-24") ~ "under 25",
+                           age %in% c("25-29", "30-34")          ~ "25 to 34",
+                           TRUE                                  ~ "35 and over")) |>
+  group_by(entity, year, group) |>
+  summarise(births = sum(births), .groups = "drop") |>
+  group_by(entity, year) |>
+  mutate(share = births / sum(births))
+comp |>
+  ggplot(aes(x = year, y = share, color = group)) + geom_line(linewidth = 1) +
+  facet_grid(~entity) + theme_classic() +
+  theme(axis.title = element_blank(), legend.title = element_blank()) +
+  scale_color_d3()
+```
+
+In **high income** countries, the share of births to mothers **under 25** fell from 37% (1960) to **15%** (2023), while the share to mothers **35 and over** rose from 9% (1980) to **25%**. The world panel shows the same rotation, delayed and damped by the countries still in transition.
+
+This rotation towards older ages is the signature of **postponement** (demographers say a **tempo** effect) rather than of a pure change in family size (a **quantum** effect). Distinguishing the two is *the* central measurement problem of the field:
+
+- the **total fertility rate** (TFR) is a *period* measure: it sums the fertility rates observed in a given year across ages, i.e., it describes a **synthetic woman** who would never exist;
+- if every woman shifts her births two years later, the TFR **drops** for two decades, then recovers, even though **completed** (cohort) fertility never moved.
+
+::: {.callout-warning collapse="false"}
+## Health warning on the TFR
+
+Almost every number quoted in the press (including in this notebook) is a **period** TFR. It is **biased downward** during a postponement phase. Cohort fertility (children ever born to women born in year $t$) is the right object, but it is only known ~45 years too late. This is why serious work (e.g., Kearney & Levine) insists on **cohort** analysis - and why part of the "collapse" may eventually be recovered.
+:::
+
+The teenage part of that collapse is worth isolating - we will come back to it when discussing smartphones.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+wb_raw |>
+  filter(country %in% c("World", "High income", "European Union", "United States"),
+         year > 1990) |>
+  ggplot(aes(x = year, y = fertility_teen, color = country)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.7, 0.85),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_aaas() +
+  ggtitle("Births per 1,000 women aged 15-19")
+```
+
+## Postponement
+
+The mean age at childbearing gives a direct read on the tempo effect.
+
+```{r}
+#| label: fetch_age_mother
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+age_mother <- read_csv(owid("period-average-age-of-mothers"))
+colnames(age_mother) <- c("country", "code", "year", "age_mother")
+age_mother |>
+  filter(country %in% c("France", "United States", "Japan", "Spain", "Sweden"),
+         year > 1960) |>
+  ggplot(aes(x = year, y = age_mother, color = country)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.25, 0.8),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_d3() +
+  ggtitle("Mean age of mothers at birth")
+```
+
+The pattern is remarkably common across rich countries: a **U-shape**, with a trough in the mid-1970s (25.8 years in the US, 26.6 in France, 26.7 in Sweden) followed by an uninterrupted rise of **4 to 6 years** (to 29.9, 31.6 and 31.6 respectively in 2023). Postponement is not innocuous: **fecundity declines with age**, so delaying is a (partly involuntary) way of reducing completed fertility.
+
+
+
+# A workhorse model of fertility choice
+
+Before running regressions, we need a frame to organize the suspects. We build it in three steps.
+
+## The price of a child
+
+Consider a household with a "**father**" earning $w_m$ and a "**mother**" earning $w_f$, both endowed with one unit of time. Raising a child costs
+
+- $\pi$ units of **goods** (food, clothes, housing, school), and
+- $\tau$ units of the **mother's time** (this asymmetry is an empirical fact, not a normative statement - see the child penalty below).
+
+If the household has $n$ children, the mother works $1-\tau n$ and the budget constraint is
+$$c= w_m + w_f(1-\tau n) - \pi n = \underbrace{w_m+w_f}_{\text{full income } I} - \underbrace{(\pi + \tau w_f)}_{\text{price of a child } p}n.$$ {#eq-budget}
+
+::: {.callout-note collapse="false"}
+## The key object
+
+The **price of a child** is
+$$p = \pi + \tau w_f,$$
+i.e., a **goods** component *plus* an **opportunity cost** component. The second term is what makes fertility a *macro* variable: it moves with **wages**.
+:::
+
+With the (Cobb-Douglas) preferences $u=c^{1-\gamma}n^\gamma$, the program is
+$$\max_n \ (I-pn)^{1-\gamma}n^\gamma,$$
+whose first order condition reads
+$$-(1-\gamma)p(I-pn)^{-\gamma}n^\gamma + \gamma (I-pn)^{1-\gamma}n^{\gamma-1}=0,$$
+that is $\gamma(I-pn)=(1-\gamma)pn$, hence
+
+$$n^*=\frac{\gamma I}{p}=\frac{\gamma(w_m+w_f)}{\pi+\tau w_f}.$$ {#eq-n_star}
+
+The interesting comparative static is with respect to the **female wage**, which appears *both* in income and in the price:
+
+$$\frac{\partial n^*}{\partial w_f} = \gamma\frac{(\pi+\tau w_f)-\tau(w_m+w_f)}{(\pi+\tau w_f)^2} = \gamma\frac{\pi-\tau w_m}{(\pi+\tau w_f)^2}.$$ {#eq-dn_dwf}
+
+::: {.callout-important collapse="false"}
+## Becker's insight in one line
+
+$$\text{sign}\left(\frac{\partial n^*}{\partial w_f}\right)=\text{sign}(\pi-\tau w_m).$$
+
+A rise in **women's wages reduces fertility** if and only if the **time** cost dominates the **goods** cost. This is the standard justification for the historical **negative** correlation between female labor market opportunities and fertility. Note also that $\partial n^*/\partial w_m>0$ always: the father's income is a pure income effect.
+:::
+
+## Quantity versus quality
+
+Becker's second idea: parents choose the **number** of children *and* how much they invest in each of them. Let $q$ be **quality** (education, health, attention), which costs $\phi$ per unit and per child. Preferences become $u=c^{1-\gamma}\left(nq^{\theta}\right)^{\gamma}$ with $\theta\in(0,1)$, and the constraint is
+$$c=I-n\underbrace{(\pi+\tau w_f + \phi q)}_{p(q)}.$$
+
+Taking logs, the program is
+$$\max_{n,q} \ (1-\gamma)\log(I-np(q))+\gamma \log(n) + \gamma\theta\log(q).$$
+
+The two first order conditions are
+$$\frac{\gamma}{n}=\frac{(1-\gamma)p(q)}{c}\quad \text{and} \quad \frac{\gamma\theta}{q}=\frac{(1-\gamma)n\phi}{c}.$$
+
+The first one gives $np(q)=\frac{\gamma}{1-\gamma}c$ and, since $c=I-np(q)$, we get $np(q)=\gamma I$: a **constant share** of full income goes to children. The second one yields $n\phi q=\gamma \theta I$: a constant share goes to **quality**. Subtracting,
+$$n(\pi+\tau w_f)=\gamma(1-\theta) I,$$
+
+::: {.callout-note collapse="false"}
+## The quantity-quality trade-off
+
+$$n^*=\frac{\gamma(1-\theta)(w_m+w_f)}{\pi+\tau w_f}, \qquad q^*=\frac{\theta}{\phi(1-\theta)}\left(\pi+\tau w_f\right).$$
+
+Three lessons:
+
+1. quantity keeps the structure of @eq-n_star, deflated by $(1-\theta)$;
+2. **quality rises with the price of children**: everything that makes children expensive pushes parents towards *fewer, better* children;
+3. an increase in $\theta$ - the weight of quality, i.e., a shift towards "**intensive parenting**" - mechanically **reduces** $n^*$, at *unchanged* love for children.
+:::
+
+## What broke: career-family compatibility
+
+@eq-dn_dwf predicts a negative link between female wages/participation and fertility. That prediction was true in the 1970s. It is **false today** (we check it on data below). [Doepke, Hannusch, Kindermann & Tertilt](https://www.nber.org/papers/w29948) argue that the missing ingredient is the **compatibility** between career and family. Formally, replace the time cost by
+$$\tau = \tau(\kappa), \quad \tau'(\kappa)>0,$$
+where $\kappa \ge 0$ measures **incompatibility**: how much a birth actually costs a woman's career. $\kappa$ is *not* a preference - it is an **institution**:
+
+- availability and price of **childcare**, length and design of **parental leave**;
+- the **father's** share of child-rearing;
+- the presence of "**greedy jobs**" ([Goldin](https://www.aeaweb.org/articles?id=10.1257/aer.104.4.1091)), i.e., occupations with convex returns to long and inflexible hours;
+- **social norms** on working mothers.
+
+Then $\frac{\partial n^*}{\partial \kappa}<0$, but the interesting object is the **elasticity** of fertility to the female wage. From @eq-n_star,
+
+$$\frac{\partial \log n^*}{\partial \log w_f}=\underbrace{\frac{w_f}{w_m+w_f}}_{\text{income share}}-\underbrace{\frac{\tau w_f}{\pi + \tau w_f}}_{\text{share of the time cost}},$$ {#eq-elast}
+
+which is negative if and only if the **time cost** weighs more in the price of a child than the female wage weighs in family income. And since
+$$\frac{\partial}{\partial \tau}\left(\frac{\partial \log n^*}{\partial \log w_f}\right)=-\frac{\pi w_f}{(\pi+\tau w_f)^2}<0,$$
+the *same* rise in female wages depresses fertility **a lot** in a high-$\kappa$ (high-$\tau$) country and **not at all** in a low-$\kappa$ one. This single parameter is what reconciles Sweden (participation 62%, fertility 1.45) with Korea (participation 56%, fertility 0.72), Italy (41%, 1.21) and Spain (53%, 1.12) - countries whose *wage* levels are not that different. It also explains why the cross-country correlation between participation and fertility **flipped sign** once rich countries started differing mostly in $\kappa$ rather than in $w_f$: [Goldin](https://www.nber.org/papers/w31712) makes exactly this point for Greece, Italy, Japan, Korea, Portugal and Spain, which grew very fast after 1950 while keeping traditional beliefs about who raises children.
+
+## Shifting priorities: an expanding choice set
+
+[Kearney & Levine](https://www.nber.org/papers/w33989) push a different (and complementary) idea: what changed is not the price of children but the **menu**. Let adults choose between children $n$ and $J$ alternative "life projects" $c_j$ (career, travel, hobbies, digital leisure, pets, ...), with **CES** preferences
+
+$$U=\left[\alpha \, n^{\frac{\sigma-1}{\sigma}}+\sum_{j=1}^J\beta_j c_j^{\frac{\sigma-1}{\sigma}}\right]^{\frac{\sigma}{\sigma-1}}, \qquad pn + \sum_{j=1}^J q_jc_j = I,$$
+
+where $\sigma>0$ is the **elasticity of substitution** between children and everything else (see the `CES_functions.pdf` note in the course folder). Standard CES algebra gives the **expenditure share** devoted to children:
+
+$$s_n=\frac{pn^*}{I}=\frac{\alpha^\sigma p^{1-\sigma}}{\alpha^\sigma p^{1-\sigma}+\sum_{j=1}^J\beta_j^\sigma q_j^{1-\sigma}}, \qquad n^*=\frac{s_n I}{p}.$$ {#eq-ces}
+
+::: {.callout-tip collapse="false"}
+## Two mechanisms, no change in preferences
+
+@eq-ces says that fertility falls whenever the **denominator** grows, which happens when
+
+- a **new** option $J+1$ appears (adding $\beta_{J+1}^\sigma q_{J+1}^{1-\sigma}>0$), *or*
+- an existing option becomes **cheaper** or **better** ($q_j\downarrow$ or $\beta_j\uparrow$), **provided $\sigma>1$**.
+
+Crucially, $\alpha$ - the "taste for children" - **never moves**. People need not love children less to have fewer of them. And the *sign* of the effect of cheaper leisure hinges entirely on whether $\sigma$ is above or below one, which is an **empirical** question that nobody has convincingly answered.
+:::
+
+This framework is the one that makes room for smartphones, social media, video games ([Aguiar et al.](https://www.journals.uchicago.edu/doi/10.1086/713559) made exactly this argument for the labor supply of young men), long education, and careers - all at once, and without assuming a preference shift.
+
+
+
+# The suspects
+
+We now go through the candidate explanations one by one. For each, we state the mechanism, look at what the data can (and cannot) say, and report the verdict of the literature.
+
+## Income and the quantity-quality trade-off
+
+**Mechanism**: from @eq-n_star, richer means more children (income effect) *unless* wealth raises the price of children faster, through $\tau w_f$ and through $\theta$ (quality). Historically, the second force won: the **cross-sectional** link between income and fertility is famously negative.
+
+Is it still? Let us plot fertility against (log) GDP per capita for three vintages. Note that the PPP series only starts in 1990.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 8
+#| fig.height: 3
+wb_country |>
+  filter(year %in% c(1990, 2005, 2023), !is.na(fertility), !is.na(gdp_percap)) |>
+  ggplot(aes(x = log(gdp_percap), y = fertility)) +
+  geom_point(aes(size = pop), alpha = 0.25, color = "#3B4992") +
+  geom_smooth(se = FALSE, color = "#C0504D") +
+  facet_grid(~year) + theme_classic() +
+  theme(legend.position = "none", axis.title.y = element_blank()) +
+  xlab("log GDP per capita (PPP)")
+```
+
+The relationship is **negative but convex**: it is very steep for poor countries and **flat** at the top. To make this precise we need a homogeneous group of rich countries; the World Bank "High income" class is too heterogeneous (it mixes Norway, the Gulf and small Caribbean islands), so we define an **OECD** list once and for all.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+oecd <- c("Australia", "Austria", "Belgium", "Canada", "Chile", "Colombia", "Costa Rica",
+          "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece",
+          "Hungary", "Iceland", "Ireland", "Israel", "Italy", "Japan", "Korea, Rep.",
+          "Latvia", "Lithuania", "Luxembourg", "Mexico", "Netherlands", "New Zealand",
+          "Norway", "Poland", "Portugal", "Slovak Republic", "Slovenia", "Spain",
+          "Sweden", "Switzerland", "Turkiye", "United Kingdom", "United States")
+correl <- function(data, x, y, years){
+  data |> filter(!is.na({{x}}), !is.na({{y}}), year %in% years) |>
+    group_by(year) |>
+    summarise(correlation = round(cor({{x}}, {{y}}), 2), nb_countries = n())
+}
+wb_country |> correl(fertility, log(gdp_percap), c(1990, 2000, 2010, 2023))
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+wb_country |> filter(country %in% oecd) |>
+  correl(fertility, log(gdp_percap), c(1990, 2000, 2010, 2023))
+```
+
+The contrast is instructive. **Worldwide**, the negative gradient has *strengthened* (from $-0.73$ to $-0.83$): the transition is still spreading. **Within the OECD**, it has essentially **vanished** (from $-0.62$ to $\approx-0.1$): among rich countries, income no longer predicts fertility.
+
+$\rightarrow$ Micro-level causal studies (lottery wins, tax rebates, commodity booms) *do* find that exogenous income raises births, i.e., children are **normal goods**. But household income has **not fallen** across the cohorts that stopped having children. **Verdict: cannot be the main driver.**
+
+## Female education and labor force participation
+
+**Mechanism**: @eq-dn_dwf. More education $\rightarrow$ higher $w_f$ and later entry into union $\rightarrow$ higher opportunity cost of a birth.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+wb_country |>
+  filter(!is.na(fertility), !is.na(educ_female), year %in% c(1980, 2000, 2020)) |>
+  ggplot(aes(x = educ_female, y = fertility, color = factor(year))) +
+  geom_point(alpha = 0.4) + geom_smooth(se = FALSE, method = "lm") +
+  theme_classic() +
+  theme(legend.title = element_blank(),
+        legend.position = c(0.8, 0.85),
+        axis.title.y = element_blank()) +
+  scale_color_d3() + xlab("female tertiary enrolment (%)")
+```
+
+The education gradient is **robustly negative** and it is one of the very few facts that hold in *every* sample. Female schooling is also the variable that best predicts the *timing* of the transition in late-comers.
+
+Female **participation** is a different story. This is the famous **sign reversal**.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 8
+#| fig.height: 3
+wb_country |>
+  filter(country %in% oecd, year %in% c(1990, 2005, 2023),
+         !is.na(fertility), !is.na(lfp_female)) |>
+  ggplot(aes(x = lfp_female, y = fertility)) +
+  geom_point(alpha = 0.5, color = "#008B45") +
+  geom_smooth(method = "lm", se = FALSE, color = "#C0504D") +
+  facet_grid(~year) + theme_classic() +
+  theme(axis.title.y = element_blank()) +
+  xlab("female labor force participation (%, 15+)")
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+wb_country |> filter(country %in% oecd) |>
+  correl(fertility, lfp_female, c(1990, 2000, 2005, 2010, 2023))
+```
+
+The correlation goes from **negative** ($-0.13$ in 1990) to **positive** ($+0.22$ in 2010) and then decays. Doepke et al. report a sharper version of the same picture ($-0.34$ in 1980, $+0.59$ in 2000) and Kearney & Levine find $-0.06$ in 2023; our numbers are milder because the World Bank series measures participation of **all women aged 15 and over**, whereas they use the OECD **25-54** rate, which is the relevant age band and which is far more compressed across countries.
+
+::: {.callout-tip collapse="false"}
+## Two lessons for you
+
+1. The **sign of a headline correlation depends on the sample and on the variable definition**. Before quoting one, check the age band, the country list and the year.
+2. Whatever the exact number, the historical negative link is **gone**. Once participation reached 80-90% nearly everywhere, it stopped discriminating between countries. This is exactly the $\kappa$ story of @eq-elast: what matters now is **how** women work, not **whether** they work.
+:::
+
+::: {.callout-warning collapse="false"}
+## Beware of the ecological fallacy
+
+The *cross-country* correlation between participation and fertility and the *individual* correlation need not have the same sign, and usually do not. Within any given country, working women still have fewer children. Aggregating flips the comparison because countries differ in institutions, not in preferences.
+:::
+
+## The child penalty
+
+**Mechanism**: this is the empirical counterpart of $\tau w_f$. [Kleven, Landais & Søgaard](https://www.aeaweb.org/articles?id=10.1257/app.20180010) run event studies around the **first birth**: earnings of mothers and fathers move in parallel before, then diverge sharply and permanently after. The gap is ~20% in Denmark, over 50% in Austria and Germany, and it is decomposed roughly equally into **participation**, **hours** and **wage rates**.
+
+The [Child Penalty Atlas](https://www.nber.org/papers/w32005) shows two facts that matter here:
+
+- the penalty exists in **every** country ever measured;
+- it is **larger in richer** economies, and it correlates with elicited **gender norms** far better than with policies. Kleven et al. show that even Austria's massive expansion of leave and childcare barely moved it.
+
+$\rightarrow$ The penalty is the best measure we have of $\kappa$. Whether it *causes* low fertility is less clear: part of it may be mothers' **willingness to pay** for time with their children rather than an externally imposed constraint.
+
+## The direct cost of children: childcare, housing, intensive parenting
+
+Three distinct sub-suspects, all acting through $\pi$, $\theta$ or $\tau$:
+
+- **Childcare and parental leave** (acting on $\tau$ and $\kappa$). The well-identified studies (California's 2004 paid leave, Norway 1980s-1990s expansions, Sweden's "speed premium", Austria 1990) find **timing effects but essentially no effect on completed fertility**. [Olivetti & Petrongolo](https://www.aeaweb.org/articles?id=10.1257/jep.31.1.205) estimate that spending **one extra point of GDP** on early childhood raises the TFR by about **0.02**. That is a very small number - we quantify it at the end of the notebook.
+- **Housing** (acting on $\pi$). [Dettling & Kearney](https://www.sciencedirect.com/science/article/abs/pii/S0047272713001904) show that a house price increase *reduces* births among **renters** (price effect) and *raises* them among **owners** (wealth effect), with a positive net effect at US ownership rates. More recent work (Fazio et al. on a Brazilian housing-credit lottery; Dettling & Kearney on the 1930s-40s introduction of low down-payment mortgages, which explains ~10% of the baby boom) suggests that **access to ownership** matters beyond prices - a natural candidate given the collapse of young-adult homeownership since 2008.
+- **Intensive parenting** (acting on $\theta$). Time-use data show that parents in rich countries spend **far more** time per child than in 1975 (about +6 hours a week for both US mothers and fathers), while having fewer children. [Doepke & Zilibotti](https://press.princeton.edu/books/hardcover/9780691171517/love-money-and-parenting) link this to rising **returns to education** and inequality: when the stakes of schooling rise, parenting styles become more "concerted", raising $\theta$ and lowering $n$ in @eq-n_star.
+
+## Marriage and partnership
+
+This is probably the single most *mechanically* powerful correlate. Married women have far more children than unmarried ones, so if marriage collapses, births follow - unless non-marital childbearing takes over.
+
+```{r}
+#| label: fetch_marriage
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+marriage <- read_csv(owid("marriage-rate-per-1000-inhabitants"))
+colnames(marriage) <- c("country", "code", "year", "marriage_rate")
+outside <- read_csv(owid("share-of-births-outside-marriage"))
+colnames(outside) <- c("country", "code", "year", "births_outside")
+marriage |> filter(country == "France") |> tail(3)
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+marriage |>
+  filter(country %in% c("France", "United States", "Japan", "Italy", "South Korea"),
+         year > 1970) |>
+  ggplot(aes(x = year, y = marriage_rate, color = country)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.78, 0.8),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_d3() +
+  ggtitle("Marriages per 1,000 inhabitants")
+```
+
+Does the fall in marriage line up with the fall in fertility **across countries**? We compute the change in both variables over the 1995-2019 window (pre-Covid) and confront them.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 6
+#| fig.height: 4
+delta_mar <- marriage |>
+  filter(year %in% c(1995, 2019)) |> select(code, year, marriage_rate) |>
+  pivot_wider(names_from = year, values_from = marriage_rate, names_prefix = "y") |>
+  mutate(d_marriage = y2019 - y1995) |> select(code, d_marriage) |> na.omit()
+delta_fert <- wb_country |>
+  filter(year %in% c(1995, 2019)) |> select(code, country, year, fertility, income) |>
+  pivot_wider(names_from = year, values_from = fertility, names_prefix = "y") |>
+  mutate(d_fertility = y2019 - y1995) |>
+  select(code, country, income, d_fertility) |> na.omit()
+delta <- inner_join(delta_mar, delta_fert, by = "code") |>
+  filter(income %in% c("High income", "Upper middle income"))
+delta |>
+  ggplot(aes(x = d_marriage, y = d_fertility)) +
+  geom_point(color = "#3B4992", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "#C0504D") +
+  geom_text_repel(aes(label = country), size = 2.2, max.overlaps = 12) +
+  theme_classic() +
+  xlab("change in marriage rate (1995-2019)") +
+  ylab("change in fertility (1995-2019)")
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+summary(lm(d_fertility ~ d_marriage, data = delta))$coefficients |> round(3)
+```
+
+The link is positive and significant: across 40 rich and upper-middle income countries, losing **one** marriage per 1,000 inhabitants goes with **0.15 fewer** children per woman ($t\approx 3.6$). [Stone](https://ifstudies.org/blog/theres-no-mystery-to-americas-fertility-decline) reports that, mechanically, roughly **three quarters** of the US fertility decline since 2007 can be attributed to declining marriage. But *mechanically* is doing a lot of work here:
+
+::: {.callout-important collapse="false"}
+## Reverse causality, in capital letters
+
+Marriage and fertility are **jointly** chosen. Two stories fit the same data:
+
+1. people cannot find a suitable partner $\rightarrow$ they do not marry $\rightarrow$ they do not have children;
+2. people no longer plan to have children $\rightarrow$ marriage loses much of its purpose $\rightarrow$ they do not marry.
+
+A decomposition cannot separate them. Note also that the strength of the marriage-fertility link depends on **norms about non-marital births**: in 2021, 2.3% of Japanese births were outside marriage, against ~40% in the US and ~60% in France.
+:::
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+outside |>
+  filter(country %in% c("France", "United States", "Japan", "Italy", "Sweden"),
+         year > 1960) |>
+  ggplot(aes(x = year, y = births_outside, color = country)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.25, 0.75),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_d3() +
+  ggtitle("Births outside marriage (%)")
+```
+
+Two related, more macro, channels:
+
+- the **marriageability** of men. [Autor, Dorn & Hanson](https://www.aeaweb.org/articles?id=10.1257/aeri.20180010) show that Chinese import competition reduced the employment and earnings of young men in exposed US labor markets, and that this reduced **marriage** and **fertility** while raising the share of children in single-headed households. Deindustrialization is thus a demographic shock, not only a labor market one. A parallel force is the **reversal of the education gap**: women are now substantially more educated than men in nearly every rich country, which thins the pool of partners acceptable under (still largely intact) norms of assortative mating;
+- the **technology of the partner market** itself. Dating apps have replaced friends, work and neighbourhood as the dominant meeting channel in barely fifteen years. Whether this raises match quality (and hence stable unions) or increases search, delay and churn is contested and, to date, essentially unidentified. It belongs on the list of open questions, not on the list of established causes.
+
+## Contraception and abortion
+
+**Mechanism**: the ability to *avoid* births. The pill (1960s) and, more recently, long-acting reversible contraception (LARC: IUDs, implants) sharply reduced **unintended** pregnancies.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+wb_country |>
+  filter(!is.na(contraception), !is.na(fertility)) |>
+  ggplot(aes(x = contraception, y = fertility)) +
+  geom_point(alpha = 0.25, color = "#631879") +
+  geom_smooth(se = FALSE, color = "#C0504D") +
+  theme_classic() +
+  theme(axis.title.y = element_blank()) +
+  xlab("contraceptive prevalence (%)")
+```
+
+The cross-country relation is strongly negative (and is one of the main levers of the transition in developing countries). But for the **recent** decline in rich countries, the timing does not work: the pill diffused *decades* before, and Japan - which only legalized it in 1999 and where use remains rare - has one of the lowest fertility rates in the world. Quasi-experimental studies of LARC expansions (Colorado 2009, Michigan vouchers) find real effects, concentrated on **low-income and teenage** women, far too small to explain the aggregate.
+
+Abortion access has large, well-documented effects (US legalization in the early 1970s cut the general fertility rate by ~5%), but abortion law has been broadly stable in rich countries over the past thirty years - the *Dobbs* decision (2022) being a recent exception, with a small measured *increase* in births.
+
+**Verdict: important at the micro level, minor for the recent aggregate decline.**
+
+## Smartphones and the digital era
+
+This is the newest and most debated suspect - and the one your question is probably really about. Two facts are undisputed:
+
+1. the inflection of fertility in a large number of countries occurs around **2007-2012**;
+2. the collapse of **teenage** fertility is far steeper than that of any other age group.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3.5
+wmean <- function(x, w) sum(x * w, na.rm = TRUE) / sum(w[!is.na(x)], na.rm = TRUE)
+wb_country |>
+  filter(income == "High income", year %in% 1995:2023) |>
+  group_by(year) |>                                    # population-weighted aggregate
+  summarise(across(c(fertility_teen, internet, mobile), \(x) wmean(x, pop))) |>
+  pivot_longer(-year, names_to = "variable", values_to = "value") |>
+  group_by(variable) |>
+  mutate(value = 100 * value / value[year == 2000]) |>
+  ggplot(aes(x = year, y = value, color = variable)) + geom_line(linewidth = 1) +
+  geom_vline(xintercept = 2007, linetype = 2) +
+  annotate("text", x = 2004.2, y = 300, label = "iPhone", size = 3) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.3, 0.25),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_aaas() + scale_y_log10() +
+  ggtitle("High income, base 100 in 2000 (log scale)")
+```
+
+The **mechanism** proposed by [Hudson & Moscoso Boedo](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6676839) is a **coordination** story, and it fits our CES framework: once enough teenagers are on the phone, the peer network *is* on the phone, in-person unstructured socializing collapses (time-use diaries show it roughly halving while digital leisure roughly triples), and with it the occasions in which most unintended conceptions occur. In their model, as the price of the phone falls, the "in-person" equilibrium **ceases to exist** - a tipping point, not a smooth response. They instrument coverage with **terrain ruggedness** (which affects broadband and 4G rollout but nothing else demographic) and find a causal effect on teen fertility. A companion paper exploits AT&T's 2007-2011 iPhone carrier **monopoly** in the US and attributes 33-52% of the fall in the general fertility rate of women aged 15-44 to iPhone diffusion.
+
+Let us do the naive test ourselves: across rich countries, does the **speed of internet adoption** predict the fall in adolescent fertility?
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 6
+#| fig.height: 4
+digital <- wb_country |>
+  filter(year %in% c(2007, 2019), income == "High income") |>
+  select(country, year, fertility_teen, internet) |>
+  pivot_longer(c(fertility_teen, internet)) |>
+  pivot_wider(names_from = c(name, year), values_from = value) |>
+  mutate(d_internet = internet_2019 - internet_2007,
+         d_teen = 100 * (fertility_teen_2019 / fertility_teen_2007 - 1)) |>
+  na.omit()
+digital |>
+  ggplot(aes(x = d_internet, y = d_teen)) +
+  geom_point(color = "#008B45", alpha = 0.7) +
+  geom_smooth(method = "lm", se = FALSE, color = "#C0504D") +
+  geom_text_repel(aes(label = country), size = 2.2, max.overlaps = 14) +
+  theme_classic() +
+  xlab("change in internet penetration, pp (2007-2019)") +
+  ylab("change in teen fertility, % (2007-2019)")
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+summary(lm(d_teen ~ d_internet, data = digital))$coefficients |> round(3)
+```
+
+**Nothing.** The slope is not significant - and it even has the "wrong" sign (countries that adopted the internet *faster* saw teen fertility fall *less*). Teen fertility fell by ~40% on average in high income countries between 2007 and 2019, whatever the pace of digital diffusion.
+
+::: {.callout-warning collapse="false"}
+## What just happened, and how to read it
+
+This is the honest state of the smartphone debate:
+
+- the **time-series** coincidence (previous graph) is spectacular;
+- the **cross-country** test finds nothing, because internet adoption is **not random**: it tracks income, urbanization, education and state capacity, all of which independently reduce teen fertility, *and* because by 2019 penetration is near-saturated everywhere, leaving no variation. There is essentially **no control group** left.
+- 2007 is also the year of the **Great Recession**, of the diffusion of LARC, and of a decline in teenage sexual activity that had started **before** the iPhone.
+- Even taken at face value, the documented effect concerns mostly **unintended teenage** pregnancies. Women above 25 account for ~80% of births, and the evidence for them is weak.
+
+Which is exactly why the credible work uses **within-country** variation and instruments (terrain ruggedness, the AT&T monopoly) rather than the graphs we just drew. A seductive aggregate coincidence is not evidence; a null cross-country regression is not a refutation either.
+:::
+
+## Economic uncertainty and precarity
+
+**Mechanism**: children are a **long-duration, irreversible** commitment. Under uncertainty, the option value of waiting rises, and postponement at the individual level aggregates into a lower period TFR - and, through age-related fecundity decline, into lower completed fertility.
+
+The empirical literature (Comolli, Sobotka, Seltzer, and the large European "Great Recession" literature) documents that:
+
+- fertility is **pro-cyclical**, with a lag of about one year;
+- the 2008 shock produced a fertility drop in Europe and the US that, unlike previous recessions, **never recovered** during the expansion;
+- **perceived** uncertainty and unstable, low-paid "stopgap" employment matter beyond realized income - which is why measured income does not capture the channel;
+- robot adoption and labor market polarization correlate with lower regional fertility in Europe.
+
+A companion mechanism is the sheer **lengthening of the transition to adulthood**: more years in education, later financial independence, later leaving of the parental home, and, in some countries, large **student debt**. Each of these pushes the *start* of childbearing to the right, and postponement is not free (see the biology section below).
+
+This channel is attractive because it is **cohort-specific**: a cohort entering the labor market in 2009 is scarred in a way that no period variable captures.
+
+## Health, biology and the environment
+
+**Mechanism**: what if part of the decline is not a *choice*?
+
+- **Fecundity and age**. Postponement is the main biological channel: fecundity declines with age (and, according to recent work, more linearly and earlier than the conventional "cliff at 35"). Delaying converts into unwanted childlessness.
+- **ART** (assisted reproductive technologies). IVF and related therapies now account for ~2.3% of US births and 2-9% in European countries. They *raise* period fertility at older ages, but their long-run effect is **ambiguous**: they may induce further delay through over-optimistic beliefs (a "moral hazard" effect). Machado & Sanz-de-Galdeano find that IVF insurance mandates raise the age at first birth with **no** change in completed fertility.
+- **Sperm counts and endocrine disruptors**. Swan and co-authors report large declines in sperm concentration in Western countries and point to endocrine disruptors and microplastics. The scientific community has **not** reached a consensus on the causal effect on births, and the measurement is contested.
+- **Obesity, chronic disease, pollution** are further candidates, again without a settled quantification.
+
+$\rightarrow$ We flag these for completeness. As economists we should be honest: we do not have the expertise, nor the identification, to rank them.
+
+## Norms, religion, media
+
+The residual - and, in Kearney & Levine's reading, the **largest** part.
+
+- **Religiosity**. Observant individuals have more children, everywhere and always. Secularization is thus a candidate. Causal evidence exists but is exotic: papal visits to Latin America between 1979 and 1996 raised subsequent fertility, especially when the speech mentioned marriage or contraception. The reverse problem remains: *why* did religiosity decline?
+- **Media**. Norms are **malleable**. The introduction of Brazilian *telenovelas* (featuring small families and divorce) reduced fertility and raised separation; cable TV in rural India changed attitudes towards women; MTV's *16 and Pregnant* reduced US teen births by a measurable amount. Nobody has yet measured how Instagram and TikTok portray parenthood.
+- **Gender-role norms**. Women's expectations about the division of housework have moved; men's have moved **less**. Briselli & González document this growing gap and show it correlates with both fertility and female employment across European countries. [Doepke & Kindermann](https://www.aeaweb.org/articles?id=10.1257/aer.20141689) show that a birth occurs essentially only when **both** partners want one, and that in low-fertility countries it is overwhelmingly the **woman** who is opposed - precisely where men do little childcare. Fertility is a **bargaining** outcome.
+- **Climate and the future**. Surveys regularly find that a non-trivial share of young adults report climate change among their reasons for hesitating to have children. Whether stated concerns translate into realized behaviour is another matter: this is a **stated-preference** literature, and stated preferences about hypothetical children are notoriously poor predictors of births. Treat it as a norm shifter (a component of $\beta_j$ and $\alpha$ in @eq-ces), not as an established cause.
+- **Shifting priorities**. The synthesis: an expanding set of socially sanctioned life projects (@eq-ces) crowds out parenthood without any drop in the taste for children. Vignette studies across eight countries find that having *at least one* child remains an ideal nearly everywhere - it is the **second and third** child that lost its obviousness.
+
+## Mortality, urbanization and the classic transition
+
+Finally, the textbook drivers - which explain most of the *historical* decline and remain the dominant force in Africa and South Asia today:
+
+- **Child mortality**. When 30% of children die before age five, having six children is how you get three adults. As mortality collapses, the required number of births collapses with it (with a lag - hence the population explosion in between).
+- **Urbanization**. Children are an asset on a farm and a cost in a city (housing, no child labor, schooling).
+- **Pensions and social insurance**. Where the state (or a funded system) insures old age, children stop being a retirement asset - a channel that links directly back to the **OLG** notebook.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+wb_country |>
+  filter(!is.na(mortality_inf), !is.na(fertility)) |>
+  ggplot(aes(x = mortality_inf, y = fertility, color = year)) +
+  geom_point(alpha = 0.2, size = 0.7) +
+  geom_smooth(se = FALSE, color = "#C0504D") +
+  theme_classic() +
+  theme(axis.title.y = element_blank(),
+        legend.position = "bottom",
+        legend.key.width = unit(0.8, "cm")) +
+  scale_color_viridis_c() +
+  xlab("infant mortality (per 1,000)")
+```
+
+
+
+# Confronting the suspects in a panel
+
+Time to put (some of) them together. As in the cross-section notebook, we build a country-year panel and estimate two-way fixed effect models. We impute a few points to preserve sample size.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+vars <- c("gdp_percap", "lfp_female", "educ_female", "contraception",
+          "urban", "internet", "mortality_inf", "life_exp")
+panel <- wb_country |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(across(all_of(vars), impute)) |>
+  ungroup() |>
+  mutate(gdp_percap = log(gdp_percap)) |>
+  select(country, year, income, region, fertility, all_of(vars))
+panel |> select(-region) |> is.na() |> colMeans() |> round(3)
+```
+
+**Contraceptive prevalence** is survey-based and very sparse: including it would divide the sample by four. We drop it (and keep it in mind).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+vars <- setdiff(vars, "contraception")
+panel <- panel |> select(-contraception) |> na.omit()
+fml <- as.formula(paste("fertility ~", paste(vars, collapse = " + "), "| country + year"))
+fit_twfe <- feols(fml, data = panel)
+fit_twfe$coeftable |> round(4)
+```
+
+Reading the output (the panel starts in 1990, since that is when the PPP and internet series begin):
+
+- **infant mortality** enters **positively** and strongly: the classic transition is still the dominant force. Where child mortality falls, fertility follows;
+- **urbanization** enters **negatively** and carries the largest *t*-statistic of the table (each extra point of urban population goes with $-0.023$ children);
+- **female participation** enters **negatively**, as @eq-n_star predicts;
+- **GDP per capita** and **female education** enter **positively** - the opposite of the raw cross-sectional gradient. This is the "new era" reversal in a nutshell: *between* countries, rich and educated means fewer children; *within* a country and once the transition variables are controlled for, more income means **more** children (children are normal goods);
+- **internet penetration** enters positively and small, i.e., the panel gives no support at all to the digital story.
+
+Does this hold within income groups? Recall from the cross-section notebook that pooled estimates can hide a lot. We display **test statistics** rather than raw coefficients (they carry more information).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+fit_group <- function(inc){
+  fit <- feols(fml, data = panel |> filter(income == inc))
+  (fit$coefficients / sqrt(diag(fit$cov.iid))) |> data.frame() |>
+    rownames_to_column(var = "variable") |> mutate(group = inc)
+}
+stats <- bind_rows(fit_group("High income"),
+                   fit_group("Upper middle income"),
+                   fit_group("Lower middle income"))
+colnames(stats)[2] <- "statistic"
+stats |> pivot_wider(names_from = group, values_from = statistic) |>
+  mutate(across(where(is.numeric), \(x) round(x, 2)))
+```
+
+The **signs are far from stable across income groups**. GDP per capita flips from strongly positive in rich countries to negative in lower-middle income ones; infant mortality flips too; the internet coefficient is null in rich countries and positive elsewhere. Only **urbanization** and **female participation** keep the same (negative) sign everywhere. This instability is precisely the message of the theory section: the same variable ($w_f$, education, urbanization) acts through different channels depending on the institutional parameter $\kappa$ and on where a country stands in its transition.
+
+::: {.callout-important collapse="false"}
+## Why none of this is causal
+
+Every regressor above is **jointly determined** with fertility:
+
+- women invest in education *because* they plan to have fewer children;
+- countries adopt the internet *because* they are getting richer and more urban;
+- infant mortality falls *because* families are smaller and better spaced.
+
+Two-way fixed effects remove country levels and common year shocks; they do **not** remove **reverse causality** nor **time-varying** confounders. This is why the credible parts of the literature rely on lotteries, policy discontinuities, ruggedness instruments and event studies - each of which identifies one small, local effect that is then very hard to aggregate. The honest summary is: **we have many well-identified small effects and no well-identified big one.**
+:::
+
+
+# The gap between wanted and realized fertility
+
+One last piece of evidence, and arguably the most important for policy. The World Bank publishes a **wanted fertility rate** (built from DHS surveys: the TFR that would prevail if all unwanted births were avoided).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| fig.width: 6
+#| fig.height: 4
+gap <- wb_country |>
+  filter(!is.na(fertility_want), !is.na(fertility), year > 1995) |>
+  mutate(gap = fertility - fertility_want)
+gap |>
+  ggplot(aes(x = fertility_want, y = fertility, color = region)) +
+  geom_point(alpha = 0.7) + geom_abline(slope = 1, intercept = 0, linetype = 2) +
+  theme_classic() +
+  theme(legend.title = element_blank(), legend.position = "bottom",
+        legend.text = element_text(size = 6)) +
+  guides(color = guide_legend(nrow = 3, byrow = TRUE)) +
+  xlab("wanted fertility") + ylab("realized fertility")
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+gap |> group_by(region) |>
+  summarise(gap = round(mean(gap), 2), n = n()) |> arrange(-gap)
+```
+
+In **developing** countries, realized fertility is **above** wanted fertility: there is a stock of **unwanted** births, and the binding constraint is access to contraception and to female autonomy.
+
+In **rich** countries, the survey evidence points the **other way**: stated ideals in OECD countries hover around **2.2-2.3 children**, well **above** realized fertility of 1.4-1.6, and intentions to remain childless rarely exceed 15%. People say they want more children than they have.
+
+::: {.callout-important collapse="false"}
+## The real puzzle
+
+If preferences were the whole story, we would observe realized $\approx$ desired. We do not. The **wedge** between the two - failing to find a partner, not reaching economic security in time, running out of biological time after postponing - may well be the object that a "fertility policy" should target, rather than the number of children itself.
+:::
+
+
+# Consequences, and what policy can do
+
+## Ageing
+
+The immediate consequence is mechanical: the **old-age dependency ratio** (population 65+ over working-age population).
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+wb_country |>
+  filter(country %in% c("France", "Japan", "Korea, Rep.", "China",
+                        "United States", "Nigeria")) |>
+  ggplot(aes(x = year, y = old_dep, color = country)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.28, 0.75),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_d3() +
+  ggtitle("Old-age dependency ratio (%)")
+```
+
+Everything we derived in the **overlapping generations** notebook applies: with $n$ falling, a pay-as-you-go system must either raise contributions, cut benefits, or push back the retirement age. There is no fourth option.
+
+## Growth with a shrinking population
+
+The deeper worry is the one raised by [Charles Jones](https://www.nber.org/papers/w26651): in **ideas-based** growth models, output per person grows because people produce ideas, and ideas are **non-rival**. Write
+
+$$\dot{A}_t=\alpha L_t^{\lambda}A_t^{\phi}, \qquad \phi<1,$$
+
+where $L$ is the number of researchers. Along a balanced path, $g_A=\frac{\lambda n}{1-\phi}$: **growth is proportional to population growth**. If $n<0$, $L_t\to 0$ geometrically, the flow of new ideas dries up, and $A_t$ converges to a **finite** limit: income per person **stagnates** at a level determined by history. Jones calls this the **Empty Planet** outcome, as opposed to the **Expanding Cosmos** one.
+
+We can simulate it.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+simul_ideas <- function(n, T = 400, alpha = 0.02, lambda = 1, phi = 0.5){
+  L <- A <- numeric(T)
+  L[1] <- 1; A[1] <- 1
+  for(t in 2:T){
+    L[t] <- L[t-1] * (1 + n)
+    A[t] <- A[t-1] + alpha * L[t-1]^lambda * A[t-1]^phi
+  }
+  tibble(t = 1:T, L = L, A = A, n = n)
+}
+ideas <- map_dfr(c(0.01, 0.005, 0, -0.005, -0.01), simul_ideas)
+ideas |> head(3)
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.width: 4
+#| fig.height: 3
+ideas |>
+  mutate(n = paste0("n = ", 100 * n, "%")) |>
+  ggplot(aes(x = t, y = A, color = n)) + geom_line(linewidth = 1) +
+  theme_classic() +
+  theme(axis.title.y = element_blank(),
+        legend.title = element_blank(),
+        legend.position = c(0.25, 0.78),
+        legend.text = element_text(size = 7),
+        legend.key.height = unit(0.35, "cm")) +
+  scale_color_d3() + scale_y_log10() +
+  ggtitle("Stock of ideas (log scale)")
+```
+
+The message is stark: with $n>0$, knowledge grows without bound; with $n\le 0$, it **flattens out**. Note two important caveats: (i) this concerns the *very* long run, and (ii) it assumes the *share* of the population doing research is constant - a rising share (through education, or through automation of research itself) can offset a falling $L$ for a long while.
+
+## Can policy do anything?
+
+Let's use the two most credible aggregate elasticities in the literature to calibrate what it would take to bring a TFR of 1.6 back to 2.1.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+tfr_0    <- 1.60   # starting point (roughly the US / EU average)
+target   <- 2.10   # replacement
+# (i) Olivetti & Petrongolo: +1pp of GDP on childcare => +0.02 TFR
+gdp_pts  <- (target - tfr_0) / 0.02
+# (ii) Stone: child benefits worth 10% of income => +0.5% to +4.1% births
+low      <- log(target / tfr_0) / log(1.005) * 10
+high     <- log(target / tfr_0) / log(1.041) * 10
+tibble(policy = c("childcare (% of GDP)",
+                  "child benefits, low (% of income)",
+                  "child benefits, high (% of income)"),
+       needed = round(c(gdp_pts, low, high), 1))
+```
+
+These numbers are not policy recommendations - they are **reductio ad absurdum**. Closing the gap with childcare spending alone would require ~25 points of GDP; with child benefits, transfers worth **half to five times** household income. No country has ever done anything remotely comparable, which is why every review (Sobotka et al., Bergsvik et al., Gauthier 2025) reaches the same conclusion:
+
+::: {.callout-note collapse="false"}
+## What pro-natalist policies actually do
+
+- they produce **timing** effects (births happen earlier) far more reliably than **quantum** effects (more children ever born);
+- cash benefits are the most effective single instrument, but the elasticities are **small**;
+- packages combining cash, childcare, stable employment and **gender-equal leave** do better than any instrument alone;
+- the fertility effect is largest where it helps families reach **their own** stated goals - which brings us back to the wanted-realized wedge.
+:::
+
+
+# Bottomline
+
+::: {.callout-important collapse="false"}
+## What we know and what we don't
+
+**Solid**:
+
+1. fertility is falling nearly everywhere, faster than forecast, and more than two thirds of humanity now lives below replacement;
+2. the decline is concentrated at **young ages**: postponement is central;
+3. **education** of women and the **decline of infant mortality** explain most of the historical and developing-world transition;
+4. the historical negative links between fertility and both **income** and **female participation** have flattened or reversed among rich countries;
+5. pro-natalist policies work, but **weakly**.
+
+**Contested**: the *recent* decline in rich countries. Prices, income and the opportunity cost of women's time are real but **too small**. Marriage decline is mechanically powerful but **jointly determined**. Smartphones have a serious identification strategy but a **narrow** target (teen and unintended births). Norms around parenting, work, gender roles and leisure are the leading candidate - and the hardest to measure.
+
+**Missing**: a credible aggregate decomposition. As of today, nobody can tell you what share of the decline each suspect owns.
+:::
+
+Some questions to think about:
+
+1. In @eq-ces, what would you need to measure to identify $\sigma$? Is there any real-world experiment that moves the price of one alternative $q_j$ exogenously?
+2. The "child penalty" is often called a penalty. Under what conditions is it instead an optimal, freely chosen allocation - and does the distinction matter for the effect on fertility?
+3. Take the OLG model of the previous notebook, and reverse the causality: could a **pay-as-you-go** pension system itself be a cause of low fertility?
+4. If completed (cohort) fertility eventually recovers part of the postponement, which of the policy conclusions above survive?
+5. Immigration is the only short-run margin that changes the age pyramid. Write down what @eq-n_star would have to look like for immigration to be a *substitute* for domestic fertility in the ideas-based growth model.
