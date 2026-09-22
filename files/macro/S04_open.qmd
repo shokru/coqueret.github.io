@@ -116,7 +116,9 @@ wb_raw |>
   geom_line(aes(x = year, y = gdp/10^12), linewidth = 1)
 ```
 
-# The Ramsey with debt/bond
+We need to subtract the red bars from the green ones and recover the black line... not too far! 
+
+# The Ramsey model with debt/bond
 ## Formulation
 
 For simplicity, we fix $n=0$ and $L_0=1$ so that population remains constant and all terms can be viewed as *per capita*. As in the **Ramsey model**, the utility is 
