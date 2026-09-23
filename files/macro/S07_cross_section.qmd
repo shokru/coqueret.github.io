@@ -539,16 +539,14 @@ Hard to find a pattern, though (Eastern Europe is represented for the negative c
 
 # Data sources outside the World Bank
 
-The [Energy Institute](https://www.energyinst.org/statistical-review/resources-and-data-downloads) compiles a valuable (& updated) dataset on energy production by source. The data is too rich (90 variables), hence we restrict it to a few items.
+The [Energy Institute](https://www.energyinst.org/statistical-review/resources-and-data-downloads) compiles a valuable (& updated) [dataset](https://www.energyinst.org/__data/assets/excel_doc/0006/1656348/Statistical-Review-of-World-Energy-Data.xlsx) on energy production by source. The data is too rich (90 variables), hence we restrict it to a few items.
 
 ```{r}
 #| message: false
 #| warning: false
 #| class-source: my_class
 #| classes: my_class
-url <- "https://www.energyinst.org/__data/assets/excel_doc/0006/1656348/Statistical-Review-of-World-Energy-Data.xlsx"
-GET(url, write_disk(tf <- tempfile(fileext = ".xlsx")))
-df <- read_excel(tf) 
+df <- read_excel("Statistical-Review-of-World-Energy-Data.xlsx") 
 data_energy <- df |> 
   select(-ISO3166_alpha3, -ISO3166_numeric, -ISO3166_numeric, -CIS) |>
   mutate(Var = Var |> str_replace_all("_ej", "")) |>
@@ -693,10 +691,13 @@ This is supported by [What Remains of Cross-Country Convergence?
 
 Another related paper: [Growth, Interrupted: How Crises delay Global Convergence](https://www.imf.org/en/Publications/WP/Issues/2025/06/13/Growth-Interrupted-How-Crises-delay-Global-Convergence-567257):
 
-![](transitions.png). 
+![](transitions.png){width=90% align="center"} 
 
 The above table shows the transitions from income groups in periods **with and without crises**. It shows that moving upward (to a higher income group) is much more likely outside crisis periods, but that the probability of moving downwards increases during downturns. 
 
+Finally, some additional material from this [post](https://www.chat-gdp.org/we-were-wrong-about-convergence/):
+
+![](convergence_2.png){width=85% align="center"} 
 
 
 # A step back: heuristic sources of growth

@@ -4,7 +4,7 @@ format:
   html:
     grid:
       sidebar-width: 150px
-      body-width: 720px
+      body-width: 780px
       margin-width: 350px
       gutter-width: 0.6em
     toc: true
@@ -39,6 +39,7 @@ library(readxl)       # Package to import MS Excel files
 library(latex2exp)    # Package for LaTeX expressions
 library(quantmod)     # Package for stock data extraction
 library(highcharter)  # Package for reactive plots
+library(patchwork)    # Package for plotting layout
 library(ggcorrplot)   # Package for correlation plots
 library(ggrepel)      # Package for neat annotations
 library(plm)          # Package for panel models
@@ -65,6 +66,16 @@ The content of the notebook is heavily inspired from the book [**Advanced Macro-
 It's not easy to explain growth **endogenously**. Adding new factors (human capital) to the production function does not help if CRS are assumed. 
 
 How about **technology**? This could be an interesting factor: a country with access to advanced technologies should be able to improve productivity and be more competitive, both **in time** and **in comparison with other countries**.   
+
+Look at the **pace of innovation** below!
+
+![](Longterm-timeline-of-technology.png)
+
+All signs point to a rapid increase. See for instance **patents**! (though patents do not mean much per se - without more data on their usefulness). 
+
+![](patents.png)
+
+
 
 We first refer to a recent piece on the drivers of productivity in manufacturing: [Why Is Manufacturing Productivity Growth So Low?](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5515863). Therein, the authors report: "*while productivity growth slowdowns are observed in multiple manufacturing industries, most of the measured sector-wide stagnation is quantitatively explained by productivity changes in Computer and Electronic Products Manufacturing (NAICS 334). In fact, nearly all of the manufacturing sector’s productivity growth since 1987—and its deceleration since 2009—can be attributed to this single 3-digit industry.*" 
 
@@ -128,7 +139,7 @@ wb_growth |>
   ggplot(aes(x = RD, y = growth)) + geom_point() +
   theme_classic() + xlab("R&D expenditures (%GDP)") +
   geom_text_repel(aes(label = country)) +
-  geom_smooth(se = F) 
+  geom_smooth(se = F) + geom_smooth(method = "lm", se = F, color = "#22CC99")
 ```
 
 The link is either far from obvious, or potentially negative, which is not what we would expect, intuitively...
@@ -151,7 +162,7 @@ wb_growth |>
   ggplot(aes(x = nb_R, y = growth)) + geom_point() +
   theme_classic() + xlab("Number of researchers (per million inhab.)") +
   geom_text_repel(aes(label = country)) +
-  geom_smooth(se = F)
+  geom_smooth(se = F) + geom_smooth(method = "lm", se = F, color = "#22CC99")
 ```
 
 Same conclusion here... not very convincing!    
@@ -249,7 +260,7 @@ $$X(i)=\left(\frac{\alpha \lambda}{p(i)} \right)^{1/(1-\alpha)}.$$
 Demand is logically **downward sloping**: if variety $i$ costs more, then demand for it will shrink (we exclude the case of [Giffen](https://en.wikipedia.org/wiki/Giffen_good) and [Veblen](https://en.wikipedia.org/wiki/Veblen_good) goods). 
 
 
-But in fact, upon simplifying assumption on the lack of heterogeneity in the cross-section of intermediate products, **the distinction vanishes**. Indeed, upon setting $X(i)=Z/M$ where $Z$ represents the total resources required to produce the intermediate inputs, we get
+But in fact, upon a simplifying assumption on the lack of heterogeneity in the cross-section of intermediate products, **the distinction vanishes**. Indeed, upon setting $X(i)=Z/M$ where $Z$ represents the total resources required to produce the intermediate inputs, we get
 
 $$Y=(M(Z/M)^\alpha)^{1/\alpha}=ZM^{1/\alpha-1},$$
 
@@ -276,7 +287,7 @@ and the interesting part here is the evolution of $A$, which is defined as the *
 $$\dot{A}=\tilde{\delta} L_A^\lambda, \quad \lambda \in (0,1],$$
 i.e., change in innovation is driven by the R&D headcount but possibly at a power smaller than one. $\tilde{\delta}$ is the rate at which "scientists" discover new ideas and products. This rate could depend on the level of knowledge in the economy. Here we assume that
 $$\tilde{\delta}=\delta A^\phi,$$
-where $\phi$ determines the returns of **knowledge**. Note that it can be negative! In the end,
+where $\phi$ determines the returns of **knowledge**. Note that it can be smaller than one! In the end,
 $$\dot{A}=\delta A^\phi L_A^\lambda \quad \Leftrightarrow \quad \gamma_A= \frac{\dot{A}}{A}=\delta A^{\phi-1}L_A^\lambda. $$
 If we differentiate with respect to $t$, we get
 $$\frac{\partial \gamma_A}{\partial t}=\delta(\lambda L_A^{\lambda-1}A^{\phi-1}\dot{L}_A+\dot{A}(\phi-1)A^{\phi-2}L_A^\lambda).$$
@@ -284,8 +295,348 @@ If the growth rate of $A$ remains constant, this means the above quantity is zer
 $$\frac{\lambda}{1-\phi}\frac{\dot{L_A}}{L_A}=\frac{\dot{A}}{A}.$$
 If the growth rate of $L_A$ is $n$, then we have 
 $$\gamma_A=\frac{\lambda n}{1-\phi},$$ {#eq-growth_A}
-hence the parameter $\phi$ plays a crucial role. This is all the more evident if we recall that under standard assumptions, it holds that production factors follow dynamics such as:
+hence the parameter $\phi$ plays a crucial role. This is all the more evident if we recall that under standard assumptions, it holds that (generic) production factors follow dynamics such as:
 $$ \gamma_x= \frac{\dot{x}_t}{x_t}=s\frac{y_t}{x_t}-(\delta+n),$$
 hence if $\gamma_x$ is constant, it means that the ratio $y_t/x_t$ should be constant too, i.e., that all quantities grow at the same rate, which will be given by @eq-growth_A in the model. A strictly positive growth requires $\lambda>0$ and $n>0$ - the latter being less and less obvious recently (post 2025).  
+
+
+
+
+
+
+
+
+
+# Technology diffusion (in the cross-section)
+
+The models above focus on the **creation** of new ideas. But an innovation does not raise productivity everywhere as soon as it appears. It must also be **adopted**. We now consider a simple diffusion approach, in the spirit of [Comin and Hobijn](https://www.nber.org/papers/w11928), who document large differences across countries in the adoption of a wide range of technologies. See also [Technology Usage Lags](https://link.springer.com/article/10.1007/s10887-008-9035-5) from the same authors.
+
+Let $A_t^*$ denote the **productivity frontier** and let $m_{i,t}\in[0,1]$ measure how much of the frontier technology has been adopted in country $i$. A simple representation of local productivity is
+
+$$\log A_{i,t}=(1-m_{i,t})\log A_{i,t-1}+m_{i,t}\log A_t^*.$$
+
+A country that adopts more rapidly closes the gap with the frontier more quickly. One simple way to represent the diffusion of a new technology is the S-shaped adoption curve:
+
+$$\dot{m}_{i,t}=\kappa m_{i,t}(1-m_{i,t}), \qquad \kappa>0.$$
+
+For instance, see the code below. 
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+#| column: 'margin'
+#| fig.width: 6
+#| fig.height: 4
+
+kappa <- 0.8 
+dt <- 0.02
+df <- data.frame(t = seq(0, 12, by = dt), m = NA)
+df$m[1] <- 0.02
+for (j in 2:nrow(df)) {
+  m <- df$m[j - 1]
+  df$m[j] <- m + dt * kappa * m * (1 - m)
+}
+ggplot(df, aes(t, m)) +
+  geom_line(color = "#3976A8", linewidth = 1.2) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  labs(x = "Time", y = expression(m[i](t))) +
+  theme_minimal(base_size = 14)
+```
+
+
+
+Output per worker still depends on capital, but now also on local productivity:
+
+$$y_{i,t}=A_{i,t}k_{i,t}^{\alpha}, \qquad \alpha\in(0,1).$$
+
+This is deliberately a small model: **innovation** moves the frontier, while **diffusion** determines how quickly each country benefits from it. For an illustration, we use internet use as a proxy for the adoption of digital technology. It is an imperfect proxy, but the data are public and available for many countries.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| cache: true
+
+tech_diffusion <- WDI(
+  indicator = c(
+    "gdp_percap" = "NY.GDP.PCAP.PP.KD", # GDP per capita, constant PPP dollars
+    "internet" = "IT.NET.USER.ZS"       # Individuals using the Internet (% population)
+  ),
+  start = 1990,
+  end = 2024
+) |>
+  filter(!is.na(gdp_percap), !is.na(internet)) |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(
+    gdp_growth = if_else(
+      year == dplyr::lag(year) + 1,
+      log(gdp_percap) - log(dplyr::lag(gdp_percap)),
+      NA_real_
+    ),
+    internet_change = if_else(
+      year == dplyr::lag(year) + 1,
+      internet - dplyr::lag(internet),
+      NA_real_
+    )
+  ) |>
+  ungroup()
+```
+
+The adoption curve is often S-shaped: take-up can be slow at first, accelerate, and then flatten as it approaches saturation. The following plot shows internet use for a few economies.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 6
+#| fig.height: 4
+
+tech_diffusion |>
+  filter(country %in% c("France", "India", "United States", "China")) |>
+  ggplot(aes(x = year, y = internet, colour = country)) +
+  geom_line(linewidth = 0.8) +
+  theme_classic() +
+  labs(x = NULL, y = "Individuals using the Internet (%)", colour = NULL)
+```
+
+Finally, we compare changes in internet use with GDP-per-capita growth across countries. The relationship need not be positive in every period: adoption is measured imperfectly, and growth of course reflects many other forces. The plot however shows a very limited relationship...  
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 6
+#| fig.height: 4
+
+tech_diffusion |>
+  filter(is.finite(gdp_growth), is.finite(internet_change)) |>
+  group_by(country) |>
+  summarise(
+    growth = mean(gdp_growth, na.rm = T) * 100,
+    adoption = mean(internet_change, na.rm = T),
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = adoption, y = growth)) +
+  geom_point(alpha = 0.6) + geom_smooth(se = F, color = "red") +
+  theme_classic() + geom_smooth(method = "lm", se = F) +
+  labs(x = "Average annual change in internet use (percentage points)",
+       y = "Average annual GDP-per-capita growth (%)")
+```
+
+
+
+
+
+
+
+
+
+# The productivity J-curve
+
+The diffusion section above considers how a technology **spreads**. We now consider why its productivity gains may take time to appear. General-purpose technologies (GPTs!) such as electricity, computers or AI require complementary investments: firms need to adapt their infrastructure, software, data, skills, and work processes before the technology is used effectively. This is the focus of [Brynjolfsson, Rock, and Syverson (2021)](https://www.aeaweb.org/articles?id=10.1257/mac.20180386).
+
+Here, $B_t$ is a stock of complementary intangible assets. It can include:
+
+- **Software and data infrastructure**: databases, pipelines, and systems that connect the technology to the firm's operations.   
+- **Process redesign**: changing how orders are handled, decisions are made, tasks are divided between people and machines.   
+- **Firm-specific skills**: training employees to use the technology and check its output.   
+- **Organizational capital**: new routines and management practices that let the technology be used productively.
+
+
+Not all intangible investment is missing from measured output. For example, U.S. national accounts capitalize business R&D and software, just like entertainment, literary, and artistic works. The BEA's [intellectual-property investment data](https://www.bea.gov/data/special-topics/intellectual-property) documents these assets.
+
+A simple production and accumulation block is
+
+$$
+Y_t^* = G_t K_t^\alpha L_t^{1-\alpha} B_t^\eta,
+\qquad \alpha,\eta>0,
+$$
+
+$$
+\dot B_t = I_t^B-\delta_B B_t,
+\qquad I_t^{B,U}=\theta I_t^B,
+\qquad 0\leq\theta\leq1,
+$$
+
+where $I_t^B$ is investment in complementary assets and $I_t^{B,U}$ is the portion not captured in the accounts. Measured output and measured TFP can then be represented schematically as
+
+$$
+Y_t^{\mathrm{meas}}\approx Y_t^*-I_t^{B,U},
+\qquad
+A_t^{\mathrm{meas}}=\frac{Y_t^{\mathrm{meas}}}{K_t^\alpha L_t^{1-\alpha}}.
+$$
+
+
+Early on, measured productivity can understate the technological gains because benefits have **not yet** accumulated. Later on, the assets end up rising output, and measured productivity growth can overstate the gains because the intangibles are **not accounted for**. Brynjolfsson, Rock, and Syverson find substantial J-curve effects for software but smaller effects for computer hardware. Their adjustment for computer-related intangibles raises the U.S. TFP level relative to official measures.
+
+We propose a stylize simulation below It shows an initial dip in measured TFP relative to its pre-implementation level, followed by a later increase.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 6
+#| fig.height: 4
+
+jcurve <- tibble(t = seq(0, 30, by = 0.1)) |>
+  mutate(
+    investment = exp(-0.15 * t),
+    true_tfp = 100 * exp(0.02 * t),
+    measured_tfp = true_tfp - 20 * investment
+  ) |>
+  bind_rows(tibble(
+    t = -1, investment = 0,
+    true_tfp = 100, measured_tfp = 100
+  )) |>
+  arrange(t)
+
+jcurve |>
+  pivot_longer(c(true_tfp, measured_tfp),
+               names_to = "series", values_to = "tfp") |>
+  mutate(series = recode(
+    series,
+    true_tfp = "Underlying TFP",
+    measured_tfp = "Measured TFP"
+  )) |>
+  ggplot(aes(x = t, y = tfp, colour = series)) +
+  geom_hline(yintercept = 100, linetype = "dashed", colour = "grey60") +
+  geom_line(linewidth = 0.9) +
+  coord_cartesian(ylim = c(75, 190)) +
+  theme_classic() + theme(legend.position = c(0.2,0.8)) + 
+  labs(x = "Years since GPT introduction",
+       y = "TFP index (stylized)",
+       colour = NULL)
+```
+
+
+## A balanced-growth extension
+
+The J-curve model above describes the transition and the measurement of productivity. To obtain a balanced-growth path, we add investment in physical capital and complementary assets. After the new technology arrives, we fix its level $G$ and labor $L$ to a constant. Suppose fixed shares $s_K$ and $s_B$ of output are invested in physical capital and intangible complements, and the remainder is consumed:
+
+$$
+Y_t=G K_t^\alpha L^{1-\alpha}B_t^\eta,
+\qquad C_t=(1-s_K-s_B)Y_t,
+$$
+
+$$
+\dot K_t=s_KY_t-\delta K_t,
+\qquad \dot B_t=s_BY_t-\delta B_t.
+$$
+
+Assume the two stocks have constant returns jointly, $\alpha+\eta=1$, and share the same depreciation rate. On the balanced-growth path, their ratio is constant:
+
+$$
+\frac{B_t}{K_t}=\frac{s_B}{s_K}.
+$$
+
+Output and both capital stocks then grow at the same rate:
+
+$$
+g_Y=g_K=g_B
+=s_KG L^{1-\alpha}
+\left(\frac{s_B}{s_K}\right)^\eta-\delta.
+$$
+
+The growth rate is positive when the expression above is positive. Growth is sustained by investment in reproducible capital, including the intangible complements. The technology level $G$ is given, hence this explains growth after a GPT arrives. 
+
+The simulation below starts away from the balanced-growth ratio and shows the capital ratio and output growth approaching their balanced-growth values. The **Euler discretization** approximates the differential equations above.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+
+alpha <- 0.35        # Output elasticity of physical capital K
+eta <- 1 - alpha     # Output elasticity of intangible capital B; alpha + eta = 1
+G <- 0.7             # Productivity scale in the production function
+L <- 1               # Fixed labor input, normalized to 1
+sK <- 0.20           # Share of output invested in physical capital
+sB <- 0.10           # Share of output invested in intangible capital
+delta <- 0.05        # Depreciation/obsolescence rate for both capital stocks
+dt <- 0.05           # Simulation time step, in the same units as t
+
+bgp <- tibble(t = seq(0, 100, by = dt), K = NA_real_, B = NA_real_)
+bgp$K[1] <- 1
+bgp$B[1] <- 0.2
+
+for (j in 2:nrow(bgp)) {
+  y <- G * bgp$K[j - 1]^alpha * L^(1 - alpha) * bgp$B[j - 1]^eta
+  bgp$K[j] <- bgp$K[j - 1] + dt * (sK * y - delta * bgp$K[j - 1])
+  bgp$B[j] <- bgp$B[j - 1] + dt * (sB * y - delta * bgp$B[j - 1])
+}
+
+g_bgp <- sK * G * L^(1 - alpha) * (sB / sK)^eta - delta
+
+bgp <- bgp |>
+  mutate(
+    Y = G * K^alpha * L^(1 - alpha) * B^eta,
+    ratio = B / K,
+    g_Y = (log(Y) - lag(log(Y))) / (t - lag(t))
+  )
+```
+
+
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: 'margin'
+#| fig.width: 6
+#| fig.height: 4
+
+p_ratio <- ggplot(bgp, aes(t, ratio)) +
+  geom_line(color = "#2166AC", linewidth = 0.9) +
+  geom_hline(yintercept = sB / sK, linetype = "dashed", color = "#B2182B") +
+  annotate("text", x = 75, y = 0.95*sB / sK, label = "B/K on BGP",
+           color = "#B2182B", vjust = -0.6) +
+  theme_classic() +
+  labs(x = "Time", y = "Intangible-to-physical capital ratio")
+
+s_total <- sK + sB
+theta0 <- sB / s_total
+alloc <- tibble(theta = seq(0.01, 0.99, length.out = 300)) |>
+  mutate(
+    sK_theta = s_total * (1 - theta),
+    sB_theta = s_total * theta,
+    g = sK_theta * G * L^(1 - alpha) *
+        (sB_theta / sK_theta)^eta - delta
+  )
+
+g_max <- G * L^(1 - alpha) *
+  (s_total * (1 - eta))^alpha * (s_total * eta)^eta - delta
+
+p_growth <- ggplot(alloc, aes(theta, 100 * g)) +
+  geom_hline(yintercept = 0, color = "grey75") +
+  geom_line(color = "#2166AC", linewidth = 1) +
+  geom_vline(xintercept = eta, linetype = "dashed", color = "#B2182B") +
+  geom_point(aes(x = theta0, y = 100 * g_bgp),
+             inherit.aes = FALSE, color = "#2166AC", size = 3) +
+  geom_point(aes(x = eta, y = 100 * g_max),
+             inherit.aes = FALSE, color = "#B2182B", size = 3) +
+  annotate("text", x = theta0, y = 100 * g_bgp,
+           label = "Current\nallocation", hjust = 1.1, vjust = -0.8, size = 3.5) +
+  annotate("text", x = eta, y = 100 * g_max*0.9,
+           label = "Growth-maximizing\nallocation", hjust = -0.05, vjust = 0, size = 3.5) +
+  scale_x_continuous(labels = function(x) paste0(round(100 * x), "%")) +
+  theme_classic() +
+  labs(x = "Share of invest. allocated to intangibles",
+       y = "BGP output growth (% per period)")
+
+p_ratio | p_growth
+```
 
 
