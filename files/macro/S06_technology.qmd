@@ -346,6 +346,14 @@ ggplot(df, aes(t, m)) +
   theme_minimal(base_size = 14)
 ```
 
+This is not too far fetched if we take a long term perspective: 
+
+![](consumption_spreads.png)
+
+Though for online services and social media, the speed is much faster...
+
+![](social_growth.png)
+
 
 
 Output per worker still depends on capital, but now also on local productivity:
