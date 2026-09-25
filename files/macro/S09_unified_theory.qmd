@@ -4,8 +4,8 @@ format:
   html:
     grid:
       sidebar-width: 150px
-      body-width: 720px
-      margin-width: 350px
+      body-width: 800px
+      margin-width: 300px
       gutter-width: 0.6em
     toc: true
     toc-location: left

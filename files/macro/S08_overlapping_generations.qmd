@@ -343,10 +343,10 @@ wb_labor <- wb_labor |> filter(region != "Aggregates") # Remove continents & co.
 #| fig.width: 5 
 #| fig.height: 5
 wb_labor |>
-  mutate(n = 100 * labor / (pop_65_percent) / pop) |>
+  mutate(ratio_active = 100 * labor / (pop_65_percent) / pop) |>
   filter(country %in% c("France", "Italy", "United States", "India", "China", "Nigeria"), 
          year > 1990) |>
-  ggplot(aes(x = year, y = n, color = country)) + geom_line(linewidth = 1.2) +
+  ggplot(aes(x = year, y = ratio_active, color = country)) + geom_line(linewidth = 1.2) +
   theme_classic() + 
   theme(legend.position = c(0.85,0.70), 
         legend.title = element_blank()) 
