@@ -324,7 +324,7 @@ wb_labor <- WDI(                                   # World Bank data
     "pop_65_percent" = "SP.POP.65UP.TO.ZS",        # Population > 65yo (%)
     "age_dep_ratio" = "SP.POP.DPND"                # Age dependency ratio
   ), 
-  extra = TRUE, start = 1960, end = 2024) |>
+  extra = TRUE, start = 1960, end = 2025) |>
   mutate(across(everything(), as.vector)) |>
   select(-status, -lending, -iso2c, -iso3c) |>
   filter(lastupdated == max(lastupdated)) |>
@@ -424,3 +424,34 @@ $$c_{\text{old},t+1}= (1+r_{t+1})s_t + (1+r_{t+1})d + (1+r_{t+1})g_{\text{debt}}
 and **total savings** are now:
 $$s_t+d = \frac{w_t}{2+\rho}-g_{\text{debt}} = \frac{w_t}{2+\rho}-d,$$
 which is lower than @eq-PAYG when $r>n$. Hence this seems like a pleasant solution (politically speaking)! 
+
+
+
+
+
+
+# Other applications
+
+The pension system is only one application of overlapping generations models. Their main advantage is that they make it possible to study how decisions made today affect people who belong to different generations.
+
+## Climate change
+
+Climate change is a natural application because current generations choose consumption, saving, and emissions, while future generations **inherit** the resulting climate and capital stock. In the influential model of [John and Pecchenino (1994)](https://ideas.repec.org/a/ecj/econjl/v104y1994i427p1393-1410.html), environmental quality evolves according to
+$$E_{t+1}=(1-\delta)E_t-\beta c_t+\gamma m_t,$$ {#eq-environment}
+where $m_t$ is maintenance or abatement. A simple budget constraint is
+$$w_t=c_t+s_t+m_t.$$ {#eq-environment-budget}
+Current consumption **reduces** the environmental quality inherited by the next generation, while **maintenance** improves it. This framework can therefore study the distribution of climate policy costs across cohorts. For a recent survey of environmental OLG models, see [Dugan, Prskawetz, and Raffin (2024)](https://doi.org/10.1111/joes.12602).
+
+## Knowledge transmission (and AI)
+
+Recent work connects this idea directly to artificial intelligence. In [Automation, AI, and the Intergenerational Transmission of Knowledge](https://arxiv.org/html/2507.16078), workers first enter the labor market as novices and later become experts. Novices acquire **tacit knowledge** by working alongside experts. If $F_t(q)$ is the distribution of expert skills, $a_t$ is the marginal active skill, and $N-I$ is the number of **novices** hired by each **expert**, the law of motion is
+$$F_{t+1}(q)=\begin{cases}0 & \text{if } q\leq a_t,\\(N-I)\left[F_t(q)-F_t(a_t)\right] & \text{if } q>a_t.\end{cases}$$ {#eq-knowledge-distribution}
+The next generation therefore inherits the skills of its mentors. The model makes the career ladder a genuine **transmission** mechanism rather than only a wage progression.
+
+Suppose that an AI improvement automates an additional $\Delta$ tasks, with machine productivity $m$, novice productivity $h$, and tail parameter $\theta$. Let $Y_t$ denote aggregate output at date $t$ without the AI shock, $\widetilde{Y}_t$ be the aggregate output at date $t$ after the shock, which occurs at date $\tau$. Ide derives the **output ratio** comparing these two quantities:
+$$\frac{\widetilde{Y}_t}{Y_t}=\underbrace{\left(\frac{m}{h}\right)^{\Delta}\left(1-\frac{\Delta}{N-I}\right)^{-(1-\theta)}}_{\text{immediate adoption gains}}\underbrace{\left(1-\frac{\Delta}{N-I}\right)^{\theta(t-\tau)}}_{\text{long run losses}}.$$ {#eq-ai-automation}
+The first term captures productivity gains upon adoption, while the second may reduce future growth. If AI removes junior tasks, fewer novices may learn from the most productive experts, so the economy **loses a share of competences** needed by future cohorts.
+
+This mechanism relates to recent evidence. [Brynjolfsson, Chandar, and Chen (2025)](https://siepr.stanford.edu/publications/working-paper/canaries-coal-mine-six-facts-about-recent-employment-effects-artificial) document a relative decline in employment for workers aged 22 to 25 in highly AI exposed occupations, while employment among experienced workers remains more stable. [Hosseini and Lichtinger (2025)](https://doi.org/10.2139/ssrn.5425555) find a similar seniority pattern within AI adopting firms. These results are descriptive (not causal), but they corroborate the possibility that AI can weaken the entry level positions through which tacit knowledge is transmitted.
+
+These examples do not require changing the basic logic of the model. They only require specifying what is transmitted across cohorts, how know-how evolves.
