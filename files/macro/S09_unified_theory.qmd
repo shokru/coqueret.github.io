@@ -67,6 +67,20 @@ To illustrate the two regimes, we refer to "**macrohistory**", see e.g., the pos
 
 ![](macro_history.png)
 
+
+
+The demographic changes are striking. Global life expectancy was about 32 years in 1900, whereas it is now above 70 years. Global fertility fell from ~5 children per woman in the 1950s to 2.1 in 2026, while the global population growth rate fell from a peak of 2.3% in 1963 to about 0.9% in 2023. This leads to the core questions of unified growth theory:   
+- why did sustained growth begin so late, why did population growth first accelerate?  
+- why did fertility later decline as education and longevity increased?   
+
+
+See the [long run evidence on life expectancy](https://ourworldindata.org/life-expectancy), [fertility](https://ourworldindata.org/fertility-rate), and [population growth](https://ourworldindata.org/population-growth).
+
+
+
+
+
+
 # The model
 
 ## Production and utility
@@ -201,5 +215,10 @@ delta |> tail(9)
 1. A first major question will be that of demographic transition for African countries (will it occur?).     
 2. A second one may be **climate change**: how it will affect fertility and mortality is an important unknown.   
 
+# Extensions 
 
-
+- **Mortality and child quality.** [Galor and Weil (2000)](https://pubs.aeaweb.org/doi/10.1257/aer.90.4.806): improved child survival raises the return to education, helping families shift from child quantity toward child quality.
+- **Gender, fertility, and growth.** [Galor and Weil (1996)](https://ideas.repec.org/a/aea/aecrev/v86y1996i3p374-87.html): capital deepening raises women’s relative wages, increasing the opportunity cost of childrearing and reinforcing the fertility transition.
+- **Fertility timing.** [d’Albis, Greulich, and Ponthiere (2018)](https://www.sciencedirect.com/science/article/pii/S0022053118303594): development can first advance births and later postpone them, so unified growth theory must explain both fertility levels and fertility timing.
+- **Capital and skill complementarity.** [Cervellati, Meyerheim, and Sunde](https://link.springer.com/article/10.1007/s10887-022-09216-2): physical capital and human capital can reinforce each other, producing a temporary growth acceleration during the demographic transition.
+- **Evolution and the growth takeoff.** [Galor and Moav (2002)](https://academic.oup.com/qje/article-abstract/117/4/1133/1875925): selection during the Malthusian era may have favored traits that later supported education, innovation, and sustained growth.
