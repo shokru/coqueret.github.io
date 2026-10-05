@@ -49,6 +49,214 @@ library(highcharter) # Package for reactive plots
 We have not talked about macro finance until now. One important reference is exactly [**Macro Finance**](https://academic.oup.com/rof/article/21/3/945/3060346) by Cochrane. It reviews many models, most of which are based on the Euler formula $\mathbb{E}[M_tR_t]=0$, where $R_t$ is an excess return and $M_t$ is a so-called [**stochastic discount factor**](https://en.wikipedia.org/wiki/Stochastic_discount_factor). Cochrane mentions several sub-streams of the literature that invoke various concepts, such as **habits**, **disaster**, **long-term risks**, **heterogeneous preferences**, etc.
 
 
+# The financial accelerator
+
+The stochastic discount factor links financial prices to future payoffs. A typical macro-finance question is how financial conditions can feed back into investment and output. The **financial accelerator** describes such kinds of mechanisms: a shock to asset values weakens borrowers' balance sheets, raises the cost of external finance, and thus reduces investment. Lower investment and output can hence put pressure on asset values.
+
+## A short version: leverage magnifies a loss
+
+Suppose a firm owns assets worth 100 and owes 90. Its net worth is 10. If the value of its assets falls by 5 percent while the debt remains fixed, net worth falls to 5.
+
+| Balance sheet | Before the loss | After the loss |
+|:--|--:|--:|
+| Assets | 100 | 95 |
+| Debt | 90 | 90 |
+| Net worth, assets minus debt | 10 | 5 |
+| Debt / net worth | 9 | 18 |
+
+The 5 percent asset loss divides equity by two and doubles the debt-to-net-worth ratio. If lenders limit borrowing against collateral or require firms to maintain a minimum net worth, the firm may have to borrow less, sell assets, or perhaps postpone investment. Asset prices  affect firms’ financing capacity, even when their productive assets have not changed.
+
+## The macroeconomic mechanism
+
+Let $N_t/A_t$ denote a borrower’s net-worth ratio. A simple representation of the **external finance premium** is
+
+$$
+\text{EFP}_t
+= R^{e}_t - R^f_t
+= \phi\!\left(\frac{N_t}{A_t}\right),
+\qquad
+\phi'(\cdot)<0,
+$$
+
+where $R^{e}_t$ is the cost of external finance and $R^f_t$ is a benchmark risk-free rate. $\phi$ is some decreasing function. The premium rises when net worth falls relative to assets.
+
+**Investment** responds to the expected return on capital, relative to the financing cost:
+
+$$
+I_t
+=
+I\!\left(
+\mathbb{E}_t[R^K_{t+1}] - R^{e}_t
+\right),
+\qquad
+I'(\cdot)>0.
+$$
+
+A fall in net worth raises the **external finance premium**. Some projects then become too costly to finance, and investment shrinks. Lower investment weakens expected cash flows and may lower asset values, which further reduces net worth. This *negative* feedback is the **accelerator**.
+
+The balance-sheet example gives the intuition. The model adds a reason why the interest rate faced by a firm can rise above the risk-free rate: lenders face agency or monitoring costs when borrower net worth is low. The classic framework for this is Bernanke, Gertler, and Gilchrist’s [financial accelerator model](https://www.sciencedirect.com/science/chapter/handbook/pii/S157400489910034X).
+
+## A data illustration: credit conditions and future activity
+
+The Federal Reserve’s **excess bond premium (EBP)** is the component of corporate bond spreads not directly attributed to expected default risk. It is a useful indicator of credit-market risk appetite, but it is not a clean, exogenous measure of credit supply. The Federal Reserve provides a [downloadable monthly EBP series](https://www.federalreserve.gov/econres/notes/feds-notes/updating-the-recession-risk-and-the-excess-bond-premium-20161006.html) and notes that historical values can be revised. Record the access date or data vintage if you want the exercise to be reproducible.
+
+The code below compares the EBP with subsequent 12-month industrial production growth. The forecast regression is descriptive: it tests whether the EBP contains predictive information, not whether an exogenous credit shock causes output to change.
+
+First, we fetch the EBP data. 
+
+```{r}
+#| message: false
+#| warning: false
+
+library(readr)
+library(stringr)
+library(lubridate)
+
+ebp_url <- "https://www.federalreserve.gov/econres/notes/feds-notes/ebp_csv.csv"
+ebp_raw <- read_csv(ebp_url, show_col_types = FALSE)
+
+# Identify the date and EBP columns from the CSV headers.
+header_names <- names(ebp_raw)
+date_col <- header_names[str_detect(str_to_lower(header_names), "date|month")][1]
+ebp_col <- header_names[str_detect(str_to_lower(header_names), "ebp|excess.*premium")][1]
+
+ebp <- ebp_raw |>
+  transmute(
+    # The Federal Reserve file may encode dates as full dates (for example,
+    # 1973-01-01) or month/year strings (for example, 1/1/1973).
+    date = as.Date(floor_date(
+      parse_date_time(
+        as.character(.data[[date_col]]),
+        orders = c("ymd", "mdy", "dmy", "ym", "my", "bY", "BY", "Yb", "YB"),
+        quiet = TRUE
+      ),
+      unit = "month"
+    )),
+    ebp = as.numeric(.data[[ebp_col]])
+  ) |>
+  filter(!is.na(date), is.finite(ebp))
+```
+
+Next, we download industrial production from the Federal Reserve Board’s public G.17 text file and join both series month-by-month. The 12-month growth outcome overlaps across adjacent observations, so the regression uses a Newey–West covariance estimator with 11 monthly lags.
+
+```{r}
+#| message: false
+#| warning: false
+
+ip_url <- "https://www.federalreserve.gov/releases/g17/Current/ipdisk/ip_sa.txt"
+ip_lines <- readLines(ip_url, warn = FALSE)
+ip_series <- str_match(ip_lines[1], '^"([^"]+):')[, 2]
+
+
+# Keep only rows for the total index, then parse the year and 12 monthly values.
+ip_rows <- ip_lines[grepl(
+  paste0("^[[:space:]]*\"?", ip_series, "\"?[[:space:]]+"), ip_lines
+)]
+ip_tokens <- str_split(str_trim(ip_rows), "[[:space:]]+")
+
+ip_wide <- map_dfr(ip_tokens, function(tokens) {
+  tokens <- str_remove_all(tokens, '"')
+  values <- suppressWarnings(as.numeric(tokens[3:14]))
+  bind_cols(
+    tibble(year = as.integer(tokens[2])),
+    tibble::as_tibble_row(stats::setNames(as.list(values), month.abb))
+  )
+})
+
+ip <- ip_wide |>
+  pivot_longer(
+    cols = all_of(month.abb),
+    names_to = "month",
+    values_to = "industrial_production"
+  ) |>
+  mutate(
+    date = as.Date(sprintf("%04d-%02d-01", year, match(month, month.abb)))
+  ) |>
+  filter(!is.na(date), is.finite(industrial_production)) |>
+  mutate(month_id = format(date, "%Y-%m")) |>
+  select(month_id, industrial_production)
+
+macro_finance <- ebp |>
+  mutate(month_id = format(date, "%Y-%m")) |>
+  select(month_id, ebp) |>
+  inner_join(ip, by = "month_id") |>
+  mutate(date = as.Date(paste0(month_id, "-01"))) |>
+  arrange(date) |>
+  mutate(
+    ip_growth_12m = 100 * (log(lead(industrial_production, 12)) -
+                           log(industrial_production))
+  ) |>
+  filter(is.finite(ip_growth_12m)) |>
+  mutate(ebp_z = as.numeric(scale(ebp)))
+
+
+
+```
+
+A first plot.
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.height: 4
+#| fig.width: 4
+ggplot(macro_finance, aes(x = date, y = ebp)) +
+  geom_line(linewidth = 0.4, colour = "#315A78") +
+  labs(x = NULL, y = "Excess bond premium",
+       title = "A credit-market indicator") +
+  theme_minimal()
+```
+
+```{r}
+#| message: false
+#| warning: false
+#| class-source: my_class
+#| classes: my_class
+#| column: margin
+#| fig.height: 4
+#| fig.width: 4
+ggplot(macro_finance, aes(x = ebp_z, y = ip_growth_12m)) +
+  geom_point(alpha = 0.35, size = 1) +
+  geom_smooth(method = "lm", se = TRUE, colour = "#A34432") +
+  labs(x = "Excess bond premium (standard deviations)",
+       y = "Industrial production growth over the next 12 months (%)",
+       title = "Does the EBP predict subsequent activity?") +
+  theme_minimal()
+```
+
+
+
+Finally, we estimate the simple **predictive regression** and report the *HAC* standard error.
+
+```{r}
+fit_ebp <- lm(ip_growth_12m ~ ebp_z, data = macro_finance)
+
+lmtest::coeftest(
+  fit_ebp,
+  vcov. = sandwich::NeweyWest(
+    fit_ebp, lag = 11, prewhite = FALSE, adjust = TRUE
+  )
+)
+```
+
+A negative coefficient means that a higher EBP is associated with weaker industrial production growth over the following year. The relationship is **not causal**! Note that the EBP can also respond to changing expectations about output, default risk, or investors’ risk appetite.  
+
+
+## Advanced extension: intermediary balance sheets
+
+The same amplification logic applies to **financial intermediaries**. When intermediary capital falls, their ability or willingness to hold risky assets can decline. Asset sales depress prices, reduce collateral values, and weaken intermediary balance sheets further. This extension can generate nonlinear dynamics and crisis episodes. Brunnermeier and Sannikov’s [macroeconomic model with a financial sector](https://www.aeaweb.org/articles?id=10.1257/aer.104.2.379) develops this channel in depth.
+
+### A few key references
+
+- Bernanke, Ben S., Mark Gertler, and Simon Gilchrist. 1999. “The Financial Accelerator in a Quantitative Business Cycle Framework.” In *Handbook of Macroeconomics*, vol. 1C, 1341–1393. [Available here](https://www.sciencedirect.com/science/chapter/handbook/pii/S157400489910034X).
+- Gilchrist, Simon, and Egon Zakrajšek. 2012. “Credit Spreads and Business Cycle Fluctuations.” *American Economic Review* 102 (4): 1692–1720. [https://doi.org/10.1257/aer.102.4.1692](https://doi.org/10.1257/aer.102.4.1692).
+- Brunnermeier, Markus K., and Yuliy Sannikov. 2014. “A Macroeconomic Model with a Financial Sector.” *American Economic Review* 104 (2): 379–421. [https://doi.org/10.1257/aer.104.2.379](https://doi.org/10.1257/aer.104.2.379).
+
+
+
 # A demand-based model
 
 Here, rather, we follow another route. We present the ideas of [**A Demand System Approach to Asset Pricing**](https://www.journals.uchicago.edu/doi/full/10.1086/701683). 
@@ -321,7 +529,7 @@ In the original paper, [Koijen & Yogo](https://www.journals.uchicago.edu/doi/abs
 
 
 
-Turning to the returns-based approach, we run **rolling regressions** inspired from the second lemma and plot the time-varying $t$-statistics. We do so for 93 characteristics, but only plot the outcome (for the $\beta$, not the $\eta$) for the 3 most common ones. 
+Turning to the returns-based approach, [we run](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195) **rolling regressions** inspired from the second lemma and plot the time-varying $t$-statistics. We do so for 93 characteristics, but only plot the outcome (for the $\beta$, not the $\eta$) for the 3 most common ones. 
 
 
 ![](t_stats.png)
@@ -347,5 +555,3 @@ This is again proof that characteristics do not explain a very large portion of 
 
 
 $\rightarrow$ researchers in asset pricing still have a lot of work to do!
-
-
