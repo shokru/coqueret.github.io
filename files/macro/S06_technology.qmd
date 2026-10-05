@@ -286,8 +286,8 @@ $$Y=K^{1-a}(AL_Y)^a,$$
 and the interesting part here is the evolution of $A$, which is defined as the **productivity of knowledge**. We know that specifying $\dot{A}/A=\delta$ is cheating as this leads to **exogenous** growth. Instead, suppose
 $$\dot{A}=\tilde{\delta} L_A^\lambda, \quad \lambda \in (0,1],$$
 i.e., change in innovation is driven by the R&D headcount but possibly at a power smaller than one. $\tilde{\delta}$ is the rate at which "scientists" discover new ideas and products. This rate could depend on the level of knowledge in the economy. Here we assume that
-$$\tilde{\delta}=\delta A^\phi,$$
-where $\phi$ determines the returns of **knowledge**. Note that it can be smaller than one! In the end,
+$$\tilde{\delta}=\delta A^\phi, \quad \phi \in (0,1)$$
+where $\phi$ determines the returns of **knowledge**. In the end,
 $$\dot{A}=\delta A^\phi L_A^\lambda \quad \Leftrightarrow \quad \gamma_A= \frac{\dot{A}}{A}=\delta A^{\phi-1}L_A^\lambda. $$
 If we differentiate with respect to $t$, we get
 $$\frac{\partial \gamma_A}{\partial t}=\delta(\lambda L_A^{\lambda-1}A^{\phi-1}\dot{L}_A+\dot{A}(\phi-1)A^{\phi-2}L_A^\lambda).$$
