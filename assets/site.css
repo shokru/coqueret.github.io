@@ -1,0 +1,283 @@
+/* ==========================================================================
+   gcoqueret.com — shared stylesheet
+   One reading column. Dated entries (CV, papers, courses) share a left date
+   column so years line up down the page, like a reference list.
+   Serif for content, sans for navigation and metadata.
+   ========================================================================== */
+
+:root {
+  /* Palette: the site's original navy ink and blue, plus a muted sage */
+  --paper:       #FAFBFC;
+  --ink:         #13203A;
+  --muted:       #566177;
+  --faint:       #8892A6;
+  --rule:        #E1E5EC;
+  --accent:      #3B60A2;
+  --accent-soft: #EBF0F8;
+  --sage:        #57744F;
+  --sage-soft:   #EDF2EB;
+
+  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans:  "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --fs-small: 0.875rem;
+  --fs-meta:  0.9375rem;
+  --fs-body:  1.125rem;
+  --fs-h2:    1.5rem;
+  --fs-h1:    clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
+
+  --measure: 46rem;
+  --date-col: 7.25rem;
+  color-scheme: light;
+}
+
+/* Dark mode follows the visitor's system setting. Delete both blocks for light only. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #11161F; --ink: #E4E8EF; --muted: #A4ADBD; --faint: #7A8496;
+    --rule: #262E3C; --accent: #93B2E6; --accent-soft: #1C2740;
+    --sage: #A7C29F; --sage-soft: #1D2A1C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #11161F; --ink: #E4E8EF; --muted: #A4ADBD; --faint: #7A8496;
+  --rule: #262E3C; --accent: #93B2E6; --accent-soft: #1C2740;
+  --sage: #A7C29F; --sage-soft: #1D2A1C;
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.listing-no-matching { display: none; } /* Quarto adds this; not needed here */
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0 auto;
+  max-width: calc(var(--measure) + 2rem);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  font-optical-sizing: auto;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  text-underline-offset: 0.18em;
+}
+a:hover { text-decoration-color: currentColor; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+h1, h2, h3 {
+  font-family: var(--serif);
+  font-weight: 500;
+  line-height: 1.2;
+  text-wrap: balance;
+  margin: 0;
+}
+h1 { font-size: var(--fs-h1); letter-spacing: -0.015em; font-weight: 400; }
+h2 { font-size: var(--fs-h2); margin-bottom: 1rem; }
+h3 { font-size: 1.1875rem; }
+p { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+cite { font-style: italic; }
+
+.skip-link {
+  position: absolute; left: -999px; top: 0;
+  background: var(--ink); color: var(--paper); padding: 0.5rem 0.75rem;
+  font-family: var(--sans); font-size: var(--fs-small);
+}
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+/* ---------- Header & footer ---------- */
+
+.site-header {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: 0.5rem 2rem;
+  padding-block: 1.75rem 2.5rem;
+}
+.site-name {
+  font-size: 1.1875rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+}
+.site-nav { display: flex; gap: 1.5rem; font-family: var(--sans); font-size: var(--fs-meta); }
+.site-nav a { color: var(--muted); text-decoration: none; padding-block: 0.25rem; }
+.site-nav a:hover { color: var(--ink); }
+.site-nav a[aria-current="page"] { color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); }
+
+.site-footer {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.75rem 2rem;
+  margin-top: 4rem;
+  padding-block: 1.5rem 2.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans); font-size: var(--fs-small); color: var(--faint);
+}
+.site-footer a { color: var(--muted); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+
+/* ---------- Sections ---------- */
+
+h2 { margin-top: 3rem; }
+.page-head p { color: var(--muted); max-width: 38rem; margin-top: 0.75rem; }
+
+/* In-page index (research page) */
+.toc p {
+  display: flex; flex-wrap: wrap; gap: 0.375rem 1.25rem;
+  font-family: var(--sans); font-size: var(--fs-small);
+  margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+}
+.toc a { color: var(--muted); text-decoration: none; }
+.toc a:hover { color: var(--accent); }
+
+/* ---------- Home: intro ---------- */
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 12rem;
+  gap: 2.5rem;
+  align-items: end;
+}
+.intro > * { min-width: 0; }
+.intro h1 { margin-bottom: 0.375rem; }
+.intro .role { font-family: var(--sans); font-size: 1rem; color: var(--muted); margin-bottom: 1.25rem; }
+.intro p + p { margin-top: 0.75rem; }
+.portrait {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 3px;
+}
+.quick-links p {
+  display: flex; flex-wrap: wrap; gap: 0.375rem 1.25rem;
+  margin-top: 1.75rem;
+  font-family: var(--sans); font-size: var(--fs-meta);
+}
+
+/* ---------- Dated rows (CV, courses) ---------- */
+
+.rows { display: grid; gap: 0.625rem; }
+.row {
+  display: grid;
+  grid-template-columns: var(--date-col) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: baseline;
+}
+.row-date {
+  font-family: var(--sans); font-size: var(--fs-small); color: var(--faint);
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.row-main { min-width: 0; }
+.row-where { color: var(--muted); }
+.row-links {
+  display: flex; flex-wrap: wrap; gap: 0.125rem 1rem;
+  font-family: var(--sans); font-size: var(--fs-small);
+  margin-top: 0.125rem;
+}
+
+/* ---------- Papers ---------- */
+
+.pubs { display: grid; gap: 1.125rem; }
+.pub {
+  display: grid;
+  grid-template-columns: 3.25rem minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: baseline;
+}
+.pubs.is-undated .pub { grid-template-columns: minmax(0, 1fr); }
+.pub-year {
+  font-family: var(--sans); font-size: var(--fs-small); color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.pub-body { min-width: 0; }
+.pub-title { font-weight: 500; line-height: 1.4; }
+.pub-venue { line-height: 1.45; }
+.pub-venue cite { color: var(--accent); }
+.pub-venue .vol { color: var(--muted); font-variant-numeric: tabular-nums; }
+.pub-meta {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.125rem 1rem;
+  font-family: var(--sans); font-size: var(--fs-small);
+  margin-top: 0.0625rem;
+}
+.pub-authors { color: var(--muted); font-size: var(--fs-meta); }
+.pub-note {
+  display: inline-block;
+  margin-top: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 3px;
+  background: var(--sage-soft); color: var(--sage);
+  font-family: var(--sans); font-size: 0.8125rem; line-height: 1.5;
+}
+.pub-note a { color: inherit; }
+
+/* Topic filter (built by assets/site.js) */
+.filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.chip {
+  appearance: none;
+  font: 500 var(--fs-small)/1 var(--sans);
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+}
+.chip:hover { color: var(--ink); border-color: var(--faint); }
+.chip[aria-pressed="true"] { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
+.chip .n { color: var(--faint); font-variant-numeric: tabular-nums; margin-left: 0.25rem; }
+.chip[aria-pressed="true"] .n { color: inherit; opacity: 0.7; }
+
+/* ---------- Books ---------- */
+
+.books { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.book {
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1.125rem 1.25rem 1.25rem;
+  min-width: 0;
+}
+.book h3 { margin-bottom: 0.25rem; }
+.book p { font-family: var(--sans); font-size: var(--fs-small); color: var(--muted); line-height: 1.6; }
+.book p + p { margin-top: 0.5rem; }
+.book strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- Profiles & contact (home) ---------- */
+
+.profiles ul {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.375rem 1.5rem;
+  font-family: var(--sans); font-size: var(--fs-meta);
+}
+.line-block { line-height: 1.55; }
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+  :root { --fs-body: 1.0625rem; }
+  .site-header { padding-block: 1.25rem 1.5rem; }
+  .intro { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .intro .portrait-cell { order: -1; max-width: 8.5rem; }
+  .rows { gap: 0.875rem; }
+  .row { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .pub { grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.75rem; }
+  .books { grid-template-columns: minmax(0, 1fr); }
+  .profiles ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  h2 { margin-top: 2.5rem; }
+}

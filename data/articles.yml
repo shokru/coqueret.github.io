@@ -1,0 +1,222 @@
+# Published academic articles (research page). Newest first.
+# Fields:
+#   title, journal, details (volume, pages), year, authors
+#   links:    one per line as   Label: https://...
+#   note:     optional highlight, e.g. an award (markdown allowed, keep it in "quotes")
+#   topic:    filter button the paper belongs to (a new topic creates a new button)
+#   selected: true  -> shown under "Selected" (the default view)
+# Put text in "quotes" if it contains a colon.
+
+- title: Sustainability in commodity markets
+  journal: Journal of Banking & Finance
+  details: Vol. 184, pp. 107599
+  year: 2026
+  authors: with B. Tavin and Y. Zhou
+  links:
+    Open access: https://www.sciencedirect.com/science/article/pii/S0378426625002195
+  note: "Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/)"
+  topic: Sustainable finance
+  selected: true
+
+- title: The biodiversity premium
+  journal: Ecological Economics
+  details: Vol. 228
+  year: 2025
+  authors: with T. Giroux & O.D. Zerbib
+  links:
+    Open access: https://www.sciencedirect.com/science/article/pii/S092180092400332X
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550
+  topic: Sustainable finance
+
+- title: Unexpected opportunities in misspecified predictive regressions
+  journal: European Journal of Operational Research
+  details: Vol. 318, No. 2, pp. 686–700
+  year: 2024
+  authors: with R. Deguest
+  links:
+    Open access: https://www.sciencedirect.com/science/article/pii/S0377221724004235
+    Material: http://www.gcoqueret.com/PRs.html
+  topic: Data & decision sciences
+  selected: true
+
+- title: ESG news spillovers across the value chain
+  journal: Financial Management
+  details: Vol. 52, No. 4, pp. 677–710
+  year: 2023
+  authors: with V. Le Tran
+  links:
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705
+  topic: Sustainable finance
+
+- title: Dynamic decision making with predictive panels
+  journal: Journal of the Operational Research Society
+  details: Vol. 75, No. 6, pp. 1055–1075
+  year: 2023
+  authors: with B. Tavin
+  links:
+    Link: https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793
+    R notebook: http://www.gcoqueret.com/files/misc/panel.html
+  topic: Data & decision sciences
+
+- title: Scopes of carbon emissions and their impact on green portfolios
+  journal: Economic Modelling
+  details: Vol. 115
+  year: 2022
+  authors: with T. Anquetin, B. Tavin & L. Welgryn
+  links:
+    Link: https://www.sciencedirect.com/science/article/abs/pii/S0264999322001973
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629
+  topic: Sustainable finance
+
+- title: "The determinants of health assessment in the United States: A supervised learning approach"
+  journal: Healthcare Analytics
+  details: Vol. 2
+  year: 2022
+  links:
+    Open access: https://www.sciencedirect.com/science/article/pii/S2772442522000466
+  topic: Data & decision sciences
+
+- title: Persistence in factor-based supervised learning models
+  journal: Journal of Finance & Data Science
+  details: Vol. 8, pp. 12–34
+  year: 2022
+  links:
+    Open access: https://www.sciencedirect.com/science/article/pii/S2405918821000143
+    Material: http://www.gcoqueret.com/horizons.html
+  topic: Data & decision sciences
+
+- title: A note on implied correlation for bivariate contracts
+  journal: Economics Bulletin
+  details: Vol. 40, No. 2, pp. 1388–1396
+  year: 2020
+  authors: with B. Tavin
+  links:
+    Link: http://www.accessecon.com/Pubs/EB/2020/Volume40/EB-20-V40-I2-P119.pdf
+  topic: Finance & economics
+
+- title: Training trees on tails with applications to portfolio choice
+  journal: Annals of Operations Research
+  details: Vol. 288, pp. 181–221
+  year: 2020
+  authors: with T. Guida
+  links:
+    Link: https://link.springer.com/article/10.1007/s10479-020-03539-2
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009
+    Material: http://www.gcoqueret.com/tot.html
+  topic: Portfolio choice
+
+- title: Procedural Rationality, Asset Heterogeneity and Market Selection
+  journal: Journal of Mathematical Economics
+  details: Vol. 82, pp. 125–149
+  year: 2019
+  authors: with B. Tavin
+  links:
+    Link: https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2952659
+  topic: Finance & economics
+  selected: true
+
+- title: Herding behavior among wine investors
+  journal: Economic Modelling
+  details: Vol. 68, pp. 318–328
+  year: 2018
+  authors: with B. Aytac and C. Mandou
+  links:
+    Link: https://www.sciencedirect.com/science/article/pii/S0264999317301001
+  topic: Wine business
+
+- title: Empirical properties of a heterogeneous agent model in large dimensions
+  journal: Journal of Economic Dynamics & Control
+  details: Vol. 77, pp. 180–201
+  year: 2017
+  links:
+    Link: https://www.sciencedirect.com/science/article/pii/S0165188917300386
+  topic: Finance & economics
+  selected: true
+
+- title: Approximate NORTA simulations for virtual sample generation
+  journal: Expert Systems With Applications
+  details: Vol. 73, pp. 69–81
+  year: 2017
+  links:
+    Link: https://www.sciencedirect.com/science/article/pii/S0957417416307096
+  topic: Data & decision sciences
+
+- title: An investigation of model risk in a market with jumps and stochastic volatility
+  journal: European Journal of Operational Research
+  details: Vol. 253, pp. 648–658
+  year: 2016
+  authors: with B. Tavin
+  links:
+    Link: https://www.sciencedirect.com/science/article/abs/pii/S0377221716301461
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2474223
+  topic: Finance & economics
+  selected: true
+
+- title: Characteristics-based portfolio choice with leverage constraints
+  journal: Journal of Banking and Finance
+  details: Vol. 70, pp. 23–37
+  year: 2016
+  authors: with M. Ammann and J-P. Schade
+  links:
+    Link: https://www.sciencedirect.com/science/article/pii/S0378426616300516
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2736324
+  topic: Portfolio choice
+  selected: true
+
+- title: On the distribution of the supremum of the spectrally negative stable process with drift
+  journal: Statistics & Probability Letters
+  details: Vol. 107, pp. 333–340
+  year: 2015
+  links:
+    Link: https://www.sciencedirect.com/science/article/pii/S0167715215003314
+  topic: Probability & statistics
+
+- title: Diversified minimum-variance portfolios
+  journal: Annals of Finance
+  details: Vol. 11, No. 2, pp. 221–241
+  year: 2015
+  links:
+    Link: https://link.springer.com/article/10.1007%2Fs10436-014-0253-x
+  topic: Portfolio choice
+
+- title: Optimal wine pricing for restaurants
+  journal: Journal of Wine Economics
+  details: Vol. 10, No. 2, pp. 204–224
+  year: 2015
+  links:
+    Link: https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E
+  topic: Wine business
+
+- title: Second order risk aggregation with the Bernstein copula
+  journal: "Insurance: Mathematics and Economics"
+  details: Vol. 58, pp. 150–158
+  year: 2014
+  links:
+    Link: https://www.sciencedirect.com/science/article/pii/S0167668714000882
+  topic: Probability & statistics
+
+- title: Lookback option prices under a spectrally negative tempered-stable model
+  journal: International Journal of Theoretical and Applied Finance
+  details: Vol. 16, No. 3
+  year: 2013
+  links:
+    Link: https://www.worldscientific.com/doi/abs/10.1142/S021902491350012X
+  topic: Finance & economics
+
+- title: Meromorphic Levy-Khintchine exponents with poles of order two
+  journal: Communications on Stochastic Analysis
+  details: Vol. 7, No. 2, pp. 179–198
+  year: 2013
+  links:
+    Link: https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/
+  topic: Probability & statistics
+
+- title: Approximation of probabilistic Laplace transforms and their inverses
+  journal: Communications in Applied Mathematics and Computational Science
+  details: Vol. 7, No. 2, pp. 231–246
+  year: 2012
+  links:
+    Link: https://msp.org/camcos/2012/7-2/p03.xhtml
+  topic: Probability & statistics

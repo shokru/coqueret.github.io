@@ -1,0 +1,81 @@
+# Articles in the practitioner press (research page). Newest first.
+# Same fields as articles.yml (topic and selected are not used here).
+# Put text in "quotes" if it contains a colon.
+
+- title: Cross-Asset Climate Betas
+  journal: Journal of Portfolio Management
+  details: Vol. 51, No. 5, pp. 143–163
+  year: 2025
+  authors: with JC Bertrand, N. McLoughlin and S. Mesnard
+  links:
+    Link: https://www.pm-research.com/content/iijpormgmt/50/5/238
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5073529
+
+- title: The impact of climate change risk on long-term asset allocation
+  journal: Journal of Portfolio Management
+  details: Vol. 50, No. 5, pp. 238–263
+  year: 2024
+  authors: with JC Bertrand, N. McLoughlin and S. Mesnard
+  links:
+    Link: https://www.pm-research.com/content/iijpormgmt/50/5/238
+    Working paper: papers/climate_risk_alloc.pdf
+
+- title: International market exposure to sovereign ESG
+  journal: Journal of Sustainable Finance & Investment
+  details: Vol. 14, No. 4, pp. 968–987
+  year: 2024
+  authors: with C. Morgenstern & J. Kelly
+  links:
+    Open access: https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136
+
+- title: Interpretable supervised portfolios
+  journal: Journal of Financial Data Science
+  details: Vol. 6, No. 2, pp. 10–34
+  year: ""
+  authors: with G. Chevalier & T. Raffinot
+  links:
+    Link: https://www.pm-research.com/content/iijjfds/6/2/10
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955
+
+- title: Supervised portfolios
+  journal: Quantitative Finance
+  details: Vol. 22, No. 12, pp. 2275–2295
+  year: 2022
+  authors: with G. Chevalier & T. Raffinot
+  links:
+    Link: https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109
+    Notebook: https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k
+
+- title: Tuning trend following strategies with macro ESG data
+  journal: Journal of Impact & ESG Investing
+  details: Vol. 2, No. 2, pp. 117–136
+  year: 2021
+  authors: with C. Morgenstern & J. Kelly
+  links:
+    Link: https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032
+
+- title: Stock-specific sentiment and return predictability
+  journal: Quantitative Finance
+  details: Vol. 20, No. 9, pp. 1531–1551
+  year: 2020
+  links:
+    Link: https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1736314
+    Working paper: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3248925
+
+- title: "Machine learning in systematic equity allocation: a model comparison"
+  journal: Wilmott Magazine
+  details: Vol. 2018, Issue 98, pp. 24–33
+  year: 2018
+  authors: with T. Guida
+  links:
+    Link: https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719
+
+- title: Equity portfolios with improved liability-hedging benefits
+  journal: Journal of Portfolio Management
+  details: Vol. 43, No. 2 (Winter 2017), pp. 37–49
+  year: 2017
+  authors: with L. Martellini and V. Milhau
+  links:
+    Link: https://jpm.iijournals.com/content/43/2/37

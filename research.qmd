@@ -1,0 +1,95 @@
+---
+pagetitle: "Research · Guillaume Coqueret"
+description: "Research of Guillaume Coqueret: working papers, published articles, books and practitioner publications."
+listing:
+  - id: wp
+    contents: data/working-papers.yml
+    template: _templates/pubs.ejs
+    sort: false
+  - id: articles
+    contents: data/articles.yml
+    template: _templates/pubs.ejs
+    sort: false
+  - id: practitioner
+    contents: data/practitioner.yml
+    template: _templates/pubs.ejs
+    sort: false
+  - id: chapters
+    contents: data/chapters.yml
+    template: _templates/pubs.ejs
+    sort: false
+  - id: permanent
+    contents: data/permanent-papers.yml
+    template: _templates/pubs.ejs
+    sort: false
+  - id: talks
+    contents: data/presentations.yml
+    template: _templates/pubs.ejs
+    sort: false
+---
+
+::: page-head
+# Research
+
+Supervised learning for financial economics, sustainable equity investing and the impact of AI on organizations.
+:::
+
+::: toc
+[Working papers](#working-papers) [Published articles](#published-articles) [Books](#books) [Practitioner press](#in-the-practitioner-press) [Book chapters](#book-chapters-and-review) [Permanent working papers](#permanent-working-papers) [Presentations](#research-presentations)
+:::
+
+## Working papers
+
+::: {#wp}
+:::
+
+## Published articles
+
+::: {#articles}
+:::
+
+## Books
+
+:::: books
+::: book
+### Perspectives in sustainable equity investing
+
+CRC / Chapman Hall, March 2022
+
+**[Read the open source version](http://www.esgperspectives.com)** \
+[Early working paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753)
+
+Order: [Publisher](https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015), [Amazon FR](https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/), [Amazon US](https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/), [Amazon UK](https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/)
+:::
+
+::: book
+### Machine learning for factor investing
+
+With T. Guida. CRC / Chapman Hall. R version September 2020, Python version September 2023
+
+**[Read the open source version](http://www.mlfactor.com)** \
+[Material](https://github.com/shokru/mlfactor.github.io/tree/master/material), [Slides](files/SLIDES/SLIDES.html)
+
+Order the R version: [Publisher](https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864), [Amazon FR](https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/), [Amazon US](https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1), [Amazon UK](https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2)
+:::
+::::
+
+## In the practitioner press
+
+::: {#practitioner}
+:::
+
+## Book chapters and review
+
+::: {#chapters}
+:::
+
+## Permanent working papers
+
+::: {#permanent}
+:::
+
+## Research presentations
+
+::: {#talks}
+:::

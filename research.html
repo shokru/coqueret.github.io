@@ -1,865 +1,1011 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="description" content="Research of Guillaume Coqueret: working papers, published articles, books and practitioner publications.">
 
-
-
-
-<title>research.knit</title>
-
-<script src="site_libs/header-attrs-2.32/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+<title>Research · Guillaume Coqueret</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
-</script>
-
-
-
-
-
-
-<link rel="stylesheet" href="styles.css" type="text/css" />
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 </style>
 
 
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script>
 
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-wp .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+    const options = {
+      valueNames: ['listing-title','listing-authors','listing-links','listing-note',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-authors","listing-links","listing-note"],
+    };
 
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-wp'] = new List('listing-wp', options);
 
-<!-- tabsets -->
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
 
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-articles .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
-  border: none;
-}
+    const options = {
+      valueNames: ['listing-title','listing-journal','listing-details','listing-year','listing-authors','listing-links','listing-note','listing-topic','listing-selected',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-journal","listing-details","listing-year","listing-authors","listing-links","listing-note","listing-topic","listing-selected"],
+    };
 
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-articles'] = new List('listing-articles', options);
 
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
 
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-practitioner .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-<!-- code folding -->
+    const options = {
+      valueNames: ['listing-title','listing-journal','listing-details','listing-year','listing-authors','listing-links',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-journal","listing-details","listing-year","listing-authors","listing-links"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-practitioner'] = new List('listing-practitioner', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-chapters .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-journal','listing-details','listing-year','listing-authors','listing-links',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-journal","listing-details","listing-year","listing-authors","listing-links"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-chapters'] = new List('listing-chapters', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-permanent .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-links','listing-year','listing-authors','listing-details',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-links","listing-year","listing-authors","listing-details"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-permanent'] = new List('listing-permanent', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
+
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-talks .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-title','listing-year','listing-links',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-title","listing-year","listing-links"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-talks'] = new List('listing-talks', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap">
 
 
-
-
+<link rel="stylesheet" href="assets/site.css">
 </head>
 
 <body>
 
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="index.html">Guillaume Coqueret</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="teaching.html">Teaching</a>
+  </nav>
+</header>
+<span id="content"></span>
 
-<div class="container-fluid main-container">
 
 
 
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Guillaume Coqueret</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="research.html">Research</a>
+<section id="research" class="page-head">
+<h1>Research</h1>
+<p>Supervised learning for financial economics, sustainable equity investing and the impact of AI on organizations.</p>
+</section>
+<div class="toc">
+<p><a href="#working-papers">Working papers</a> <a href="#published-articles">Published articles</a> <a href="#books">Books</a> <a href="#in-the-practitioner-press">Practitioner press</a> <a href="#book-chapters-and-review">Book chapters</a> <a href="#permanent-working-papers">Permanent working papers</a> <a href="#research-presentations">Presentations</a></p>
+</div>
+<h2 id="working-papers">Working papers</h2>
+<div id="listing-wp" class="quarto-listing quarto-listing-container-custom">
+<ol class="pubs is-undated">
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Randomness in large language models: What researchers need to know (and report)
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with J. Llull, F. Oswald, C. Pérignon, C. Scheuch, L. Vilhuber</span> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7191580" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
 </li>
-<li>
-  <a href="teaching.html">Teaching</a>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Persistent anomalies and nonstandard Sharpe ratios
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with C. Pérignon</span> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
 </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/shokru">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Higher education in the era of Generative AI: Survival under quality-differentiation
+</p>
+<p class="pub-meta">
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6752980" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
 </li>
-<li>
-  <a href="https://twitter.com/g_coqueret">
-    <span class="fa fa-twitter fa-lg"></span>
-     
-  </a>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Posterior drift in equity premium forecasts
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with M. Laguerre</span> <a href="https://arxiv.org/abs/2506.23619" target="_blank" rel="noopener">arXiv</a>
+</p>
+</div>
 </li>
-<li>
-  <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fa fa-linkedin fa-lg"></span>
-     
-  </a>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Global p-values in multi-design studies
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier</span> <a href="https://arxiv.org/abs/2507.03815" target="_blank" rel="noopener">arXiv</a>
+</p>
+</div>
 </li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
-
-
-
-
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Can corporate incentives deliver decarbonization?
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Qiu</span>
+</p>
+<p class="pub-note">
+Revise &amp; resubmit, <em>Journal of Corporate Finance</em>
+</p>
+</div>
+</li>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+An anatomy of decarbonizing firms
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Giroux and B. Qiu</span>
+</p>
+</div>
+</li>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Factor investing with reinforcement learning
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with E. André</span> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Characteristics-driven returns in equilibrium
+</p>
+<p class="pub-meta">
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank" rel="noopener">SSRN</a> <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank" rel="noopener">R notebook</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<div class="pub-body">
+<p class="pub-title">
+Interactions in Asset Pricing
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with G. Chevalier, M. Laguerre &amp; T. Raffinot</span> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="published-articles">Published articles</h2>
+<div id="listing-articles" class="quarto-listing quarto-listing-container-custom">
+<ol class="pubs">
+<li class="pub" data-topic="Sustainable finance" data-selected="">
+<span class="pub-year">2026</span>
+<div class="pub-body">
+<p class="pub-title">
+Sustainability in commodity markets
+</p>
+<p class="pub-venue">
+<cite>Journal of Banking &amp; Finance</cite> <span class="vol">Vol. 184, pp.&nbsp;107599</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Tavin and Y. Zhou</span> <a href="https://www.sciencedirect.com/science/article/pii/S0378426625002195" target="_blank" rel="noopener">Open access</a>
+</p>
+<p class="pub-note">
+Winner of the <a href="https://www.cascad.tech/">cascad</a> best reproduced paper award at the <a href="https://affi2024.eventsadmin.com/">2024 AFFI conference</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Sustainable finance">
+<span class="pub-year">2025</span>
+<div class="pub-body">
+<p class="pub-title">
+The biodiversity premium
+</p>
+<p class="pub-venue">
+<cite>Ecological Economics</cite> <span class="vol">Vol. 228</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Giroux &amp; O.D. Zerbib</span> <a href="https://www.sciencedirect.com/science/article/pii/S092180092400332X" target="_blank" rel="noopener">Open access</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Data &amp; decision sciences" data-selected="">
+<span class="pub-year">2024</span>
+<div class="pub-body">
+<p class="pub-title">
+Unexpected opportunities in misspecified predictive regressions
+</p>
+<p class="pub-venue">
+<cite>European Journal of Operational Research</cite> <span class="vol">Vol. 318, No.&nbsp;2, pp.&nbsp;686–700</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with R. Deguest</span> <a href="https://www.sciencedirect.com/science/article/pii/S0377221724004235" target="_blank" rel="noopener">Open access</a> <a href="http://www.gcoqueret.com/PRs.html" target="_blank" rel="noopener">Material</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Sustainable finance">
+<span class="pub-year">2023</span>
+<div class="pub-body">
+<p class="pub-title">
+ESG news spillovers across the value chain
+</p>
+<p class="pub-venue">
+<cite>Financial Management</cite> <span class="vol">Vol. 52, No.&nbsp;4, pp.&nbsp;677–710</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with V. Le Tran</span> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Data &amp; decision sciences">
+<span class="pub-year">2023</span>
+<div class="pub-body">
+<p class="pub-title">
+Dynamic decision making with predictive panels
+</p>
+<p class="pub-venue">
+<cite>Journal of the Operational Research Society</cite> <span class="vol">Vol. 75, No.&nbsp;6, pp.&nbsp;1055–1075</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Tavin</span> <a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank" rel="noopener">Working paper</a> <a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank" rel="noopener">R notebook</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Sustainable finance">
+<span class="pub-year">2022</span>
+<div class="pub-body">
+<p class="pub-title">
+Scopes of carbon emissions and their impact on green portfolios
+</p>
+<p class="pub-venue">
+<cite>Economic Modelling</cite> <span class="vol">Vol. 115</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Anquetin, B. Tavin &amp; L. Welgryn</span> <a href="https://www.sciencedirect.com/science/article/abs/pii/S0264999322001973" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Data &amp; decision sciences">
+<span class="pub-year">2022</span>
+<div class="pub-body">
+<p class="pub-title">
+The determinants of health assessment in the United States: A supervised learning approach
+</p>
+<p class="pub-venue">
+<cite>Healthcare Analytics</cite> <span class="vol">Vol. 2</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank" rel="noopener">Open access</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Data &amp; decision sciences">
+<span class="pub-year">2022</span>
+<div class="pub-body">
+<p class="pub-title">
+Persistence in factor-based supervised learning models
+</p>
+<p class="pub-venue">
+<cite>Journal of Finance &amp; Data Science</cite> <span class="vol">Vol. 8, pp.&nbsp;12–34</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank" rel="noopener">Open access</a> <a href="http://www.gcoqueret.com/horizons.html" target="_blank" rel="noopener">Material</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Finance &amp; economics">
+<span class="pub-year">2020</span>
+<div class="pub-body">
+<p class="pub-title">
+A note on implied correlation for bivariate contracts
+</p>
+<p class="pub-venue">
+<cite>Economics Bulletin</cite> <span class="vol">Vol. 40, No.&nbsp;2, pp.&nbsp;1388–1396</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Tavin</span> <a href="http://www.accessecon.com/Pubs/EB/2020/Volume40/EB-20-V40-I2-P119.pdf" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Portfolio choice">
+<span class="pub-year">2020</span>
+<div class="pub-body">
+<p class="pub-title">
+Training trees on tails with applications to portfolio choice
+</p>
+<p class="pub-venue">
+<cite>Annals of Operations Research</cite> <span class="vol">Vol. 288, pp.&nbsp;181–221</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Guida</span> <a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank" rel="noopener">Working paper</a> <a href="http://www.gcoqueret.com/tot.html" target="_blank" rel="noopener">Material</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Finance &amp; economics" data-selected="">
+<span class="pub-year">2019</span>
+<div class="pub-body">
+<p class="pub-title">
+Procedural Rationality, Asset Heterogeneity and Market Selection
+</p>
+<p class="pub-venue">
+<cite>Journal of Mathematical Economics</cite> <span class="vol">Vol. 82, pp.&nbsp;125–149</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Tavin</span> <a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2952659" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Wine business">
+<span class="pub-year">2018</span>
+<div class="pub-body">
+<p class="pub-title">
+Herding behavior among wine investors
+</p>
+<p class="pub-venue">
+<cite>Economic Modelling</cite> <span class="vol">Vol. 68, pp.&nbsp;318–328</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Aytac and C. Mandou</span> <a href="https://www.sciencedirect.com/science/article/pii/S0264999317301001" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Finance &amp; economics" data-selected="">
+<span class="pub-year">2017</span>
+<div class="pub-body">
+<p class="pub-title">
+Empirical properties of a heterogeneous agent model in large dimensions
+</p>
+<p class="pub-venue">
+<cite>Journal of Economic Dynamics &amp; Control</cite> <span class="vol">Vol. 77, pp.&nbsp;180–201</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.sciencedirect.com/science/article/pii/S0165188917300386" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Data &amp; decision sciences">
+<span class="pub-year">2017</span>
+<div class="pub-body">
+<p class="pub-title">
+Approximate NORTA simulations for virtual sample generation
+</p>
+<p class="pub-venue">
+<cite>Expert Systems With Applications</cite> <span class="vol">Vol. 73, pp.&nbsp;69–81</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Finance &amp; economics" data-selected="">
+<span class="pub-year">2016</span>
+<div class="pub-body">
+<p class="pub-title">
+An investigation of model risk in a market with jumps and stochastic volatility
+</p>
+<p class="pub-venue">
+<cite>European Journal of Operational Research</cite> <span class="vol">Vol. 253, pp.&nbsp;648–658</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with B. Tavin</span> <a href="https://www.sciencedirect.com/science/article/abs/pii/S0377221716301461" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2474223" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Portfolio choice" data-selected="">
+<span class="pub-year">2016</span>
+<div class="pub-body">
+<p class="pub-title">
+Characteristics-based portfolio choice with leverage constraints
+</p>
+<p class="pub-venue">
+<cite>Journal of Banking and Finance</cite> <span class="vol">Vol. 70, pp.&nbsp;23–37</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with M. Ammann and J-P. Schade</span> <a href="https://www.sciencedirect.com/science/article/pii/S0378426616300516" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2736324" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Probability &amp; statistics">
+<span class="pub-year">2015</span>
+<div class="pub-body">
+<p class="pub-title">
+On the distribution of the supremum of the spectrally negative stable process with drift
+</p>
+<p class="pub-venue">
+<cite>Statistics &amp; Probability Letters</cite> <span class="vol">Vol. 107, pp.&nbsp;333–340</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.sciencedirect.com/science/article/pii/S0167715215003314" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Portfolio choice">
+<span class="pub-year">2015</span>
+<div class="pub-body">
+<p class="pub-title">
+Diversified minimum-variance portfolios
+</p>
+<p class="pub-venue">
+<cite>Annals of Finance</cite> <span class="vol">Vol. 11, No.&nbsp;2, pp.&nbsp;221–241</span>
+</p>
+<p class="pub-meta">
+<a href="https://link.springer.com/article/10.1007%2Fs10436-014-0253-x" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Wine business">
+<span class="pub-year">2015</span>
+<div class="pub-body">
+<p class="pub-title">
+Optimal wine pricing for restaurants
+</p>
+<p class="pub-venue">
+<cite>Journal of Wine Economics</cite> <span class="vol">Vol. 10, No.&nbsp;2, pp.&nbsp;204–224</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Probability &amp; statistics">
+<span class="pub-year">2014</span>
+<div class="pub-body">
+<p class="pub-title">
+Second order risk aggregation with the Bernstein copula
+</p>
+<p class="pub-venue">
+<cite>Insurance: Mathematics and Economics</cite> <span class="vol">Vol. 58, pp.&nbsp;150–158</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.sciencedirect.com/science/article/pii/S0167668714000882" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Finance &amp; economics">
+<span class="pub-year">2013</span>
+<div class="pub-body">
+<p class="pub-title">
+Lookback option prices under a spectrally negative tempered-stable model
+</p>
+<p class="pub-venue">
+<cite>International Journal of Theoretical and Applied Finance</cite> <span class="vol">Vol. 16, No.&nbsp;3</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.worldscientific.com/doi/abs/10.1142/S021902491350012X" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Probability &amp; statistics">
+<span class="pub-year">2013</span>
+<div class="pub-body">
+<p class="pub-title">
+Meromorphic Levy-Khintchine exponents with poles of order two
+</p>
+<p class="pub-venue">
+<cite>Communications on Stochastic Analysis</cite> <span class="vol">Vol. 7, No.&nbsp;2, pp.&nbsp;179–198</span>
+</p>
+<p class="pub-meta">
+<a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub" data-topic="Probability &amp; statistics">
+<span class="pub-year">2012</span>
+<div class="pub-body">
+<p class="pub-title">
+Approximation of probabilistic Laplace transforms and their inverses
+</p>
+<p class="pub-venue">
+<cite>Communications in Applied Mathematics and Computational Science</cite> <span class="vol">Vol. 7, No.&nbsp;2, pp.&nbsp;231–246</span>
+</p>
+<p class="pub-meta">
+<a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="books">Books</h2>
+<div class="books">
+<section id="perspectives-in-sustainable-equity-investing" class="book">
+<h3>Perspectives in sustainable equity investing</h3>
+<p>CRC / Chapman Hall, March 2022</p>
+<p><strong><a href="http://www.esgperspectives.com">Read the open source version</a></strong><br>
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753">Early working paper</a></p>
+<p>Order: <a href="https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015">Publisher</a>, <a href="https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/">Amazon FR</a>, <a href="https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/">Amazon US</a>, <a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/">Amazon UK</a></p>
+</section>
+<section id="machine-learning-for-factor-investing" class="book">
+<h3>Machine learning for factor investing</h3>
+<p>With T. Guida. CRC / Chapman Hall. R version September 2020, Python version September 2023</p>
+<p><strong><a href="http://www.mlfactor.com">Read the open source version</a></strong><br>
+<a href="https://github.com/shokru/mlfactor.github.io/tree/master/material">Material</a>, <a href="files/SLIDES/SLIDES.html">Slides</a></p>
+<p>Order the R version: <a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864">Publisher</a>, <a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/">Amazon FR</a>, <a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1">Amazon US</a>, <a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2">Amazon UK</a></p>
+</section>
+</div>
+<h2 id="in-the-practitioner-press">In the practitioner press</h2>
+<div id="listing-practitioner" class="quarto-listing quarto-listing-container-custom">
+<ol class="pubs">
+<li class="pub">
+<span class="pub-year">2025</span>
+<div class="pub-body">
+<p class="pub-title">
+Cross-Asset Climate Betas
+</p>
+<p class="pub-venue">
+<cite>Journal of Portfolio Management</cite> <span class="vol">Vol. 51, No.&nbsp;5, pp.&nbsp;143–163</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with JC Bertrand, N. McLoughlin and S. Mesnard</span> <a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5073529" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2024</span>
+<div class="pub-body">
+<p class="pub-title">
+The impact of climate change risk on long-term asset allocation
+</p>
+<p class="pub-venue">
+<cite>Journal of Portfolio Management</cite> <span class="vol">Vol. 50, No.&nbsp;5, pp.&nbsp;238–263</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with JC Bertrand, N. McLoughlin and S. Mesnard</span> <a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank" rel="noopener">Link</a> <a href="papers/climate_risk_alloc.pdf">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2024</span>
+<div class="pub-body">
+<p class="pub-title">
+International market exposure to sovereign ESG
+</p>
+<p class="pub-venue">
+<cite>Journal of Sustainable Finance &amp; Investment</cite> <span class="vol">Vol. 14, No.&nbsp;4, pp.&nbsp;968–987</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with C. Morgenstern &amp; J. Kelly</span> <a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank" rel="noopener">Open access</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year"></span>
+<div class="pub-body">
+<p class="pub-title">
+Interpretable supervised portfolios
+</p>
+<p class="pub-venue">
+<cite>Journal of Financial Data Science</cite> <span class="vol">Vol. 6, No.&nbsp;2, pp.&nbsp;10–34</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with G. Chevalier &amp; T. Raffinot</span> <a href="https://www.pm-research.com/content/iijjfds/6/2/10" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2022</span>
+<div class="pub-body">
+<p class="pub-title">
+Supervised portfolios
+</p>
+<p class="pub-venue">
+<cite>Quantitative Finance</cite> <span class="vol">Vol. 22, No.&nbsp;12, pp.&nbsp;2275–2295</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with G. Chevalier &amp; T. Raffinot</span> <a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank" rel="noopener">Working paper</a> <a href="https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k" target="_blank" rel="noopener">Notebook</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2021</span>
+<div class="pub-body">
+<p class="pub-title">
+Tuning trend following strategies with macro ESG data
+</p>
+<p class="pub-venue">
+<cite>Journal of Impact &amp; ESG Investing</cite> <span class="vol">Vol. 2, No.&nbsp;2, pp.&nbsp;117–136</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with C. Morgenstern &amp; J. Kelly</span> <a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2020</span>
+<div class="pub-body">
+<p class="pub-title">
+Stock-specific sentiment and return predictability
+</p>
+<p class="pub-venue">
+<cite>Quantitative Finance</cite> <span class="vol">Vol. 20, No.&nbsp;9, pp.&nbsp;1531–1551</span>
+</p>
+<p class="pub-meta">
+<a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1736314" target="_blank" rel="noopener">Link</a> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3248925" target="_blank" rel="noopener">Working paper</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2018</span>
+<div class="pub-body">
+<p class="pub-title">
+Machine learning in systematic equity allocation: a model comparison
+</p>
+<p class="pub-venue">
+<cite>Wilmott Magazine</cite> <span class="vol">Vol. 2018, Issue 98, pp.&nbsp;24–33</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Guida</span> <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2017</span>
+<div class="pub-body">
+<p class="pub-title">
+Equity portfolios with improved liability-hedging benefits
+</p>
+<p class="pub-venue">
+<cite>Journal of Portfolio Management</cite> <span class="vol">Vol. 43, No.&nbsp;2 (Winter 2017), pp.&nbsp;37–49</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with L. Martellini and V. Milhau</span> <a href="https://jpm.iijournals.com/content/43/2/37" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="book-chapters-and-review">Book chapters and review</h2>
+<div id="listing-chapters" class="quarto-listing quarto-listing-container-custom">
+<ol class="pubs">
+<li class="pub">
+<span class="pub-year">2023</span>
+<div class="pub-body">
+<p class="pub-title">
+Enhancing Environment-driven Portfolios with Traditional Factors
+</p>
+<p class="pub-venue">
+<cite>Climate and Sustainable Investing</cite> <span class="vol">edited by E. Jurczenko</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with J. Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip</span>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2020</span>
+<div class="pub-body">
+<p class="pub-title">
+Book review: Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bilokon)
+</p>
+<p class="pub-venue">
+<cite>Quantitative Finance</cite>
+</p>
+<p class="pub-meta">
+<a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1828609" target="_blank" rel="noopener">Link</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2018</span>
+<div class="pub-body">
+<p class="pub-title">
+Ensemble learning applied to quant equity: gradient boosting in a multifactor framework
+</p>
+<p class="pub-venue">
+<cite>Big Data and Machine Learning in Quantitative Investment</cite> <span class="vol">edited by T. Guida</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Guida</span>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="permanent-working-papers">Permanent working papers</h2>
+<div id="listing-permanent" class="quarto-listing quarto-listing-container-custom">
+<ol class="pubs">
+<li class="pub">
+<span class="pub-year"></span>
+<div class="pub-body">
+<p class="pub-title">
+Forking paths in empirical studies
+</p>
+<p class="pub-meta">
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank" rel="noopener">SSRN</a> <a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank" rel="noopener">R notebook (first study)</a> <a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank" rel="noopener">R notebook (second study)</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2021</span>
+<div class="pub-body">
+<p class="pub-title">
+Boosting ESG-Based Optimization With Asset Pricing Characteristics
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with J. Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip</span> <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242" target="_blank" rel="noopener">SSRN</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2018</span>
+<div class="pub-body">
+<p class="pub-title">
+Stock returns and the cross-section of characteristics: a tree-based approach
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with T. Guida</span> <a href="papers/TAPA.pdf">PDF</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2015</span>
+<div class="pub-body">
+<p class="pub-title">
+Active allocation to smart factor indices
+</p>
+<p class="pub-venue">
+<span class="vol">Scientific Beta Research Paper</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with N. Amenc and L. Martellini</span> <a href="papers/active_allocation_timing.pdf">PDF</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2013</span>
+<div class="pub-body">
+<p class="pub-title">
+Estimation of covariance matrices for portfolio optimization
+</p>
+<p class="pub-venue">
+<span class="vol">Scientific Beta Research Paper</span>
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with V. Milhau</span> <a href="papers/Estim_cov.pdf">PDF</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year"></span>
+<div class="pub-body">
+<p class="pub-title">
+Equity portfolios with improved liability-hedging benefits (long version)
+</p>
+<p class="pub-meta">
+<span class="pub-authors">with R. Deguest, L. Martellini and V. Milhau</span> <a href="papers/OTPP.pdf">PDF</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2013</span>
+<div class="pub-body">
+<p class="pub-title">
+Risk aggregation with the generalized logistic distribution
+</p>
+<p class="pub-meta">
+<a href="papers/Logistic.pdf">PDF</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2012</span>
+<div class="pub-body">
+<p class="pub-title">
+Pricing exotic options in the Finite Moment Log-Stable model
+</p>
+<p class="pub-meta">
+<a href="papers/FMLS.pdf">PDF</a>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="research-presentations">Research presentations</h2>
+<div id="listing-talks" class="quarto-listing quarto-listing-container-custom">
+<ol class="pubs">
+<li class="pub">
+<span class="pub-year">2022</span>
+<div class="pub-body">
+<p class="pub-title">
+Explaining green returns
+</p>
+<p class="pub-meta">
+<a href="files/SLIDES/Explaining_green_returns.pdf">PDF</a>
+</p>
+</div>
+</li>
+<li class="pub">
+<span class="pub-year">2020</span>
+<div class="pub-body">
+<p class="pub-title">
+Advances in asset pricing
+</p>
+<p class="pub-meta">
+<a href="files/SLIDES/AAP/AAP.html">Slides (HTML)</a>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
 </div>
 
 
-<head>
-<title>
-Research
-</title>
-<meta name="Research projects of Guillaume Coqueret"/>
-</head>
-<p><br><br />
-<br></p>
-<style>
-details > summary {
-  padding: 9px;
-  width: 100%;
-  background-color: #EBF3FF;
-  border: none;
-  box-shadow: 1px 1px 2px #3B60A2;
-  cursor: pointer;
-}
 
-br2 {
-  display: block; /* makes it have a width */
-  content: ""; /* clears default height */
-  margin-top: 0; /* change this to whatever height you want it */
-}
-</style>
-<div id="ongoing-research-working-papers" class="section level3">
-<h3><font color="#3B60A2"><strong>Ongoing research</strong> (working
-papers)</font></h3>
-<ul>
-<li>Randomness in large language models: What researchers need to know
-(and report) (with J. Llull, F. Oswald, C. Pérignon, C. Scheuch, L.
-Vilhuber)
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7191580" target="_blank">[SSRN]</a><br />
-</li>
-<li>Persistent anomalies and nonstandard Sharpe ratios (with C.
-Pérignon)
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank">[SSRN]</a><br />
-</li>
-<li>Higher education in the era of Generative AI: Survival under
-quality-differentiation
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6752980" target="_blank">[SSRN]</a><br />
-</li>
-<li>Posterior drift in equity premium forecasts (with M. Laguerre)
-<a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a><br />
-</li>
-<li>Global p-values in multi-design studies (with Y. Zhang, C. Pérignon,
-F. Chiaromonte and S. Guerrier)
-<a href="https://arxiv.org/abs/2507.03815" target="_blank">[arXiv]</a><br />
-</li>
-<li>Can corporate incentives deliver decarbonization? (with B. Qiu) -
-R&amp;R <em>Journal of Corporate Finance</em><br />
-</li>
-<li>An anatomy of decarbonizing firms (with T. Giroux and B. Qiu)<br />
-</li>
-<li>Factor investing with reinforcement learning (with E. André):
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">[SSRN]</a><br />
-</li>
-<li>Characteristics-driven returns in equilibrium:
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">[SSRN]</a>
--
-<a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R
-notebook</a><br />
-</li>
-<li>Interactions in Asset Pricing (with G. Chevalier, M. Laguerre &amp;
-T. Raffinot):
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944" target="_blank">[SSRN]</a></li>
-</ul>
-<hr />
-</div>
-<div id="main-publications" class="section level3">
-<h3><font color="#3B60A2"><strong>Main Publications</strong></font></h3>
-<p>The full list of articles can be found below.</p>
-<ul>
-<li>Sustainability in commodity markets, <br> <span
-style="color:#3B60A2"><strong>Journal of Banking &amp;
-Finance</strong></span> Vol. 184 (2026), pp. 107599 (with B. Tavin and
-Y. Zhou) -
-<a href="https://www.sciencedirect.com/science/article/pii/S0378426625002195" target="_blank">[Open
-Access]</a> <br> <strong>Winner</strong> of the <a
-href="https://www.cascad.tech/">cascad</a> best reproduced paper award
-at the <a href="https://affi2024.eventsadmin.com/">2024 AFFI
-conference</a><br />
-</li>
-<li>Unexpected opportunities in misspecified predictive regressions,
-<br/> <span style="color:#3B60A2"><strong>European Journal of
-Operational Research</strong></span> Vol. 318, No. 2 (2024), pp. 686-700
-(with R. Deguest):
-<a href="https://www.sciencedirect.com/science/article/pii/S0377221724004235" target="_blank">[Link
-- Open Access]</a> -
-<a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a><br />
-</li>
-<li>Procedural Rationality, Asset Heterogeneity and Market Selection,
-<br/> <span style="color:#3B60A2"><strong>Journal of Mathematical
-Economics</strong></span>, Vol. 82 (2019), pp. 125-149 (with B. Tavin)
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2952659" target="_blank">[Working
-paper]</a><br />
-</li>
-<li>Empirical properties of a heterogeneous agent model in large
-dimensions, <br/> <span style="color:#3B60A2"><strong>Journal of
-Economic Dynamics &amp; Control</strong></span>, Vol. 77 (2017),
-pp. 180-201
-<a href="https://www.sciencedirect.com/science/article/pii/S0165188917300386" target="_blank">[Link]</a><br />
-</li>
-<li>Characteristics-based portfolio choice with leverage constraints,
-<br/> <span style="color:#3B60A2"><strong>Journal of Banking and
-Finance</strong></span>, Vol. 70 (2016), pp. 23-37 (with M. Ammann and
-J-P. Schade)
-<a href="https://www.sciencedirect.com/science/article/pii/S0378426616300516" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2736324" target="_blank">[Working
-paper]</a><br />
-</li>
-<li>An investigation of model risk in a market with jumps and stochastic
-volatility, <br/> <span style="color:#3B60A2"><strong>European Journal
-of Operational Research</strong></span>, Vol. 253 (2016), pp. 648-658
-(with B. Tavin)
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0377221716301461" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2474223" target="_blank">[Working
-paper]</a></li>
-</ul>
-<hr />
-</div>
-<div id="books" class="section level3">
-<h3><font color="#3B60A2"><strong>Books</strong></font></h3>
-<div id="perspectives-in-sustainable-equity-investing"
-class="section level4">
-<h4><strong>Perspectives in sustainable equity investing</strong></h4>
-<p>CRC / Chapman Hall - March 2022<br />
-Order on
-<a href="https://www.routledge.com/Perspectives-in-Sustainable-Equity-Investing/Coqueret/p/book/9781032071015" target="_blank">on
-the publisher’s website</a>,
-<a href="https://www.amazon.fr/Perspectives-Sustainable-Investing-Guillaume-Coqueret/dp/103207101X/" target="_blank">Amazon
-(France)</a>,
-<a href="https://www.amazon.com/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon
-(US)</a> or
-<a href="https://www.amazon.co.uk/Perspectives-Sustainable-Investing-Guillaume-Coqueret-ebook/dp/B09RRMCB4R/" target="_blank">Amazon
-(UK)</a><br />
-<strong>Available</strong>:
-<a href="http://www.esgperspectives.com" target="_blank"><strong>open
-source website</strong></a> -
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3715753" target="_blank">Early
-working paper version</a></p>
-</div>
-<div id="machine-learning-for-factor-investing-with-t.-guida"
-class="section level4">
-<h4><strong>Machine learning for factor investing</strong> (with T.
-Guida)</h4>
-<p>CRC / Chapman Hall, <strong>R</strong> version published in September
-2020 - <strong>Python</strong> version published in September 2023<br />
-Order the <strong>R</strong> version on
-<a href="https://www.routledge.com/Machine-Learning-for-Factor-Investing/Coqueret-Guida/p/book/9780367545864" target="_blank">on
-the publisher’s website</a>,
-<a href="https://www.amazon.fr/Machine-Learning-Investing-Guillaume-Coqueret/dp/0367545861/" target="_blank">Amazon
-(France)</a>,
-<a href="https://www.amazon.com/Machine-Learning-Factor-Investing-Mathematics/dp/0367545861/ref=sr_1_1" target="_blank">Amazon
-(US)</a> or
-<a href="https://www.amazon.co.uk/Machine-Learning-Investing-Financial-Mathematics/dp/0367545861/ref=sr_1_2" target="_blank">Amazon
-(UK)</a><br />
-<strong>Available</strong>:
-<a href="http://www.mlfactor.com" target="_blank"><strong>open source
-website</strong></a> -
-<a href="https://github.com/shokru/mlfactor.github.io/tree/master/material" target="_blank"><strong>Material</strong></a>
--
-<a href="files/SLIDES/SLIDES.html" target="_blank"><strong>Slides</strong></a></p>
-<hr />
-</div>
-</div>
-<div id="complete-list-of-published-academic-articles"
-class="section level3">
-<h3><font color="#3B60A2"><strong>Complete list of Published Academic
-Articles</strong></font></h3>
-<p>Articles are grouped into <strong>research themes</strong> below.</p>
-<details>
-<summary>
-<strong>FINANCE &amp; ECONOMICS</strong>
-</summary>
-<ul>
-<li>A note on implied correlation for bivariate contracts, <br/> <span
-style="color:#3B60A2"><strong>Economics Bulletin</strong></span>, Vol.
-40, No. 2 (2020), pp. 1388-1396 (with B. Tavin)
-<a href="http://www.accessecon.com/Pubs/EB/2020/Volume40/EB-20-V40-I2-P119.pdf" target="_blank">[Link]</a><br />
-</li>
-<li>Procedural Rationality, Asset Heterogeneity and Market Selection,
-<br/> <span style="color:#3B60A2"><strong>Journal of Mathematical
-Economics</strong></span>, Vol. 82 (2019), pp. 125-149 (with B. Tavin)
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0304406819300205" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2952659" target="_blank">[Working
-paper]</a> <br/></li>
-<li>Empirical properties of a heterogeneous agent model in large
-dimensions, <br/> <span style="color:#3B60A2"><strong>Journal of
-Economic Dynamics &amp; Control</strong></span>, Vol. 77 (2017),
-pp. 180-201
-<a href="https://www.sciencedirect.com/science/article/pii/S0165188917300386" target="_blank">[Link]</a><br />
-</li>
-<li>An investigation of model risk in a market with jumps and stochastic
-volatility, <br/> <span style="color:#3B60A2"><strong>European Journal
-of Operational Research</strong></span>, Vol. 253 (2016), pp. 648-658
-(with B. Tavin)
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0377221716301461" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2474223" target="_blank">[Working
-paper]</a></li>
-<li>Lookback option prices under a spectrally negative tempered-stable
-model, <br/> <span style="color:#3B60A2"><strong>International Journal
-of Theoretical and Applied Finance</strong></span>, Vol. 16, No. 3
-(2013)
-<a href="https://www.worldscientific.com/doi/abs/10.1142/S021902491350012X" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<p><br2></p>
-<details>
-<summary>
-<strong>SUSTAINABLE FINANCE</strong>
-</summary>
-<ul>
-<li>Sustainability in commodity markets (with B. Tavin and Y. Zhou)
-<a href="https://www.sciencedirect.com/science/article/pii/S0378426625002195" target="_blank">[Open
-Access]</a>, <br/> <span style="color:#3B60A2"><strong>Journal of
-Banking &amp; Finance</strong></span> Vol. 184 (2026), pp. 107599 <br>
-(Winner of the <a href="https://www.cascad.tech/">cascad</a> best
-reproduced paper award at the <a
-href="https://affi2024.eventsadmin.com/">2024 AFFI conference</a>)<br />
-</li>
-<li>The biodiversity premium, <br/> <span
-style="color:#3B60A2"><strong>Ecological Economics</strong></span>, Vol.
-228 (2025) (with T. Giroux &amp; O.D. Zerbib):
-<a href="https://www.sciencedirect.com/science/article/pii/S092180092400332X" target="_blank">[Link
-- Open Access]</a> -
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a><br />
-</li>
-<li>ESG news spillovers across the value chain, <br/> <span
-style="color:#3B60A2"><strong>Financial Management</strong></span>, Vol.
-52, No. 4 (2023), pp. 677-710 (with V. Le Tran)
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4002705" target="_blank">[Working
-Paper]</a><br />
-</li>
-<li>Scopes of carbon emissions and their impact on green portfolios,
-<br/> <span style="color:#3B60A2"><strong>Economic
-Modelling</strong></span>, Vol. 115 (2022), (with T. Anquetin, B. Tavin
-&amp; L. Welgryn)
-<a href="https://www.sciencedirect.com/science/article/abs/pii/S0264999322001973" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4012629" target="_blank">[Working
-Paper]</a></li>
-</ul>
-</details>
-<p><br2></p>
-<details>
-<summary>
-<strong>DATA &amp; DECISION SCIENCES</strong>
-</summary>
-<ul>
-<li>Unexpected opportunities in misspecified predictive regressions,
-<br/> <span style="color:#3B60A2"><strong>European Journal of
-Operational Research</strong></span> Vol. 318, No. 2 (2024), pp. 686-700
-(with R. Deguest):
-<a href="https://www.sciencedirect.com/science/article/pii/S0377221724004235" target="_blank">[Link
-- Open Access]</a> -
-<a href="http://www.gcoqueret.com/PRs.html" target="_blank">material</a><br />
-</li>
-<li>Dynamic decision making with predictive panels, <br/> <span
-style="color:#3B60A2"><strong>Journal of the Operational Research
-Society</strong></span>, Vol. 75, No. 6 (2023), pp. 1055-1075 (with B.
-Tavin)
-<a href="https://www.tandfonline.com/doi/full/10.1080/01605682.2023.2231488" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3853793" target="_blank">[Working
-Paper]</a> -
-<a href="http://www.gcoqueret.com/files/misc/panel.html" target="_blank">[R
-notebook]</a><br />
-</li>
-<li>The determinants of health assessment in the United States: A
-supervised learning approach, <br/> <span
-style="color:#3B60A2"><strong>Healthcare Analytics</strong></span>, Vol.
-2 (2022)
-<a href="https://www.sciencedirect.com/science/article/pii/S2772442522000466" target="_blank">[Link
-- Open Access]</a><br />
-</li>
-<li>Persistence in factor-based supervised learning models, <br/> <span
-style="color:#3B60A2"><strong>Journal of Finance &amp; Data
-Science</strong></span>, Vol. 8 (2022), pp. 12-34
-<a href="https://www.sciencedirect.com/science/article/pii/S2405918821000143" target="_blank">[Link
-- Open Access]</a>
-<a href="http://www.gcoqueret.com/horizons.html" target="_blank">[Material]</a><br />
-</li>
-<li>Approximate NORTA simulations for virtual sample generation, <br/>
-<span style="color:#3B60A2"><strong>Expert Systems With
-Applications</strong></span>, Vol. 73 (2017), pp. 69-81
-<a href="https://www.sciencedirect.com/science/article/pii/S0957417416307096" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<p><br2></p>
-<details>
-<summary>
-<strong>STANDARD PORTFOLIO CHOICE</strong>
-</summary>
-<ul>
-<li>Training trees on tails with applications to portfolio choice, <br/>
-<span style="color:#3B60A2"><strong>Annals of Operations
-Research</strong></span>, Vol. 288 (2020), pp. 181-221 (with T. Guida)
-<a href="https://link.springer.com/article/10.1007/s10479-020-03539-2" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009" target="_blank">[Working
-paper]</a>
-<a href="http://www.gcoqueret.com/tot.html" target="_blank">[Material]</a><br />
-</li>
-<li>Characteristics-based portfolio choice with leverage constraints,
-<br/> <span style="color:#3B60A2"><strong>Journal of Banking and
-Finance</strong></span>, Vol. 70 (2016), pp. 23-37 (with M. Ammann and
-J-P. Schade)
-<a href="https://www.sciencedirect.com/science/article/pii/S0378426616300516" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2736324" target="_blank">[Working
-paper]</a><br />
-</li>
-<li>Diversified minimum-variance portfolios, <br/> <span
-style="color:#3B60A2"><strong>Annals of Finance</strong></span>, Vol.
-11, No. 2 (2015), pp. 221-241
-<a href="https://link.springer.com/article/10.1007%2Fs10436-014-0253-x" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<p><br2></p>
-<details>
-<summary>
-<strong>PROBABILITY &amp; STATISTICS</strong> (older work)
-</summary>
-<ul>
-<li>On the distribution of the supremum of the spectrally negative
-stable process with drift, <br/> <span style="color:#3B60A2">
-<strong>Statistics &amp; Probability Letters</strong></span>, Vol. 107
-(2015), pp. 333-340
-<a href="https://www.sciencedirect.com/science/article/pii/S0167715215003314" target="_blank">[Link]</a><br />
-</li>
-<li>Second order risk aggregation with the Bernstein copula, <br/> <span
-style="color:#3B60A2"> <strong>Insurance: Mathematics and
-Economics</strong></span>, Vol. 58 (2014), pp. 150-158
-<a href="https://www.sciencedirect.com/science/article/pii/S0167668714000882" target="_blank">[Link]</a><br />
-</li>
-<li>Meromorphic Levy-Khintchine exponents with poles of order two, <br/>
-<span style="color:#3B60A2"> <strong>Communications on Stochastic
-Analysis</strong></span>, Vol. 7, No. 2 (2013), pp. 179-198
-<a href="https://digitalcommons.lsu.edu/cosa/vol7/iss2/1/" target="_blank">[Link]</a><br />
-</li>
-<li>Approximation of probabilistic Laplace transforms and their
-inverses, <br/> <span style="color:#3B60A2"> <strong>Communications in
-Applied Mathematics and Computational Science</strong></span>, Vol. 7,
-No. 2 (2012), pp. 231-246
-<a href="https://msp.org/camcos/2012/7-2/p03.xhtml" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<p><br2></p>
-<details>
-<summary>
-<strong>WINE BUSINESS</strong> (older work)
-</summary>
-<ul>
-<li>Herding behavior among wine investors, <span
-style="color:#3B60A2"><strong>Economic Modelling</strong></span>, Vol.
-68 (2018), pp. 318-328 (with B. Aytac and C. Mandou)
-<a href="https://www.sciencedirect.com/science/article/pii/S0264999317301001" target="_blank">[Link]</a><br />
-</li>
-<li>Optimal wine pricing for restaurants, <span
-style="color:#3B60A2"><strong>Journal of Wine Economics</strong></span>,
-Vol. 10, No. 2 (2015), pp. 204-224
-<a href="https://www.cambridge.org/core/journals/journal-of-wine-economics/article/optimal-wine-pricing-for-restaurants/A3A972D73E0785CE8E6A606470FC0A0E" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<hr />
-</div>
-<div id="in-the-practitioner-press" class="section level3">
-<h3><font color="#3B60A2"><strong>In the Practitioner
-Press</strong></font></h3>
-<details>
-<summary>
-<strong>SUSTAINABLE INVESTING</strong>
-</summary>
-<ul>
-<li>Cross-Asset Climate Betas, <br> <span
-style="color:#3B60A2"><strong>Journal of Portfolio
-Management</strong></span>, Vol. 51, No. 5 (2025), pp. 143-163 (with JC
-Bertrand, N. McLoughlin and S. Mesnard)
-<a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5073529" target="_blank">[Working
-Paper]</a><br />
-</li>
-<li>The impact of climate change risk on long-term asset allocation,
-<br> <span style="color:#3B60A2"><strong>Journal of Portfolio
-Management</strong></span>, Vol. 50, No. 5 (2024), pp. 238-263 (with JC
-Bertrand, N. McLoughlin and S. Mesnard)
-<a href="https://www.pm-research.com/content/iijpormgmt/50/5/238" target="_blank">[Link]</a>
-<a href="papers/climate_risk_alloc.pdf" target="_blank">[Working
-Paper]</a><br />
-</li>
-<li>International market exposure to sovereign ESG, <br/> <span
-style="color:#3B60A2"><strong>Journal of Sustainable Finance &amp;
-Investment</strong></span>, Vol. 14, No. 4, (2024), pp 968-987, (with C.
-Morgenstern &amp; J. Kelly)
-<a href="https://www.tandfonline.com/doi/full/10.1080/20430795.2022.2148817" target="_blank">[Open
-Access]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4138136" target="_blank">[Working
-Paper]</a><br />
-</li>
-<li>Tuning trend following strategies with macro ESG data, <br/> <span
-style="color:#3B60A2"><strong>Journal of Impact &amp; ESG
-Investing</strong></span>, Vol. 2, No. 2 (2021), pp. 117-136 (with C.
-Morgenstern &amp; J. Kelly)
-<a href="https://jesg.pm-research.com/content/early/2021/10/25/jesg.2021.1.032" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<p><br2></p>
-<details>
-<summary>
-<strong>QUANTITATIVE FINANCE</strong>
-</summary>
-<ul>
-<li>Interpretable supervised portfolios, <br> <span
-style="color:#3B60A2"><strong>Journal of Financial Data
-Science</strong></span>, Vol. 6, No. 2, pp. 10 - 34 (with G. Chevalier
-&amp; T. Raffinot):
-<a href="https://www.pm-research.com/content/iijjfds/6/2/10" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4230955" target="_blank">[Working
-Paper]</a><br />
-</li>
-<li>Supervised portfolios, <br> <span
-style="color:#3B60A2"><strong>Quantitative Finance</strong></span>, Vol.
-22, No. 12 (2022), pp. 2275-2295 (with G. Chevalier &amp; T. Raffinot):
-<a href="https://www.tandfonline.com/doi/abs/10.1080/14697688.2022.2122543" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3954109" target="_blank">[Working
-Paper]</a> -
-<a href="https://colab.research.google.com/drive/1yrhuV5i_o2g0Ju-xJEyONR5s2PFqyk3k" target="_blank">[notebook]</a><br />
-</li>
-<li>Stock-specific sentiment and return predictability, <br/> <span
-style="color:#3B60A2"><strong>Quantitative Finance</strong></span>, Vol.
-20, No. 9 (2020), pp. 1531-1551
-<a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1736314" target="_blank">[Link]</a>
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3248925" target="_blank">[Working
-paper]</a><br />
-</li>
-<li>Machine learning in systematic equity allocation: a model
-comparison, <br/> <span style="color:#3B60A2"><strong>Wilmott
-Magazine</strong></span>, Vol. 2018, Issue 98 (2018), pp. 24-33 (with T.
-Guida)
-<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/wilm.10719" target="_blank">[Link]</a><br />
-</li>
-<li>Equity portfolios with improved liability-hedging benefits, <br/>
-<span style="color:#3B60A2"><strong>Journal of Portfolio
-Management</strong></span>, Vol. 43, No. 2 (Winter 2017), pp. 37-49
-(with L. Martellini and V. Milhau)
-<a href="https://jpm.iijournals.com/content/43/2/37" target="_blank">[Link]</a></li>
-</ul>
-</details>
-<hr />
-</div>
-<div id="book-chapters" class="section level3">
-<h3><font color="#3B60A2"><strong>Book Chapters</strong></font></h3>
-<ul>
-<li>Enhancing Environment-driven Portfolios with Traditional Factors, In
-<strong>Climate and Sustainable Investing</strong> edited by E.
-Jurczenko, 2023, (with J., Frey-Skött, C. Morgenstern, J. Kelly, B.
-Österberg, S. Stiernegrip)<br />
-</li>
-<li>Ensemble learning applied to quant equity: gradient boosting in a
-multifactor framework, In <strong>Big Data and Machine Learning in
-Quantitative Investment</strong> edited by T. Guida, 2018 (with T.
-Guida)</li>
-</ul>
-<hr />
-</div>
-<div id="book-review" class="section level3">
-<h3><font color="#3B60A2"><strong>Book Review</strong></font></h3>
-<p>Machine Learning in Finance: From Theory to Practice (by Dixon,
-Halperin and Bilokon), <span style="color:#3B60A2"><strong>Quantitative
-Finance</strong></span>, 2020
-<a href="https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1828609" target="_blank">[Link]</a></p>
-<hr />
-</div>
-<div id="permanent-working-papers" class="section level3">
-<h3><font color="#3B60A2"><strong>Permanent Working
-Papers</strong></font></h3>
-<ul>
-<li>Forking paths in empirical studies:
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379" target="_blank">SSRN</a>
--
-<a href="https://www.gcoqueret.com/files/misc/forking_paths.html" target="_blank">R
-Notebook (first study)</a>
-<a href="https://www.gcoqueret.com/files/misc/forking_paths2.html" target="_blank">R
-Notebook (second study)</a><br />
-</li>
-<li>Boosting ESG-Based Optimization With Asset Pricing Characteristics,
-2021 (with J., Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S.
-Stiernegrip)
-<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242" target="_blank">[SSRN]</a><br />
-</li>
-<li>Stock returns and the cross-section of characteristics: a tree-based
-approach, 2018 (with T. Guida)
-<a href="papers/TAPA.pdf" target="_blank">[PDF]</a><br />
-</li>
-<li>Active allocation to smart factor indices, 2015 (with N. Amenc and
-L. Martellini) - Scientific Beta Research Paper
-<a href="papers/active_allocation_timing.pdf" target="_blank">[PDF]</a><br />
-</li>
-<li>Estimation of covariance matrices for portfolio optimization, 2013
-(with V. Milhau) - Scientific Beta Research Paper
-<a href="papers/Estim_cov.pdf" target="_blank">[PDF]</a><br />
-</li>
-<li>Equity portfolios with improved liability-hedging benefits - Long
-Version (with R. Deguest, L. Martellini and V. Milhau)
-<a href="papers/OTPP.pdf" target="_blank">[PDF]</a><br />
-</li>
-<li>Risk aggregation with the generalized logistic distribution, 2013
-<a href="papers/Logistic.pdf" target="_blank">[PDF]</a><br />
-</li>
-<li>Pricing exotic options in the Finite Moment Log-Stable model, 2012
-<a href="papers/FMLS.pdf" target="_blank">[PDF]</a></li>
-</ul>
-<hr />
-</div>
-<div id="research-presentations" class="section level3">
-<h3><font color="#3B60A2"><strong>Research
-presentations</strong></font></h3>
-<ul>
-<li>Explaining green returns (2022)
-<a href="files/SLIDES/Explaining_green_returns.pdf" target="_blank">[pdf]</a><br />
-</li>
-<li>Advances in asset pricing (2020)
-<a href="files/SLIDES/AAP/AAP.html" target="_blank">[html]</a></li>
-</ul>
-<hr />
-</div>
-<div id="academic-profiles" class="section level3">
-<h3><font color="#3B60A2"><strong>Academic profiles</strong></font></h3>
-<p><a href="http://orcid.org/0000-0002-1596-4086" target="_blank">ORCID</a>
- 
-<a href="https://www.researchgate.net/profile/Guillaume_Coqueret" target="_blank">Researchgate</a>
- 
-<a href="https://publons.com/researcher/1352687/guillaume-coqueret" target="_blank">Publons</a></p>
-</div>
+<footer class="site-footer">
+  <span>Updated October 2026</span>
+  <span class="footer-links">
+    <a href="https://github.com/shokru" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://twitter.com/g_coqueret" target="_blank" rel="noopener">X / Twitter</a>
+  </span>
+</footer>
+<script src="assets/site.js"></script>
 
 
 
 
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</body></html>

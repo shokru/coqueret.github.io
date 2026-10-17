@@ -1,0 +1,31 @@
+---
+pagetitle: "Teaching · Guillaume Coqueret"
+description: "Courses taught by Guillaume Coqueret at emlyon business school, ENS de Lyon and elsewhere, with course material."
+listing:
+  - id: current
+    contents: data/courses.yml
+    include: { section: current }
+    template: _templates/rows.ejs
+    sort: false
+  - id: past
+    contents: data/courses.yml
+    include: { section: past }
+    template: _templates/rows.ejs
+    sort: false
+---
+
+::: page-head
+# Teaching
+
+Finance, data science and macroeconomics courses. Most course material is openly available below.
+:::
+
+## Current courses
+
+::: {#current}
+:::
+
+## Past courses
+
+::: {#past}
+:::

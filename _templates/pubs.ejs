@@ -1,0 +1,11 @@
+<%
+/* Papers. Fields: title, journal, details, year, authors,
+   links (label: url), note, topic (filter group), selected (true/false) */
+const ext = (u) => /^https?:/.test(String(u)) ? ' target="_blank" rel="noopener"' : '';
+const undated = !items.some((i) => i.year);
+%>
+<ol class="pubs<%= undated ? ' is-undated' : '' %>">
+<% for (const item of items) { %>
+<li class="pub"<% if (item.topic) { %> data-topic="<%= item.topic %>"<% } %><% if (item.selected) { %> data-selected<% } %>><% if (!undated) { %><span class="pub-year"><%= item.year ?? "" %></span><% } %><div class="pub-body"><p class="pub-title"><%= item.title %></p><% if (item.journal || item.details) { %><p class="pub-venue"><% if (item.journal) { %><cite><%= item.journal %></cite><% } %><% if (item.details) { %> <span class="vol"><%= item.details %></span><% } %></p><% } %><% if (item.authors || item.links) { %><p class="pub-meta"><% if (item.authors) { %><span class="pub-authors"><%= item.authors %></span> <% } %><% if (item.links) { for (const [label, url] of Object.entries(item.links)) { %><a href="<%= url %>"<%= ext(url) %>><%= label %></a> <% } } %></p><% } %><% if (item.note) { %><p class="pub-note"><%= item.note %></p><% } %></div></li>
+<% } %>
+</ol>

@@ -1,0 +1,49 @@
+# Working papers (research page). Newest or most important first.
+# Fields: title, authors, links (Label: https://...), note (optional, e.g. R&R)
+# Put text in "quotes" if it contains a colon.
+
+- title: "Randomness in large language models: What researchers need to know (and report)"
+  authors: with J. Llull, F. Oswald, C. Pérignon, C. Scheuch, L. Vilhuber
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7191580
+
+- title: Persistent anomalies and nonstandard Sharpe ratios
+  authors: with C. Pérignon
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723
+
+- title: "Higher education in the era of Generative AI: Survival under quality-differentiation"
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6752980
+
+- title: Posterior drift in equity premium forecasts
+  authors: with M. Laguerre
+  links:
+    arXiv: https://arxiv.org/abs/2506.23619
+
+- title: Global p-values in multi-design studies
+  authors: with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier
+  links:
+    arXiv: https://arxiv.org/abs/2507.03815
+
+- title: Can corporate incentives deliver decarbonization?
+  authors: with B. Qiu
+  note: "Revise & resubmit, *Journal of Corporate Finance*"
+
+- title: An anatomy of decarbonizing firms
+  authors: with T. Giroux and B. Qiu
+
+- title: Factor investing with reinforcement learning
+  authors: with E. André
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714
+
+- title: Characteristics-driven returns in equilibrium
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195
+    R notebook: http://www.gcoqueret.com/files/misc/demand_6_share.html
+
+- title: Interactions in Asset Pricing
+  authors: with G. Chevalier, M. Laguerre & T. Raffinot
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4500944

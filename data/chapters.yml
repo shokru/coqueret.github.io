@@ -1,0 +1,20 @@
+# Book chapters and book reviews (research page). Newest first.
+# Put text in "quotes" if it contains a colon.
+
+- title: Enhancing Environment-driven Portfolios with Traditional Factors
+  journal: Climate and Sustainable Investing
+  details: edited by E. Jurczenko
+  year: 2023
+  authors: with J. Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip
+
+- title: "Book review: Machine Learning in Finance: From Theory to Practice (by Dixon, Halperin and Bilokon)"
+  journal: Quantitative Finance
+  year: 2020
+  links:
+    Link: https://www.tandfonline.com/doi/full/10.1080/14697688.2020.1828609
+
+- title: "Ensemble learning applied to quant equity: gradient boosting in a multifactor framework"
+  journal: Big Data and Machine Learning in Quantitative Investment
+  details: edited by T. Guida
+  year: 2018
+  authors: with T. Guida

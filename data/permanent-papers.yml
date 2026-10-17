@@ -1,0 +1,49 @@
+# Permanent working papers (research page).
+# Put text in "quotes" if it contains a colon.
+
+- title: Forking paths in empirical studies
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3999379
+    R notebook (first study): https://www.gcoqueret.com/files/misc/forking_paths.html
+    R notebook (second study): https://www.gcoqueret.com/files/misc/forking_paths2.html
+
+- title: Boosting ESG-Based Optimization With Asset Pricing Characteristics
+  year: 2021
+  authors: with J. Frey-Skött, C. Morgenstern, J. Kelly, B. Österberg, S. Stiernegrip
+  links:
+    SSRN: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3877242
+
+- title: "Stock returns and the cross-section of characteristics: a tree-based approach"
+  year: 2018
+  authors: with T. Guida
+  links:
+    PDF: papers/TAPA.pdf
+
+- title: Active allocation to smart factor indices
+  details: Scientific Beta Research Paper
+  year: 2015
+  authors: with N. Amenc and L. Martellini
+  links:
+    PDF: papers/active_allocation_timing.pdf
+
+- title: Estimation of covariance matrices for portfolio optimization
+  details: Scientific Beta Research Paper
+  year: 2013
+  authors: with V. Milhau
+  links:
+    PDF: papers/Estim_cov.pdf
+
+- title: Equity portfolios with improved liability-hedging benefits (long version)
+  authors: with R. Deguest, L. Martellini and V. Milhau
+  links:
+    PDF: papers/OTPP.pdf
+
+- title: Risk aggregation with the generalized logistic distribution
+  year: 2013
+  links:
+    PDF: papers/Logistic.pdf
+
+- title: Pricing exotic options in the Finite Moment Log-Stable model
+  year: 2012
+  links:
+    PDF: papers/FMLS.pdf

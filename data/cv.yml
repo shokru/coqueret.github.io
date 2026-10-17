@@ -1,0 +1,71 @@
+# CV entries shown on the home page.
+# section: employment | positions | education   (decides where the line appears)
+# years:   free text, e.g. 2024–present
+# title:   the role or degree
+# where:   institution (markdown links allowed)
+# Lines appear in the order written here. Put text in "quotes" if it contains a colon.
+
+- section: employment
+  years: 2024–present
+  title: Professor
+  where: emlyon business school
+
+- section: employment
+  years: 2018–2024
+  title: Associate Professor
+  where: emlyon business school
+
+- section: employment
+  years: 2015–2018
+  title: Assistant Professor
+  where: Montpellier Business School
+
+- section: employment
+  years: 2013–2015
+  title: Senior Quantitative Researcher
+  where: EDHEC-Risk Institute
+
+- section: positions
+  years: ""
+  title: Head of AI Automation
+  where: "[cascad](https://cascad.tech/)"
+
+- section: positions
+  years: 2024–2027
+  title: Board member
+  where: Association Française de Finance ([AFFI](https://www.affi.asso.fr/))
+
+- section: positions
+  years: 2024–present
+  title: Head of the AIM Institute (AI and Management)
+  where: emlyon business school
+
+- section: positions
+  years: 2022–2024
+  title: Head of the QUANT research center
+  where: emlyon business school
+
+- section: education
+  years: 2022
+  title: Accreditation to supervise research (French HDR)
+  where: Univ. Lyon 2
+
+- section: education
+  years: 2008–2012
+  title: Ph.D. in Finance & Applied Mathematics
+  where: ESSEC Business School & Univ. Lille 1
+
+- section: education
+  years: 2007–2008
+  title: Master of Science in Probability and Finance
+  where: Sorbonne Univ. (ex-Univ. Paris 6 UPMC)
+
+- section: education
+  years: 2005–2006
+  title: Master of Science in Market Finance
+  where: Univ. Paris 1
+
+- section: education
+  years: 2002–2007
+  title: Master of Science in Management
+  where: ESSEC Business School

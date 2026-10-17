@@ -1,489 +1,275 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="description" content="Courses taught by Guillaume Coqueret at emlyon business school, ENS de Lyon and elsewhere, with course material.">
 
-
-
-
-<title>teaching.knit</title>
-
-<script src="site_libs/header-attrs-2.32/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+<title>Teaching · Guillaume Coqueret</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
-</script>
-
-
-
-
-
-
-<link rel="stylesheet" href="styles.css" type="text/css" />
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 </style>
 
 
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script>
 
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-current .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+    const options = {
+      valueNames: ['listing-section','listing-years','listing-title','listing-where','listing-links','listing-url',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-section","listing-years","listing-title","listing-where","listing-links","listing-url"],
+    };
 
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-current'] = new List('listing-current', options);
 
-<!-- tabsets -->
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
 
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-past .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
-  border: none;
-}
+    const options = {
+      valueNames: ['listing-section','listing-years','listing-title','listing-where','listing-links','listing-url',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-section","listing-years","listing-title","listing-where","listing-links","listing-url"],
+    };
 
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-past'] = new List('listing-past', options);
 
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap">
 
 
-
-
+<link rel="stylesheet" href="assets/site.css">
 </head>
 
 <body>
 
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Guillaume Coqueret</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="research.html">Research</a>
-</li>
-<li>
-  <a href="teaching.html">Teaching</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/shokru">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://twitter.com/g_coqueret">
-    <span class="fa fa-twitter fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fa fa-linkedin fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="index.html">Guillaume Coqueret</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="teaching.html">Teaching</a>
+  </nav>
+</header>
+<span id="content"></span>
 
 
 
 
+<section id="teaching" class="page-head">
+<h1>Teaching</h1>
+<p>Finance, data science and macroeconomics courses. Most course material is openly available below.</p>
+</section>
+<h2 id="current-courses">Current courses</h2>
+<div id="listing-current" class="quarto-listing quarto-listing-container-custom">
+<ol class="rows">
+<li class="row">
+<span class="row-date">2026–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Intermediate finance &amp; valuation</span><span class="row-where">, emlyon business school, MSc Data Science</span>
+</p>
 </div>
-
-
-<p><br/><br />
-<br/></p>
-<div id="current-courses" class="section level3">
-<h3>Current courses</h3>
-<table>
-<colgroup>
-<col width="46%" />
-<col width="38%" />
-<col width="15%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Course and links</th>
-<th>Institution &amp; program</th>
-<th>Years</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>- Intermediate finance &amp; valuation</td>
-<td><strong>emlyon</strong> business school, MSc Data Science</td>
-<td>2026 - present</td>
-</tr>
-<tr class="even">
-<td>- Introduction to financial markets</td>
-<td><strong>emlyon</strong> business school, Master in Management</td>
-<td>2026 - present</td>
-</tr>
-<tr class="odd">
-<td>- <strong>Time-series analysis with R</strong> (crash course): <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html">R
-&amp; data</a>, <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/2_theory_1.html">Randomness
-&amp; stationarity</a>, <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/3_theory_2.html">ARMA
-processes</a>, <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/4_advanced_models.html">Advanced
-models</a></td>
-<td><strong>emlyon</strong> business school, MSc in Data Science</td>
-<td>2025 - present</td>
-</tr>
-<tr class="even">
-<td>- <a
-href="https://www.gcoqueret.com/macro.html"><strong>Introductory
-macroeconomics</strong></a></td>
-<td><strong>Ecole Normale Supérieure</strong> de Lyon</td>
-<td>2024 - present</td>
-</tr>
-<tr class="odd">
-<td>- <strong>Financial macroeconomics</strong>: <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S1_consumption.html">C-CAPM</a>,
-<a
-href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S2_rare_events.html">Extreme
-risks</a>, <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S3_HAMs.html">Heterogeneous
-agents</a>, <a
-href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S4_alt_growth.html">Degrowth
-&amp; sustainability</a></td>
-<td><strong>Ecole Normale Supérieure</strong> de Lyon</td>
-<td>2024 - present</td>
-</tr>
-<tr class="even">
-<td>- <a href="http://www.greenfinance.education"><strong>Green
-finance</strong>: concepts &amp; quantitative methods</a></td>
-<td><strong>emlyon</strong> business school, Master in Management</td>
-<td>2022 - present</td>
-</tr>
-<tr class="odd">
-<td>- <a href="ml_factor.html"><strong>Machine Learning for Factor
-Investing</strong></a></td>
-<td><strong>emlyon</strong> business school, MSc. in Finance</td>
-<td>2019 - present</td>
-</tr>
-</tbody>
-</table>
-<hr>
+</li>
+<li class="row">
+<span class="row-date">2026–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Introduction to financial markets</span><span class="row-where">, emlyon business school, Master in Management</span>
+</p>
 </div>
-<div id="past-courses" class="section level3">
-<h3>Past courses</h3>
-<table>
-<colgroup>
-<col width="46%" />
-<col width="38%" />
-<col width="15%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Course and links</th>
-<th>Institution &amp; program</th>
-<th>Years</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>- <strong>Finance</strong> &amp; <strong>data analysis</strong> (ML)
-in R: <a
-href="https://www.gcoqueret.com/files/ML_course/fraud_detection.html">fraud
-detection</a>, <a
-href="https://www.gcoqueret.com/files/ML_course/credit_risk.html">credit
-scoring</a>, <a
-href="https://www.gcoqueret.com/files/ML_course/ts_crypto.html">time-series
-and crypto</a></td>
-<td><strong>emlyon</strong> business school, MSc. in Data Science</td>
-<td>2022 - 2025 </td>
-</tr>
-<tr class="even">
-<td>- <a href="shiny.html"><strong>Dynamic Dashboards with
-Shiny</strong></a></td>
-<td><strong>emlyon</strong> business school, Master in Management,
-<strong>emlyon</strong> MSc Digital Market &amp; Data Science</td>
-<td>2018-2025</td>
-</tr>
-<tr class="odd">
-<td>- Crash course on <strong>climate change</strong> +
-<strong>finance</strong> (<a
-href="https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb">energy-emissions-economy-environment</a>
-&amp; <a
-href="https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb">sustainable
-investing</a>)</td>
-<td><strong>emlyon</strong> business school, Master in Management</td>
-<td>2021 <br> </td>
-</tr>
-<tr class="even">
-<td>- <a href="ml_factor.html"><strong>Machine Learning for Factor
-Investing</strong></a></td>
-<td><strong>Imperial College</strong> Business School, MSc. in
-Finance</td>
-<td>2019</td>
-</tr>
-<tr class="odd">
-<td>- <a href="rstats.html">Introduction to statistics with R</a></td>
-<td><strong>emlyon</strong> business school, Master in Management</td>
-<td>2018</td>
-</tr>
-<tr class="even">
-<td>- Non-Gaussian processes in finance</td>
-<td><strong>emlyon</strong> business school, Master in Quant.
-Finance</td>
-<td>2018</td>
-</tr>
-<tr class="odd">
-<td>- Introduction to big data and business analytics</td>
-<td><strong>Montpellier Business School</strong>, Master of
-Management</td>
-<td>2015-2017</td>
-</tr>
-<tr class="even">
-<td>- Numerical methods in finance</td>
-<td><strong>Univ. Paris I Pantheon-Sorbonne</strong>, Master of Market
-Finance</td>
-<td>2008-2010</td>
-</tr>
-</tbody>
-</table>
+</li>
+<li class="row">
+<span class="row-date">2025–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Time-series analysis with R (crash course)</span><span class="row-where">, emlyon business school, MSc in Data Science</span>
+</p>
+<p class="row-links">
+<a href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html" target="_blank" rel="noopener">R &amp; data</a> <a href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/2_theory_1.html" target="_blank" rel="noopener">Randomness &amp; stationarity</a> <a href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/3_theory_2.html" target="_blank" rel="noopener">ARMA processes</a> <a href="https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/4_advanced_models.html" target="_blank" rel="noopener">Advanced models</a>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2024–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title"><a href="https://www.gcoqueret.com/macro.html" target="_blank" rel="noopener">Introductory macroeconomics</a></span><span class="row-where">, Ecole Normale Supérieure de Lyon</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2024–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Financial macroeconomics</span><span class="row-where">, Ecole Normale Supérieure de Lyon</span>
+</p>
+<p class="row-links">
+<a href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S1_consumption.html" target="_blank" rel="noopener">C-CAPM</a> <a href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S2_rare_events.html" target="_blank" rel="noopener">Extreme risks</a> <a href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S3_HAMs.html" target="_blank" rel="noopener">Heterogeneous agents</a> <a href="https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S4_alt_growth.html" target="_blank" rel="noopener">Degrowth &amp; sustainability</a>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2022–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title"><a href="http://www.greenfinance.education" target="_blank" rel="noopener">Green finance: concepts &amp; quantitative methods</a></span><span class="row-where">, emlyon business school, Master in Management</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2019–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title"><a href="ml_factor.html">Machine Learning for Factor Investing</a></span><span class="row-where">, emlyon business school, MSc. in Finance</span>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="past-courses">Past courses</h2>
+<div id="listing-past" class="quarto-listing quarto-listing-container-custom">
+<ol class="rows">
+<li class="row">
+<span class="row-date">2022–2025</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Finance &amp; data analysis (ML) in R</span><span class="row-where">, emlyon business school, MSc. in Data Science</span>
+</p>
+<p class="row-links">
+<a href="https://www.gcoqueret.com/files/ML_course/fraud_detection.html" target="_blank" rel="noopener">Fraud detection</a> <a href="https://www.gcoqueret.com/files/ML_course/credit_risk.html" target="_blank" rel="noopener">Credit scoring</a> <a href="https://www.gcoqueret.com/files/ML_course/ts_crypto.html" target="_blank" rel="noopener">Time-series and crypto</a>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2018–2025</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title"><a href="shiny.html">Dynamic Dashboards with Shiny</a></span><span class="row-where">, emlyon business school, Master in Management and MSc Digital Market &amp; Data Science</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2021</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Crash course on climate change and finance</span><span class="row-where">, emlyon business school, Master in Management</span>
+</p>
+<p class="row-links">
+<a href="https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb" target="_blank" rel="noopener">Energy-emissions-economy-environment</a> <a href="https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb" target="_blank" rel="noopener">Sustainable investing</a>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2019</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title"><a href="ml_factor.html">Machine Learning for Factor Investing</a></span><span class="row-where">, Imperial College Business School, MSc. in Finance</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2018</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title"><a href="rstats.html">Introduction to statistics with R</a></span><span class="row-where">, emlyon business school, Master in Management</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2018</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Non-Gaussian processes in finance</span><span class="row-where">, emlyon business school, Master in Quant. Finance</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2015–2017</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Introduction to big data and business analytics</span><span class="row-where">, Montpellier Business School, Master of Management</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2008–2010</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Numerical methods in finance</span><span class="row-where">, Univ. Paris I Panthéon-Sorbonne, Master of Market Finance</span>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
 </div>
 
 
 
-
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
+<footer class="site-footer">
+  <span>Updated October 2026</span>
+  <span class="footer-links">
+    <a href="https://github.com/shokru" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://twitter.com/g_coqueret" target="_blank" rel="noopener">X / Twitter</a>
+  </span>
+</footer>
+<script src="assets/site.js"></script>
 
 
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
 
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</body></html>

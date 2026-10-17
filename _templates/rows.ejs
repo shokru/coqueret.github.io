@@ -1,0 +1,10 @@
+<%
+/* Dated rows: CV entries and courses.
+   Fields: years, title, where, url (optional), links (optional: label: url) */
+const ext = (u) => /^https?:/.test(String(u)) ? ' target="_blank" rel="noopener"' : '';
+%>
+<ol class="rows">
+<% for (const item of items) { %>
+<li class="row"><span class="row-date"><%= item.years ?? "" %></span><div class="row-main"><p class="row-line"><span class="row-title"><% if (item.url) { %><a href="<%= item.url %>"<%= ext(item.url) %>><%= item.title %></a><% } else { %><%= item.title %><% } %></span><% if (item.where) { %><span class="row-where">, <%= item.where %></span><% } %></p><% if (item.links) { %><p class="row-links"><% for (const [label, url] of Object.entries(item.links)) { %><a href="<%= url %>"<%= ext(url) %>><%= label %></a> <% } %></p><% } %></div></li>
+<% } %>
+</ol>

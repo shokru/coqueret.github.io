@@ -1,0 +1,105 @@
+# Courses shown on the teaching page.
+# section: current | past
+# years:   free text, e.g. 2025–present
+# title:   course name;  url: optional link on the course name
+# where:   institution and program (markdown allowed)
+# links:   optional session links, one per line as   Label: https://...
+# Lines appear in the order written here. Put text in "quotes" if it contains a colon.
+
+- section: current
+  years: 2026–present
+  title: Intermediate finance & valuation
+  where: emlyon business school, MSc Data Science
+
+- section: current
+  years: 2026–present
+  title: Introduction to financial markets
+  where: emlyon business school, Master in Management
+
+- section: current
+  years: 2025–present
+  title: Time-series analysis with R (crash course)
+  where: emlyon business school, MSc in Data Science
+  links:
+    R & data: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html
+    Randomness & stationarity: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/2_theory_1.html
+    ARMA processes: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/3_theory_2.html
+    Advanced models: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/4_advanced_models.html
+
+- section: current
+  years: 2024–present
+  title: Introductory macroeconomics
+  url: https://www.gcoqueret.com/macro.html
+  where: Ecole Normale Supérieure de Lyon
+
+- section: current
+  years: 2024–present
+  title: Financial macroeconomics
+  where: Ecole Normale Supérieure de Lyon
+  links:
+    C-CAPM: https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S1_consumption.html
+    Extreme risks: https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S2_rare_events.html
+    Heterogeneous agents: https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S3_HAMs.html
+    Degrowth & sustainability: https://htmlpreview.github.io/?https://github.com/shokru/macro_course/blob/main/notebooks_html/S4_alt_growth.html
+
+- section: current
+  years: 2022–present
+  title: "Green finance: concepts & quantitative methods"
+  url: http://www.greenfinance.education
+  where: emlyon business school, Master in Management
+
+- section: current
+  years: 2019–present
+  title: Machine Learning for Factor Investing
+  url: ml_factor.html
+  where: emlyon business school, MSc. in Finance
+
+- section: past
+  years: 2022–2025
+  title: Finance & data analysis (ML) in R
+  where: emlyon business school, MSc. in Data Science
+  links:
+    Fraud detection: https://www.gcoqueret.com/files/ML_course/fraud_detection.html
+    Credit scoring: https://www.gcoqueret.com/files/ML_course/credit_risk.html
+    Time-series and crypto: https://www.gcoqueret.com/files/ML_course/ts_crypto.html
+
+- section: past
+  years: 2018–2025
+  title: Dynamic Dashboards with Shiny
+  url: shiny.html
+  where: emlyon business school, Master in Management and MSc Digital Market & Data Science
+
+- section: past
+  years: 2021
+  title: Crash course on climate change and finance
+  where: emlyon business school, Master in Management
+  links:
+    Energy-emissions-economy-environment: https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/E4_master.ipynb
+    Sustainable investing: https://colab.research.google.com/github/shokru/carbon_emissions/blob/main/carbon_finance_main.ipynb
+
+- section: past
+  years: 2019
+  title: Machine Learning for Factor Investing
+  url: ml_factor.html
+  where: Imperial College Business School, MSc. in Finance
+
+- section: past
+  years: 2018
+  title: Introduction to statistics with R
+  url: rstats.html
+  where: emlyon business school, Master in Management
+
+- section: past
+  years: 2018
+  title: Non-Gaussian processes in finance
+  where: emlyon business school, Master in Quant. Finance
+
+- section: past
+  years: 2015–2017
+  title: Introduction to big data and business analytics
+  where: Montpellier Business School, Master of Management
+
+- section: past
+  years: 2008–2010
+  title: Numerical methods in finance
+  where: Univ. Paris I Panthéon-Sorbonne, Master of Market Finance

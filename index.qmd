@@ -1,0 +1,78 @@
+---
+pagetitle: "Guillaume Coqueret"
+description: "Guillaume Coqueret, professor of finance at emlyon business school. Research in supervised learning for financial economics, sustainable equity investing and AI in organizations."
+listing:
+  - id: employment
+    contents: data/cv.yml
+    include: { section: employment }
+    template: _templates/rows.ejs
+    sort: false
+  - id: positions
+    contents: data/cv.yml
+    include: { section: positions }
+    template: _templates/rows.ejs
+    sort: false
+  - id: education
+    contents: data/cv.yml
+    include: { section: education }
+    template: _templates/rows.ejs
+    sort: false
+---
+
+::::: intro
+:::: intro-text
+# Guillaume Coqueret
+
+::: role
+Professor of Finance, emlyon business school
+:::
+
+I am a professor of finance at [emlyon business school](https://www.em-lyon.com/en/) and an affiliated professor at the [ENS de Lyon](https://www.ens-lyon.fr/en/), within the [CERGIC](https://www.cergic-lyon.fr/).
+
+My research interests include supervised learning for financial economics, sustainable equity investing and, more generally, the impact of AI on organizations.
+::::
+
+:::: portrait-cell
+<img class="portrait" src="images/gcoq-portrait.jpg" width="480" height="600" alt="Guillaume Coqueret speaking at a conference">
+::::
+:::::
+
+::: quick-links
+[SSRN](https://www.ssrn.com/author=708190) [Google Scholar](https://scholar.google.com/citations?user=pycLjS8AAAAJ) [GitHub](https://github.com/shokru) [ORCID](https://orcid.org/0000-0002-1596-4086) [LinkedIn](https://www.linkedin.com/in/guillaume-coqueret/)
+:::
+
+## Employment
+
+::: {#employment}
+:::
+
+## Academic positions
+
+::: {#positions}
+:::
+
+## Education
+
+::: {#education}
+:::
+
+## Academic profiles
+
+::: profiles
+- [SSRN](https://www.ssrn.com/author=708190)
+- [Google Scholar](https://scholar.google.com/citations?user=pycLjS8AAAAJ)
+- [GitHub](https://github.com/shokru)
+- [ORCID](https://orcid.org/0000-0002-1596-4086)
+- [ResearchGate](https://www.researchgate.net/profile/Guillaume_Coqueret)
+- [Web of Science](https://www.webofscience.com/wos/author/record/I-6752-2019)
+- [arXiv](https://arxiv.org/a/0000-0002-1596-4086.html)
+- [HAL](https://hal.science/search/index/q/*/authIdHal_s/guillaume-coqueret)
+- [Publons](https://publons.com/researcher/1352687/guillaume-coqueret/)
+:::
+
+## Contact
+
+| emlyon business school
+| 144, avenue Jean Jaurès
+| 69007 Lyon, France
+| coqueret/at/em-lyon.com

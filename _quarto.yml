@@ -1,0 +1,20 @@
+# Quarto config for gcoqueret.com
+# Render with:  quarto render   (or the Render button in RStudio)
+# Pages are written next to their source (output-dir: .), so GitHub Pages
+# keeps serving the repository root exactly as before.
+
+project:
+  type: website
+  output-dir: .
+  render:            # only these pages are built; the older .Rmd pages are left alone
+    - index.qmd
+    - research.qmd
+    - teaching.qmd
+
+format:
+  html:
+    minimal: true                 # no Bootstrap: the look comes from assets/site.css
+    css: assets/site.css
+    include-in-header: _partials/head.html
+    include-before-body: _partials/header.html
+    include-after-body: _partials/footer.html

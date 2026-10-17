@@ -1,435 +1,312 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="description" content="Guillaume Coqueret, professor of finance at emlyon business school. Research in supervised learning for financial economics, sustainable equity investing and AI in organizations.">
 
-
-
-
-<title>index.knit</title>
-
-<script src="site_libs/header-attrs-2.32/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+<title>Guillaume Coqueret</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
-</script>
-
-
-
-
-
-
-<link rel="stylesheet" href="styles.css" type="text/css" />
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
 </style>
 
 
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
+<script>
 
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-employment .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+    const options = {
+      valueNames: ['listing-section','listing-years','listing-title','listing-where',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-section","listing-years","listing-title","listing-where"],
+    };
 
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-employment'] = new List('listing-employment', options);
 
-<!-- tabsets -->
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
 
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-positions .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
-  border: none;
-}
+    const options = {
+      valueNames: ['listing-section','listing-years','listing-title','listing-where',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-section","listing-years","listing-title","listing-where"],
+    };
 
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-positions'] = new List('listing-positions', options);
 
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
 
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  
 
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-education .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
 
-<!-- code folding -->
+    const options = {
+      valueNames: ['listing-section','listing-years','listing-title','listing-where',{ data: ['index'] },{ data: ['categories'] }],
+      
+      searchColumns: ["listing-section","listing-years","listing-title","listing-where"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-education'] = new List('listing-education', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap">
 
 
-
-
+<link rel="stylesheet" href="assets/site.css">
 </head>
 
 <body>
 
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Guillaume Coqueret</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="research.html">Research</a>
-</li>
-<li>
-  <a href="teaching.html">Teaching</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/shokru">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://twitter.com/g_coqueret">
-    <span class="fa fa-twitter fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fa fa-linkedin fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="index.html">Guillaume Coqueret</a>
+  <nav class="site-nav" aria-label="Main">
+    <a href="index.html">About</a>
+    <a href="research.html">Research</a>
+    <a href="teaching.html">Teaching</a>
+  </nav>
+</header>
+<span id="content"></span>
 
 
 
 
+<div class="intro">
+<section id="guillaume-coqueret" class="intro-text">
+<h1>Guillaume Coqueret</h1>
+<div class="role">
+<p>Professor of Finance, emlyon business school</p>
 </div>
-
-
-<head>
-<meta charset="UTF-8">
-<title>
-Research
-</title>
-<meta name="Personal website of Guillaume Coqueret"/>
-</head>
-<p><br/><br />
-<br></p>
-<p><link rel="stylesheet" href="styles.css" type="text/css"></p>
-<p><img src="images/gcoq.jpg" style="width:30%; border:35px; margin-right: 100px" align="right"></p>
-<p>I am a professor of finance at
-<a href="https://www.em-lyon.com/en/" target="_blank">em<strong>lyon
-business school</strong></a>.<br />
-My research interests include</p>
+<p>I am a professor of finance at <a href="https://www.em-lyon.com/en/">emlyon business school</a> and an affiliated professor at the <a href="https://www.ens-lyon.fr/en/">ENS de Lyon</a>, within the <a href="https://www.cergic-lyon.fr/">CERGIC</a>.</p>
+<p>My research interests include supervised learning for financial economics, sustainable equity investing and, more generally, the impact of AI on organizations.</p>
+</section>
+<div class="portrait-cell">
+<p><img class="portrait" src="images/gcoq-portrait.jpg" width="480" height="600" alt="Guillaume Coqueret speaking at a conference"></p>
+</div>
+</div>
+<div class="quick-links">
+<p><a href="https://www.ssrn.com/author=708190">SSRN</a> <a href="https://scholar.google.com/citations?user=pycLjS8AAAAJ">Google Scholar</a> <a href="https://github.com/shokru">GitHub</a> <a href="https://orcid.org/0000-0002-1596-4086">ORCID</a> <a href="https://www.linkedin.com/in/guillaume-coqueret/">LinkedIn</a></p>
+</div>
+<h2 id="employment">Employment</h2>
+<div id="listing-employment" class="quarto-listing quarto-listing-container-custom">
+<ol class="rows">
+<li class="row">
+<span class="row-date">2024–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Professor</span><span class="row-where">, emlyon business school</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2018–2024</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Associate Professor</span><span class="row-where">, emlyon business school</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2015–2018</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Assistant Professor</span><span class="row-where">, Montpellier Business School</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2013–2015</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Senior Quantitative Researcher</span><span class="row-where">, EDHEC-Risk Institute</span>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="academic-positions">Academic positions</h2>
+<div id="listing-positions" class="quarto-listing quarto-listing-container-custom">
+<ol class="rows">
+<li class="row">
+<span class="row-date"></span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Head of AI Automation</span><span class="row-where">, <a href="https://cascad.tech/">cascad</a></span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2024–2027</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Board member</span><span class="row-where">, Association Française de Finance (<a href="https://www.affi.asso.fr/">AFFI</a>)</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2024–present</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Head of the AIM Institute (AI and Management)</span><span class="row-where">, emlyon business school</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2022–2024</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Head of the QUANT research center</span><span class="row-where">, emlyon business school</span>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="education">Education</h2>
+<div id="listing-education" class="quarto-listing quarto-listing-container-custom">
+<ol class="rows">
+<li class="row">
+<span class="row-date">2022</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Accreditation to supervise research (French HDR)</span><span class="row-where">, Univ. Lyon 2</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2008–2012</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Ph.D.&nbsp;in Finance &amp; Applied Mathematics</span><span class="row-where">, ESSEC Business School &amp; Univ. Lille 1</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2007–2008</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Master of Science in Probability and Finance</span><span class="row-where">, Sorbonne Univ. (ex-Univ. Paris 6 UPMC)</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2005–2006</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Master of Science in Market Finance</span><span class="row-where">, Univ. Paris 1</span>
+</p>
+</div>
+</li>
+<li class="row">
+<span class="row-date">2002–2007</span>
+<div class="row-main">
+<p class="row-line">
+<span class="row-title">Master of Science in Management</span><span class="row-where">, ESSEC Business School</span>
+</p>
+</div>
+</li>
+</ol>
+<div class="listing-no-matching d-none">No matching items</div>
+</div>
+<h2 id="academic-profiles">Academic profiles</h2>
+<div class="profiles">
 <ul>
-<li><strong>supervised learning for financial economics</strong><br />
-</li>
-<li><strong>sustainable equity investing</strong> and<br />
-</li>
-<li><strong>the impact of AI on organizations more
-generally</strong>.</li>
+<li><a href="https://www.ssrn.com/author=708190">SSRN</a></li>
+<li><a href="https://scholar.google.com/citations?user=pycLjS8AAAAJ">Google Scholar</a></li>
+<li><a href="https://github.com/shokru">GitHub</a></li>
+<li><a href="https://orcid.org/0000-0002-1596-4086">ORCID</a></li>
+<li><a href="https://www.researchgate.net/profile/Guillaume_Coqueret">ResearchGate</a></li>
+<li><a href="https://www.webofscience.com/wos/author/record/I-6752-2019">Web of Science</a></li>
+<li><a href="https://arxiv.org/a/0000-0002-1596-4086.html">arXiv</a></li>
+<li><a href="https://hal.science/search/index/q/*/authIdHal_s/guillaume-coqueret">HAL</a></li>
+<li><a href="https://publons.com/researcher/1352687/guillaume-coqueret/">Publons</a></li>
 </ul>
-<hr />
-<div id="employment" class="section level4">
-<h4><font color="#9AAD98"><strong>Employment</strong> </font></h4>
-<p>Professor, em<strong>lyon business school</strong> (2024 -
-present)<br />
-Associate Professor, em<strong>lyon business school</strong> (2018 -
-2024)<br />
-Assistant Professor, <strong>Montpellier Business School</strong> (2015
-- 2018)<br />
-Senior Quantitative Researcher, <strong>EDHEC-Risk Institute</strong>
-(2013 - 2015)</p>
-<p>I am also an affiliated professor at the <a
-href="https://www.ens-lyon.fr/en/"><strong>ENS de Lyon</strong></a>,
-within the <a href="https://www.cergic-lyon.fr/">CERGIC</a>.</p>
-<p>More on my
-<a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank">
-<strong>LinkedIn</strong> profile</a>.</p>
-<hr />
 </div>
-<div id="academic-positions" class="section level4">
-<h4><font color="#9AAD98"><strong>Academic positions</strong>
-</font></h4>
-<p>Head of AI Automation, <a href="https://cascad.tech/">cascad</a>
-Board member, Association Française de Finance (<a
-href="https://www.affi.asso.fr/">AFFI</a>) (2024 - 2027)<br />
-Head of the AIM Institute (AI and Management), em<strong>lyon business
-school</strong> (2024 - present)<br />
-Head of the QUANT research center, em<strong>lyon business
-school</strong> (2022 - 2024)</p>
-<hr />
-</div>
-<div id="education" class="section level4">
-<h4><font color="#9AAD98"><strong>Education</strong></font></h4>
-<p>Accreditation to supervise research (French HDR), <strong>Univ. Lyon
-2</strong> (2022)<br />
-Ph.D. in Finance &amp; Applied Mathematics, <strong>ESSEC Business
-School</strong> &amp; <strong>Univ. Lille 1</strong> (2008-2012)<br />
-Master of Science in Probability and Finance, <strong>Sorbonne
-Univ.</strong> (ex-Univ. Paris 6 UPMC) (2007-2008)<br />
-Master of Science in Market Finance, <strong>Univ. Paris 1</strong>
-(2005-2006)<br />
-Master of Science in Management, <strong>ESSEC Business School</strong>
-(2002-2007)</p>
-<hr />
-</div>
-<div id="links-academic-profiles" class="section level4">
-<h4><font color="#9AAD98"><strong>Links</strong> (academic
-profiles)</font></h4>
-<p><strong>SSRN</strong>:
-<a href="https://www.ssrn.com/author=708190" target="_blank">https://www.ssrn.com/author=708190</a><br />
-<strong>Google Scholar</strong>:
-<a href="https://scholar.google.com/citations?user=pycLjS8AAAAJ" target="_blank">https://scholar.google.com/citations?user=pycLjS8AAAAJ</a><br />
-<strong>Github</strong>:
-<a href="https://github.com/shokru" target="_blank">https://github.com/shokru</a><br />
-<strong>ORCID</strong>:
-<a href="https://orcid.org/0000-0002-1596-4086" target="_blank">https://orcid.org/0000-0002-1596-4086</a><br />
-<strong>researchgate</strong>:
-<a href="https://www.researchgate.net/profile/Guillaume_Coqueret" target="_blank">https://www.researchgate.net/profile/Guillaume_Coqueret</a><br />
-<strong>Web of Science</strong> (Researcher ID):
-<a href="https://www.webofscience.com/wos/author/record/I-6752-2019" target="_blank">https://www.webofscience.com/wos/author/record/I-6752-2019</a><br />
-<strong>arXiv</strong>:
-<a href="https://arxiv.org/a/0000-0002-1596-4086.html" target="_blank">https://arxiv.org/a/0000-0002-1596-4086.html</a><br />
-<strong>HAL</strong>:
-<a href="https://hal.science/search/index/q/*/authIdHal_s/guillaume-coqueret" target="_blank">
-https://hal.science/search/index/q/*/authIdHal_s/guillaume-coqueret</a><br />
-<strong>Publons</strong>:
-<a href="https://publons.com/researcher/1352687/guillaume-coqueret/" target="_blank">https://publons.com/researcher/1352687/guillaume-coqueret/</a></p>
-<hr />
-</div>
-<div id="contact" class="section level4">
-<h4><font color="#9AAD98"><strong>Contact</strong> </font></h4>
-<p>em<strong>lyon business school</strong><br />
-144, avenue Jean Jaurès<br />
-69007 Lyon - <strong>FRANCE</strong><br />
-coqueret/at/em-lyon.com</p>
-<hr />
-<p>Updated in Oct. 2026</p>
-</div>
+<h2 id="contact">Contact</h2>
+<div class="line-block">emlyon business school<br>
+144, avenue Jean Jaurès<br>
+69007 Lyon, France<br>
+coqueret/at/em-lyon.com</div>
+
+
+
+<footer class="site-footer">
+  <span>Updated October 2026</span>
+  <span class="footer-links">
+    <a href="https://github.com/shokru" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://twitter.com/g_coqueret" target="_blank" rel="noopener">X / Twitter</a>
+  </span>
+</footer>
+<script src="assets/site.js"></script>
 
 
 
 
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
-
-
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</body></html>
