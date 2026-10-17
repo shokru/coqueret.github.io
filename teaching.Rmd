@@ -9,6 +9,7 @@
 
 Course and links | Institution & program | Years 
 ------ | ----- | --   
+- Intermediate finance & valuation | **emlyon** business school, MSc Data Science | 2026 - present    
 - Introduction to financial markets | **emlyon** business school, Master in Management | 2026 - present    
 - **Time-series analysis with R** (crash course): [R & data](https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html), [Randomness & stationarity](https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/2_theory_1.html), [ARMA processes](https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/3_theory_2.html), [Advanced models](https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/4_advanced_models.html) | **emlyon** business school, MSc in Data Science | 2025 - present    
 - [**Introductory macroeconomics**](https://www.gcoqueret.com/macro.html) | **Ecole Normale Supérieure** de Lyon | 2024 - present   

@@ -13,7 +13,7 @@
 
 <title>research.knit</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.32/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -144,11 +144,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -177,8 +181,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -186,16 +190,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -315,18 +312,28 @@ br2 {
 <h3><font color="#3B60A2"><strong>Ongoing research</strong> (working
 papers)</font></h3>
 <ul>
-<li>Overparametrized models with posterior drift (with M. Laguerre)
-<a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a><br />
+<li>Randomness in large language models: What researchers need to know
+(and report) (with J. Llull, F. Oswald, C. Pérignon, C. Scheuch, L.
+Vilhuber)
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7191580" target="_blank">[SSRN]</a><br />
 </li>
-<li>Persistent anomalies and nonstandard errors (with C. Pérignon)
+<li>Persistent anomalies and nonstandard Sharpe ratios (with C.
+Pérignon)
 <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank">[SSRN]</a><br />
+</li>
+<li>Higher education in the era of Generative AI: Survival under
+quality-differentiation
+<a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6752980" target="_blank">[SSRN]</a><br />
+</li>
+<li>Posterior drift in equity premium forecasts (with M. Laguerre)
+<a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a><br />
 </li>
 <li>Global p-values in multi-design studies (with Y. Zhang, C. Pérignon,
 F. Chiaromonte and S. Guerrier)
 <a href="https://arxiv.org/abs/2507.03815" target="_blank">[arXiv]</a><br />
 </li>
-<li>Can corporate incentives deliver decarbonization? (with B.
-Qiu)<br />
+<li>Can corporate incentives deliver decarbonization? (with B. Qiu) -
+R&amp;R <em>Journal of Corporate Finance</em><br />
 </li>
 <li>An anatomy of decarbonizing firms (with T. Giroux and B. Qiu)<br />
 </li>
@@ -493,10 +500,10 @@ of Theoretical and Applied Finance</strong></span>, Vol. 16, No. 3
 <li>Sustainability in commodity markets (with B. Tavin and Y. Zhou)
 <a href="https://www.sciencedirect.com/science/article/pii/S0378426625002195" target="_blank">[Open
 Access]</a>, <br/> <span style="color:#3B60A2"><strong>Journal of
-Banking &amp; Finance</strong></span> Forthcoming <br> (Winner of the <a
-href="https://www.cascad.tech/">cascad</a> best reproduced paper award
-at the <a href="https://affi2024.eventsadmin.com/">2024 AFFI
-conference</a>)<br />
+Banking &amp; Finance</strong></span> Vol. 184 (2026), pp. 107599 <br>
+(Winner of the <a href="https://www.cascad.tech/">cascad</a> best
+reproduced paper award at the <a
+href="https://affi2024.eventsadmin.com/">2024 AFFI conference</a>)<br />
 </li>
 <li>The biodiversity premium, <br/> <span
 style="color:#3B60A2"><strong>Ecological Economics</strong></span>, Vol.

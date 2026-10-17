@@ -33,10 +33,12 @@ br2 {
 
 ### <font color="#3B60A2">**Ongoing research** (working papers)</font>  
 
-- Overparametrized models with posterior drift (with M. Laguerre) <a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a>    
+- Randomness in large language models: What researchers need to know (and report) (with J. Llull, F. Oswald, C. Pérignon, C. Scheuch, L. Vilhuber) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7191580" target="_blank">[SSRN]</a>  
 - Persistent anomalies and nonstandard Sharpe ratios (with C. Pérignon) <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5276723" target="_blank">[SSRN]</a>  
+- Higher education in the era of Generative AI: Survival under quality-differentiation <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6752980" target="_blank">[SSRN]</a>  
+- Posterior drift in equity premium forecasts (with M. Laguerre) <a href="https://arxiv.org/abs/2506.23619" target="_blank">[arXiv]</a>    
 - Global p-values in multi-design studies (with Y. Zhang, C. Pérignon, F. Chiaromonte and S. Guerrier)  <a href="https://arxiv.org/abs/2507.03815" target="_blank">[arXiv]</a>  
-- Can corporate incentives deliver decarbonization? (with B. Qiu)    
+- Can corporate incentives deliver decarbonization? (with B. Qiu) - R&R *Journal of Corporate Finance*    
 - An anatomy of decarbonizing firms (with T. Giroux and B. Qiu)    
 - Factor investing with reinforcement learning (with E. André): <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3726714" target="_blank">[SSRN]</a>    
 - Characteristics-driven returns in equilibrium: <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3941195" target="_blank">[SSRN]</a> - <a href="http://www.gcoqueret.com/files/misc/demand_6_share.html" target="_blank">R notebook</a>   
@@ -100,7 +102,7 @@ Articles are grouped into **research themes** below.
 
 <details>
   <summary>**SUSTAINABLE FINANCE**</summary>
-* Sustainability in commodity markets (with B. Tavin and Y. Zhou) <a href="https://www.sciencedirect.com/science/article/pii/S0378426625002195" target="_blank">[Open Access]</a>, <br/> <span style="color:#3B60A2">**Journal of Banking & Finance**</span> Forthcoming <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))    
+* Sustainability in commodity markets (with B. Tavin and Y. Zhou) <a href="https://www.sciencedirect.com/science/article/pii/S0378426625002195" target="_blank">[Open Access]</a>, <br/> <span style="color:#3B60A2">**Journal of Banking & Finance**</span> Vol. 184 (2026), pp. 107599  <br> (Winner of the [cascad](https://www.cascad.tech/) best reproduced paper award at the [2024 AFFI conference](https://affi2024.eventsadmin.com/))    
 * The biodiversity premium, <br/>
 <span style="color:#3B60A2">**Ecological Economics**</span>, Vol. 228 (2025) (with T. Giroux & O.D. Zerbib): <a href="https://www.sciencedirect.com/science/article/pii/S092180092400332X" target="_blank">[Link - Open Access]</a> - <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4489550" target="_blank">SSRN</a>     
 * ESG news spillovers across the value chain, <br/>
