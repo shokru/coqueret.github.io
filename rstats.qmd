@@ -1,0 +1,46 @@
+---
+pagetitle: "Introduction to statistical methods with R · Guillaume Coqueret"
+description: "Teaching material for introductory courses of statistics in R."
+---
+
+::: page-head
+[[Teaching](teaching.html)]{.crumb}
+
+# Introduction to statistical methods with R
+
+Teaching material for **introductory** courses of statistics in R.
+:::
+
+## Courses
+
+HTML notebooks for each session. Slides are available upon request; the original Rmd files are in the supplementary material below.
+
+::: sessions
+1. [**Introduction to the tidyverse**](files/S1_tidyverse.nb.html): plotting, filtering, organising data
+1. [**Basic R instructions**](files/S2_Basics.nb.html): package installation, data generation, matrix & dataframe manipulation, loops and simple functions
+1. [**Distributions**](files/S3_Distributions.nb.html): descriptive statistics, parametric distributions, plots, histograms, etc.
+1. [**Maximum likelihood estimation**](files/S4_MLE.nb.html): moment matching versus the mle/mle2 functions
+1. [**Monte-Carlo simulations**](files/S5_MC.nb.html): random number generation with sequential tournaments as examples + cool exercises
+1. [**Time-series analysis**](files/S6_TS.nb.html): fitting autoregressive processes & predictions using [French economic data](https://github.com/shokru/rstats/blob/master/data/economics.RData)
+1. [**Bayesian inference**](files/S7_Bayes.nb.html): conjugate priors, grid approximation and a snapshot of Markov Chains (but no MCMC sadly)
+1. [**Statistical tests & regressions**](files/S8_Test.nb.html): one and two mean tests, basic regression analysis
+:::
+
+## Supplementary material
+
+- The original **[Rmd files](https://github.com/shokru/rstats/blob/master/material/all_Rmd.zip)** (.zip) and the correction of exercises: **[data + html and Rmd format](https://github.com/shokru/rstats/blob/master/material/Solution_files.zip)** (.zip)
+- [**R Memo**](files/R_Memo.nb.html): a compilation of everything you need to know (survival toolkit)
+- [**Example on financial data**](files/Fin_solutions.nb.html): exercises on 30 large US firms; data **[here](https://github.com/shokru/rstats/blob/master/data/data.RData)**
+- [**Online tutorial**](https://gcoqueret.shinyapps.io/Tidyverse-exercises/): exercises & solutions on the core functions of the tidyverse
+- [**R on the web**](https://github.com/shokru/rstats/blob/master/material/R_links.md): a short list of links, sorted by themes
+
+## Datasets
+
+- [ANES data: US political surveys (1990-2016)](https://github.com/shokru/rstats/blob/master/data/anes.RData), also in [Excel form](https://github.com/shokru/rstats/blob/master/data/anes.xlsx)
+- [French economic indicators](https://github.com/shokru/rstats/blob/master/data/economics.RData)
+- [Financial data on 30 large US firms](https://github.com/shokru/rstats/blob/master/data/data.RData)
+- [All files at once](https://github.com/shokru/rstats/blob/master/data/all_files.zip) (.zip)
+
+::: disclaimer
+The data and code are meant for pedagogical use only.
+:::

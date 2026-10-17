@@ -1,0 +1,25 @@
+---
+pagetitle: "Training ML models on tails · Guillaume Coqueret"
+description: "Research and presentation material on instance filtering in machine learning."
+---
+
+::: page-head
+[[Research](research.html)]{.crumb}
+
+# Training ML models on tails
+
+Research and presentation material on the topic of instance filtering in machine learning.
+:::
+
+## Files
+
+- [**Formal analysis & graphs**](files/tot/formal_analysis_graphs.nb.html): some plots and the simple gain contest analysis between linear and quadratic generators [[Rmd source](files/tot/formal_analysis_graphs.Rmd)]{.links}
+- [**Toy model**](files/tot/toy_example.nb.html): a simple illustration of the impact of filtering [[Rmd source](files/tot/toy_example.Rmd)]{.links}
+- [**Simulations**](files/tot/simulations.nb.html): simulations on the impact of filtering [[Rmd source](files/tot/simulations.Rmd)]{.links}
+- [**Portfolio backtesting**](files/tot/xgb_port.nb.html): boosted tree-based portfolio construction (out-of-sample) [[Rmd source](files/tot/xgb_port.Rmd)]{.links}
+- [**Data**](https://drive.google.com/file/d/1stxwrsyEfyD0iKrr2i1oBSVWdFKRx7J5/view?usp=sharing) in R format: 1,182 firms & 108 features over 162 months
+- [**Slides**](files/tot/ToT_slides.html), [**working paper**](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3403009) and [**published paper**](https://link.springer.com/article/10.1007/s10479-020-03539-2)
+
+::: disclaimer
+The **data** and **code** are meant for research and pedagogical use only.
+:::

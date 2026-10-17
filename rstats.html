@@ -1,291 +1,117 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
+<meta name="description" content="Teaching material for introductory courses of statistics in R.">
 
-
-
-
-<title></title>
-
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
-
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+<title>Introduction to statistical methods with R · Guillaume Coqueret</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script>
+  /* Apply the visitor's saved light/dark choice before the page paints */
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap">
 
 
-
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
-
-<link rel="stylesheet" href="styles.css" type="text/css" />
-
+<link rel="stylesheet" href="assets/site.css">
 </head>
 
 <body>
 
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
-img {
-  max-width:100%;
-  height: auto;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-</style>
-
-
-<style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 64px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 69px;
-  margin-top: -69px;
-}
-
-.section h2 {
-  padding-top: 69px;
-  margin-top: -69px;
-}
-.section h3 {
-  padding-top: 69px;
-  margin-top: -69px;
-}
-.section h4 {
-  padding-top: 69px;
-  margin-top: -69px;
-}
-.section h5 {
-  padding-top: 69px;
-  margin-top: -69px;
-}
-.section h6 {
-  padding-top: 69px;
-  margin-top: -69px;
-}
-</style>
-
-<script>
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.parent().addClass('active');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-});
-</script>
-
-
-<div class="container-fluid main-container">
-
-<!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
-
-<!-- code folding -->
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="index.html">Guillaume Coqueret</a>
+  <div class="site-tools">
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="teaching.html">Teaching</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden="">
+      <svg class="i-moon" viewbox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"></path></svg>
+      <svg class="i-sun" viewbox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"></path></svg>
+    </button>
+  </div>
+</header>
+<span id="content"></span>
 
 
 
 
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Guillaume Coqueret</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="research.html">Research</a>
-</li>
-<li>
-  <a href="teaching.html">Teaching</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/shokru">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://twitter.com/g_coqueret">
-    <span class="fa fa-twitter fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fa fa-linkedin fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div class="fluid-row" id="header">
-
-
-
-
+<div class="page-head">
+<p><span class="crumb"><a href="teaching.html">Teaching</a></span></p>
+<h1 id="introduction-to-statistical-methods-with-r">Introduction to statistical methods with R</h1>
+<p>Teaching material for <strong>introductory</strong> courses of statistics in R.</p>
 </div>
-
-
-<p><br/></p>
-<div id="introduction-to-statistical-methods-with-r" class="section level1">
-<h1>Introduction to statistical methods with R</h1>
-<p>This page contains teaching material for <strong>introductory</strong> courses of statistics in R.</p>
-<hr />
-<div id="courses" class="section level2">
-<h2>Courses</h2>
-<p>The links below lead to html notebooks. The slides are available upon request. The original <strong>Rmd</strong> files can be downloaded further hereafter.</p>
-<ol style="list-style-type: decimal">
-<li><p><a href="files/S1_tidyverse.nb.html" target="_blank"><strong>Introduction to the tidyverse</strong></a>: plotting, filtering, organising data.</p></li>
-<li><p><a href="files/S2_Basics.nb.html" target="_blank"><strong>Basic R instructions</strong></a>: package installation, data generation, matrix &amp; dataframe manipulation, loops and simple functions.</p></li>
-<li><p><a href="files/S3_Distributions.nb.html" target="_blank"><strong>Distributions</strong></a>: descriptive statistics, parametric distributions, plots, histograms, etc.</p></li>
-<li><p><a href="files/S4_MLE.nb.html" target="_blank"><strong>Maximum likelihood estimation</strong></a>: moment matching versus the mle/mle2 functions.</p></li>
-<li><p><a href="files/S5_MC.nb.html" target="_blank"><strong>Monte-Carlo simulations</strong></a>: random number generation with sequential tournaments as examples + cool exercises.</p></li>
-<li><p><a href="files/S6_TS.nb.html" target="_blank"><strong>Time-series analysis</strong></a>: fitting autoregressive processes &amp; predictions using <a href="https://github.com/shokru/rstats/blob/master/data/economics.RData">French economic data</a>.</p></li>
-<li><p><a href="files/S7_Bayes.nb.html" target="_blank"><strong>Bayesian inference</strong></a>: conjugate priors, grid approximation and a snapshot of Markov Chains (but no MCMC sadly).</p></li>
-<li><p><a href="files/S8_Test.nb.html" target="_blank"><strong>Statistical tests &amp; regressions</strong></a> : one and two mean tests, basic regression analysis.</p></li>
+<h2 id="courses">Courses</h2>
+<p>HTML notebooks for each session. Slides are available upon request; the original Rmd files are in the supplementary material below.</p>
+<div class="sessions">
+<ol type="1">
+<li><a href="files/S1_tidyverse.nb.html"><strong>Introduction to the tidyverse</strong></a>: plotting, filtering, organising data</li>
+<li><a href="files/S2_Basics.nb.html"><strong>Basic R instructions</strong></a>: package installation, data generation, matrix &amp; dataframe manipulation, loops and simple functions</li>
+<li><a href="files/S3_Distributions.nb.html"><strong>Distributions</strong></a>: descriptive statistics, parametric distributions, plots, histograms, etc.</li>
+<li><a href="files/S4_MLE.nb.html"><strong>Maximum likelihood estimation</strong></a>: moment matching versus the mle/mle2 functions</li>
+<li><a href="files/S5_MC.nb.html"><strong>Monte-Carlo simulations</strong></a>: random number generation with sequential tournaments as examples + cool exercises</li>
+<li><a href="files/S6_TS.nb.html"><strong>Time-series analysis</strong></a>: fitting autoregressive processes &amp; predictions using <a href="https://github.com/shokru/rstats/blob/master/data/economics.RData">French economic data</a></li>
+<li><a href="files/S7_Bayes.nb.html"><strong>Bayesian inference</strong></a>: conjugate priors, grid approximation and a snapshot of Markov Chains (but no MCMC sadly)</li>
+<li><a href="files/S8_Test.nb.html"><strong>Statistical tests &amp; regressions</strong></a>: one and two mean tests, basic regression analysis</li>
 </ol>
-<hr />
 </div>
-<div id="supplementary-material" class="section level2">
-<h2>Supplementary material:</h2>
-<p>The original <strong><a href="https://github.com/shokru/rstats/blob/master/material/all_Rmd.zip">Rmd files</a></strong> (.zip) as well as the correction of exercises: <strong><a href="https://github.com/shokru/rstats/blob/master/material/Solution_files.zip">data + html and Rmd format</a></strong> (.zip also).</p>
-<p><a href="files/R_Memo.nb.html" target="_blank"><strong>R Memo</strong></a>: a compilation of everything you need to know (survival toolkit).</p>
-<p><a href="files/Fin_solutions.nb.html" target="_blank"><strong>Example on financial data</strong></a>: exercises on 30 large US firms; data <strong><a href="https://github.com/shokru/rstats/blob/master/data/data.RData">here</a></strong>.</p>
-<p><a href="https://gcoqueret.shinyapps.io/Tidyverse-exercises/" target="_blank"><strong>Online tutorial</strong></a>: exercises &amp; solutions on the core functions of the tidyverse.</p>
-<p><strong>Links:</strong> <a href="https://github.com/shokru/rstats/blob/master/material/R_links.md">R on the web</a>: a short list of links, sorted by themes.</p>
-<hr />
-</div>
-<div id="datasets" class="section level2">
-<h2>Datasets:</h2>
-<p><a href="https://github.com/shokru/rstats/blob/master/data/anes.RData">ANES data: US political surveys (1990-2016)</a> and in <a href="https://github.com/shokru/rstats/blob/master/data/anes.xlsx">Excel form</a></p>
-<p><a href="https://github.com/shokru/rstats/blob/master/data/economics.RData">French economic indicators</a></p>
-<p><a href="https://github.com/shokru/rstats/blob/master/data/data.RData">Financial data on 30 large US firms</a></p>
-<p>You can download all files at once <strong><a href="https://github.com/shokru/rstats/blob/master/data/all_files.zip">here</a></strong>.</p>
-<hr />
-<p><strong>DISCLAIMER</strong>: the data and code are meant for pedagogical use only.</p>
-<hr />
-</div>
+<h2 id="supplementary-material">Supplementary material</h2>
+<ul>
+<li>The original <strong><a href="https://github.com/shokru/rstats/blob/master/material/all_Rmd.zip">Rmd files</a></strong> (.zip) and the correction of exercises: <strong><a href="https://github.com/shokru/rstats/blob/master/material/Solution_files.zip">data + html and Rmd format</a></strong> (.zip)</li>
+<li><a href="files/R_Memo.nb.html"><strong>R Memo</strong></a>: a compilation of everything you need to know (survival toolkit)</li>
+<li><a href="files/Fin_solutions.nb.html"><strong>Example on financial data</strong></a>: exercises on 30 large US firms; data <strong><a href="https://github.com/shokru/rstats/blob/master/data/data.RData">here</a></strong></li>
+<li><a href="https://gcoqueret.shinyapps.io/Tidyverse-exercises/"><strong>Online tutorial</strong></a>: exercises &amp; solutions on the core functions of the tidyverse</li>
+<li><a href="https://github.com/shokru/rstats/blob/master/material/R_links.md"><strong>R on the web</strong></a>: a short list of links, sorted by themes</li>
+</ul>
+<h2 id="datasets">Datasets</h2>
+<ul>
+<li><a href="https://github.com/shokru/rstats/blob/master/data/anes.RData">ANES data: US political surveys (1990-2016)</a>, also in <a href="https://github.com/shokru/rstats/blob/master/data/anes.xlsx">Excel form</a></li>
+<li><a href="https://github.com/shokru/rstats/blob/master/data/economics.RData">French economic indicators</a></li>
+<li><a href="https://github.com/shokru/rstats/blob/master/data/data.RData">Financial data on 30 large US firms</a></li>
+<li><a href="https://github.com/shokru/rstats/blob/master/data/all_files.zip">All files at once</a> (.zip)</li>
+</ul>
+<div class="disclaimer">
+<p>The data and code are meant for pedagogical use only.</p>
 </div>
 
 
+<footer class="site-footer">
+  <span>Updated October 2026</span>
+  <span class="footer-links">
+    <a href="https://github.com/shokru" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://twitter.com/g_coqueret" target="_blank" rel="noopener">X / Twitter</a>
+  </span>
+</footer>
+<script src="assets/site.js"></script>
 
 
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
 
 
-</script>
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</body></html>

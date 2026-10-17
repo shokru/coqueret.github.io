@@ -1,0 +1,42 @@
+---
+pagetitle: "Supervised learning for factor investing · Guillaume Coqueret"
+description: "Teaching material (R code) for introductory courses on supervised learning applied to factor investing."
+---
+
+::: page-head
+[[Teaching](teaching.html)]{.crumb}
+
+# Supervised learning for factor investing
+
+Teaching material (**R** code) for **introductory** courses on supervised learning applied to factor investing.
+:::
+
+## Sessions
+
+HTML notebooks and PDF slides for each session.
+
+::: sessions
+1. **Economic foundations**: asset pricing anomalies, characteristics-based investing [[Notebook](files/ML_course/S1_Foundations.html) [Slides](files/ML_course/S1_Foundations.pdf)]{.links}
+1. **Portfolio strategies**: portfolio back-testing framework [[Notebook](files/ML_course/S2_Portfolio.html) [Slides](files/ML_course/S2_Portfolio.pdf)]{.links}
+1. **Penalized regressions & sparse portfolios**: penalised regressions for minimum variance portfolios and for robust forecasts [[Notebook](files/ML_course/S3_Lasso.html) [Slides](files/ML_course/S3_LASSO.pdf)]{.links}
+1. **Data preparation**: feature engineering and labelling with a focus on categorical data [[Notebook](files/ML_course/S4_Data.html) [Slides](files/ML_course/S4_Data.pdf)]{.links}
+1. **Decision trees**: simple trees, random forests and boosted trees [[Notebook](files/ML_course/S5_Trees.nb.html) [Slides](files/ML_course/S5_Trees.pdf)]{.links}
+1. **Neural networks**: multilayer perceptron and recurrent networks (**G**ated **R**ecurrent **U**nits) [[Notebook](files/ML_course/S6_NN.nb.html) [Slides](files/ML_course/S6_NN.pdf)]{.links}
+1. **Validating & tuning**: performance metrics and hyper-parameter adjustment [[Notebook](files/ML_course/S7_Validation.nb.html) [Slides](files/ML_course/S7_Tuning.pdf)]{.links}
+1. **Extensions**: SVMs, ensemble learning, interpretability and deflated Sharpe ratios [[Notebook](files/ML_course/S8_Extensions.nb.html) [Slides](files/ML_course/S8_Extensions.pdf)]{.links}
+:::
+
+## Material
+
+Datasets in R format (they end in 2025):
+
+- [**Base** (small)](https://github.com/shokru/coqueret.github.io/blob/master/files/ML_course/data_new.RData): 30 firms, 7 features, year 2000 onwards
+- [**Large**](https://github.com/shokru/coqueret.github.io/raw/master/files/ML_course/SPX_macro.RData): ~500 firms (S&P500), 20 features (including GHG emissions across the 3 scopes) and 4 macro variables, from year 1991 onwards
+
+<!--
+[All code](https://github.com/shokru/coqueret.github.io/blob/master/files/ml_factor.zip): Rmd files + data.
+-->
+
+::: disclaimer
+The **data** and **code** are meant for pedagogical use only.
+:::

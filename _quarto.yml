@@ -1,15 +1,23 @@
 # Quarto config for gcoqueret.com
 # Render with:  quarto render   (or the Render button in RStudio)
+# A new page: create the .qmd file and add it to the render list below.
 # Pages are written next to their source (output-dir: .), so GitHub Pages
 # keeps serving the repository root exactly as before.
 
 project:
   type: website
   output-dir: .
-  render:            # only these pages are built; the older .Rmd pages are left alone
+  render:            # only these pages are built; notebooks and slides under files/ are never touched
     - index.qmd
     - research.qmd
     - teaching.qmd
+    - ml_factor.qmd
+    - macro.qmd
+    - rstats.qmd
+    - shiny.qmd
+    - PRs.qmd
+    - horizons.qmd
+    - tot.qmd
 
 format:
   html:

@@ -1,0 +1,47 @@
+---
+pagetitle: "Introduction to macroeconomics · Guillaume Coqueret"
+description: "Teaching material for an introductory macroeconomics course at the Ecole Normale Supérieure de Lyon."
+---
+
+::: page-head
+[[Teaching](teaching.html)]{.crumb}
+
+# Introduction to macroeconomics
+
+Teaching material for a starter on macroeconomics, given at the [Ecole Normale Supérieure de Lyon](https://www.ens-lyon.fr/en/).
+:::
+
+## Topics
+
+Each topic links to HTML **slides** and course **material**, with its Quarto source.
+
+::: sessions
+1. [Introduction, data and basic salient facts](files/macro/S01_intro.html) [[Quarto source](files/macro/S01_intro.qmd)]{.links}
+1. [The Solow model and extensions](files/macro/S02_Solow.html) [[Quarto source](files/macro/S02_Solow.qmd)]{.links}
+1. [The Ramsey model](files/macro/S03_Ramsey.html) [[Quarto source](files/macro/S03_Ramsey.qmd)]{.links}
+1. [Open economies](files/macro/S04_open.html) [[Quarto source](files/macro/S04_open.qmd)]{.links}
+1. [Human capital](files/macro/S05_human_capital.html) [[Quarto source](files/macro/S05_human_capital.qmd)]{.links}
+1. [Technological change](files/macro/S06_technology.html) [[Quarto source](files/macro/S06_technology.qmd)]{.links}
+1. [Growth in the cross-section of countries](files/macro/S07_cross_section.html) [[Quarto source](files/macro/S07_cross_section.qmd)]{.links}
+1. [Models with overlapping generations](files/macro/S08_overlapping_generations.html) [[Quarto source](files/macro/S08_overlapping_generations.qmd)]{.links}
+1. [Unified growth theory](files/macro/S09_unified_theory.html) [[Quarto source](files/macro/S09_unified_theory.qmd)]{.links}
+1. [Simulations](files/macro/S10_Simulations.html) [[Quarto source](files/macro/S10_Simulations.qmd)]{.links}
+1. [Fluctuations](files/macro/S11_Fluctuations.html) [[Quarto source](files/macro/S11_Fluctuations.qmd)]{.links}
+1. [Unemployment](files/macro/S12_Unemployment.html) [[Quarto source](files/macro/S12_Unemployment.qmd)]{.links}
+1. [Some financial economics](files/macro/S13_finance.html) [[Quarto source](files/macro/S13_finance.qmd)]{.links}
+1. [Demographics, by Opus 5](files/macro/S14_demographics.html) [[Quarto source](files/macro/S14_demographics.qmd)]{.links}
+:::
+
+## Resources
+
+Main reference: [**Advanced Macroeconomics: An Easy Guide**](https://press.lse.ac.uk/site/books/m/10.31389/lsepress.ame/) by Campante et al.
+
+Other good books:
+
+- [**Macroeconomics** (for PhDs)](https://phdmacrobook.org/downloads/) by Azzimonti et al.
+- [**Economic growth**](http://piketty.pse.ens.fr/files/BarroSalaIMartin2004.pdf) by Barro and Sala-ì-Martin
+- [**Advanced Macroeconomics** (editor website)](https://www.mheducation.com/highered/product/advanced-macroeconomics-romer/M9781260185218.html) by Romer
+
+::: disclaimer
+The data and code are meant for pedagogical use only.
+:::

@@ -1,411 +1,110 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="description" content="Research material on quadratic errors in predictive regressions, joint work with Romain Deguest.">
 
-
-
-
-<title>PRs.knit</title>
-
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+<title>Misspecified predictive regressions · Guillaume Coqueret</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script>
+  /* Apply the visitor's saved light/dark choice before the page paints */
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap">
 
 
-
-
-
-
-<link rel="stylesheet" href="styles.css" type="text/css" />
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
-</style>
-
-
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-
+<link rel="stylesheet" href="assets/site.css">
 </head>
 
 <body>
 
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Guillaume Coqueret</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="research.html">Research</a>
-</li>
-<li>
-  <a href="teaching.html">Teaching</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/shokru">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://twitter.com/g_coqueret">
-    <span class="fa fa-twitter fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fa fa-linkedin fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="index.html">Guillaume Coqueret</a>
+  <div class="site-tools">
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="teaching.html">Teaching</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden="">
+      <svg class="i-moon" viewbox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"></path></svg>
+      <svg class="i-sun" viewbox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"></path></svg>
+    </button>
+  </div>
+</header>
+<span id="content"></span>
 
 
 
 
+<div class="page-head">
+<p><span class="crumb"><a href="research.html">Research</a></span></p>
+<h1 id="cost-opportunities-in-misspecified-predictive-regressions">Cost &amp; opportunities in misspecified predictive regressions</h1>
+<p>Research and presentation material on the topic of quadratic errors in predictive regressions. Joint work with <a href="https://sites.google.com/site/romaindeguestsite/research"><strong>Romain Deguest</strong></a>.</p>
 </div>
-
-
-<p><br/><br />
-<br/></p>
-<div id="cost-opportunities-in-misspecified-predictive-regressions"
-class="section level1">
-<h1>Cost &amp; opportunities in misspecified predictive regressions</h1>
-<p>This page contains research and presentation material on the topic of
-quadratic errors in predictive regressions.<br />
-This is joint work with
-<a href="https://sites.google.com/site/romaindeguestsite/research" target="_blank"><strong>Romain
-Deguest</strong></a>.</p>
-<hr />
-<div id="files" class="section level2">
-<h2>Files</h2>
+<h2 id="theoretical-contributions">Theoretical contributions</h2>
 <ul>
-<li>The <strong>theoretical contributions</strong> of the paper are
-decomposed into:
-<ul>
-<li><a href="files/PRs/comparison.nb.html" target="_blank"><strong>Comparisons
-of methods</strong></a>: tests between integral formulae and Monte-Carlo
-simulations. This requires
-<a href="files/PRs/R_functions.R" target="_blank"><strong>R
-functions</strong></a> and
-<a href="files/PRs/c_functions.cpp" target="_blank"><strong>C
-functions</strong></a>.</li>
-<li><a href="files/PRs/sensitivity.nb.html" target="_blank"><strong>Sensitivity
-analysis</strong></a>: impact of persistence, forecasting horizon and
-sample size on loss / R^2.<br />
-</li>
-<li><a href="files/PRs/univariate.nb.html" target="_blank"><strong>Univariate
-learning</strong></a>: comparison between PRs and univariate learning,
-that is, regression on lagged values of the process.</li>
-</ul></li>
-<li>All our <strong>empirical results</strong> are based on the
-following
-<a href="files/PRs/emp_func.Rmd" target="_blank"><strong>RMarkdown
-notebook</strong></a> and the function
-<a href="files/PRs/r_func.R" target="_blank"><strong>file</strong></a>.
-The data can be found
-<a href="files/PRs/data_exp.RData" target="_blank"><strong>here</strong></a>
-(.RData format). It is based on that of Welch and Goyal (2008) plus one
-variable from Novy-Marx (2014).<br />
-The source for the multiple analyses are the following:
-<ul>
-<li><a href="files/PRs/impact_rho_web.nb.html" target="_blank"><strong>impact
-of rho_y</strong></a><br />
-</li>
-<li>value of
-<a href="files/PRs/constraints.nb.html" target="_blank"><strong>economic
-constraints</strong></a><br />
-</li>
-<li>aggregate
-<a href="files/PRs/variance.nb.html" target="_blank"><strong>variance
-forecasting</strong></a></li>
-</ul></li>
+<li><a href="files/PRs/comparison.nb.html"><strong>Comparisons of methods</strong></a>: tests between integral formulae and Monte-Carlo simulations. Requires the <a href="files/PRs/R_functions.R">R functions</a> and <a href="files/PRs/c_functions.cpp">C functions</a>.</li>
+<li><a href="files/PRs/sensitivity.nb.html"><strong>Sensitivity analysis</strong></a>: impact of persistence, forecasting horizon and sample size on loss / R<sup>2</sup>.</li>
+<li><a href="files/PRs/univariate.nb.html"><strong>Univariate learning</strong></a>: comparison between PRs and univariate learning, that is, regression on lagged values of the process.</li>
 </ul>
-<!--    
-- Presentation <a href="files/PRs/slides.html" target="_blank"><strong>slides</strong></a>
-- Paper on <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3709412" target="_blank"><strong>SSRN</strong></a>   
+<h2 id="empirical-results">Empirical results</h2>
+<p>All empirical results are based on this <a href="files/PRs/emp_func.Rmd"><strong>RMarkdown notebook</strong></a> and this <a href="files/PRs/r_func.R"><strong>function file</strong></a>. The <a href="files/PRs/data_exp.RData"><strong>data</strong></a> (.RData format) is based on that of Welch and Goyal (2008) plus one variable from Novy-Marx (2014). Sources of the analyses:</p>
+<ul>
+<li><a href="files/PRs/impact_rho_web.nb.html"><strong>Impact of rho_y</strong></a></li>
+<li>Value of <a href="files/PRs/constraints.nb.html"><strong>economic constraints</strong></a></li>
+<li>Aggregate <a href="files/PRs/variance.nb.html"><strong>variance forecasting</strong></a></li>
+</ul>
+<!--
+- Presentation [slides](files/PRs/slides.html)
+- Paper on [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3709412)
 -->
-<p><strong>References</strong>:<br />
-- Welch, I., &amp; Goyal, A. (2008). A comprehensive look at the
-empirical performance of equity premium prediction. <em>Review of
-Financial Studies</em>, 21(4), 1455-1508.<br />
-- Novy-Marx, R. (2014). Predicting anomaly performance with politics,
-the weather, global warming, sunspots, and the stars. <em>Journal of
-Financial Economics</em>, 112(2), 137-146.</p>
-<hr />
-<hr />
-<p><strong>DISCLAIMER</strong>: the <strong>data</strong> and
-<strong>code</strong> are meant for research and pedagogical use
-only.</p>
-<hr />
-</div>
+<h2 id="references">References</h2>
+<ul>
+<li>Welch, I., &amp; Goyal, A. (2008). A comprehensive look at the empirical performance of equity premium prediction. <em>Review of Financial Studies</em>, 21(4), 1455-1508.</li>
+<li>Novy-Marx, R. (2014). Predicting anomaly performance with politics, the weather, global warming, sunspots, and the stars. <em>Journal of Financial Economics</em>, 112(2), 137-146.</li>
+</ul>
+<div class="disclaimer">
+<p>The <strong>data</strong> and <strong>code</strong> are meant for research and pedagogical use only.</p>
 </div>
 
 
+<footer class="site-footer">
+  <span>Updated October 2026</span>
+  <span class="footer-links">
+    <a href="https://github.com/shokru" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://twitter.com/g_coqueret" target="_blank" rel="noopener">X / Twitter</a>
+  </span>
+</footer>
+<script src="assets/site.js"></script>
 
 
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
 
 
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</body></html>

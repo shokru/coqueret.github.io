@@ -1,422 +1,111 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
-<html>
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
 
-<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta charset="utf-8" />
-<meta name="generator" content="pandoc" />
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+<meta name="description" content="Teaching material for a course on dynamic dashboard applications with R and Shiny.">
 
-
-
-
-<title>shiny.knit</title>
-
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
-<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
-<script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-
-<style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
-
-<style type="text/css">code{white-space: pre;}</style>
-<script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+<title>Dynamic dashboards with R &amp; Shiny · Guillaume Coqueret</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
 }
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+</style>
+
+
+<script>
+  /* Apply the visitor's saved light/dark choice before the page paints */
+  try {
+    var t = localStorage.getItem("theme");
+    if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+  } catch (e) {}
 </script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;display=swap">
 
 
-
-
-
-
-<link rel="stylesheet" href="styles.css" type="text/css" />
-
-
-
-<style type = "text/css">
-.main-container {
-  max-width: 940px;
-  margin-left: auto;
-  margin-right: auto;
-}
-img {
-  max-width:100%;
-}
-.tabbed-pane {
-  padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
-}
-button.code-folding-btn:focus {
-  outline: none;
-}
-summary {
-  display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
-}
-pre code {
-  padding: 0;
-}
-</style>
-
-
-<style type="text/css">
-.dropdown-submenu {
-  position: relative;
-}
-.dropdown-submenu>.dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover>.dropdown-menu {
-  display: block;
-}
-.dropdown-submenu>a:after {
-  display: block;
-  content: " ";
-  float: right;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-  border-width: 5px 0 5px 5px;
-  border-left-color: #cccccc;
-  margin-top: 5px;
-  margin-right: -10px;
-}
-.dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
-}
-.dropdown-submenu.pull-left {
-  float: none;
-}
-.dropdown-submenu.pull-left>.dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  border-radius: 6px 0 6px 6px;
-}
-</style>
-
-<script type="text/javascript">
-// manage active state of menu based on current page
-$(document).ready(function () {
-  // active menu anchor
-  href = window.location.pathname
-  href = href.substr(href.lastIndexOf('/') + 1)
-  if (href === "")
-    href = "index.html";
-  var menuAnchor = $('a[href="' + href + '"]');
-
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
-});
-</script>
-
-<!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-  background-color: transparent;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
-<!-- code folding -->
-
-
-
-
+<link rel="stylesheet" href="assets/site.css">
 </head>
 
 <body>
 
-
-<div class="container-fluid main-container">
-
-
-
-
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="index.html">Guillaume Coqueret</a>
-    </div>
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li>
-  <a href="research.html">Research</a>
-</li>
-<li>
-  <a href="teaching.html">Teaching</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="http://github.com/shokru">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://twitter.com/g_coqueret">
-    <span class="fa fa-twitter fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="https://www.linkedin.com/in/guillaumecoqueret/">
-    <span class="fa fa-linkedin fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-    </div><!--/.nav-collapse -->
-  </div><!--/.container -->
-</div><!--/.navbar -->
-
-<div id="header">
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <a class="site-name" href="index.html">Guillaume Coqueret</a>
+  <div class="site-tools">
+    <nav class="site-nav" aria-label="Main">
+      <a href="index.html">About</a>
+      <a href="research.html">Research</a>
+      <a href="teaching.html">Teaching</a>
+    </nav>
+    <button class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" hidden="">
+      <svg class="i-moon" viewbox="0 0 24 24" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"></path></svg>
+      <svg class="i-sun" viewbox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"></path></svg>
+    </button>
+  </div>
+</header>
+<span id="content"></span>
 
 
 
 
+<div class="page-head">
+<p><span class="crumb"><a href="teaching.html">Teaching</a></span></p>
+<h1 id="coding-dynamic-dashboard-applications-with-r-shiny">Coding dynamic dashboard applications (with R &amp; Shiny)</h1>
+<p>Teaching material for a course on dynamic dashboards.</p>
 </div>
-
-
-<p><br/></p>
-<div id="coding-dynamic-dashboard-applications-with-r-shiny"
-class="section level1">
-<h1>Coding dynamic dashboard applications (with R &amp; Shiny)</h1>
-<p>This page contains teaching material for a course on dynamic
-dashboards.</p>
-<hr />
-<div id="sessions" class="section level2">
-<h2>Sessions</h2>
-<p>The links below lead to html <strong>slides</strong> and course
-<strong>material</strong>.</p>
-<ol style="list-style-type: decimal">
-<li><p>Introduction to <strong>R/RStudio</strong> and the
-<strong>tidyverse</strong> (tidying with tidyr, wrangling with dplyr):
-<a href="files/shiny/S1_tidyverse.html" target="_blank"><strong>slides</strong></a>
-and sample notebook in
-<a href="files/shiny/notebook_options.Rmd" target="_blank"><strong>RMarkdown</strong></a>
-or in
-<a href="files/shiny/notebook_options.html" target="_blank"><strong>html</strong></a></p></li>
-<li><p><strong>Basic R instructions</strong> (matrices, dataframes,
-indexing, data modes):
-<a href="files/shiny/S2_base.html" target="_blank"><strong>slides</strong></a>,
-<a href="files/shiny/movies_script.Rmd" target="_blank"><strong>sample
-notebook</strong></a> and
-<a href="files/shiny/Tidyverse_exercises_2.Rmd" target="_blank"><strong>exercise
-notebook</strong></a></p></li>
-<li><p><strong>Plots</strong> (ggplot, gganimate, plotly):
-<a href="files/shiny/S3_plots.html" target="_blank"><strong>slides</strong></a>
-and
-<a href="files/shiny/S3_exercises.html" target="_blank"><strong>exercises</strong></a></p></li>
-<li><p><strong>Shiny 1</strong> (User Interface &amp; Server dialog):
-<a href="files/shiny/S4_ui_server.html" target="_blank"><strong>slides</strong></a>
-and
-<a href="files/shiny/S4_exercises.html" target="_blank"><strong>exercises</strong></a>.
-More importantly: the
-<a href="files/shiny/steps4.zip" target="_blank"><strong>examples</strong></a>.</p></li>
-<li><p><strong>Shiny 2</strong> (User Interface layout):
-<a href="files/shiny/S5_UI_layout.html" target="_blank"><strong>slides</strong></a>
-and
-<a href="files/shiny/S5_exercises.html" target="_blank"><strong>exercises</strong></a>.
-More importantly: the
-<a href="files/shiny/steps5.zip" target="_blank"><strong>examples</strong></a>.</p></li>
-<li><p><strong>Shiny 3</strong> (Further options &amp; deployment):
-<a href="files/shiny/S6_deploy.html" target="_blank"><strong>slides</strong></a>
-and more importantly: the
-<a href="files/shiny/steps6.zip" target="_blank"><strong>examples</strong></a>.</p></li>
-<li><p><strong>Geocomputing, Twitter data &amp; simple text
-mining</strong>:
-<a href="files/shiny/geocomputing.nb.html" target="_blank"><strong>notebook
-for maps</strong></a> and
-<a href="files/shiny/Mastodon_text.nb.html" target="_blank"><strong>notebook
-for Mastodon text analysis</strong></a> +
-<a href="files/shiny/Geocomputing.zip" target="_blank"><strong>all
-files</strong></a> for the maps.</p></li>
-<li><p><strong>Modelling</strong> &amp; <strong>case study</strong>:
-<a href="files/shiny/S8.zip" target="_blank"><strong>all files
-(zipped)</strong></a>.</p></li>
+<h2 id="sessions">Sessions</h2>
+<p>Each session links to HTML <strong>slides</strong> and course <strong>material</strong>.</p>
+<div class="sessions">
+<ol type="1">
+<li>Introduction to <strong>R/RStudio</strong> and the <strong>tidyverse</strong> (tidying with tidyr, wrangling with dplyr) <span class="links"><a href="files/shiny/S1_tidyverse.html">Slides</a> <a href="files/shiny/notebook_options.Rmd">Sample notebook (Rmd)</a> <a href="files/shiny/notebook_options.html">Sample notebook (html)</a></span></li>
+<li><strong>Basic R instructions</strong> (matrices, dataframes, indexing, data modes) <span class="links"><a href="files/shiny/S2_base.html">Slides</a> <a href="files/shiny/movies_script.Rmd">Sample notebook</a> <a href="files/shiny/Tidyverse_exercises_2.Rmd">Exercise notebook</a></span></li>
+<li><strong>Plots</strong> (ggplot, gganimate, plotly) <span class="links"><a href="files/shiny/S3_plots.html">Slides</a> <a href="files/shiny/S3_exercises.Rmd">Exercises (Rmd)</a></span></li>
+<li><strong>Shiny 1</strong> (User Interface &amp; Server dialog) <span class="links"><a href="files/shiny/S4_ui_server.html">Slides</a> <a href="files/shiny/S4_exercises.html">Exercises</a> <a href="files/shiny/steps4.zip"><strong>Examples</strong></a></span></li>
+<li><strong>Shiny 2</strong> (User Interface layout) <span class="links"><a href="files/shiny/S5_UI_layout.html">Slides</a> <a href="files/shiny/S5_exercises.html">Exercises</a> <a href="files/shiny/steps5.zip"><strong>Examples</strong></a></span></li>
+<li><strong>Shiny 3</strong> (Further options &amp; deployment) <span class="links"><a href="files/shiny/S6_deploy.html">Slides</a> <a href="files/shiny/steps6.zip"><strong>Examples</strong></a></span></li>
+<li><strong>Geocomputing, Twitter data &amp; simple text mining</strong> <span class="links"><a href="files/shiny/geocomputing.nb.html">Notebook for maps</a> <a href="files/shiny/Mastodon_text.nb.html">Notebook for Mastodon text analysis</a> <a href="files/shiny/geocomputing.zip">All files for the maps</a></span></li>
+<li><strong>Modelling</strong> &amp; <strong>case study</strong> <span class="links"><a href="files/shiny/S8.zip">All files (zipped)</a></span></li>
 </ol>
-<hr />
 </div>
-<div id="datasets" class="section level2">
-<h2>Datasets</h2>
-<p><img src="files/shiny/ui_server_compact.png" style="width:55%; border:0px solid; margin-right: 20px" align="right"></p>
-<p>The datasets used in the course:
-<a href="files/shiny/songs.RData" target="_blank"><strong>songs</strong></a>,
-<a href="files/shiny/movies.RData" target="_blank"><strong>movies</strong></a>
-and
-<a href="files/shiny/olympics.RData" target="_blank"><strong>olympics</strong></a>.
-Don’t forget to locate them in the app/notebook directory.</p>
-<hr />
-</div>
-<div id="resources" class="section level2">
-<h2>Resources</h2>
-<p><a href="https://mastering-shiny.org" target="_blank"><strong>Mastering
-shiny</strong></a>: Hadley Wickham’s book.</p>
-<p><a href="https://shiny.rstudio.com/tutorial/" target="_blank"><strong>Shiny
-tutorials</strong></a>: efficient material (by RStudio).</p>
-<p><a href="https://rstudio.github.io/shinydashboard/" target="_blank"><strong>Shiny
-dashboard</strong></a>: the package’s webpage.</p>
-<hr />
-<p><strong>DISCLAIMER</strong>: the data and code are meant for
-pedagogical use only.</p>
-<hr />
-</div>
+<h2 id="datasets">Datasets</h2>
+<p>The datasets used in the course: <a href="files/shiny/songs.RData"><strong>songs</strong></a>, <a href="files/shiny/movies.RData"><strong>movies</strong></a> and <a href="files/shiny/olympics.RData"><strong>olympics</strong></a>. Don’t forget to locate them in the app/notebook directory.</p>
+<p><img class="figure-right" src="files/shiny/ui_server_compact.png" alt="Diagram of the dialog between the user interface and the server in a Shiny app"></p>
+<h2 id="resources">Resources</h2>
+<ul>
+<li><a href="https://mastering-shiny.org"><strong>Mastering shiny</strong></a>: Hadley Wickham’s book</li>
+<li><a href="https://shiny.rstudio.com/tutorial/"><strong>Shiny tutorials</strong></a>: efficient material (by RStudio)</li>
+<li><a href="https://rstudio.github.io/shinydashboard/"><strong>Shiny dashboard</strong></a>: the package’s webpage</li>
+</ul>
+<div class="disclaimer">
+<p>The data and code are meant for pedagogical use only.</p>
 </div>
 
 
+<footer class="site-footer">
+  <span>Updated October 2026</span>
+  <span class="footer-links">
+    <a href="https://github.com/shokru" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://www.linkedin.com/in/guillaume-coqueret/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://twitter.com/g_coqueret" target="_blank" rel="noopener">X / Twitter</a>
+  </span>
+</footer>
+<script src="assets/site.js"></script>
 
 
-</div>
-
-<script>
-
-// add bootstrap table styles to pandoc tables
-function bootstrapStylePandocTables() {
-  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
-}
-$(document).ready(function () {
-  bootstrapStylePandocTables();
-});
 
 
-</script>
-
-<!-- tabsets -->
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
-  });
-});
-</script>
-
-<!-- code folding -->
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
-
-</body>
-</html>
+</body></html>

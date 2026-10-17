@@ -1,0 +1,25 @@
+---
+pagetitle: "Persistence in supervised learning models · Guillaume Coqueret"
+description: "Research material on using long-term returns in machine learning models for factor investing."
+---
+
+::: page-head
+[[Research](research.html)]{.crumb}
+
+# Persistence in factor-based supervised learning models
+
+Research material on the topic of using long term returns in machine learning models for factor investing.
+:::
+
+## Files
+
+All notebooks are available in original .Rmd format upon request.
+
+- The [**dataset**](https://github.com/shokru/mlfactor.github.io/tree/master/material)
+- Simulation notebooks: [**sampling depth analysis**](files/tests_window.nb.html) and [**effect of autocorrelation levels**](files/lessons_sim.nb.html)
+- The notebook for the [**baseline results**](files/predictions_share.nb.html)
+- The [**paper**](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3588261)
+
+::: disclaimer
+The **data** and **code** are meant for research and pedagogical use only.
+:::

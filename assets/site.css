@@ -28,15 +28,19 @@
 
   --measure: 46rem;
   --date-col: 7.25rem;
+  --show-moon: block;
+  --show-sun: none;
   color-scheme: light;
 }
 
-/* Dark mode follows the visitor's system setting. Delete both blocks for light only. */
+/* Dark mode: follows the visitor's system setting, unless they pick a theme
+   with the switch in the header (stored as data-theme on <html>). */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --paper: #11161F; --ink: #E4E8EF; --muted: #A4ADBD; --faint: #7A8496;
     --rule: #262E3C; --accent: #93B2E6; --accent-soft: #1C2740;
     --sage: #A7C29F; --sage-soft: #1D2A1C;
+    --show-moon: none; --show-sun: block;
     color-scheme: dark;
   }
 }
@@ -44,6 +48,7 @@
   --paper: #11161F; --ink: #E4E8EF; --muted: #A4ADBD; --faint: #7A8496;
   --rule: #262E3C; --accent: #93B2E6; --accent-soft: #1C2740;
   --sage: #A7C29F; --sage-soft: #1D2A1C;
+  --show-moon: none; --show-sun: block;
   color-scheme: dark;
 }
 
@@ -100,6 +105,15 @@ p { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 cite { font-style: italic; }
 
+/* Lists written in markdown (no class) */
+ul:not([class]), ol:not([class]) { padding-left: 1.25rem; }
+ul:not([class]) { list-style: disc; }
+ol:not([class]) { list-style: decimal; }
+ul:not([class]) li::marker { color: var(--faint); }
+ul:not([class]) > li + li, ol:not([class]) > li + li { margin-top: 0.375rem; }
+section p + p, .content p + p { margin-top: 0.75rem; }
+h2 + p, p + ul, p + ol { margin-top: 0.5rem; }
+
 .skip-link {
   position: absolute; left: -999px; top: 0;
   background: var(--ink); color: var(--paper); padding: 0.5rem 0.75rem;
@@ -118,6 +132,7 @@ cite { font-style: italic; }
   font-size: 1.1875rem; font-weight: 500;
   color: var(--ink); text-decoration: none;
 }
+.site-tools { display: flex; align-items: center; gap: 1.25rem; }
 .site-nav { display: flex; gap: 1.5rem; font-family: var(--sans); font-size: var(--fs-meta); }
 .site-nav a { color: var(--muted); text-decoration: none; padding-block: 0.25rem; }
 .site-nav a:hover { color: var(--ink); }
@@ -132,6 +147,23 @@ cite { font-style: italic; }
 }
 .site-footer a { color: var(--muted); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+
+.theme-toggle {
+  appearance: none;
+  display: inline-grid; place-items: center;
+  width: 2rem; height: 2rem;
+  padding: 0;
+  border: 1px solid var(--rule); border-radius: 999px;
+  background: transparent; color: var(--muted);
+  cursor: pointer;
+}
+.theme-toggle:hover { color: var(--ink); border-color: var(--faint); }
+.theme-toggle svg {
+  width: 1rem; height: 1rem;
+  fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
+}
+.theme-toggle .i-moon { display: var(--show-moon); }
+.theme-toggle .i-sun  { display: var(--show-sun); }
 
 /* ---------- Sections ---------- */
 
@@ -261,23 +293,64 @@ h2 { margin-top: 3rem; }
 /* ---------- Profiles & contact (home) ---------- */
 
 .profiles ul {
+  list-style: none; padding: 0;
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.375rem 1.5rem;
   font-family: var(--sans); font-size: var(--fs-meta);
 }
 .line-block { line-height: 1.55; }
 
+/* ---------- Course and material pages ---------- */
+
+.crumb { font-family: var(--sans); font-size: var(--fs-small); margin-bottom: 0.5rem; }
+.crumb a { color: var(--muted); text-decoration: none; }
+.crumb a:hover { color: var(--accent); }
+
+/* Numbered sessions: number in the left column, links at the end of the line */
+.sessions ol {
+  list-style: none; padding: 0; margin: 0;
+  counter-reset: session;
+  display: grid; gap: 0.625rem;
+}
+.sessions li {
+  counter-increment: session;
+  position: relative;
+  padding-left: 2.75rem;
+}
+.sessions li + li { margin-top: 0; }
+.sessions li::before {
+  content: counter(session, decimal-leading-zero);
+  position: absolute; left: 0; top: 0.2em;
+  font-family: var(--sans); font-size: var(--fs-small); color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.links { font-family: var(--sans); font-size: var(--fs-small); margin-left: 0.75rem; }
+.links a { margin-right: 0.75rem; white-space: nowrap; }
+.sessions { margin-top: 0.75rem; }
+/* Sub-pages (with a parent link above the title) get a smaller title */
+.page-head:has(.crumb) h1 { font-size: clamp(1.875rem, 1.4rem + 2vw, 2.5rem); }
+
+.figure-right { max-width: 24rem; margin-top: 1rem; border-radius: 3px; }
+
+.disclaimer {
+  margin-top: 3rem; padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans); font-size: var(--fs-small); color: var(--faint);
+}
+
 /* ---------- Small screens ---------- */
 
 @media (max-width: 640px) {
   :root { --fs-body: 1.0625rem; }
   .site-header { padding-block: 1.25rem 1.5rem; }
+  .sessions li { padding-left: 2.25rem; }
   .intro { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
   .intro .portrait-cell { order: -1; max-width: 8.5rem; }
   .rows { gap: 0.875rem; }
   .row { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .pub { grid-template-columns: 2.75rem minmax(0, 1fr); gap: 0.75rem; }
   .books { grid-template-columns: minmax(0, 1fr); }
-  .profiles ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profiles ul {
+  list-style: none; padding: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   h2 { margin-top: 2.5rem; }
 }

@@ -1,0 +1,40 @@
+---
+pagetitle: "Misspecified predictive regressions · Guillaume Coqueret"
+description: "Research material on quadratic errors in predictive regressions, joint work with Romain Deguest."
+---
+
+::: page-head
+[[Research](research.html)]{.crumb}
+
+# Cost & opportunities in misspecified predictive regressions
+
+Research and presentation material on the topic of quadratic errors in predictive regressions. Joint work with [**Romain Deguest**](https://sites.google.com/site/romaindeguestsite/research).
+:::
+
+## Theoretical contributions
+
+- [**Comparisons of methods**](files/PRs/comparison.nb.html): tests between integral formulae and Monte-Carlo simulations. Requires the [R functions](files/PRs/R_functions.R) and [C functions](files/PRs/c_functions.cpp).
+- [**Sensitivity analysis**](files/PRs/sensitivity.nb.html): impact of persistence, forecasting horizon and sample size on loss / R^2^.
+- [**Univariate learning**](files/PRs/univariate.nb.html): comparison between PRs and univariate learning, that is, regression on lagged values of the process.
+
+## Empirical results
+
+All empirical results are based on this [**RMarkdown notebook**](files/PRs/emp_func.Rmd) and this [**function file**](files/PRs/r_func.R). The [**data**](files/PRs/data_exp.RData) (.RData format) is based on that of Welch and Goyal (2008) plus one variable from Novy-Marx (2014). Sources of the analyses:
+
+- [**Impact of rho_y**](files/PRs/impact_rho_web.nb.html)
+- Value of [**economic constraints**](files/PRs/constraints.nb.html)
+- Aggregate [**variance forecasting**](files/PRs/variance.nb.html)
+
+<!--
+- Presentation [slides](files/PRs/slides.html)
+- Paper on [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3709412)
+-->
+
+## References
+
+- Welch, I., & Goyal, A. (2008). A comprehensive look at the empirical performance of equity premium prediction. *Review of Financial Studies*, 21(4), 1455-1508.
+- Novy-Marx, R. (2014). Predicting anomaly performance with politics, the weather, global warming, sunspots, and the stars. *Journal of Financial Economics*, 112(2), 137-146.
+
+::: disclaimer
+The **data** and **code** are meant for research and pedagogical use only.
+:::

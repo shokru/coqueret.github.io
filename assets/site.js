@@ -1,20 +1,52 @@
 /* Small enhancements; every page still works without JavaScript. */
 (function () {
-  // 1. Underline the current page in the top menu
+  var root = document.documentElement;
+
+  // 1. Underline the current section in the top menu.
+  //    Sub-pages (course or research material) point to their parent
+  //    with the small link above their title (class "crumb").
   var page = location.pathname.split("/").pop() || "index.html";
+  var crumb = document.querySelector(".crumb a");
+  var current = crumb ? crumb.getAttribute("href") : page;
   document.querySelectorAll(".site-nav a").forEach(function (a) {
-    if (a.getAttribute("href") === page) a.setAttribute("aria-current", "page");
+    if (a.getAttribute("href") === current) a.setAttribute("aria-current", "page");
   });
 
-  // 2. Links to other sites open in a new tab
-  document.querySelectorAll('a[href^="http"]').forEach(function (a) {
-    if (a.hostname !== location.hostname) {
+  // 2. Light / dark switch. The choice is remembered in the visitor's browser;
+  //    until they use it, the site follows their system setting.
+  var btn = document.querySelector(".theme-toggle");
+  if (btn) {
+    var media = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+    var effective = function () {
+      return root.getAttribute("data-theme") || (media && media.matches ? "dark" : "light");
+    };
+    var label = function () {
+      var text = effective() === "dark" ? "Switch to light mode" : "Switch to dark mode";
+      btn.setAttribute("aria-label", text);
+      btn.title = text;
+    };
+    btn.addEventListener("click", function () {
+      var next = effective() === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("theme", next); } catch (e) {}
+      label();
+    });
+    if (media && media.addEventListener) media.addEventListener("change", label);
+    label();
+    btn.hidden = false;
+  }
+
+  // 3. Links to other sites, notebooks, slides and papers open in a new tab
+  document.querySelectorAll("a[href]").forEach(function (a) {
+    var href = a.getAttribute("href");
+    var external = /^https?:/.test(href) && a.hostname !== location.hostname;
+    if (external || /^(files|papers)\//.test(href)) {
       a.target = "_blank";
       a.rel = "noopener";
     }
   });
 
-  // 3. Topic filter for published articles (research page).
+  // 4. Topic filter for published articles (research page).
   //    Buttons are built from the "topic" values in data/articles.yml,
   //    so a new topic gets its own button automatically.
   var list = document.querySelector("#listing-articles .pubs");
