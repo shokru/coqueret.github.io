@@ -33,7 +33,7 @@ My research interests include supervised learning for financial economics, susta
 ::::
 
 :::: portrait-cell
-<img class="portrait" src="images/gcoq-portrait.jpg" width="480" height="600" alt="Guillaume Coqueret speaking at a conference">
+<img class="portrait" src="images/gcoq-portrait.jpg" width="480" height="660" alt="Guillaume Coqueret speaking at a conference">
 ::::
 :::::
 
