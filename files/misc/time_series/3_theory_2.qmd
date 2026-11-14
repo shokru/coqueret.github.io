@@ -1,0 +1,1461 @@
+---
+title: "Time series theory (2/2): R and Python"
+engine: knitr
+execute:
+  error: false
+format:
+  html:
+    toc: true
+    number-sections: true
+    embed-resources: true
+    grid:
+      margin-width: 410px
+      body-width: 950px
+      sidebar-width: 210px
+---
+
+
+<style>
+.main-container {
+max-width: 1440px !important;
+margin-left: auto;
+margin-right: auto;
+}
+</style>
+
+
+This notebook presents the foundational models in time-series beyond the random walk: **autoregressive** and **moving-average** processes.  
+
+
+# Getting started (packages)
+
+This notebook provides both R & Python code.
+The language tabs are synchronized throughout the document.
+Both languages execute from top to bottom (imperatively sequentially).
+
+Quarto uses **knitr** and **reticulate** to execute both languages.
+Install any missing R packages from the list below, including reticulate (1.41 or later).
+The loading chunk declares Python dependencies, including the Excel reader, for reticulate’s managed environment.
+
+For an existing Python installation, use `python -m pip install numpy pandas matplotlib seaborn scipy statsmodels requests openpyxl yfinance plotly`.
+Render with `quarto render 3_theory_2_R_Python.qmd`.
+Both languages use seed 42, but their random generators produce different samples.
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: load_R
+#| warning: false
+#| message: false
+
+library(tidyverse)  # THE library for data science
+library(openxlsx)   # A cool package to deal with Excel files/formats
+library(quantmod)   # Package for financial data extraction
+library(tsibble)    # TS with dataframes framework 
+library(fable)      # Package for time-series models & predictions
+library(feasts)     # Package for time-series analysis
+library(forecast)   # Another package for TS (forecasting)
+library(tseries)    # Simple package for time-series tests
+library(plotly)     # For 3D graphs
+library(mvtnorm)    # For multivariate Gaussian distributions
+library(crypto2)    # For cryto data
+library(ggsci)      # For color palettes
+reticulate::py_require(c(
+  "numpy", "pandas", "matplotlib", "seaborn", "scipy", "statsmodels",
+  "requests", "openpyxl>=3.1.5", "yfinance", "plotly"
+))
+set.seed(42)        # Random seed
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_01
+#| warning: false
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import requests
+import yfinance as yf
+import plotly.express as px
+import statsmodels.api as sm
+from statsmodels.graphics.tsaplots import plot_acf
+from statsmodels.tsa.stattools import acf
+from statsmodels.tsa.arima_process import arma_generate_sample
+from statsmodels.tsa.ar_model import ar_select_order
+from statsmodels.tsa.arima.model import ARIMA
+
+rng = np.random.default_rng(42)
+sns.set_theme(style="whitegrid")
+````
+
+:::
+
+# The auto-regressive model
+
+## Introduction
+
+::: {.callout-note collapse="false"}
+## Definition
+Let us introduce a small yet crucial modification to the **random walk** process and consider:
+$$x_t=a+\rho x_{t-1}+e_t, \quad a \in \mathbb{R}, \quad |\rho|< 1.$$
+This process is called the **Auto-Regressive model** of order one and is written AR(1).   
+::: 
+
+Iterating, we have:
+$$x_t = a + \rho (a + \rho x_{t-2}+e_{t-1})+e_{t}$$
+and, until infinity...
+$$x_t=a \sum_{k=0}^\infty\rho^k+ \sum_{k=0}^\infty \rho^ke_{t-k}=\frac{a}{1-\rho}+ \sum_{k=0}^\infty \rho^ke_{t-k},$$
+which explains why we need $|\rho|<1$ (if not, the process **explodes** asymptotically). 
+
+
+## Interpretation
+
+The process' current value is determined by past values plus a contemporary shock.
+
+This makes AR(p) processes useful to model variables that evolve gradually, such as:
+
+- GDP    
+- Inflation   
+- Interest rates    
+- Temperature   
+- Asset **prices**.
+
+In the AR(p) model, because of the **memory**, shocks can have a lasting effect. The higher the $\rho$ parameter, the longer the memory.
+
+## Properties
+
+::: {.callout-note collapse="false"}
+## Basic properties
+We have
+$$\mathbb{E}[x_t]=\frac{a}{1-\rho}, $$
+and when innovations are independent,
+$$\mathbb{V}[x_t]=\mathbb{V}\left[\sum_{k=0}^\infty \rho^ke_{t-k} \right]=\sum_{k=0}^\infty \mathbb{V}\left[\rho^ke_{t-k} \right]=\frac{\sigma^2}{1-\rho^2}.$$
+
+In this case, we see that the **mean** and **variance** do not depend on $t$! (obvious given the infinite series).
+::: 
+
+Moreover, 
+
+$$\mathbb{C}ov[x_t,x_{t+h}]=\mathbb{C}ov\left[\sum_{k=0}^\infty \rho^ke_{t-k} ,\sum_{j=0}^\infty \rho^je_{t-j+h} \right]=\sum_{k=0}^\infty \sum_{j=0}^\infty \mathbb{C}ov\left[ \rho^ke_{t-k}, \rho^je_{t-j+h} \right].$$
+Again, we need to focus on the cases when the time indices are equal, so
+$$\mathbb{C}ov[x_t,x_{t+h}]=\sum_{k=0}^\infty \sum_{j=h}^\infty \mathbb{C}ov\left[ \rho^ke_{t-k}, \rho^{j-h}e_{t-j} \right]=\sum_{k=0}^\infty \sum_{j=h}^\infty \rho^{k+j-h}\mathbb{C}ov[e_{t-k},e_{t-j} ].$$
+
+Thus, for $j=k$, we get (mind the change in index, $m=j-h$)
+$$\mathbb{C}ov[x_t,x_{t+h}]=\sigma^2 \sum_{j=h}^\infty \rho^{2j-h}=\sigma^2 \rho^{-h} \sum_{j=h}^\infty \rho^{2j}=\sigma^2 \rho^h  \sum_{m=0}^\infty \rho^{2m}=\sigma^2\frac{\rho^h}{1-\rho^2}.$$
+Again, this does not depend on the time index $t$. 
+If innovations are Gaussian, as Gaussian distributions are entirely defined by their first two moments, this means that the full (unconditional) distribution of the process is **invariant**. This very convenient property is called **stationarity**, and comes in various flavors (have a look on the net!). It is very suitable for analysis because now we know that the object that we study (the underlying distribution) is stable in time. 
+
+The above quantity, which measures the link between different realizations of the same variable (at different points in time) is very important. Often, the covariance is scaled by the variance to yield the **auto-correlation** of the process. 
+
+::: {.callout-note collapse="false"}
+Relatedly, there is the **auto-correlogram**, which is defined, for stationary series, as 
+
+$$\gamma(h)=\mathbb{C}orr[x_t,x_{t+h}].$$
+
+The sample version is
+$$\hat{\gamma}(k) = \frac{\sum_{t=1}^{n-k}(x_t - \bar{x})(x_{t+k} - \bar{x})}{\sum_{t=1}^{n}(x_t - \bar{x})^2}.$$
+
+For the AR(1), $\gamma(h)=\rho^h$, a super simple form: as $h$ increases, the correlation decreases following a power pattern. 
+:::
+
+More generally, autoregressive models of higher orders (AR(p)) have memory that goes back further in time:
+
+$$x_t=a+\sum_{k=1}^p\rho_k x_{t-k}+e_t, \quad a \in \mathbb{R},$$
+
+The average of the process is 
+$$\mathbb{E}[x_t]=\frac{a}{1-\rho_1-\dots-\rho_p}.$$ 
+
+This of course imposes a restriction on the coefficients...   
+However, there is no simple expression for the variance...
+
+## Illustration (simulations)
+
+Let's simulate two such processes. We refer to the [ARIMA](https://stat.ethz.ch/R-manual/R-devel/library/stats/html/arima.html) page for details on the implementation. The order is $(p,d,q)$, like in the ARMA(p,q) process (the $d$ is for integration, a notion out of the scope of this course, simply linked to the fact that the model can be differentiated if need be).
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: AR_process
+#| warning: false
+#| message: false
+#| fig.height: 4
+#| fig.align: center
+N <- 180
+x_02 <- arima.sim(list(order = c(1,0,0), ar=.02), n = N)
+x_98 <- arima.sim(list(order = c(1,0,0), ar=.98), n = N)
+tibble(time = 1:N, x_02 = x_02, x_98 = x_98) |>
+  pivot_longer(-time, names_to = "process", values_to = "values") |>
+  ggplot(aes(x = time, y = values, color = process)) + geom_line(linewidth = 1) +
+  theme_bw() +
+  scale_color_manual(values = c("#FD9911", "#0066CC"))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_02
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+N = 180
+x_02 = arma_generate_sample([1, -0.02], [1], nsample=N,
+                           burnin=1000, distrvs=rng.standard_normal)
+x_98 = arma_generate_sample([1, -0.98], [1], nsample=N,
+                           burnin=1000, distrvs=rng.standard_normal)
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(np.arange(1, N + 1), x_02, label="x_02", color="#FD9911")
+ax.plot(np.arange(1, N + 1), x_98, label="x_98", color="#0066CC")
+ax.set(xlabel="Time", ylabel="Value")
+ax.legend(title="Process")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+
+One of the processes seems to be just white noise, the other evolves more slowly and oscillates much less. 
+
+Let's have a look at the auto-correlogram of the series. In **R**, ACF means AutoCorrelation Function. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: ACF_plot
+#| warning: false
+#| message: false
+#| fig.align: center
+#| fig.height: 4
+ggAcf(x_98) + theme_bw() + 
+  geom_function(fun = function(x) 0.98^x, color = "#11DD33")
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_03
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+acf_lags = int(np.floor(10 * np.log10(len(x_98))))
+fig, ax = plt.subplots(figsize=(8, 4))
+plot_acf(x_98, lags=acf_lags, bartlett_confint=False, ax=ax)
+h = np.arange(acf_lags + 1)
+ax.plot(h, 0.98 ** h, color="#11DD33", label="Theoretical: 0.98^h")
+ax.set(xlabel="Lag", ylabel="Autocorrelation")
+ax.legend()
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+
+The values we extract from the sample are not exactly those predicted from the model. 
+This comes from size of the sample, which is too small. As it increases, we would obtain a perfect fit (you can try!). 
+
+
+# Moving averages
+
+## Definitions
+
+::: {.callout-note collapse="false"}
+## Simple moving average
+
+The SMA, in its backward-looking version:
+$$\text{MA}_t(X,N) = \frac{1}{N} \sum_{n=1}^N X_{t+1-n} . $$
+:::
+
+But maybe some observations matter more than others.
+
+::: {.callout-note collapse="false"}
+## Exponentially-weighted moving average
+
+The EWMA, backward-looking:
+$$\text{EWMA}_t(X, \alpha) = (1-\alpha) \sum_{n=0}^\infty \alpha^n X_{t-n}, \quad \alpha \in (0,1).  $$
+This gives more weight to the most recent observations. The scaling factor comes from $\sum_{n=0}^\infty \alpha^n=(1-\alpha)^{-1}$. 
+:::
+
+The averages can also be forward-looking (with knowledge of the future):
+$$\text{MA}^{\text{fwd}}_t(X,N) = \frac{1}{N} \sum_{n=1}^N X_{t-1+n}.  $$
+
+Or sometimes they can even be **centered** (taking $N/2$ before and $N/2$ after). This depends on the context.
+
+**Updating** is very easy for the EWMA (based on the previous value of EWMA):
+
+$$\text{EWMA}_t(X, \alpha) = \alpha \text{EWMA}_{t-1}(X, \alpha) + (1-\alpha) X_t .$$
+
+
+For the simple MA, it is:
+
+$$\text{MA}_{t+1} = \text{MA}_{t} + \frac{1}{m}\left( X_{t+1} - X_{t-m+1} \right).$$
+
+## Examples
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.height: 4.5
+#| fig.align: center
+t <- 1:90
+d <- t + 10*sin(t*10) + 10*rnorm(length(t))
+MA_05 <- SMA(d, 5)
+EWMA_10 <- EMA(d, 10, ratio = 0.5)
+MA_20 <- SMA(d, 20)
+data.frame(t, d, MA_05, EWMA_10, MA_20) |>
+  pivot_longer(-t, values_to = "value", names_to = "series") |>
+  ggplot(aes(x = t, y = value, color = series)) + geom_line(linewidth = 0.9) +
+  theme_classic() + 
+  theme(legend.position = c(0.2,0.8)) +
+  scale_color_d3()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_04
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4.5
+
+t = np.arange(1, 91)
+d = pd.Series(t + 10 * np.sin(t * 10) + 10 * rng.normal(size=len(t)))
+MA_05 = d.rolling(5).mean()
+MA_20 = d.rolling(20).mean()
+# TTR::EMA starts with the mean of the first 10 observations.
+EWMA_10 = pd.Series(np.nan, index=d.index)
+EWMA_10.iloc[9] = d.iloc[:10].mean()
+for i in range(10, len(d)):
+    EWMA_10.iloc[i] = 0.5 * d.iloc[i] + 0.5 * EWMA_10.iloc[i - 1]
+ma_examples = pd.DataFrame({"d": d, "MA_05": MA_05,
+                            "EWMA_10": EWMA_10, "MA_20": MA_20}, index=d.index)
+ax = ma_examples.set_axis(t).plot(figsize=(8, 4.5), linewidth=1.2)
+ax.set(xlabel="Time", ylabel="Value")
+ax.legend(title="Series")
+plt.tight_layout()
+plt.show()
+````
+
+:::
+
+Note that when $N$ is large, the averaging takes some time (i.e., points) and the MA starts later in the sample...
+
+
+# The MA(q)-process
+
+## Introduction
+
+::: {.callout-note collapse="false"}
+## Definition
+A **Moving Average** process of order $q$, denoted MA($q$), models a univariate time series $\{x_t\}$ as a linear function of current and past error terms:
+
+$$
+x_t  = \mu  + e_t  + \theta_1 e_{t-1} + \theta_2 e_{t-2}  + \cdots + \theta_q e_{t-q},
+$$
+
+where:    
+
+- $\mu$ is the mean of the process,    
+-  $e_t$ is a white-noise innovation with variance $\sigma_e^2$,   
+- $\theta_1, \theta_2, \dots, \theta_q$ are MA coefficients.    
+:::
+
+
+The innovations are assumed to satisfy:
+$$e_t \sim (0, \sigma_e^2), \qquad \text{i.i.d.},$$
+
+with:
+$$
+\mathbb{E}[e_t e_{t-s}] = 
+\begin{cases}
+\sigma_e^2, & s = 0, \\
+0, & s \neq 0.
+\end{cases}
+$$
+
+$$\operatorname{Cov}(x_t,x_{t+h})=\sigma_e^2\sum_{s=0}^{q-h}\theta_s\theta_{s+h}, \quad 0\leq h\leq q,\quad \theta_0=1$$
+
+Hence, nonzero terms are those for which $t-s=t+h-r$, i.e., $s = r-h$.   
+
+In short, the **autocovariance function** of an MA($q$) process is nonzero only up to lag $q$:
+
+$$
+\gamma(s) = 
+\begin{cases}
+\sigma_e^2 \left( 1 + \theta_1^2 + \cdots + \theta_q^2 \right), & s = 0, \\[6pt]
+\sigma_e^2 \left( \theta_s + \theta_1 \theta_{s+1} + \cdots + \theta_{q-s} \theta_q \right), & 1 \le s \le q, \\[6pt]
+0, & s > q.
+\end{cases}
+$$
+
+Thus, the MA($q$) process has a finite autocorrelation structure. After a time that is beyond the maximum lag, there is no more (auto-)**correlation**.
+
+## Interpretation
+
+The series is driven entirely by shocks. In an MA(q) process, the value of the time series at time $t$ ($x_t$) is a weighted sum of current and past shocks. These shocks have temporary (not persistent) effects; after some time, they are "forgotten". Hence, MA models have **short memory**.
+
+They are useful when:
+
+- The series reacts sharply to random events (especially true in finance);   
+- The effect dissipates quickly;    
+- The autocorrelation function drops to zero after a few lags.    
+
+## Simulation
+
+We can either build the series manually (interesting intellectually)...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+simulate_ma <- function(n, theta, sigma = 1) {
+  q <- length(theta)
+  epsilon <- rnorm(n + q, mean = 0, sd = sigma)
+  y <- numeric(n)
+  for (t in 1:n) {
+    y[t] <- epsilon[t + q] + sum(theta * epsilon[(t + q - 1):(t)])
+  }
+  return(y)
+}
+ma_series_1 <- simulate_ma(n = N, theta = c(0.6, -0.4), sigma = 1)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_05
+#| warning: false
+
+def simulate_ma(n, theta, sigma=1):
+    q = len(theta)
+    epsilon = rng.normal(scale=sigma, size=n + q)
+    y = np.empty(n)
+    for t in range(n):
+        past_shocks = epsilon[t:t + q][::-1]
+        y[t] = epsilon[t + q] + np.dot(theta, past_shocks)
+    return y
+
+ma_series_1 = simulate_ma(n=N, theta=[0.6, -0.4], sigma=1)
+````
+
+:::
+
+or resort on the R internal function...
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 3
+ma_series_2 <- arima.sim(model = list(ma = c(0.6, -0.4)), n = N)
+data.frame(t = 1:N, x_1 = ma_series_1, x_2 = ma_series_2) |>
+  pivot_longer(-t, names_to = "series", values_to = "value") |> 
+  ggplot(aes(x = t, y = value, color = series)) + geom_line() +
+  theme_classic() + 
+  theme(legend.position = "top")
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_06
+#| warning: false
+#| fig-width: 4
+#| fig-height: 3
+
+ma_series_2 = arma_generate_sample([1], [1, 0.6, -0.4], nsample=N,
+                                 burnin=100, distrvs=rng.standard_normal)
+fig, ax = plt.subplots(figsize=(4, 3))
+ax.plot(np.arange(1, N + 1), ma_series_1, label="Manual")
+ax.plot(np.arange(1, N + 1), ma_series_2, label="statsmodels")
+ax.set(xlabel="Time", ylabel="Value")
+ax.legend(loc="upper center", ncol=2, fontsize=8)
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+The series seem similar indeed
+
+## Reading the ACF and PACF
+
+The ACF measures the correlation between observations at each lag.
+The **partial autocorrelation function** (PACF) removes the linear contribution of the intervening lags.
+At lag two, for example, it measures the link between $x_t$ and $x_{t-2}$ after accounting for $x_{t-1}$.
+
+Compare these two processes, with independent standard Gaussian shocks:
+
+$$
+\underbrace{X_t=0.7X_{t-1}+e_t}_{\mathrm{AR}(1)},
+\qquad
+\underbrace{Y_t=u_t+0.7u_{t-1}}_{\mathrm{MA}(1)}.
+$$ {#eq-acf-pacf-examples}
+
+For the AR(1), the ACF decays with the lag, while the PACF is zero after lag one.
+For the MA(1), the ACF is zero after lag one, while the PACF decays.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: acf-pacf-comparison-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 5.5
+#| fig-cap: "Bars show sample correlations; orange lines show the model values. Each series contains 800 observations."
+
+withr::with_seed(42, {
+  comparison_models <- list(`AR(1)` = list(ar = 0.7),
+                            `MA(1)` = list(ma = 0.7))
+  correlation_comparison <- map_dfr(names(comparison_models), function(model) {
+    specification <- comparison_models[[model]]
+    values <- arima.sim(model = specification, n = 800)
+    tibble(
+      model = model,
+      lag = rep(1:12, 2),
+      measure = rep(c("ACF", "PACF"), each = 12),
+      sample = c(as.numeric(acf(values, lag.max = 12, plot = FALSE)$acf)[-1],
+                 as.numeric(pacf(values, lag.max = 12, plot = FALSE)$acf)),
+      theory = c(do.call(ARMAacf, c(specification, list(lag.max = 12)))[-1],
+                 do.call(ARMAacf, c(specification, list(lag.max = 12, pacf = TRUE)))))
+  }) |>
+    mutate(measure = factor(measure, levels = c("ACF", "PACF")))
+
+  print(ggplot(correlation_comparison, aes(lag, sample)) +
+    geom_hline(yintercept = 0, color = "gray60") +
+    geom_segment(aes(xend = lag, yend = 0), color = "#4477AA", linewidth = 1) +
+    geom_line(aes(y = theory), color = "#D95F02", linewidth = 0.8) +
+    geom_point(aes(y = theory), color = "#D95F02", size = 1.5) +
+    facet_grid(model ~ measure) +
+    scale_x_continuous(breaks = c(1, 3, 6, 9, 12)) +
+    coord_cartesian(ylim = c(-0.5, 0.85)) +
+    labs(x = "Lag", y = "Correlation") + theme_minimal())
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: acf-pacf-comparison-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5.5
+#| fig-cap: "Bars show sample correlations; orange lines show the model values. Each series contains 800 observations."
+
+from statsmodels.tsa.arima_process import ArmaProcess
+from statsmodels.tsa.stattools import pacf
+
+comparison_rng = np.random.default_rng(42)
+comparison_models = [("AR(1)", ArmaProcess([1, -0.7], [1])),
+                     ("MA(1)", ArmaProcess([1], [1, 0.7]))]
+comparison_lags = np.arange(1, 13)
+fig, axes = plt.subplots(2, 2, figsize=(8, 5.5), sharex=True, sharey=True)
+for row, (name, process) in enumerate(comparison_models):
+    values = process.generate_sample(nsample=800, burnin=1000,
+                                     distrvs=comparison_rng.standard_normal)
+    sample_correlations = [acf(values, nlags=12, fft=True)[1:],
+                           pacf(values, nlags=12, method="ywm")[1:]]
+    model_correlations = [process.acf(lags=13)[1:], process.pacf(lags=13)[1:]]
+    for col, measure in enumerate(["ACF", "PACF"]):
+        ax = axes[row, col]
+        ax.axhline(0, color="gray", linewidth=0.7)
+        ax.vlines(comparison_lags, 0, sample_correlations[col], color="#4477AA", linewidth=2)
+        ax.plot(comparison_lags, model_correlations[col], "o-", color="#D95F02", markersize=3)
+        ax.set(title=f"{name}: {measure}", ylim=(-0.5, 0.85), xticks=[1, 3, 6, 9, 12])
+for ax in axes[1]:
+    ax.set_xlabel("Lag")
+for ax in axes[:, 0]:
+    ax.set_ylabel("Correlation")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+For an AR($p$), the population PACF is zero beyond lag $p$; for an MA($q$), the population ACF is zero beyond lag $q$.
+Sample correlations fluctuate around these patterns, so look across several lags when choosing orders to try.
+
+# The ARMA(p,q) process
+
+Basically, it's a combination of AR(p) and MA(q)! 
+
+
+An Autoregressive Moving Average process of order $(p, q)$, denoted ARMA($p, q$), combines both autoregressive and moving average components. It is defined as:
+
+\begin{align}
+x_t &= c  + \phi_1 x_{t-1} + \phi_2 x_{t-2}  + \cdots  + \phi_p x_{t-p} + e_t
++ \theta_1 e_{t-1} + \theta_2 e_{t-2} + \cdots + \theta_q e_{t-q} \\
+&= c + \sum_{i=1}^{p} \phi_i\, x_{t-i} + e_t + \sum_{j=1}^{q} \theta_j\, e_{t-j}.
+\end{align}
+
+where:
+
+- $x_t$ is the value of the time series at time $t$;   
+- $c$ is a constant term;     
+- $\phi_1, \dots, \phi_p$ are autoregressive coefficients;     
+- $\theta_1, \dots, \theta_q$ are moving average coefficients;      
+- $e_t$ is a white-noise innovation with variance $\sigma_e^2$.
+
+The innovations satisfy $e_t \sim (0, \sigma_u^2), \qquad \text{i.i.d.}$, with
+$$
+\mathbb{E}[e_t e_{t-s}] = 
+\begin{cases}
+\sigma_e^2, & s = 0, \\
+0, & s \neq 0.
+\end{cases}
+$$
+
+::: {.callout-note collapse="false"}
+## Compact lag-operator representation
+
+Using the lag operator $L x_t = x_{t-1}$, an ARMA($p, q$) process can be written as:
+
+$$\phi(L) x_t = c + \theta(L) e_t,$$
+
+with $\phi(L) = 1 - \phi_1 L - \phi_2 L^2 - \cdots - \phi_p L^p,$ and $\theta(L) = 1 + \theta_1 L + \theta_2 L^2 + \cdots + \theta_q L^q.$
+
+:::
+
+In particular, when $p=q=1$...
+
+::: {.callout-note collapse="false"}
+## The properties of the ARMA(1,1) are as follows:
+
+\begin{align}
+\mathbb{E}[x_t]&=\frac{c}{1-\phi}, \\
+\mathbb{V}[x_t]&=
+\frac{(1+\theta^2 + 2\phi\theta)\,\sigma^2}
+     {1 - \phi^2}, \\
+\operatorname{Corr}(x_t,x_{t+1})&= \frac{(\phi + \theta)(1 + \phi\theta)}{1 + 2\phi\theta + \theta^2}
+\end{align}
+For longer lags, multiply the lag-one correlation by $\phi^{h-1}$, for $h\geq1$. 
+
+:::
+
+
+
+
+# Predictive regressions
+
+## Introduction
+
+PRs are somewhat out of the scope of time-series strictly speaking because they seek to forecast variables with **other** variables.  
+Namely, the simplest formulation is the following.
+
+::: {.callout-note collapse="false"}
+## Definition
+
+A (simple) **predictive regression** can be written as
+$$y_{t+1} = a+ bx_t + e_{t+1},$$
+where the error terms $e_t$ satisfy the usual assumptions (iid white noise, etc.). 
+:::
+
+More general models are written
+
+$$y_{t+k} = a+X_{t}B + e_t,$$
+where the difference is in the lag $k$ and in the fact that there can be more than one **predictor** $X$. 
+
+In inference, several problems can arise when, for instance $x_t$ is itself auto-correlated. For a modern take on this issue, we refer to [Biases in long-horizon predictive regressions](https://www.sciencedirect.com/science/article/abs/pii/S0304405X21004013).
+
+
+## In practice
+
+1. We estimate the model on past data, either with a simple OLS estimator $\hat{B}=(X_T'X_T)^{-1}X_T'y_{T+k}$.   
+2. We make a prediction with the current value of $x_t$: $\tilde{y}_{t+k}=X_t\hat{B}$.   
+3. Evaluate the error (requires the realization of $y_{t+k}$).
+
+
+# Application to cryptocurrencies
+
+For simplicity, we will work with **daily** data. Higher frequencies can be obtained outside the crypto space via the [highfrequency package](https://cran.r-project.org/web/packages/highfrequency/index.html). Or playing with dedicated APIs (e.g. with packages: [binance](https://cran.r-project.org/web/packages/binancer/index.html)/[coinmarketcap](https://cran.r-project.org/web/packages/coinmarketcapr/readme/README.html)). 
+
+
+## Fetching data
+
+The R examples use `crypto2` and CoinMarketCap.
+Python uses [CoinGecko](https://docs.coingecko.com/reference/coins-list) for coin information and [Yahoo Finance](https://ranaroussi.github.io/yfinance/reference/api/yfinance.download.html) for daily USD prices.
+The download snippets below illustrate each provider's interface.
+The worked application uses the same saved CoinMarketCap prices in both languages. 
+
+
+First, let's have a look at the list of available coins... which are numerous!
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+coins <- crypto_list() 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_07
+#| warning: false
+
+response = requests.get("https://api.coingecko.com/api/v3/coins/list", timeout=120)
+response.raise_for_status()
+coins = pd.DataFrame(response.json())
+print(coins.head())
+````
+
+:::
+
+You can have a look at the info for the coins via the commented code below.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| cache: true
+c_info <- crypto_info(coin_list = coins, limit = 30)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_08
+#| warning: false
+
+response = requests.get(
+    "https://api.coingecko.com/api/v3/coins/markets",
+    params={"vs_currency": "usd", "order": "market_cap_desc",
+            "per_page": 30, "page": 1}, timeout=120)
+response.raise_for_status()
+c_info = pd.DataFrame(response.json())
+print(c_info[["id", "symbol", "name", "current_price", "market_cap"]].head())
+````
+
+:::
+
+
+
+The next snippets show how to download historical quotes and are not executed during rendering.
+The worked examples load the saved sample immediately afterward. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| eval: false
+coin_names <- c("Bitcoin", "Ethereum", "Tether USDt", "BNB", "Solana")
+coin_hist <- crypto_history(coins |> dplyr::filter(name %in% coin_names),
+                            start_date = "20170101",
+                            end_date = "20261206")
+coin_hist <- coin_hist |>  # Timestamps are at midnight, hence we add a day.
+  dplyr::mutate(date = 1 + as.Date(as.POSIXct(timestamp, origin="1970-01-01")))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_09
+#| eval: false
+#| warning: false
+
+coin_tickers = {"BTC-USD": ("bitcoin", "Bitcoin", "BTC"),
+                "ETH-USD": ("ethereum", "Ethereum", "ETH"),
+                "USDT-USD": ("tether", "Tether USDt", "USDT"),
+                "BNB-USD": ("bnb", "BNB", "BNB"),
+                "SOL-USD": ("solana", "Solana", "SOL")}
+quotes = yf.download(list(coin_tickers), start="2017-01-01", end="2026-12-07",
+                     auto_adjust=False, progress=False)
+closes = quotes["Close"].reindex(columns=list(coin_tickers))
+if closes.empty or closes.isna().all().any():
+    raise ValueError("Yahoo Finance returned no prices for one or more coins.")
+closes.index.name = "timestamp"
+coin_hist = (closes.reset_index()
+             .melt(id_vars="timestamp", var_name="ticker", value_name="close")
+             .dropna(subset=["close"]))
+coin_hist["slug"] = coin_hist["ticker"].map(lambda k: coin_tickers[k][0])
+coin_hist["name"] = coin_hist["ticker"].map(lambda k: coin_tickers[k][1])
+coin_hist["symbol"] = coin_hist["ticker"].map(lambda k: coin_tickers[k][2])
+coin_hist["timestamp"] = pd.to_datetime(coin_hist["timestamp"]).dt.tz_localize(None)
+coin_hist["date"] = coin_hist["timestamp"]
+coin_hist = coin_hist.sort_values(["name", "timestamp"]).reset_index(drop=True)
+print(coin_hist.head())
+````
+
+:::
+
+The saved sample covers January 1, 2017, through November 2026, with shorter histories for newer coins.
+It comes from the original notebook's cached download; identical duplicate rows have been removed.
+Each date identifies the day of the closing price.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: crypto_snapshot_r
+#| warning: false
+#| message: false
+
+coin_hist <- read_csv("data/3_theory_2_crypto_prices.csv",
+                      col_types = cols(timestamp = col_date(), date = col_date())) |>
+  mutate(timestamp = as.POSIXct(timestamp, tz = "UTC"))
+head(coin_hist)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: crypto_snapshot_python
+#| warning: false
+
+coin_hist = pd.read_csv("data/3_theory_2_crypto_prices.csv",
+                        parse_dates=["timestamp", "date"])
+print(coin_hist.head())
+````
+
+:::
+
+
+And plot them. **NOTE**: mind the log-scale for the *y*-axis.  
+Also, we use [**plotly**](https://plotly.com/graphing-libraries/) below for a better experience.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+library(plotly)
+g <- coin_hist |>
+  ggplot(aes(x = date, y = close, color = name, label = symbol)) + 
+  geom_line() +
+  scale_y_log10() + theme_bw() + xlab("")
+ggplotly(g)
+coin_hist |>
+  filter(symbol %in% c("USDT")) |>
+  ggplot(aes(x = date, y = close, color = name, label = symbol)) + 
+  geom_line() + theme_classic() +
+  theme(legend.position = c(0.8,0.8))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_10
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+fig = px.line(coin_hist, x="date", y="close", color="name",
+              hover_data=["symbol"], log_y=True,
+              labels={"date": "", "close": "USD closing price"})
+fig.update_layout(height=420);
+fig
+
+usdt = coin_hist.loc[coin_hist["symbol"].eq("USDT")]
+fig_usdt, ax = plt.subplots(figsize=(8, 4))
+ax.plot(usdt["date"], usdt["close"], label="Tether USDt")
+ax.set(xlabel="", ylabel="USD closing price")
+ax.legend()
+fig_usdt.tight_layout()
+plt.show()
+````
+
+:::
+
+
+Now, the problem with some of these series is that they are **NOT** stationary. At the beginning of the sample, their values are much lower to those at th end of the sample. This is one of the reasons why in finance, we look at **returns**:
+$$r_t=\frac{p_t-p_{t-1}}{p_{t-1}},$$
+which are simply relative price changes.   
+Let's compute them below. We recall that prices are gathered in the **close** column. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+coin_hist <- coin_hist |> 
+  arrange(name, timestamp) |>
+  group_by(name) |>
+  mutate(return = close / lag(close) - 1 ) |>
+  ungroup()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_11
+#| warning: false
+
+coin_hist = coin_hist.sort_values(["name", "timestamp"])
+coin_hist["return"] = coin_hist.groupby("name")["close"].pct_change(fill_method=None)
+````
+
+:::
+
+And have a look at their distributions.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 8
+coin_hist |>
+  ggplot(aes(x = return, fill = name)) + geom_histogram() +
+  facet_wrap(vars(name), scales = "free") + theme_bw() +
+  theme(axis.title = element_blank(),
+        legend.position = c(0.85,0.2))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_12
+#| warning: false
+#| fig-width: 9
+#| fig-height: 5.5
+
+g = sns.displot(data=coin_hist.dropna(subset=["return"]), x="return", hue="name",
+                col="name", col_wrap=3, bins=30, common_bins=False, facet_kws={"sharex": False,
+                "sharey": False}, height=2.5, aspect=1.1, legend=False)
+g.set_axis_labels("Return", "Count");
+g.set_titles("{col_name}");
+g.tight_layout();
+plt.show()
+````
+
+:::
+
+Are these distributions Gaussian? 
+
+There seem to be **outliers** (far to the left or far to the right of the most common values)!
+
+
+
+## Returns
+
+First, let's have a look a autocorrelograms (of returns). 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 8
+crypto_acf <-
+  coin_hist |> 
+  na.omit() %>%
+  split(.$name) %>% 
+  map(~acf(.$return, plot = F)) %>% 
+  map_dfr(
+    ~data.frame(lag = .$lag, 
+                acf = .$acf,
+                ci = qnorm(0.975)/sqrt(.$n.used)
+    ), .id = "name") 
+crypto_acf |> 
+  filter(lag > 0, lag < 6) |>
+  ggplot(aes(x = lag, y = acf, fill = name)) + 
+  geom_col(position = "dodge") + theme_bw()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_13
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+crypto_acf = []
+for name, group in coin_hist.groupby("name"):
+    values = group["return"].dropna().to_numpy()
+    coefficients = acf(values, nlags=5, fft=True, adjusted=False)
+    crypto_acf.extend({"name": name, "lag": lag, "acf": coefficients[lag]}
+                      for lag in range(1, 6))
+crypto_acf = pd.DataFrame(crypto_acf)
+fig, ax = plt.subplots(figsize=(8, 4))
+sns.barplot(data=crypto_acf, x="lag", y="acf", hue="name", ax=ax)
+ax.set(xlabel="Lag", ylabel="Autocorrelation")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+But recall that some of the coins are **stable**!  
+Overall, however, there does not seem to be a strong memory pattern.   
+Hence, daily returns appear to be mostly **white noise**.
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+coin_data <- coin_hist |>
+  select(timestamp, slug, close) |>
+  distinct() |>
+  arrange(slug, timestamp) |>
+  group_by(slug) |>
+  mutate(return = close / lag(close) - 1) |>
+  ungroup() |>
+  pivot_wider(names_from = slug, values_from = c(close, return)) |>
+  arrange(timestamp)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_14
+#| warning: false
+
+coin_data = (coin_hist.pivot(index="timestamp", columns="slug", values="close")
+             .sort_index())
+returns = coin_data.pct_change(fill_method=None)
+coin_data = pd.concat([coin_data.add_prefix("close_"),
+                       returns.add_prefix("return_")], axis=1).reset_index()
+coin_data.columns.name = None
+````
+
+:::
+
+
+
+## Estimations
+
+### AR(p)
+
+Ok, so now let's try to link what we have seen in the theoretical part with the data. This step is called **estimation**.   
+Basically, if we think that the data follows $x_t=bx_{t-1}+e_t$, we need to find a good value for $b$ (the best possible)!  
+Let's have a look at the data again...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+coin_data |> ggplot(aes(x = timestamp, y = close_bitcoin)) + geom_line()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_15
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(coin_data["timestamp"], coin_data["close_bitcoin"])
+ax.set(xlabel="Date", ylabel="Bitcoin closing price (USD)")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+So this series is clearly not **stationary**. Hence we must resort to the relative differences (returns)...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+btc_return <- coin_data$return_bitcoin |> na.omit() 
+ar(btc_return)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_16
+#| warning: false
+
+btc_return = coin_data["return_bitcoin"].dropna().reset_index(drop=True)
+max_order = min(len(btc_return) - 1, int(np.floor(10 * np.log10(len(btc_return)))))
+selected_ar = ar_select_order(btc_return, maxlag=max_order, ic="aic", trend="c")
+ar_fit = selected_ar.model.fit()
+print("Selected lags:", selected_ar.ar_lags)
+print(ar_fit.params)
+````
+
+:::
+
+Both examples select the lag order using AIC.
+R uses Yule–Walker estimation; Python uses least squares through [ar_select_order](https://www.statsmodels.org/stable/generated/statsmodels.tsa.ar_model.ar_select_order.html).
+Their selected orders can differ.   
+We can verify this manually (let's try with only one lag...).   
+The result is on the right.  
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+#| fontsize: 12
+lm(btc_return ~ lag(btc_return)) |> summary()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_17
+#| warning: false
+
+ar_data = pd.DataFrame({"return": btc_return, "lag1": btc_return.shift(1),
+                        "lag2": btc_return.shift(2)})
+ar1_data = ar_data[["return", "lag1"]].dropna()
+ar1 = sm.OLS(ar1_data["return"], sm.add_constant(ar1_data[["lag1"]])).fit()
+print(ar1.summary())
+````
+
+:::
+
+Close! But we only have one lag...    
+Moreover, thanks to the $t$-statistic and $p$-value, we see that the significance is not very strong.    
+If we try with the second order below...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+lm(btc_return ~ lag(btc_return) + lag(btc_return, 2))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_18
+#| warning: false
+
+ar2_data = ar_data.dropna()
+ar2 = sm.OLS(ar2_data["return"], sm.add_constant(ar2_data[["lag1", "lag2"]])).fit()
+print(ar2.params)
+````
+
+:::
+
+The second order is ok but we have a small shift in the first order coefficient...
+
+
+## ARMA(p,q)
+
+Super simple code for estimation...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+arma(btc_return)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_19
+#| warning: false
+
+arma_fit = ARIMA(btc_return, order=(1, 0, 1), trend="c").fit()
+print(arma_fit.params)
+````
+
+:::
+
+R's `arma()` uses conditional least squares; Python's [ARIMA](https://www.statsmodels.org/stable/generated/statsmodels.tsa.arima.model.ARIMA.html) uses maximum likelihood.
+Both fit ARMA(1,1), but the estimates need not match.
+Use the summary to inspect the fitted model.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+arma(btc_return) |> summary()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_20
+#| warning: false
+
+print(arma_fit.summary())
+````
+
+:::
+
+## First step towards predictions & backtest
+
+Time-series is all about **forecasting**!  
+And remember, "*forecasting is difficult especially about the future*".
+Following the ML parlance, we must differentiate between two key phases:
+
+- estimation/calibration, **training**, **in-sample** models;     
+- **testing**, **out-of-sample** evaluation.    
+
+In ML there are in fact other stages (like validation/tuning, post-training, etc.), but here, let's keep it simple...
+
+We first split the sample in two.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+split_date <- as.POSIXct("2022-09-06 23:59:59", tz = "UTC")
+backtest_data <- coin_data |> drop_na() |> arrange(timestamp)
+train <- backtest_data |> filter(timestamp <= split_date)
+test <- backtest_data |> filter(timestamp > split_date)
+btc_train <- train$return_bitcoin
+btc_test <- test$return_bitcoin
+c(training_days = nrow(train), test_days = nrow(test))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_21
+#| warning: false
+
+split_date = pd.Timestamp("2022-09-06")
+# Keep the same complete dates for all coins, as in the R example.
+backtest_data = coin_data.dropna().sort_values("timestamp").copy()
+train = backtest_data.loc[backtest_data["timestamp"] <= split_date].copy()
+test = backtest_data.loc[backtest_data["timestamp"] > split_date].copy()
+btc_train = train["return_bitcoin"].to_numpy()
+btc_test = test["return_bitcoin"].to_numpy()
+print({"training_days": len(train), "test_days": len(test)})
+````
+
+:::
+
+Here, we keep the original example's default order, ARMA(0,0), and make it explicit.
+This model contains only a mean and independent noise.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+fit <- arima(btc_train, order = c(0, 0, 0))
+pred <- predict(fit, n.ahead = length(btc_test))
+head(pred$pred)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_22
+#| warning: false
+
+fit = ARIMA(btc_train, order=(0, 0, 0), trend="c").fit()
+pred_btc = fit.forecast(steps=len(btc_test))
+print(pred_btc[:6])
+````
+
+:::
+
+The forecasts are constant because this model predicts the estimated mean at every horizon.
+
+
+
+## Predictive regressions
+
+Let's try to predict ETH returns with BTC returns of the previous period (day)
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+# Build the previous day's predictor before splitting the dates.
+predictive_data <- backtest_data |>
+  mutate(btc_lag = lag(return_bitcoin)) |>
+  drop_na(btc_lag)
+pr_train <- predictive_data |> filter(timestamp <= split_date)
+pr_test <- predictive_data |> filter(timestamp > split_date)
+eth_train <- pr_train$return_ethereum
+eth_test <- pr_test$return_ethereum
+fit <- lm(return_ethereum ~ btc_lag, data = pr_train)
+pred <- predict(fit, newdata = pr_test)
+head(pred)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_23
+#| warning: false
+
+# Build the previous day's predictor before splitting the dates.
+predictive_data = backtest_data.assign(
+    btc_lag=backtest_data["return_bitcoin"].shift(1)).dropna(subset=["btc_lag"])
+pr_train = predictive_data.loc[predictive_data["timestamp"] <= split_date]
+pr_test = predictive_data.loc[predictive_data["timestamp"] > split_date]
+eth_train = pr_train["return_ethereum"].to_numpy()
+eth_test = pr_test["return_ethereum"].to_numpy()
+fit = sm.OLS(eth_train, sm.add_constant(pr_train[["btc_lag"]], has_constant="add")).fit()
+pred = fit.predict(sm.add_constant(pr_test[["btc_lag"]], has_constant="add")).to_numpy()
+print(pred[:6])
+````
+
+:::
+
+These are successive one-day forecasts, using the BTC return observed the previous day.
+The fitted coefficients stay fixed throughout the test period.
+
+### Forecast accuracy
+
+The **root mean squared error** (RMSE) measures the typical size of the forecast errors:
+
+$$
+\operatorname{RMSE}=\sqrt{\frac{1}{n_{\mathrm{test}}}
+\sum_{i=1}^{n_{\mathrm{test}}}(r_i-\widehat r_i)^2}.
+$$ {#eq-forecast-rmse}
+
+Here, $n_{\mathrm{test}}$ is the number of test days, $r_i$ is the observed ETH return, and $\widehat r_i$ is its forecast.
+Compare the BTC regression with predicting zero ETH return every day: $\widehat r_i^{(0)}=0$.
+Both forecasts are evaluated on the same test dates.
+A smaller RMSE indicates smaller forecast errors.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+benchmark_results <- tibble(
+  forecast = c("BTC regression", "Zero return"),
+  RMSE = c(sqrt(mean((pred - eth_test)^2)), sqrt(mean(eth_test^2))))
+knitr::kable(benchmark_results, digits = 6, col.names = c("Forecast", "RMSE"))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_24
+#| warning: false
+
+rmse = np.sqrt(np.mean((pred - eth_test) ** 2))
+benchmark_results = pd.DataFrame({
+    "Forecast": ["BTC regression", "Zero return"],
+    "RMSE": [rmse, np.sqrt(np.mean(eth_test ** 2))]})
+print(benchmark_results.to_string(index=False, float_format=lambda value: f"{value:.6f}"))
+````
+
+:::
+
+Here, the regression does slightly worse than predicting zero.
+A relationship fitted to the training sample need not improve forecasts.
+
+The **Hit Ratio** = the proportion of time that the prediction is in the right direction:
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false 
+mean(pred*eth_test>=0)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_25
+#| warning: false
+
+hit_ratio = np.mean(pred * eth_test >= 0)
+print(hit_ratio)
+````
+
+:::
+
+The predicted direction is correct on about half the test days.
+
+
+# References
+
+## For time-series
+
+There many resources available online. We single out two below: 
+
+- [Forecasting: Principles and Practice](https://otexts.com/fpp3/)    
+- [Analysis of Financial Time Series](https://perhuaman.files.wordpress.com/2014/09/analysis-of-financial-time-series-2nd-edition.pdf)
+
+## For cryptocurrencies
+
+- [A Short Introduction to the World of Cryptocurrencies](https://files.stlouisfed.org/files/htdocs/publications/review/2018/01/10/a-short-introduction-to-the-world-of-cryptocurrencies.pdf)    
+- [Introduction to Cryptography and Cryptocurrencies](https://assets.press.princeton.edu/chapters/s10908.pdf)    
+- [Investing in Cryptocurrency](https://advisor.morganstanley.com/perrone-wealth-management-group/documents/field/p/pe/perrone-wealth-management-group/Investing_in_Cryptocurrency.pdf) (Morgan Stanley)
+
+
+
+
