@@ -17,7 +17,6 @@ listing:
 ::: page-head
 # Teaching
 
-Finance, data science and macroeconomics courses. When possible, the course material is made available.
 :::
 
 ## Current courses
