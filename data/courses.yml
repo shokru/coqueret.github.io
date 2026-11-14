@@ -18,7 +18,7 @@
 
 - section: current
   years: 2025–present
-  title: Time-series analysis with R (crash course)
+  title: Time-series analysis (crash course)
   where: emlyon business school, MSc in Data Science
   links:
     R & data: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html
