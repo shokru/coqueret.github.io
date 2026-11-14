@@ -1,0 +1,2301 @@
+---
+title: "Time series theory (1/2)"
+engine: knitr
+execute:
+  error: false
+format:
+  html:
+    toc: true
+    number-sections: true
+    embed-resources: true
+    grid:
+      margin-width: 410px
+      body-width: 950px
+      sidebar-width: 210px
+---
+
+<style>
+.main-container {
+max-width: 1440px !important;
+margin-left: auto;
+margin-right: auto;
+}
+</style>
+
+# Packages
+
+This notebook provides both R & Python code.
+The language tabs are synchronized throughout the document.
+Both languages execute from top to bottom (imperatively sequentially).
+
+Quarto uses **knitr** and **reticulate** to execute both languages.
+Install any missing R packages from the list below, including reticulate (1.41 or later).
+The loading chunk declares Python dependencies, including the Excel reader, for reticulate’s managed environment.
+
+Install the Python dependencies with `python -m pip install numpy pandas matplotlib seaborn scipy statsmodels requests openpyxl yfinance plotly`.    
+If necessary, set `RETICULATE_PYTHON` to your Python interpreter path before starting Quarto.
+Render with `quarto render 2_theory_1_R_Python.qmd`.
+
+Both languages use a seed of 42, but their random generators produce different samples.   
+Simulation plots and test outcomes can therefore differ across languages.    
+The Python examples load their own data and can be followed independently of R.
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: load_R
+#| warning: false
+#| message: false
+
+library(tidyverse)  # THE library for data science
+library(openxlsx)   # A cool package to deal with Excel files/formats
+library(quantmod)   # Package for financial data extraction
+library(tsibble)    # TS with dataframes framework 
+library(fable)      # Package for time-series models & predictions
+library(feasts)     # Package for time-series analysis
+library(forecast)   # Another package for TS (forecasting)
+library(tseries)    # Simple package for time-series tests
+library(plotly)     # For 3D graphs
+library(mvtnorm)    # For multivariate Gaussian distributions
+
+reticulate::py_require(c(
+  "numpy", "pandas", "matplotlib", "seaborn", "scipy", "statsmodels",
+  "requests", "openpyxl>=3.1.5", "yfinance", "plotly"
+))
+set.seed(42)        # Random seed
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_01
+#| warning: false
+
+import io
+import numpy as np
+import pandas as pd
+import openpyxl  # Excel reader used by pandas.
+import matplotlib.pyplot as plt
+import seaborn as sns
+import requests
+import yfinance as yf
+import plotly.graph_objects as go
+from scipy import stats
+from statsmodels.tsa.stattools import adfuller, kpss
+from statsmodels.tsa.seasonal import STL
+
+rng = np.random.default_rng(42)
+sns.set_theme(style="whitegrid")
+````
+
+:::
+
+Time-series models are entirely built to capture and mimic the **randomness** which we observe in real life situations.  
+Hence, understanding randomness is key. 
+
+
+# Random variables
+
+**Random variables** are mathematical tools (formalizations) that characterize, quite naturally, realizations of events that cannot be exactly predicted, for which there is some form of **uncertainty**.  
+
+To introduce key concepts, we will proceed with **basic case studies**. 
+
+## Example 1: the coin toss
+
+### Fair
+
+Perhaps the most simple (and easy to understand) example is the **tossing of coins**.   
+Let's first suppose that the coin is not biased and that there is a 50% of obtaining *heads* or *tails*.   
+We can simulate this with a computer. Below, let's way that  
+
+- 0 = *heads*   
+- 1 = *tails*
+
+Let's repeat the process 10 times:
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+coins <- rbinom(10, 1, 0.5)
+coins
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_02
+#| warning: false
+
+coins = rng.binomial(n=1, p=0.5, size=10)
+print(coins)
+````
+
+:::
+
+Now, the most important concept with random variables has to do with the frequency of their realizations.   
+This is often referred to as the **probability** that an event can occur.  
+In the case of a coin toss, there are only two possible outcomes. Hence, the representation of probabilities is easy (two numbers).
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+tibble(coins = coins) |> ggplot(aes(x = coins)) + theme_classic() + geom_bar() 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_03
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.bar([0, 1], np.bincount(coins, minlength=2))
+ax.set(xlabel="coins", ylabel="count", xticks=[0, 1])
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+Now, the particular random draw is somewhat surprising. We would expect something closer to 50%/50%.  
+But that's the game of random draws!    
+
+In order to get a more balanced result for with high likelihood, there is only one way: to consider much more than 10 draws.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+coins <- rbinom(100, 1, 0.5)
+coins
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_04
+#| warning: false
+
+coins = rng.binomial(n=1, p=0.5, size=100)
+print(coins)
+````
+
+:::
+
+Et voilà!
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 2
+tibble(coins = coins) |> ggplot(aes(x = coins)) + theme_classic() + geom_bar() 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_05
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(4, 2))
+ax.bar([0, 1], np.bincount(coins, minlength=2))
+ax.set(xlabel="coins", ylabel="count", xticks=[0, 1])
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+As the number of draws increases, the frequency will slowly converge to 50%/50%.   
+
+
+### Biased
+
+It's also possible to imagine a **biased** coin.
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 2
+game <- rbinom(100, 1, 0.7)
+tibble(game = game) |> ggplot(aes(x = game)) + theme_classic() + geom_bar() 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_06
+#| warning: false
+
+game = rng.binomial(n=1, p=0.7, size=100)
+fig, ax = plt.subplots(figsize=(4, 2))
+ax.bar([0, 1], np.bincount(game, minlength=2))
+ax.set(xlabel="game", ylabel="count", xticks=[0, 1])
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+
+
+## Example 2: rolling a dice
+
+Ok, so coin tossing is easy and overly simplistic. Let's consider a more complex setting in which more than two outcomes are possible.   
+
+Rolling dice seems like a perfect choice!
+
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 2
+rolls <- replicate(150, sample(1:6, 1, replace = TRUE))
+tibble(rolls = rolls) |> 
+  ggplot(aes(x = as.factor(rolls))) + geom_bar() + theme_classic() + 
+  theme(axis.title.x = element_blank())
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_07
+#| warning: false
+
+rolls = rng.integers(1, 7, size=150)
+fig, ax = plt.subplots(figsize=(4, 2))
+ax.bar(np.arange(1, 7), np.bincount(rolls, minlength=7)[1:])
+ax.set(xlabel="", ylabel="count", xticks=np.arange(1, 7))
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+In the above graph, the bars represent the number of times that each outcome is produced.  
+If we want frequencies/probabilities instead of counts, we need to divide by the number of draws. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 6
+#| fig.height: 3
+#| fig.align: center
+tibble(rolls = rolls) |> 
+  ggplot(aes(x = rolls)) + 
+  geom_histogram(breaks = seq(0.5, 6.5, by = 1), aes(y = after_stat(density)), color = "white") +
+  theme_classic() + theme(axis.title.x = element_blank()) +
+  scale_x_continuous(breaks = 0:6)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_08
+#| warning: false
+
+# Unit-width bins make density equal to relative frequency.
+fig, ax = plt.subplots(figsize=(6, 3))
+ax.hist(rolls, bins=np.arange(0.5, 7, 1), density=True, edgecolor="white")
+ax.set(xlabel="", ylabel="density", xticks=np.arange(7))
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+## Example 3: distribution of sizes
+
+Ok but let's push even further.   
+Imagine we were to ask every person in one country his or her size (say, in centimeters). If we pick the individual randomly, this makes one draw of a random variable. We can visualize this! We point to three sources:   
+
+- [Our World in Data](https://ourworldindata.org/human-height), though the data is quite old (1996) but ok for long-term perspectives;
+- [World Data](https://www.worlddata.info/average-bodyheight.php) - much more recent & up-to-date (2022);   
+- The [CDC](https://www.cdc.gov/nchs/fastats/body-measurements.htm) in the US reports slightly different values.
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+sizes <- rnorm(150, mean = 178, sd = 7) |> round()
+tibble(sizes = sizes) |> ggplot(aes(x = sizes)) + geom_histogram()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_09
+#| warning: false
+
+sizes = np.round(rng.normal(loc=178, scale=7, size=150))
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(sizes, bins=30, edgecolor="white")
+ax.set(xlabel="sizes", ylabel="count")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+There are holes if the sample is small...
+
+A larger sample reveals the underlying distribution more clearly.
+These simulated heights look Gaussian because we generated them from a normal distribution.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+sizes <- rnorm(10^5, mean = 178, sd = 7) |> round()
+tibble(sizes = sizes) |> ggplot(aes(x = sizes)) + geom_histogram(breaks = 155:205)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_10
+#| warning: false
+
+sizes = np.round(rng.normal(loc=178, scale=7, size=100_000))
+fig, ax = plt.subplots(figsize=(6, 4))
+ax.hist(sizes, bins=np.arange(155, 206), edgecolor="white")
+ax.set(xlabel="sizes", ylabel="count")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+## The Gaussian distribution
+
+Let's spend a bit of time on the properties of this very (very) important distribution.  
+It is entirely defined by two parameters:   
+
+- its **mean** (average)     
+- its **variance** (uncertainty)
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+ggplot() + xlim(-3,3.5) + theme_classic() + 
+  geom_function(fun = dnorm, args = list(mean = 0, sd = 1), aes(color = "baseline"), linewidth = 1.2) +
+  geom_function(fun = dnorm, args = list(mean = 0, sd = 0.5), aes(color = "less uncertainty")) + 
+  geom_function(fun = dnorm, args = list(mean = 1, sd = 1), aes(color = "shifted")) +
+  theme(legend.position = c(0.8,0.8),
+        axis.title = element_blank(),
+        legend.title = element_blank()) +
+  scale_color_manual(values = c("#000", "#1166DD", "#FF5511")) +
+  geom_vline(xintercept = 0, linetype = 2, color = "#1166DD") +
+  geom_vline(xintercept = 1, linetype = 2, color = "#FF5511") +
+  geom_segment(aes(x = -0.45, y = 0.5, xend = 0.45, yend = 0.5), color = "#1166DD",
+               arrow = arrow(length = unit(0.3, "cm"), ends = "both")) + 
+  geom_segment(aes(x = -0.95, y = 0.25, xend = 0.95, yend = 0.25), color = "black",
+               arrow = arrow(length = unit(0.3, "cm"), ends = "both")) +
+  geom_segment(aes(x = 0, y = 0.8, xend = 1, yend = 0.8), color = "#666666",
+               arrow = arrow(length = unit(0.3, "cm"))) +
+  annotate("text", x = 0.5, y = 0.82, label = "shift") + 
+  annotate("rect", fill = "white", xmin = -0.37, xmax = 0.37, ymin = 0.52, ymax = 0.60) + 
+  annotate("text", x = 0, y = 0.55, label = "less\nvariance") + 
+  geom_segment(aes(x = 0, y = 0, yend = 0.4, xend = 0), linetype = 1)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_11
+#| warning: false
+
+x_grid = np.linspace(-3, 3.5, 500)
+fig, ax = plt.subplots(figsize=(7, 4))
+ax.plot(x_grid, stats.norm.pdf(x_grid, loc=0, scale=1),
+        color="black", linewidth=2, label="baseline")
+ax.plot(x_grid, stats.norm.pdf(x_grid, loc=0, scale=0.5),
+        color="#1166DD", label="less uncertainty")
+ax.plot(x_grid, stats.norm.pdf(x_grid, loc=1, scale=1),
+        color="#FF5511", label="shifted")
+ax.axvline(0, color="#1166DD", linestyle="--")
+ax.axvline(1, color="#FF5511", linestyle="--")
+for left, right, height, color in [(-0.45, 0.45, 0.5, "#1166DD"),
+                                    (-0.95, 0.95, 0.25, "black")]:
+    ax.annotate("", xy=(right, height), xytext=(left, height),
+                arrowprops={"arrowstyle": "<->", "color": color})
+ax.annotate("", xy=(1, 0.8), xytext=(0, 0.8),
+            arrowprops={"arrowstyle": "->", "color": "#666666"})
+ax.text(0.5, 0.82, "shift", ha="center")
+ax.text(0, 0.55, "less\nvariance", ha="center", va="center",
+        bbox={"facecolor": "white", "edgecolor": "none"})
+ax.set(xlabel="", ylabel="", xlim=(-3, 3.5), ylim=(0, 0.9))
+ax.legend(loc="upper right")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+In 95%+ of models this is the distribution that is used to generate randomness. 
+
+Ok but how can I know if my data is distributed according to a normal law?   
+
+- There are plenty of tests ([Shapiro-Wilk](https://en.wikipedia.org/wiki/Shapiro%E2%80%93Wilk_test), [Kolmogorov-Smirnov](https://en.wikipedia.org/wiki/Kolmogorov%E2%80%93Smirnov_test));   
+- But a **visual confirmation** is often enough!
+
+The simplest way is to produce a QQ-plot (quantile-versus-quantile) to see if the empirical distribution matches (is close to) the Gaussian one. Below it seems "ok" - with some outliers nonetheless. Another appraoch is simply to display the **histogram** and see if it is "*bell-shaped*".
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 6.5
+#| fig.height: 3.5
+#| fig.align: center
+
+data.frame(x = rnorm(30)) |>
+  ggplot(aes(sample = x)) + theme_classic() + stat_qq() + stat_qq_line()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_12
+#| warning: false
+
+qq_sample = rng.normal(size=30)
+fig, ax = plt.subplots(figsize=(6.5, 3.5))
+# R's stat_qq_line uses the first and third sample quartiles.
+theoretical = stats.norm.ppf((np.arange(1, len(qq_sample) + 1) - 0.5) / len(qq_sample))
+q_theory = stats.norm.ppf([0.25, 0.75])
+q_sample = np.quantile(qq_sample, [0.25, 0.75])
+slope = np.diff(q_sample)[0] / np.diff(q_theory)[0]
+intercept = q_sample[0] - slope * q_theory[0]
+ax.scatter(theoretical, np.sort(qq_sample))
+ax.plot(theoretical, intercept + slope * theoretical, color="black")
+ax.set(xlabel="Theoretical", ylabel="Sample")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+But with an exponential distribution...
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 3
+set.seed(42)
+data.frame(x = rexp(50)) |> ggplot(aes(x = x)) + theme_classic() + geom_density()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_13
+#| warning: false
+
+rng = np.random.default_rng(42)
+exponential_sample = rng.exponential(scale=1, size=50)
+fig, ax = plt.subplots(figsize=(4, 3))
+sns.kdeplot(x=exponential_sample, ax=ax)
+ax.set(xlabel="x", ylabel="density")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+... not so much! Note that the distribution is standardized beforehand.
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 3
+set.seed(42)
+data.frame(x = rexp(30)) |> ggplot(aes(sample = x)) + theme_classic() + stat_qq() + stat_qq_line()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_14
+#| warning: false
+
+rng = np.random.default_rng(42)
+qq_sample = rng.exponential(scale=1, size=30)
+theoretical = stats.norm.ppf((np.arange(1, len(qq_sample) + 1) - 0.5) / len(qq_sample))
+q_theory = stats.norm.ppf([0.25, 0.75])
+q_sample = np.quantile(qq_sample, [0.25, 0.75])
+slope = np.diff(q_sample)[0] / np.diff(q_theory)[0]
+intercept = q_sample[0] - slope * q_theory[0]
+fig, ax = plt.subplots(figsize=(4, 3))
+ax.scatter(theoretical, np.sort(qq_sample))
+ax.plot(theoretical, intercept + slope * theoretical, color="black")
+ax.set(xlabel="Theoretical", ylabel="Sample")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+
+## Multivariate distributions
+
+In fact, random variables may come by pairs, or triplets, or more! For instance, we could imagine to study weight in addition to height!   
+In this case, representations are more complex of course and an important concept is that of **covariance**:
+
+$$\text{Cov}(X_1, X_2) = \mathbb{E[(X_1-\mu_1)(X_2-\mu_2)]},$$
+
+where $\mu_j=\mathbb{E}[X_j]$. Scaling by the product of standard deviations.
+
+Let us show a (stylized) example below. To see how correlation affects the density, it's imperative to play with the 3D representation. We increase the correlation on purpose to show its effect. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 3
+mu <- c(178, 79)  # mean vector
+sigma <- 9*matrix(c(1, 0.7, 0.7, 1), nrow = 2)  # covariance matrix
+
+# Create grid of x and y values
+x <- mu[1] + seq(-7, 7, length.out = 100)
+y <- mu[2] + seq(-7, 7, length.out = 100)
+grid <- expand.grid(x = x, y = y)
+z <- dmvnorm(as.matrix(grid), mean = mu, sigma = sigma)
+z_matrix <- matrix(z, nrow = length(x), ncol = length(y))
+
+plot_ly(x = ~x, y = ~y, z = ~z_matrix) %>%
+  add_surface(colorscale = "Viridis") %>%
+  layout(
+    scene = list(
+      xaxis = list(title = "Height (cm)"),
+      yaxis = list(title = "Weight (kgs)"),
+      zaxis = list(title = "Density"),
+      camera = list(eye = list(x = 1.5, y = -1.5, z = 1.25))
+    )
+  )
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_15
+#| warning: false
+
+mu = np.array([178, 79])
+sigma = 9 * np.array([[1, 0.7], [0.7, 1]])
+x_grid = mu[0] + np.linspace(-7, 7, 100)
+y_grid = mu[1] + np.linspace(-7, 7, 100)
+X, Y = np.meshgrid(x_grid, y_grid)
+positions = np.stack([X, Y], axis=-1)
+Z_density = stats.multivariate_normal.pdf(positions, mean=mu, cov=sigma)
+fig = go.Figure(go.Surface(x=x_grid, y=y_grid, z=Z_density, colorscale="Viridis"))
+fig.update_layout(
+    scene={"xaxis_title": "Height (cm)", "yaxis_title": "Weight (kgs)",
+           "zaxis_title": "Density",
+           "camera": {"eye": {"x": 1.5, "y": -1.5, "z": 1.25}}},
+    margin={"l": 0, "r": 0, "t": 20, "b": 0}, height=450,
+);
+fig
+````
+
+:::
+
+To visualize correlation, the simplest way is to use a **scatterplot** with one variable on one axis and the other on the other!  
+The correlation is linked to the **slope** of the regression line: strong positive (*resp.* negative) slope implies positive (*resp.* negative) correlation. When the line is roughly flat, the variables do not co-move together: correlation is weak or null. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 6
+#| fig.height: 3.5
+#| fig.align: center
+Z <- rmvnorm(200, mean = mu, sigma = sigma)
+data.frame(x = Z[,1], y = Z[,2]) |>
+  ggplot(aes(x = x, y = y)) + geom_point() + labs(x = "Height (cm)", y = "Weight (kgs)") +
+  theme_classic() + geom_smooth(method = "lm")
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_16
+#| warning: false
+
+Z = rng.multivariate_normal(mean=mu, cov=sigma, size=200)
+fig, ax = plt.subplots(figsize=(6, 3.5))
+sns.regplot(x=Z[:, 0], y=Z[:, 1], ci=95, seed=42, ax=ax)
+ax.set(xlabel="Height (cm)", ylabel="Weight (kgs)")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+
+## Moments (descriptive statistics)
+
+The most simple (and insightful) ways to characterize distributions:
+
+- the **mean**    
+- the **variance** and standard deviation    
+- the correlation (for 2+ variables)
+
+
+::: {.callout-note collapse="false"}
+## The mean
+
+The most important indicator (fun fact: it's not always defined/finite!)
+
+- **discrete** distribution: $\mathbb{E}[X] = \sum_{k=0}^\infty kP[X=k]$;  
+- **continuous** distribution: $\mathbb{E}[X] = \int_\mathbb{R} x f(x)dx,$
+
+where $f(x) = \frac{d}{dx}P[X \le x]$ is the **density** of the variable.
+:::
+
+In R, use `mean(x)`; in Python, use `np.mean(x)`.
+
+::: {.callout-note collapse="false"}
+## The variance
+
+The second most important indicator.
+
+- **discrete** distribution: $\mathbb{V}[X] = \sum_{k=0}^\infty (k-m)^2P[X=k]$;  
+- **continuous** distribution: $\mathbb{V}[X] = \int_\mathbb{R} (x-m)^2 f(x)dx,$
+
+where $m$ is the **mean** of the variable.
+:::
+
+In R, use `var(x)` or `sd(x)`.
+In Python, use `np.var(x, ddof=1)` or `np.std(x, ddof=1)` to match R’s sample variance and standard deviation.
+
+
+
+
+## LLN versus CLT
+
+Assume IID observations with mean $\mu$ and finite positive variance $\sigma^2$.
+Here, individual observations follow an exponential distribution, so $\mu=\sigma=1$.
+
+### Averages slowly stabilize
+
+The **law of large numbers** describes convergence of the sample average:
+$$\bar X_n=\frac{1}{n}\sum_{i=1}^n X_i \xrightarrow{p}\mu.$$
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: lln-averages-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+withr::with_seed(101, {
+  lln_n <- 5000
+  lln_draws <- matrix(rexp(lln_n * 5), nrow = lln_n)
+  lln_means <- apply(lln_draws, 2, cumsum) / seq_len(lln_n)
+  lln_data <- as_tibble(lln_means, .name_repair = "unique") |>
+    mutate(n = seq_len(lln_n)) |>
+    pivot_longer(-n, names_to = "sample", values_to = "average")
+  print(ggplot(lln_data, aes(n, average, color = sample)) +
+    geom_line(linewidth = 0.6) +
+    geom_hline(yintercept = 1, linetype = 2) +
+    scale_x_log10(breaks = c(1, 10, 100, 1000, 5000)) +
+    labs(x = "Sample size n (log scale)", y = "Running average",
+         title = "LLN: five averages approach the same mean, 1") +
+    theme_minimal() + theme(legend.position = "none"))
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: lln-averages-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+lln_rng = np.random.default_rng(101)
+lln_n = 5000
+lln_draws = lln_rng.exponential(size=(lln_n, 5))
+lln_means = np.cumsum(lln_draws, axis=0) / np.arange(1, lln_n + 1)[:, None]
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(np.arange(1, lln_n + 1), lln_means, linewidth=0.8)
+ax.axhline(1, color="black", linestyle="--")
+ax.set(xscale="log", xlabel="Sample size n (log scale)", ylabel="Running average",
+       title="LLN: five averages approach the same mean, 1")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+### Standardized averages become Gaussian
+
+The **central limit theorem** describes the distribution of the rescaled estimation error:
+$$\frac{\sqrt n(\bar X_n-\mu)}{\sigma}\xrightarrow{d}\mathcal N(0,1).$$
+Individual observations remain exponential; the CLT concerns standardized averages from repeated samples.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: clt-distributions-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 5.5
+
+withr::with_seed(102, {
+  clt_sizes <- c(1, 5, 30, 100)
+  clt_draws <- matrix(rexp(10000 * max(clt_sizes)), nrow = 10000)
+  clt_data <- bind_rows(lapply(clt_sizes, function(n) {
+    tibble(n = n, z = sqrt(n) *
+      (rowMeans(clt_draws[, seq_len(n), drop = FALSE]) - 1))
+  })) |>
+    mutate(n = factor(n, levels = clt_sizes,
+                      labels = paste("n =", clt_sizes)))
+  print(ggplot(clt_data, aes(z)) +
+    geom_histogram(aes(y = after_stat(density)), binwidth = 0.18,
+                   fill = "#7AA6C2", color = "white") +
+    geom_function(fun = dnorm, xlim = c(-4, 5),
+                  color = "#D95F02", linewidth = 0.9) +
+    facet_wrap(~ n, ncol = 2) + coord_cartesian(xlim = c(-4, 5)) +
+    labs(x = "Standardized average: sqrt(n) * (average - 1)", y = "Density",
+         title = "CLT: repeated standardized averages approach N(0, 1)",
+         subtitle = "Each panel uses 10,000 samples; orange is the standard normal density.") +
+    theme_minimal())
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: clt-distributions-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5.5
+
+clt_rng = np.random.default_rng(102)
+clt_sizes = [1, 5, 30, 100]
+clt_draws = clt_rng.exponential(size=(10000, max(clt_sizes)))
+fig, axes = plt.subplots(2, 2, figsize=(8, 5.5), sharex=True, sharey=True)
+clt_grid = np.linspace(-4, 5, 400)
+for ax, n in zip(axes.flat, clt_sizes):
+    clt_z = np.sqrt(n) * (clt_draws[:, :n].mean(axis=1) - 1)
+    ax.hist(clt_z, bins=np.arange(clt_z.min() - 0.18, clt_z.max() + 0.18, 0.18),
+            density=True, color="#7AA6C2", edgecolor="white")
+    ax.plot(clt_grid, stats.norm.pdf(clt_grid), color="#D95F02")
+    ax.set(title=f"n = {n}", xlim=(-4, 5), ylabel="Density")
+fig.suptitle("CLT: 10,000 standardized averages per panel; orange is N(0, 1)")
+fig.supxlabel("Standardized average: sqrt(n) * (average - 1)")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+## Bottomline
+
+::: {.callout-note collapse="false"}
+## Distribution functions
+What matters in random variables is the probability of their realizations. The **tool** that always works is the **distribution function**.    
+
+- If $X$ is **discrete**, then $P[X \le k]$ characterize the variable (so does $P[X=k]$).     
+- If $X$ is **continuous**, the only $P[X \le x]$ does. $P[X = x]=0$ but $f(x)=\frac{\partial}{\partial x} P[X \le x]$ can be defined and serve as density, which is the continuous version of the histogram.  
+- If $X=(X_1, \dots, X_n)$ is **multivariate**, then look at $P[X_1 \le x_1, \dots, X_n \le x_n]$. 
+
+Simple statistics are super useful!
+:::
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Random processes
+
+Ok so until now, we have covered **random variables** in such a way that we considered one draw at a time. 
+
+::: {.callout-note collapse="false"}
+## There are, however, several ways to combine them and consider higher dimensions:   
+- in the **cross-section**: imagine you are interested in **height** and **weight** at the same time. This make 2 numbers. And, of course, they should be related: all other things equal, taller people should be heavier.   
+- in the **time** domain. Imagine you record a given quantity periodically: economic output (GDP) on a quarterly basis; sales of Adidas shoes annually, the value of Bitcoin daily, etc. You also get several values! And these can also follow interesting patterns that you might want to understand... and predict!
+:::
+
+Because this is a course on **time-series**, we will henceforth focus on the latter.
+
+## Definitions & notations
+
+Time-series are random variables indexed by time. Usually, they are written $x_t$, or $X_t$ or $y_t$ or similar notations of this kind. The index $t$ refers to *time*. The essential question in time-series is to determine the law of motion of the process, as well as its characteristics. 
+
+Most often, the process integrates some form of randomness, which is usually written $e_t$, $u_t$, $\epsilon_t$ or $\varepsilon_t$. There are two common simplifying assumptions that are made with respect to these quantities, which are sometimes referred to as *innovations* or *residuals*:   
+
+1. they are **normally distribution** (with constant Gaussian law);  
+2. they are **independent** from each other (i.e., $e_t$ is independent from $e_{t+1}$).
+
+This is call the IID assumption. Under gaussian law, this is equivalent to the innovations being **uncorrelated**.
+
+**NOTE**: in almost all models, innovations have zero means, $\mathbb{E}[e_t]=0$, hence in the case of Gaussian innovations, only the variance $\sigma^2$ is specified. We will work under these (standard) assumptions below. Let's generate a series of $e_t$ and plot it below.
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 4
+#| fig.height: 3
+N <- 120
+sigma <- 0.2
+x <- rnorm(N, mean = 0, sd = sigma)
+data.frame(t = 1:N, x = x) |>
+  ggplot(aes(x = t, y = x)) + geom_line() + theme_minimal()
+mean(x)
+sd(x)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_17
+#| warning: false
+
+N = 120
+sigma = 0.2
+x = rng.normal(loc=0, scale=sigma, size=N)
+fig, ax = plt.subplots(figsize=(4, 3))
+ax.plot(np.arange(1, N + 1), x)
+ax.set(xlabel="t", ylabel="x")
+fig.tight_layout()
+plt.show()
+print("Mean:", np.mean(x))
+print("Sample standard deviation:", np.std(x, ddof=1))
+````
+
+:::
+
+We see that the sample averages are not too far from the parameters we chose (zero mean and 0.2 SD). 
+
+
+## Random walk
+
+
+The simplest case is the **white noise**:
+$$x_t= e_t,$$
+
+but this is not very interesting. 
+
+::: {.callout-note collapse="false"}
+## Definition
+
+A second important case is linked to the notion of **random walk**:
+$$x_t=x_{t-1}+e_t,$$ {#eq-RW}
+and, **iterating**, we see that we have $x_t=\sum_{s=0}^t e_s$ - where we assume a starting point at $t=0$. 
+:::
+
+
+Notably, we have
+$$\mathbb{E}[x_t]=\mathbb{E}\left[\sum_{s=1}^t e_s\right]=\sum_{s=1}^t\mathbb{E}\left[ e_s\right]=0.$$
+
+Moreover, if the innovations are independent,
+
+$$\mathbb{V}[x_t]=\mathbb{V}\left[\sum_{s=1}^t e_s\right]=\sum_{s=1}^t\mathbb{V}\left[ e_s\right]=t\sigma^2.$$
+
+Hence, the variance increases with time - linearly. If perturbations are *not* independent, then it's a bit more complicated and the variance will depend on all *auto-covariances*. 
+
+The covariance between two points in time is given by (number of overlapping times):
+
+$$\mathbb{C}ov[x_t,x_{t+h}] = \mathbb{E}\left[\sum_{s=1}^t\sum_{r=1}^{t+h}  e_se_r\right]=t\sigma^2, \quad h \ge 0.$$
+This is because all innovation terms are independent, hence the only ones that are non-null are the $t$ terms of the form $\mathbb{C}ov[x_s,x_s]=\sigma^2$. 
+
+Hence, we see that both the variance and auto-covariance depend on $t$, say, the present time. This makes analysis complicated, because, depending on the moment we consider, the distribution of $x_t$ will change.  
+
+Nevertheless, note that $$\mathbb{C}ov[x_t,x_{t-h}]=(t-h)\sigma^2.$$ So the general formula is
+$$\mathbb{C}ov[x_t,x_{s}]=\sigma^2\min(s,t)$$
+
+
+Let's simulate one trajectory (on the right).
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 5
+
+#set.seed(42) # This freezes the random number generator
+x <- cumsum(rnorm(N, mean = 0, sd = sigma))
+tibble(t = 1:N, x = x) |>
+  ggplot(aes(x = t, y = x)) + geom_line() + theme_minimal()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_18
+#| warning: false
+
+x = np.cumsum(rng.normal(loc=0, scale=sigma, size=N))
+fig, ax = plt.subplots(figsize=(5, 3))
+ax.plot(np.arange(1, N + 1), x)
+ax.set(xlabel="t", ylabel="x")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+Ok but this is just **ONE** trajectory. There are an infinite number of possible paths! 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+#| fig.width: 6
+#| fig.height: 3
+#| fig.align: center
+#set.seed(42) # This freezes the random number generator
+nb_traj <- 10
+x <- matrix(rnorm(N*nb_traj, mean = 0, sd = sigma), ncol = nb_traj) |> apply(2, cumsum)
+bind_cols(t = 1:N, x) |>
+  pivot_longer(-t, names_to = "simulation", values_to = "value") |>
+  ggplot(aes(x = t, y = value, color = simulation)) + geom_line() + theme_minimal()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_19
+#| warning: false
+
+nb_traj = 10
+# Each column contains one trajectory, as in the R matrix.
+x = np.cumsum(rng.normal(loc=0, scale=sigma, size=(N, nb_traj)), axis=0)
+fig, ax = plt.subplots(figsize=(6, 3))
+for j in range(nb_traj):
+    ax.plot(np.arange(1, N + 1), x[:, j], label=f"simulation {j + 1}")
+ax.set(xlabel="t", ylabel="value")
+ax.legend(bbox_to_anchor=(1.02, 1), loc="upper left", fontsize=7)
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+
+
+## Forecasting a random walk
+
+For Gaussian IID innovations, known $\sigma$, and no drift, the best forecast is the **latest observation**.
+$$\widehat X_{T+h\mid T}=X_T.$$
+Here, the notation $|T$ means "*knowing the information at time* $T$".  
+The 95% prediction interval is $X_T\pm1.96\sigma\sqrt h$; uncertainty grows with the horizon.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: random-walk-forecast-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+withr::with_seed(201, {
+  fc_T <- 120
+  fc_H <- 40
+  fc_sigma <- 0.2
+  fc_path <- cumsum(rnorm(fc_T + fc_H, sd = fc_sigma))
+  fc_h <- 0:fc_H
+  fc_sd <- fc_sigma * sqrt(fc_h)
+  fc_bands <- tibble(t = fc_T + fc_h, center = fc_path[fc_T],
+    lo95 = fc_path[fc_T] - qnorm(0.975) * fc_sd,
+    hi95 = fc_path[fc_T] + qnorm(0.975) * fc_sd,
+    lo80 = fc_path[fc_T] - qnorm(0.9) * fc_sd,
+    hi80 = fc_path[fc_T] + qnorm(0.9) * fc_sd)
+  fc_history <- tibble(t = seq_len(fc_T), value = fc_path[seq_len(fc_T)])
+  fc_future <- tibble(t = fc_T:(fc_T + fc_H),
+                       value = fc_path[fc_T:(fc_T + fc_H)])
+  print(ggplot() +
+    geom_ribbon(data = fc_bands, aes(t, ymin = lo95, ymax = hi95, fill = "95%")) +
+    geom_ribbon(data = fc_bands, aes(t, ymin = lo80, ymax = hi80, fill = "80%")) +
+    geom_line(data = fc_history, aes(t, value, color = "History")) +
+    geom_line(data = fc_future, aes(t, value, color = "Realized future"), linetype = 2) +
+    geom_line(data = fc_bands, aes(t, center, color = "Forecast"), linewidth = 0.9) +
+    geom_vline(xintercept = fc_T, linetype = 3) +
+    scale_fill_manual(values = c("95%" = "#DCEAF5", "80%" = "#9EC5E0")) +
+    scale_color_manual(values = c("History" = "black", "Realized future" = "gray50",
+                                 "Forecast" = "#1764A0")) +
+    labs(x = "Time", y = "Value", color = NULL, fill = "Prediction interval",
+         title = "A flat forecast with widening uncertainty",
+         caption = "The innovation SD is known; the realized future is shown only for comparison.") +
+    theme_minimal() + theme(legend.position = "bottom"))
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: random-walk-forecast-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+fc_rng = np.random.default_rng(201)
+fc_T, fc_H, fc_sigma = 120, 40, 0.2
+fc_path = np.cumsum(fc_rng.normal(scale=fc_sigma, size=fc_T + fc_H))
+fc_h = np.arange(fc_H + 1)
+fc_times = fc_T + fc_h
+fc_center = fc_path[fc_T - 1]
+fc_sd = fc_sigma * np.sqrt(fc_h)
+fig, ax = plt.subplots(figsize=(8, 4))
+for level, z, color in [(95, stats.norm.ppf(0.975), "#DCEAF5"),
+                         (80, stats.norm.ppf(0.9), "#9EC5E0")]:
+    ax.fill_between(fc_times, fc_center - z * fc_sd, fc_center + z * fc_sd,
+                    color=color, label=f"{level}% prediction interval")
+ax.plot(np.arange(1, fc_T + 1), fc_path[:fc_T], color="black", label="History")
+ax.plot(fc_times, fc_path[fc_T - 1:], color="gray", linestyle="--", label="Realized future")
+ax.plot(fc_times, np.repeat(fc_center, fc_H + 1), color="#1764A0", label="Forecast")
+ax.axvline(fc_T, color="gray", linestyle=":")
+ax.set(xlabel="Time", ylabel="Value", title="A flat forecast with widening uncertainty")
+ax.legend(fontsize=8, loc="best")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+## Deterministic versus stochastic trends
+
+Let's see what happens if we compare 
+$$Y_t=0.1t+\varepsilon_t$$ 
+with 
+$$X_t=X_{t-1}+0.1+\varepsilon_t,$$ 
+where $X_0=0$ and $\varepsilon_t$ is a Gaussian IID noise. If we simulate the paths and then:  
+1. subtract the deterministic trend from $Y_t$;   
+2. "differentiate" $X_t$ $\rightarrow$ we get the same result.
+
+$\rightarrow$ An extra innovation of 5 at $t=100$ affects $Y_t$ temporarily (no memory), but it shifts $X_t$ permanently.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: trend-comparison-r
+#| warning: false
+#| message: false
+#| fig-width: 9
+#| fig-height: 5.5
+
+withr::with_seed(202, {
+  trend_n <- 200
+  trend_t <- seq_len(trend_n)
+  trend_e <- rnorm(trend_n, sd = 0.8)
+  trend_y <- 0.1 * trend_t + trend_e
+  trend_x <- 0.1 * trend_t + cumsum(trend_e)
+  trend_y_shock <- trend_y + 5 * (trend_t == 100)
+  trend_x_shock <- trend_x + 5 * (trend_t >= 100)
+  trend_data <- bind_rows(
+    tibble(t = trend_t, model = "Deterministic trend", stage = "Level",
+           Original = trend_y, `With shock` = trend_y_shock),
+    tibble(t = trend_t, model = "Stochastic trend", stage = "Level",
+           Original = trend_x, `With shock` = trend_x_shock),
+    tibble(t = trend_t, model = "Deterministic trend", stage = "After transformation",
+           Original = trend_y - 0.1 * trend_t,
+           `With shock` = trend_y_shock - 0.1 * trend_t),
+    tibble(t = trend_t, model = "Stochastic trend", stage = "After transformation",
+           Original = c(NA, diff(trend_x)), `With shock` = c(NA, diff(trend_x_shock)))
+  ) |>
+    mutate(stage = factor(stage, levels = c("Level", "After transformation"))) |>
+    pivot_longer(c(Original, `With shock`), names_to = "scenario", values_to = "value")
+  print(ggplot(trend_data, aes(t, value, color = scenario)) +
+    geom_line(linewidth = 0.6, na.rm = TRUE) +
+    geom_vline(xintercept = 100, linetype = 3) +
+    facet_grid(stage ~ model, scales = "free_y") +
+    scale_color_manual(values = c("Original" = "#1764A0", "With shock" = "#D95F02")) +
+    labs(x = "Time", y = "Value", color = NULL,
+         title = "The same innovation shock has different effects on levels",
+         caption = "Bottom left subtracts the known trend; bottom right takes first differences.") +
+    theme_minimal() + theme(legend.position = "bottom"))
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: trend-comparison-python
+#| warning: false
+#| fig-width: 9
+#| fig-height: 5.5
+
+trend_rng = np.random.default_rng(202)
+trend_t = np.arange(1, 201)
+trend_e = trend_rng.normal(scale=0.8, size=len(trend_t))
+trend_y = 0.1 * trend_t + trend_e
+trend_x = 0.1 * trend_t + np.cumsum(trend_e)
+trend_y_shock = trend_y + 5 * (trend_t == 100)
+trend_x_shock = trend_x + 5 * (trend_t >= 100)
+fig, axes = plt.subplots(2, 2, figsize=(9, 5.5), sharex=True)
+trend_panels = [
+    (trend_y, trend_y_shock, "Deterministic trend"),
+    (trend_x, trend_x_shock, "Stochastic trend"),
+    (trend_y - 0.1 * trend_t, trend_y_shock - 0.1 * trend_t, "Subtract the known trend"),
+    (np.r_[np.nan, np.diff(trend_x)], np.r_[np.nan, np.diff(trend_x_shock)], "Take first differences"),
+]
+for ax, (original, shocked, title) in zip(axes.flat, trend_panels):
+    ax.plot(trend_t, original, color="#1764A0", label="Original", linewidth=0.9)
+    ax.plot(trend_t, shocked, color="#D95F02", label="With shock", linewidth=0.9)
+    ax.axvline(100, color="gray", linestyle=":")
+    ax.set(title=title, ylabel="Value")
+axes[0, 0].legend(fontsize=8)
+fig.supxlabel("Time")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+## Spurious regression
+
+### Two independent random walks
+
+We generate $T=200$ observations from
+
+$$
+\begin{aligned}
+X_t &= X_{t-1}+\varepsilon_t, & X_0&=0,\\
+Y_t &= Y_{t-1}+\eta_t, & Y_0&=0,
+\end{aligned}
+\qquad
+\varepsilon_t\sim\mathcal N(0,1),
+\quad\eta_t\sim\mathcal N(0,1).
+$$ {#eq-spurious-walks}
+
+All shocks are independent across both series and time, so $X$ and $Y$ have no relationship.
+Nevertheless, their movements can align by chance in a finite sample.
+
+### The misleading regression in levels
+
+We fit a regression to the observed values, called the **levels**:
+
+$$
+Y_t=\alpha+\beta X_t+u_t.
+$$ {#eq-spurious-levels}
+
+The slope $\beta$ describes the relationship that the regression tries to find.
+Here, the true slope is zero.
+Random walks retain past shocks, and neighboring observations contain much of the same information.
+The usual regression test can mistake this persistence for evidence of a relationship.
+A small p-value, or a large $R^2$, can therefore be misleading.
+
+### The regression after differentiating
+
+First differentiation implies to look at **_changes_** instead of **_levels_**:
+
+$$
+\Delta X_t=X_t-X_{t-1}=\varepsilon_t,
+\qquad
+\Delta Y_t=Y_t-Y_{t-1}=\eta_t,
+\qquad
+\Delta Y_t=a+b\,\Delta X_t+v_t.
+$$ {#eq-spurious-differences}
+
+The changes are just the independent shocks, so the true slope is again $b=0$.
+The usual regression test works correctly for these changes in this example.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: spurious-example-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+withr::with_seed(203, {
+  spur_x <- cumsum(rnorm(200))
+  spur_y <- cumsum(rnorm(200))
+  spur_data <- bind_rows(
+    tibble(X = spur_x, Y = spur_y, transformation = "Levels"),
+    tibble(X = diff(spur_x), Y = diff(spur_y), transformation = "First differences")) |>
+    mutate(transformation = factor(transformation, levels = c("Levels", "First differences")))
+  spur_fits <- list(Levels = lm(spur_y ~ spur_x),
+                    `First differences` = lm(diff(spur_y) ~ diff(spur_x)))
+  print(tibble(
+    transformation = names(spur_fits),
+    R_squared = sapply(spur_fits, function(fit) summary(fit)$r.squared),
+    p_value = sapply(spur_fits, function(fit) coef(summary(fit))[2, 4])))
+  print(ggplot(spur_data, aes(X, Y)) +
+    geom_point(alpha = 0.5, size = 1.3) +
+    geom_smooth(method = "lm", se = FALSE, color = "#D95F02") +
+    facet_wrap(~ transformation, scales = "free", nrow = 1) +
+    labs(title = "Independent random walks can appear related") + theme_minimal())
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: spurious-example-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+spur_rng = np.random.default_rng(203)
+spur_x = np.cumsum(spur_rng.normal(size=200))
+spur_y = np.cumsum(spur_rng.normal(size=200))
+spur_pairs = [(spur_x, spur_y, "Levels"),
+              (np.diff(spur_x), np.diff(spur_y), "First differences")]
+spur_results = []
+fig, axes = plt.subplots(1, 2, figsize=(8, 4))
+for ax, (a, b, title) in zip(axes, spur_pairs):
+    fit = stats.linregress(a, b)
+    spur_results.append({"transformation": title, "R_squared": fit.rvalue ** 2,
+                         "p_value": fit.pvalue})
+    grid = np.linspace(a.min(), a.max(), 100)
+    ax.scatter(a, b, alpha=0.5, s=12)
+    ax.plot(grid, fit.intercept + fit.slope * grid, color="#D95F02")
+    ax.set(title=title, xlabel="X", ylabel="Y")
+print(pd.DataFrame(spur_results).to_string(index=False))
+fig.suptitle("Independent random walks can appear related")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+### How often does the test report a relationship?
+
+If we repeat the experiment with 1,000 independent pairs and count how often the p-value falls below 0.05 we get the following results.  
+Because the series are independent, each reported relationship is a **false positive**.
+A test working correctly should report about 5%, with some simulation variation.
+The plots below compare results for levels and changes (quite different!).
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: spurious-repetitions-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+withr::with_seed(204, {
+  spur_p <- replicate(1000, {
+    a <- cumsum(rnorm(200))
+    b <- cumsum(rnorm(200))
+    c(Levels = cor.test(a, b)$p.value,
+      Differences = cor.test(diff(a), diff(b))$p.value)
+  })
+  spur_rates <- tibble(transformation = factor(c("Levels", "First differences"),
+                        levels = c("Levels", "First differences")),
+                       rate = rowMeans(spur_p < 0.05))
+  print(ggplot(spur_rates, aes(transformation, rate)) +
+    geom_col(fill = "#7AA6C2", width = 0.6) +
+    geom_hline(yintercept = 0.05, color = "#D95F02", linetype = 2) +
+    geom_text(aes(label = scales::percent(rate, accuracy = 0.1)), vjust = -0.4) +
+    scale_y_continuous(limits = c(0, 1), labels = scales::label_percent()) +
+    labs(x = NULL, y = "Fraction with p-value below 0.05",
+         title = "1,000 independent pairs of random walks",
+         subtitle = "The dashed line marks the nominal 5% level.") + theme_minimal())
+})
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: spurious-repetitions-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+spur_mc_rng = np.random.default_rng(204)
+spur_p = np.empty((1000, 2))
+for repetition in range(1000):
+    a = np.cumsum(spur_mc_rng.normal(size=200))
+    b = np.cumsum(spur_mc_rng.normal(size=200))
+    spur_p[repetition] = [stats.linregress(a, b).pvalue,
+                          stats.linregress(np.diff(a), np.diff(b)).pvalue]
+spur_rates = (spur_p < 0.05).mean(axis=0)
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.bar(["Levels", "First differences"], spur_rates, color="#7AA6C2", width=0.6)
+ax.axhline(0.05, color="#D95F02", linestyle="--", label="Nominal 5% level")
+for j, rate in enumerate(spur_rates):
+    ax.text(j, rate + 0.02, f"{rate:.1%}", ha="center")
+ax.set(ylim=(0, 1), ylabel="Fraction with p-value below 0.05",
+       title="1,000 independent pairs of random walks")
+ax.set_yticks(np.linspace(0, 1, 6), labels=[f"{p:.0%}" for p in np.linspace(0, 1, 6)])
+ax.legend()
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+## Unit root tests
+
+Ok, but **how** can we determine that the process we are observing is a random walk?  
+Recall that from @eq-RW, $x_t = x_{t-1}+e_t$. This is equivalent to 
+$$x_t = \rho x_{t-1}+e_t,$$ {#eq-DF}
+but for $\rho=1$. Hence we can estimate @eq-DF and test if $\rho=1$ or $\rho \neq 1$. Alternatively, it is more usual to test if $\delta=0$ in 
+$$\Delta x_t=x_t-x_{t-1}=\delta x_{t-1}+ e_t.$$
+ 
+This is referred to as the [**Dickey-Fuller**](https://en.wikipedia.org/wiki/Dickey–Fuller_test) test. If $\delta=0$ (or $\rho=1$), then we say that there is a **unit root**.   
+The test can be generalized to more complex processes, for instance correcting for constant and trends (and seasonality $s_t$ potentially, too!):
+$$\Delta x_t=a_0+a_1t +s_t+\delta x_{t-1}+e_t.$$
+
+::: {.callout-note collapse="false"}
+## NOTE 
+$\Delta x_t$ is called the **difference process**. 
+:::
+
+The **augmented Dickey-Fuller** test also includes more lags of the difference process in the regression:
+
+$$\Delta x_t=a_0+a_1t+\delta_0x_{t-1}+\sum_{j=1}^J\delta_j \Delta x_{t-j}+e_t.$$
+
+One example below.
+
+The Python helper matches `tseries::adf.test` by including a constant, a linear trend, and the same fixed lag order.
+The libraries use different p-value approximations, so p-values can differ even for identical data.
+See the [statsmodels ADF documentation](https://www.statsmodels.org/stable/generated/statsmodels.tsa.stattools.adfuller.html).
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+adf.test(x[,1])
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_20
+#| warning: false
+
+def adf_test(series):
+    values = np.asarray(pd.Series(np.asarray(series).ravel()).dropna(), dtype=float)
+    lag_order = int(np.floor((len(values) - 1) ** (1 / 3)))
+    # Match tseries::adf.test: an intercept, a trend, and fixed lag order.
+    result = adfuller(values, maxlag=lag_order, regression="ct", autolag=None)
+    return pd.Series({"ADF statistic": result[0], "p-value": result[1],
+                      "Lag order": result[2], "Observations used": result[3]})
+
+print(adf_test(x[:, 0]))
+print("Null hypothesis: the series has a unit root.")
+````
+
+:::
+
+How can we interpret this?
+
+Use the displayed p-value to decide whether the null can be rejected at a user-specified **significance level**.
+The interpretation below follows the original R illustration; Python’s independent simulations can yield different conclusions. 
+
+
+::: {.callout-note collapse="false"}
+## Limitations of the DF test
+
+One of the main issues with the test is that the **null** (what we test, i.e., $\rho=1$ ) is synonymous with "**not stationary**". (see just below for more on that...)     
+This means that when H0 is rejected it means that the series is **not** *not stationary*.  
+But this does not imply that it **is** *stationary*.
+:::
+
+In fact a likely better test (that incorporates the variance) is the [**KPSS**](https://en.wikipedia.org/wiki/KPSS_test) test.  
+In this test, the null is "*The series is stationary*".     
+KPSS p-values outside the tabulated range are reported at its bounds, usually 0.01 and 0.10. The test is more technical than the DF test; it looks at the sum of partial sums of residuals and is focused on variance (which is perhaps why it will work better on our examples below).  
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+kpss.test(x[,1])
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_21
+#| warning: false
+
+def kpss_test(series):
+    values = np.asarray(pd.Series(np.asarray(series).ravel()).dropna(), dtype=float)
+    # Match tseries::kpss.test's level null and short bandwidth.
+    lag_order = int(np.floor(4 * (len(values) / 100) ** 0.25))
+    result = kpss(values, regression="c", nlags=lag_order)
+    return pd.Series({"KPSS statistic": result[0], "p-value": result[1],
+                      "Truncation lag parameter": result[2]})
+
+print(kpss_test(x[:, 0]))
+print("Null hypothesis: the series is stationary around a constant level.")
+````
+
+:::
+
+So not a lot of support for H0.  
+$\rightarrow$ in this case, both tests agree. 
+
+
+## Ok so what?
+
+Simply put, if the test concludes that there is a unit root, what does that mean?   
+
+- The latest observation provides a forecast for a random walk without drift.
+- Forecast uncertainty grows with the horizon, as the example above illustrates.
+
+If there is no unit root, then we need to dig deeper and consider alternative (more sophisticated) models. 
+
+
+
+## A crucial concept: stationarity
+
+There are several definitions of stationarity. The common denominator is the requirement of **stability through time**. The whole point of time-series is **forecasting**. Now, to be able to forecast, the analyst needs to have some guarantees that the model she learns or builds will have value in the future. For this to hold, the time-series must show some form of *invariance*.  Indeed, if empirical properties change all the time, then it is impossible to infer durable patterns. A simple example is stock prices. Compare the values of the APPLE or NVIDIA share price in 2000 and in 2025.
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: finance_import_R
+#| warning: false
+#| message: false
+#| cache: false
+
+tickers <- c("AAPL", "NVDA", "WMT", "XOM")  
+# Tickers: Apple, Nvidia, Walmart, Exxon
+# Others: , "F", "DIS", "GE", "CVX", "MSFT", "GS"
+min_date <- "2000-01-01"                      # Starting date
+max_date <- "2026-11-20"                      # Ending date 
+prices <- getSymbols(tickers, src = 'yahoo',  # The data comes from Yahoo Finance
+                     from = min_date,         # Start date
+                     to = max_date,           # End date
+                     auto.assign = TRUE, 
+                     warnings = FALSE) %>% 
+  map(~Ad(get(.))) %>%                        # Retrieving the data
+  purrr::reduce(merge) %>%                    # Merge in one dataframe
+  `colnames<-`(tickers)                       # Set the column names
+prices |> head(4)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_22
+#| warning: false
+
+tickers = ["AAPL", "NVDA", "WMT", "XOM"]
+min_date = "2000-01-01"
+max_date = "2026-11-20" 
+stock_quotes = yf.download(tickers, start=min_date, end=max_date,
+                           auto_adjust=False, progress=False)
+prices = stock_quotes["Adj Close"].reindex(columns=tickers)
+if prices.empty or prices.isna().all().any():
+    raise ValueError("Yahoo Finance returned no prices for one or more stocks.")
+print(prices.head(4))
+````
+
+:::
+
+Not exactly the same...
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: finance_price_tail
+#| warning: false
+#| message: false
+prices |> tail(4)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_23
+#| warning: false
+
+print(prices.tail(4))
+````
+
+:::
+
+Visually, this is easy to see: we cannot study asset prices in 2000-2010 and assume that the model will be relevant in 2026...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: statio
+#| warning: false
+#| message: false
+#| fig.width: 12
+#| fig.height: 5
+
+prices |> 
+  data.frame() |>
+  rownames_to_column(var = "date") |>
+  ggplot(aes(x = as.Date(date), y = AAPL)) + geom_line() +
+  geom_segment(x = as.Date("2000-01-01"), xend = as.Date("2010-01-01"), y = 20, yend = 20, 
+               arrow = arrow(ends = "both", length = unit(0.25, "cm")), color = "blue") +
+  annotate("text", x = as.Date("2005-01-01"), y = 30, label = "mean < 100", color = "blue", size = 5) +
+  geom_segment(x = as.Date("2021-01-01"), xend = as.Date("2026-11-01"), y = 100, yend = 100, 
+               arrow = arrow(ends = "both", length = unit(0.25, "cm")), color = "blue") +
+  annotate("text", x = as.Date("2025-01-01"), y = 110, label = "mean > 100", color = "blue", size = 5) +  
+  theme_minimal() + 
+  theme(axis.title = element_blank(),
+        text = element_text(size = 16))  
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_24
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(12, 5))
+ax.plot(prices.index, prices["AAPL"])
+for start, end, height in [("2000-01-01", "2010-01-01", 20),
+                            ("2021-01-01", "2026-11-01", 100)]:
+    ax.annotate("", xy=(pd.Timestamp(end), height),
+                xytext=(pd.Timestamp(start), height),
+                arrowprops={"arrowstyle": "<->", "color": "blue"})
+ax.text(pd.Timestamp("2005-01-01"), 30, "mean < 100", color="blue", ha="center")
+ax.text(pd.Timestamp("2025-12-01"), 110, "mean > 100", color="blue", ha="center")
+ax.set(xlabel="", ylabel="")
+fig.tight_layout()
+plt.show() 
+````
+
+:::
+
+
+In finance, raw data is usually **not stationary**.  
+But what's a trick we have seen that can transform a non-stationary series into a stationary one? Inspired by unit root tests...    
+$\rightarrow$ *Differentiation*!    
+
+The problem is that differentiation won't work well because there is a scale issue. If $p_t \approx1$ or if $p_t \approx 1,000$, the variations won't have the same magnitudes. We show this on the right.
+
+::: {.panel-tabset .column-margin group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: abs_var
+#| warning: false
+#| message: false
+#| fig.width: 5
+#| fig.height: 3
+prices |> 
+  data.frame() |>
+  rownames_to_column(var = "date") |>
+  ggplot(aes(x = as.Date(date), y = AAPL - lag(AAPL))) + geom_line() +
+  geom_segment(x = as.Date("2005-01-01"), xend = as.Date("2026-12-01"), y = 2, yend = 20, 
+               arrow = arrow(ends = "both", length = unit(0.25, "cm")), color = "blue") +
+  annotate("text", x = as.Date("2012-06-01"), y = 13, label = "increasing magnitude", color = "blue", size = 5, angle = 17) + 
+  theme_minimal() + 
+  theme(axis.title = element_blank(),
+        text = element_text(size = 16))  
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_25
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(5, 3))
+ax.plot(prices.index, prices["AAPL"].diff())
+ax.annotate("", xy=(pd.Timestamp("2026-12-01"), 20),
+            xytext=(pd.Timestamp("2005-01-01"), 2),
+            arrowprops={"arrowstyle": "<->", "color": "blue"})
+ax.text(pd.Timestamp("2012-06-01"), 13, "increasing magnitude",
+        color="blue", rotation=17, ha="center", fontsize=9)
+ax.set(xlabel="", ylabel="") 
+fig.tight_layout()
+plt.show() 
+````
+
+:::
+
+
+Hence, we use **relative variations** (they are called *returns* in finance):
+
+$$r_t = \frac{p_t-p_{t-1}}{p_{t-1}}.$$
+
+And magnitudes remain *roughly* comparable throughout the sample.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: rel_var
+#| warning: false
+#| message: false
+#| fig.width: 12
+#| fig.height: 5
+
+prices |> 
+  data.frame() |>
+  rownames_to_column(var = "date") |>
+  ggplot(aes(x = as.Date(date), y = AAPL/lag(AAPL)-1)) + geom_line() +
+  theme_minimal() + 
+  theme(axis.title = element_blank(),
+        text = element_text(size = 16))  
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_26
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(12, 5))
+ax.plot(prices.index, prices["AAPL"].pct_change(fill_method=None))
+ax.set(xlabel="", ylabel="")
+fig.tight_layout() 
+plt.show()
+````
+
+:::
+
+Now let's turn to definitions of **stationarity**.
+The most strict formulation is the following. 
+
+::: {.callout-note collapse="false"}
+## Strict stationarity
+A stochastic process $\{X_t\}_{t \in T}$ is said to be \textbf{strictly stationary} if for any finite collection of time points $t_1, t_2, \ldots, t_n \in T$ and any time shift $h$, the joint distribution of $(X_{t_1}, X_{t_2}, \ldots, X_{t_n})$ is identical to the joint distribution of $(X_{t_1+h}, X_{t_2+h}, \ldots, X_{t_n+h})$.
+
+Mathematically, this means, in terms of **distribution functions**:
+$$F_{X_{t_1}, X_{t_2}, \ldots, X_{t_n}}(x_1, x_2, \ldots, x_n) = F_{X_{t_1+h}, X_{t_2+h}, \ldots, X_{t_n+h}}(x_1, x_2, \ldots, x_n)$$
+for all $n \in \mathbb{N}$, all $t_1, \ldots, t_n, h \in T$, and all $x_1, \ldots, x_n \in \mathbb{R}$.
+:::
+
+This definition is a bit tough and **not very practical**. It's hard to test and not necessarily useful.   
+Focusing on the (much simpler) first two (co-)moments is easier and workable.  
+
+
+::: {.callout-note collapse="false"}
+## Weak stationarity
+A stochastic process $\{X_t\}_{t \in T}$ is said to be \textbf{weakly stationary} (or \textbf{covariance stationary} or \textbf{second-order stationary}) if it satisfies the following three conditions:
+
+- The mean function is constant: $\mathbb{E}[X_t] = \mu \quad \text{for all } t \in T$;     
+- The variance is finite: $\text{Var}(X_t) = \mathbb{E}[(X_t - \mu)^2] < \infty \quad \text{for all } t \in T$;     
+The autocovariance function depends only on the time lag: $\text{Cov}(X_t, X_{t+h}) = \gamma(h) \quad \text{for all } t, h \in T$,
+
+where $\gamma(h) = \mathbb{E}[(X_t - \mu)(X_{t+h} - \mu)]$ is the autocovariance function at lag $h$.   
+In particular, the **variance** is constant through time, too.
+:::
+
+
+Assuming series are detrended (and de-seasonalized), the Dickey-Fuller test provides a way to determine if series are stationary or not. 
+
+
+# Application to real data
+
+
+## Airline traffic
+
+We recycle the code from the previous session. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: import_airport_data_R
+#| message: false
+#| warning: false
+#| cache: false
+
+url <- "https://github.com/shokru/coqueret.github.io/raw/refs/heads/master/files/misc/time_series/traffic-sheet.xlsx"
+airline <- read.xlsx(url, sheet = 3, startRow = 2)
+air_data <- airline |> select(1:3)                  # Keep only the first 3 columns
+colnames(air_data) <- c("date", "CDG", "ORY")       # Rename these columns
+air_data <- air_data |>                             # Reformat the date
+  mutate(date = as.Date(as.numeric(date), origin = "1899-12-30")) |>
+  filter(is.finite(date), is.finite(CDG)) |>
+  arrange(date) |>
+  mutate(date = yearmonth(date)) |>
+  distinct(date, .keep_all = T) |>
+  as_tsibble() |>
+  fill_gaps()
+air_data |> head(4) 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_27
+#| warning: false
+
+url = "https://github.com/shokru/coqueret.github.io/raw/refs/heads/master/files/misc/time_series/traffic-sheet.xlsx"
+response = requests.get(url, timeout=120)
+response.raise_for_status()
+airline = pd.read_excel(io.BytesIO(response.content), sheet_name=2, header=1)
+air_data = airline.iloc[:, :3].copy()
+air_data.columns = ["date", "CDG", "ORY"]
+# openpyxl usually converts Excel dates to datetime objects already.
+if pd.api.types.is_numeric_dtype(air_data["date"]):
+    air_data["date"] = pd.to_datetime(
+        air_data["date"], unit="D", origin="1899-12-30", errors="coerce",
+    ) 
+else:
+    air_data["date"] = pd.to_datetime(air_data["date"], errors="coerce")
+for column in ["CDG", "ORY"]:
+    air_data[column] = pd.to_numeric(air_data[column], errors="coerce")
+air_data = air_data.loc[air_data["date"].notna() & np.isfinite(air_data["CDG"])]
+air_data = air_data.sort_values("date")
+air_data["date"] = air_data["date"].dt.to_period("M")
+air_data = air_data.drop_duplicates("date").set_index("date")
+air_data = air_data.reindex(pd.period_range(
+    air_data.index.min(), air_data.index.max(), freq="M", name="date",
+))
+print(air_data.head(4))
+````
+
+:::
+
+But we first need to remove the **seasonality** component.
+Both versions use STL with a fixed monthly seasonal pattern.
+The Python code explicitly matches R’s periodic smoother, smoothing spans, and iteration settings.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+cdg <- ts(air_data$CDG, frequency = 12)
+decomp <- stl(cdg, s.window = "periodic")
+CDG_sa <- seasadj(decomp)
+bind_cols(air_data[,-3], CDG_sa = CDG_sa) |>
+  pivot_longer(-date, names_to = "series", values_to = "passengers") |>
+  ggplot(aes(x = date, y = passengers, color = series)) + geom_line() + 
+  theme_classic() + 
+  theme(legend.position = c(0.2,0.2), axis.text.x = element_text(size = 15)) 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_28
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+cdg = air_data["CDG"].to_timestamp()
+# Reproduce R's periodic STL smoother and default iteration settings.
+seasonal_window = 10 * len(cdg) + 1
+stl_result = STL(
+    cdg, period=12, seasonal=seasonal_window, seasonal_deg=0,
+    trend=19, low_pass=13, trend_deg=1, low_pass_deg=1,
+    seasonal_jump=int(np.ceil(seasonal_window / 10)),
+    trend_jump=2, low_pass_jump=2,
+).fit(inner_iter=2, outer_iter=0)
+# R's periodic option averages the fitted seasonal component by calendar month.
+periodic_seasonal = stl_result.seasonal.groupby(cdg.index.month).transform("mean")
+CDG_sa = cdg - periodic_seasonal
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(cdg.index, cdg, label="CDG")
+ax.plot(CDG_sa.index, CDG_sa, label="CDG_sa")
+ax.set(xlabel="date", ylabel="passengers")
+ax.legend()
+fig.tight_layout()
+plt.show() 
+````
+
+:::
+
+Ok so now we can move on and **test** for stationarity.  
+**NOTE**: by default, the test adds a **constant** and a **linear trend**. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+adf.test(x = CDG_sa)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_29
+#| warning: false
+
+print(adf_test(CDG_sa))
+````
+
+:::
+
+The result is not super clean cut...
+
+- **H0**: not stationary     
+- **H1**: stationary     
+
+Small p-value: "evidence" against the null... 
+(The probability, under the null H0, to observe data as extreme as the one we have, is weak.)
+
+With KPSS:
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+kpss.test(x = CDG_sa)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_30
+#| warning: false
+
+print(kpss_test(CDG_sa))
+````
+
+:::
+
+So here the test rejects the null!
+
+
+## Carbon concentration
+
+Same but with CO2 data.
+Both versions skip NOAA comment lines and recognize `-99.99` as a missing value.
+The test helpers omit missing observations. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: co2_data_R
+#| warning: false
+#| message: false
+
+url <- "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.csv"
+co2 <- read.csv(url, comment.char = "#", na.strings = "-99.99")
+co2 <- co2 |> 
+  mutate(date = make_date(year = year, month = month, day = 15)) |>
+  select(date, average, deseasonalized) |>
+  mutate(date_iso = date,
+         date = yearmonth(date)) |>
+  as_tsibble(index = date)
+adf.test(x = na.omit(co2$deseasonalized))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_31
+#| warning: false
+
+url = "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.csv"
+response = requests.get(url, timeout=120)
+response.raise_for_status()
+co2 = pd.read_csv(io.StringIO(response.text), comment="#", skipinitialspace=True,
+                  na_values=[-99.99])
+co2["date_iso"] = pd.to_datetime(co2[["year", "month"]].assign(day=15))
+co2["date"] = co2["date_iso"].dt.to_period("M")
+co2 = co2.set_index("date")[["average", "deseasonalized", "date_iso"]]
+print(adf_test(co2["deseasonalized"]))
+````
+
+:::
+
+Potential problem here: the "drift" may not be linear, but quadratic...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+kpss.test(x = na.omit(co2$deseasonalized))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_32
+#| warning: false
+
+print(kpss_test(co2["deseasonalized"]))
+````
+
+:::
+
+The test again rejects the null of stationarity. 
+
+
+## Finance
+
+
+So for the sake of obviousness, let's run a DF test on NVDA prices... (The data was loaded above)
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+nvda <- prices[,2]
+adf.test(nvda)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_33
+#| warning: false
+
+nvda = prices["NVDA"]
+print(adf_test(nvda))
+````
+
+:::
+
+That was to be expected. We cannot reject the null of *no stationarity*.   
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+kpss.test(nvda)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_34
+#| warning: false
+
+print(kpss_test(nvda))
+````
+
+:::
+
+No big surprise: the tests agree. Though in this case, we reject the null of *stationarity*. 
+
+Next, what about simple differences?
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+adf.test(na.omit(nvda - stats::lag(nvda)))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_35
+#| warning: false
+
+print(adf_test(nvda.diff().dropna()))
+````
+
+:::
+
+So we must reject the null of no-stationarity.
+Here, the problem is that the DF test implies that there is **no unit root**.   
+But this does not mean that the series are stationary either! That's an important subtlelty.    
+Let's look at the KPSS outcome.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+
+kpss.test(na.omit(nvda - stats::lag(nvda)))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_36
+#| warning: false
+
+print(kpss_test(nvda.diff().dropna()))
+````
+
+:::
+
+Et voilà! Here the tests "disagree" with regard to stationarity. Though, again, DF does not really test for stationarity strictly speaking.   
+But it is KPSS that is "correct". 
+
+Now let's turn to returns...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+adf.test(na.omit(nvda/stats::lag(nvda) - 1))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_37
+#| warning: false
+
+print(adf_test(nvda.pct_change(fill_method=None).dropna()))
+````
+
+:::
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| warning: false
+#| message: false
+kpss.test(na.omit(nvda/stats::lag(nvda) - 1))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_38
+#| warning: false
+
+print(kpss_test(nvda.pct_change(fill_method=None).dropna()))
+````
+
+:::
+
+Here the result for KPSS is not super clear cut, but it does seem that the two test point towards **stationarity**.    
+**FINALLY** !!!!
+
+The table below summarizes the original R illustration.
+Online data revisions and p-value approximations can change the empirical conclusions.
+
+ 
+| test | prices | simple difference | returns |     
+| --- | --- | --- | --- |       
+DF test | not stationary | stationary | stationary |    
+KPSS test | not stationary | not stationary | stationary |
+
+To close this session, let's recall a typical representation of returns (quite abstract).  
+Below, the returns of Apple. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: rel_var_APPLE
+#| warning: false
+#| message: false
+#| fig.width: 12
+#| fig.height: 5
+
+prices |> 
+  data.frame() |>
+  rownames_to_column(var = "date") |>
+  ggplot(aes(x = as.Date(date), y = AAPL/lag(AAPL)-1)) + geom_line() +
+  theme_minimal() + 
+  theme(axis.title = element_blank(),
+        text = element_text(size = 16)) 
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_39
+#| warning: false
+
+fig, ax = plt.subplots(figsize=(12, 5))
+ax.plot(prices.index, prices["AAPL"].pct_change(fill_method=None))
+ax.set(xlabel="", ylabel="")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+And below, a plot of simulations of white noise. Can you spot a difference?
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: noise
+#| warning: false
+#| message: false
+#| fig.width: 12
+#| fig.height: 5
+
+data.frame(t = 1:(100*N), x = rnorm(100*N)/10) |>
+  ggplot(aes(x = t, y = x)) + theme_classic() + geom_line() +
+  theme(axis.text = element_text(size = 16))
+
+
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: python_40
+#| warning: false
+
+noise = rng.normal(size=100 * N) / 10
+fig, ax = plt.subplots(figsize=(12, 5))
+ax.plot(np.arange(1, len(noise) + 1), noise)
+ax.set(xlabel="t", ylabel="x")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+## Exercise: reproduce these tests on crypto data!
+
+Use the cryptocurrency examples in the first notebook to obtain daily closing prices.
+Apply the ADF and KPSS tests to prices, first differences, and returns in either language.
+Compare the statistics and p-values before drawing conclusions about stationarity.
+
+
+```{r}
+
+```
+
