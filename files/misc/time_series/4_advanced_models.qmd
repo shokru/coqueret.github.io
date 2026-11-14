@@ -1,0 +1,1603 @@
+---
+title: "Advanced models"
+engine: knitr
+execute:
+  error: false
+format:
+  html:
+    toc: true
+    number-sections: true
+    embed-resources: true
+    grid:
+      margin-width: 290px
+      body-width: 950px
+      sidebar-width: 120px
+---
+
+
+```{css, echo=FALSE}
+.my_class {
+font-size: 0.78em;
+}
+
+.center{
+margin: 0!important;
+height: 30px;
+}
+```
+
+# Getting started
+
+This notebook pairs the R examples with Python code and output.
+The language tabs are synchronized throughout the document.
+Both languages use the saved data in the accompanying `data` folder.
+The original download examples remain available but are not run during rendering.
+Fitting routines and random initialization can produce different results between languages.
+
+## Required packages
+
+Quarto uses knitr and reticulate; install reticulate 1.41 or later.
+The loading chunk declares the Python dependencies for reticulate's managed environment.
+The neural network examples use Keras 2.15 and TensorFlow 2.15, matching the R `keras` interface.
+For an existing Python environment, install `numpy<2`, pandas, scipy, matplotlib, seaborn, statsmodels, requests, yfinance, plotly, arch, `keras==2.15.*`, and `tensorflow==2.15.*`.
+Select that environment with `RETICULATE_PYTHON` before rendering if needed.
+Render with `quarto render 4_advanced_models_R_Python.qmd`.
+Training the networks takes longer than the statistical examples.
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-01-r
+#| warning: false
+#| message: false
+
+Sys.setenv(TF_CPP_MIN_LOG_LEVEL = "2", TF_NUM_INTRAOP_THREADS = "2",
+           TF_NUM_INTEROP_THREADS = "2")
+reticulate::py_require(c("numpy<2", "pandas", "scipy", "matplotlib", "seaborn",
+                         "statsmodels", "requests", "yfinance", "plotly", "arch",
+                         "keras==2.15.*", "tensorflow==2.15.*"),
+                       python_version = ">=3.10,<3.12")
+library(highcharter) # For interactive plots
+library(WDI)         # For World Bank data
+library(RcppRoll)    # Rolling function fast with C++
+library(openxlsx)    # A cool package to deal with Excel files/formats
+library(quantmod)    # Package for financial data extraction
+library(tsibble)     # TS with dataframes framework 
+library(fable)       # Package for time-series models & predictions
+library(feasts)      # Package for time-series analysis
+library(forecast)    # Another package for TS (forecasting)
+library(tseries)     # Simple package for time-series tests
+library(plotly)      # For 3D graphs
+library(mvtnorm)     # For multivariate Gaussian distributions
+library(crypto2)     # For cryto data
+library(ggsci)       # For color palettes
+library(rugarch)     # For GARCH models
+library(fGarch)      # For GARCH models
+library(keras)       # For neural networks
+library(vars)        # For VAR (Vector AutoRegressive) models
+library(tidyverse)   # THE library for data science; at the end to override other functions
+set.seed(42)         # Random seed
+
+impute <- function(v, n = 6){     # Imputation function
+  for(j in 1:n){
+    ind <- which(is.na(v))
+    if(length(ind)>0){
+      if(ind[1]==1){ind <- ind[-1]}
+      v[ind] <- v[ind-1]
+    }
+  }
+  return(v)
+}
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-01-python
+#| warning: false
+
+import os
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
+os.environ.setdefault("TF_NUM_INTRAOP_THREADS", "2")
+os.environ.setdefault("TF_NUM_INTEROP_THREADS", "2")
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import requests
+import yfinance as yf
+import plotly.express as px
+from scipy.stats import norm
+from statsmodels.tsa.stattools import acf
+from statsmodels.tsa.api import VAR
+from statsmodels.tsa.arima.model import ARIMA
+from arch import arch_model
+from arch.univariate import ConstantMean, GARCH, Normal
+from tensorflow import keras
+
+rng = np.random.default_rng(42)
+sns.set_theme(style="whitegrid")
+
+def impute(values, n=6):
+    return values.ffill(limit=n)
+````
+
+:::
+
+## Fetching some (crypto) data
+
+The download snippets show CoinMarketCap through R's `crypto2` and Yahoo Finance through Python's `yfinance`.
+They are optional; the calculations below use the same saved prices in both languages.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-02-r
+#| warning: false
+#| message: false
+#| eval: false
+
+coins <- crypto_list() 
+c_info <- crypto_info(coin_list = coins, limit = 30)
+coin_names <- c("Bitcoin", "Ethereum", "Tether USDt", "BNB", "USDC", "Solana")
+coin_hist <- crypto_history(coins |> dplyr::filter(name %in% coin_names),
+                            start_date = "20170101",
+                            end_date = "20251206")
+coin_hist <- coin_hist |>  # Timestamps are at midnight, hence we add a day.
+  dplyr::mutate(date = 1 + as.Date(as.POSIXct(timestamp, origin="1970-01-01")))
+coin_hist <- coin_hist |> 
+  group_by(name) |>
+  mutate(return = close / lag(close) - 1 ) |>
+  ungroup()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-02-python
+#| warning: false
+#| eval: false
+
+coin_tickers = {"BTC-USD": ("bitcoin", "Bitcoin", "BTC"),
+                "ETH-USD": ("ethereum", "Ethereum", "ETH"),
+                "USDT-USD": ("tether", "Tether USDt", "USDT"),
+                "BNB-USD": ("bnb", "BNB", "BNB"),
+                "USDC-USD": ("usd-coin", "USDC", "USDC"),
+                "SOL-USD": ("solana", "Solana", "SOL")}
+quotes = yf.download(list(coin_tickers), start="2017-01-01", end="2025-12-07",
+                     auto_adjust=False, progress=False)
+closes = quotes["Close"].reindex(columns=list(coin_tickers))
+closes.index.name = "date"
+coin_hist = (closes.reset_index().melt(id_vars="date", var_name="ticker", value_name="close")
+             .dropna(subset=["close"]))
+for column, position in [("slug", 0), ("name", 1), ("symbol", 2)]:
+    coin_hist[column] = coin_hist["ticker"].map(lambda ticker: coin_tickers[ticker][position])
+coin_hist = coin_hist.sort_values(["name", "date"])
+coin_hist["return"] = coin_hist.groupby("name")["close"].pct_change(fill_method=None)
+````
+
+:::
+
+The worked examples use the saved CoinMarketCap sample from the original notebook, through November 29, 2025.
+Identical duplicate prices have been removed, and dates identify the closing day.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: crypto-snapshot-r
+#| warning: false
+#| message: false
+
+coin_hist <- read_csv("data/4_advanced_models_crypto_prices.csv",
+                      col_types = cols(timestamp = col_date(), date = col_date())) |>
+  arrange(name, date) |> group_by(name) |>
+  mutate(return = close / lag(close) - 1) |> ungroup()
+head(coin_hist)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: crypto-snapshot-python
+#| warning: false
+
+coin_hist = pd.read_csv("data/4_advanced_models_crypto_prices.csv",
+                        parse_dates=["timestamp", "date"])
+coin_hist = coin_hist.sort_values(["name", "date"])
+coin_hist["return"] = coin_hist.groupby("name")["close"].pct_change(fill_method=None)
+print(coin_hist.head())
+````
+
+:::
+
+
+# ARCH-type models
+
+
+## Realized volatility
+
+Then, let's have a look at volatility. It's measured as
+
+$$v_t=\sqrt{\frac{1}{T-1}\sum_{s=0}^{T-1}(r_{t-s}-\bar{r}_t)^2},$$
+where $\bar{r}_t$ is the mean return in the window of $T$ observations. 
+Below, we compute the rolling standard deviation over 20 days.
+Each window ends on the date shown.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-03-r
+#| warning: false
+#| message: false
+
+coin_hist <- coin_hist |>
+  arrange(name, date) |>
+  group_by(name) |>
+  filter(!is.na(return)) |>
+  mutate(real_vol_20 = RcppRoll::roll_sd(return, n = 20, fill = NA, align = "right")) |>
+  ungroup()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-03-python
+#| warning: false
+
+coin_hist = coin_hist.dropna(subset=["return"]).sort_values(["name", "date"]).copy()
+coin_hist["real_vol_20"] = coin_hist.groupby("name")["return"].transform(
+    lambda values: values.rolling(20).std(ddof=1))
+````
+
+:::
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-04-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 5
+
+coin_hist |>
+  filter(name == "Bitcoin") |>
+  pivot_longer(all_of(c("close", "real_vol_20")), names_to = "series", values_to = "value") |>
+  ggplot(aes(x = date, y = value, color = series)) + geom_line() + theme_bw() +
+  facet_wrap(vars(series), nrow = 2, scales = "free")# + scale_y_log10()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-04-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 5
+
+btc_volatility = coin_hist.loc[coin_hist["name"].eq("Bitcoin")]
+fig, axes = plt.subplots(2, 1, figsize=(8, 5), sharex=True)
+for ax, column in zip(axes, ["close", "real_vol_20"]):
+    ax.plot(btc_volatility["date"], btc_volatility[column])
+    ax.set_ylabel(column)
+axes[1].set_xlabel("Date")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+Now let's have a look a the autocorrelation of the volatility: it's highly persistent.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-05-r
+#| warning: false
+#| message: false
+#| fig-width: 9
+#| fig-height: 4
+
+crypto_acf <- coin_hist |> 
+  na.omit() %>%
+  split(.$name) %>% 
+  map(~acf(.$real_vol_20, plot = F)) %>% 
+  map_dfr(
+    ~data.frame(lag = .$lag, 
+                acf = .$acf,
+                ci = qnorm(0.975)/sqrt(.$n.used)
+    ), .id = "name") 
+crypto_acf |> 
+  filter(lag > 0, lag < 15) |>
+  ggplot(aes(x = lag, y = acf, fill = name)) + 
+  geom_col(position = "dodge", alpha = 0.8) + theme_bw() +
+  scale_fill_viridis_d(option = "magma", end = 0.9, begin = 0.1)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-05-python
+#| warning: false
+#| fig-width: 9
+#| fig-height: 4
+
+crypto_acf = []
+for name, group in coin_hist.groupby("name"):
+    values = group["real_vol_20"].dropna().to_numpy()
+    coefficients = acf(values, nlags=14, fft=True)
+    crypto_acf.extend({"name": name, "lag": lag, "acf": coefficients[lag]}
+                      for lag in range(1, 15))
+crypto_acf = pd.DataFrame(crypto_acf)
+fig, ax = plt.subplots(figsize=(9, 4))
+sns.barplot(data=crypto_acf, x="lag", y="acf", hue="name", palette="magma", ax=ax)
+ax.set(xlabel="Lag", ylabel="Autocorrelation")
+ax.legend(title="Coin", fontsize=8)
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+Large price movements often occur close together.
+GARCH models allow the variance of returns to change through time. 
+
+
+The realized volatility is based on **past** returns. But markets (**equity** mostly) have another very cool and forward-looking indicator called the [**VIX**](https://www.cboe.com/tradable_products/vix/). The VIX is slightly different, because it is based on forward-looking option prices (taking their implied volatilities over specific horizons). Still, it is linked (empirically) to the traditional volatility. 
+
+Let's have a look below.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-06-r
+#| warning: false
+#| message: false
+#| eval: false
+
+min_date <- "1998-01-01"                 # Starting date
+max_date <- "2025-11-07"                 # Ending date
+getSymbols("^VIX", src = 'yahoo',        # The data comes from Yahoo Finance
+           from = min_date,              # Start date
+           to = max_date,                # End date
+           auto.assign = TRUE, 
+           warnings = FALSE)
+VIX <- VIX |> as.data.frame() |>
+  rownames_to_column("date") |>
+  dplyr::mutate(date = as.Date(date))
+head(VIX,7)                                   # Have a look at the result!
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-06-python
+#| warning: false
+#| eval: false
+
+VIX = yf.download("^VIX", start="1998-01-01", end="2025-11-08",
+                  auto_adjust=False, progress=False)
+if VIX.columns.nlevels > 1:
+    VIX = VIX.xs("^VIX", level=1, axis=1)
+VIX = VIX.reset_index().rename(columns={"Date": "date"})
+````
+
+:::
+
+Both charts use the saved VIX sample, from January 1998 through November 7, 2025.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: vix-snapshot-r
+#| warning: false
+#| message: false
+
+VIX <- read_csv("data/4_advanced_models_vix.csv", show_col_types = FALSE)
+head(VIX, 7)
+vix_chart <- xts::xts(VIX$Close, order.by = VIX$date)
+highchart(type = "stock") %>% hc_title(text = "Evolution of the VIX") %>%
+  hc_add_series(vix_chart, name = "VIX") %>% hc_tooltip(pointFormat = "{point.y:.3f}")
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: vix-snapshot-python
+#| warning: false
+
+VIX = pd.read_csv("data/4_advanced_models_vix.csv", parse_dates=["date"])
+print(VIX.head(7))
+fig = px.line(VIX, x="date", y="Close", title="Evolution of the VIX")
+fig.update_xaxes(rangeslider_visible=True);
+fig
+````
+
+:::
+
+Periods of high volatility tend to occur together, forming **volatility clusters**. 
+
+## Some theory
+
+Therefore, we also need to introduce models that allow for this type of feature. In 1982, Robert Engle proposed such a model, called [**ARCH**](https://www.jstor.org/stable/1912773) for "*AutoRegressive Conditional Heteroskedasticity*", 
+which was generalized in 1986 to [**GARCH**](https://www.sciencedirect.com/science/article/abs/pii/0304407686900631) models. Engle obtained the Nobel Prize in economics in part for this contribution. 
+
+As we show below, GARCH models have a direct link with auto-regressive processes! 
+
+The idea is to work with the innovations, $e_t$ and to specify them a bit differently, i.e., like this: $e_t=\sigma_t z_t$, where $\sigma_t$ is going to be a changing standard deviation and $z_t$ is a simple white noise. What matters is that the vol term is modelled as
+$$\sigma^2_t = a+\sum_{j=1}^pd_j\sigma^2_{t-j} + \sum_{k=1}^qb_ke^2_{t-k},$$
+hence, the value of $\sigma_t^2$ depends both on its past and on the past of squared innovations. 
+
+There have been MANY extension to these models: T-GARCH, E-GARCH, etc. See for instance [GARCH models: structure, statistical inference and financial applications](https://onlinelibrary.wiley.com/doi/book/10.1002/9781119313472). 
+
+## Examples: estimation
+
+There are many packages for GARCH estimation. We propose two: [**ruGARCH**](https://cran.r-project.org/web/packages/rugarch/index.html) and [**fGARCH**](https://cran.r-project.org/web/packages/fGarch/index.html).
+
+
+In **fGARCH**, the model is: 
+
+$$\sigma_t^2 = \omega + \alpha e_{t-1}^2 + \beta \sigma_{t-1}^2.$$ 
+In the output, there are some additional parameters that allow to propose a more general model:
+
+- **shape** is the shape parameter of the conditional distribution.   
+- **skew** is the skewness parameter of the conditional distribution.   
+- **delta** a numeric value, the exponent delta of the variance recursion, fixed at 2 usually. 
+
+$\delta$ values other than 2 come from P-GARCH models:
+
+\begin{align}
+\varepsilon_t & = \sigma_t z_t, \qquad z_t \overset{\text{i.i.d.}}{\sim} \text{Skew}(\text{shape},\text{skew}), \\ 
+\sigma_t^{\delta}
+&= \omega
+  + \sum_{i=1}^{q} \alpha_i\bigl(|\varepsilon_{t-i}| - \gamma_i \varepsilon_{t-i}\bigr)^{\delta}
+  + \sum_{j=1}^{p} \beta_j\,\sigma_{t-j}^{\delta},
+\end{align}
+
+The examples below use Gaussian innovations and a constant mean.
+Other distribution choices allow for skewness or heavier tails.
+Returns are expressed in percentage points for these fits.
+Python uses the [arch package](https://arch.readthedocs.io/en/latest/univariate/introduction.html), first through its model constructor, then through separate components. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-07-r
+#| warning: false
+#| message: false
+
+btc_returns <- coin_hist |> filter(name == "Bitcoin") |> pull(return) |> na.omit()
+garch_returns <- 100 * btc_returns
+fit_f <- garchFit(formula = ~garch(1, 1), data = garch_returns,
+                   cond.dist = "norm", trace = FALSE)
+fit_f
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-07-python
+#| warning: false
+
+btc_returns = coin_hist.loc[coin_hist["name"].eq("Bitcoin"), "return"].dropna()
+garch_returns = 100 * btc_returns
+fit_f = arch_model(garch_returns, mean="Constant", vol="GARCH", p=1, q=1,
+                    dist="normal", rescale=False).fit(disp="off", cov_type="classic")
+print(fit_f.summary())
+````
+
+:::
+
+Now, with **rugarch**...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-08-r
+#| warning: false
+#| message: false
+
+spec <- ugarchspec(variance.model = list(model = "sGARCH", garchOrder = c(1, 1)),
+                   mean.model = list(armaOrder = c(0, 0), include.mean = TRUE),
+                   distribution.model = "norm")
+garch_dates <- coin_hist |> filter(name == "Bitcoin") |> pull(date)
+garch_series <- xts::xts(garch_returns, order.by = garch_dates)
+fit_r <- ugarchfit(data = garch_series, spec = spec, solver = "hybrid")
+fit_r@fit$coef
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-08-python
+#| warning: false
+
+garch_components = ConstantMean(garch_returns, volatility=GARCH(p=1, q=1),
+                                 distribution=Normal(), rescale=False)
+fit_r = garch_components.fit(disp="off", cov_type="classic")
+print(fit_r.params)
+````
+
+:::
+
+
+The packages use different fitting routines, so their estimates can differ.
+In both R examples, the variance equation is
+$$\sigma_t^2=\omega+\alpha e_{t-1}^2+\beta\sigma_{t-1}^2.$$
+The coefficient $\alpha$ multiplies the squared shock; $\beta$ multiplies the previous variance. 
+
+With both libraries, it is possible to make predictions.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-09-r
+#| warning: false
+#| message: false
+
+predict(fit_f, n.ahead = 5)
+ugarchforecast(fit_r, n.ahead = 3)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-09-python
+#| warning: false
+
+forecast_f = fit_f.forecast(horizon=5, reindex=False)
+forecast_r = fit_r.forecast(horizon=3, reindex=False)
+print(pd.DataFrame({"horizon": np.arange(1, 6),
+                    "mean": forecast_f.mean.iloc[-1].to_numpy(),
+                    "standard_deviation": np.sqrt(forecast_f.variance.iloc[-1].to_numpy())})
+      .to_string(index=False))
+print(pd.DataFrame({"horizon": np.arange(1, 4),
+                    "mean": forecast_r.mean.iloc[-1].to_numpy(),
+                    "standard_deviation": np.sqrt(forecast_r.variance.iloc[-1].to_numpy())})
+      .to_string(index=False))
+````
+
+:::
+
+The reported standard deviations are daily volatilities in percentage points.    
+
+A cool feature of `{rugarch}` is that you can use forward rolling, as in actual **backtests** (more on that below). 
+
+
+
+
+
+
+# Vector Auto-Regression
+
+## The VAR(1) model
+
+Now we are switching to full multivariate mode!    
+With the **Vector Auto-Regression** (VAR). It is written as:
+
+$$X_t = \mu + A X_{t-1} + \varepsilon_t,
+\qquad \varepsilon_t \sim \text{i.i.d. } (0,\Sigma_\varepsilon),$$
+with $X_t \in \mathbb{R}^k, \mu \in \mathbb{R}^k, A \in \mathbb{R}^{k \times k}$.
+
+::: {.callout-note collapse="false"}
+##  Interpretation 
+In two dimensions: $X_t=[X_{t,1} \ X_{t,2}  ]'$.      
+
+$$X_t = \mu +  \begin{bmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{bmatrix} X_{t-1} + \text{error}$$
+
+So $A_{11}$ measures the impact from $X_{t-1, 1}$ onto $X_{t,1}$ (itself) and same for $A_{22}$ for the second component. 
+The non-diagonal terms drive the cross-effects: $A_{12}$ is the impact of $X_{t-1,2}$ on $X_{t,1}$ and vice-versa.  
+:::
+
+A few probabilistic properties. 
+
+::: {.callout-note collapse="false"}
+## Mean
+If the VAR(1) is stable (all eigenvalues of $A$ satisfy $|\lambda_i(A)|<1$), the **unconditional mean** exists and is given by
+$$\mathbb{E}[X_t] = (I - A)^{-1}\mu.$$
+:::
+
+Next, let $\Gamma_0 = \mathbb{V}(X_t)$, it must satisfy
+$$ \Gamma_0 = A \Gamma_0 A' + \Sigma_\varepsilon.$$
+
+
+Next, define the lag-$h$ autocovariance matrix:
+$$\Gamma_h = \text{Cov}(X_t, X_{t-h}).$$
+
+Using for simplicity $X_t = A X_{t-1} + \varepsilon_t$ (the constant terms do not affect the covariances):
+$$ \Gamma_h = \text{Cov}(A X_{t-1} + \varepsilon_t, X_{t-h}) = A \text{Cov}(X_{t-1}, X_{t-h}) + \underbrace{\text{Cov}(\varepsilon_t, X_{t-h})}_{=0}
+= A \Gamma_{h-1} $$
+
+
+::: {.callout-note collapse="false"}
+## Autocovariance
+
+By recursion, we obtain the multivariate version of the AR(1):
+$$\Gamma_h = A^h \Gamma_0, \quad h \ge 0.$$
+The correlation matrix at lag $h$ is $D^{-1/2}\Gamma_h D^{-1/2}$, where $D$ contains the variances on its diagonal.
+:::
+
+
+
+## The VAR(p) Model
+
+A Vector Autoregression of order $p$, denoted VAR($p$), models a $k$-dimensional time series vector 
+$\mathbf{X}_t = (X_{1,t}, \dots, X_{k,t})^\top$ as:
+
+$$
+\mathbf{X}_t 
+= \mathbf{c} + A_1 \mathbf{X}_{t-1} + A_2 \mathbf{X}_{t-2} + \cdots + A_p \mathbf{X}_{t-p} + \mathbf{e}_t,
+$$
+
+where:
+
+- $\mathbf{X}_t$ is a $k \times 1$ vector of endogenous variables,   
+- $\mathbf{c}$ is a $k \times 1$ vector of intercept terms,    
+- $A_i$ are $k \times k$ coefficient matrices,     
+- $\mathbf{e}_t$ is a $k \times 1$ vector of innovations (reduced-form errors).
+
+
+**Error term assumptions**: the innovations satisfy
+
+$$\mathbf{e}_t \sim (0, \Sigma_e),$$
+
+where $\Sigma_e$ is a symmetric positive definite $k \times k$ covariance matrix, allowing contemporaneous correlation across equations.
+
+
+## Empirics
+
+VARs are often used on **macroeconomic** data.
+The optional download code below uses the [World Bank API](https://data.worldbank.org/).  
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-10-r
+#| warning: false
+#| message: false
+#| eval: false
+
+wb_raw <- WDI(                              # World Bank data
+  indicator = c(
+    "labor" = "SL.TLF.TOTL.IN",             # Labor force (# individuals)
+    "savings_rate" = "NY.GDS.TOTL.ZS",      # Savings rate (% GDP)
+    "inflation" = "FP.CPI.TOTL.ZG",         # Inflation rate
+    "trade" = "NE.TRD.GNFS.ZS",             # Trade as % of GDP 
+    "pop" = "SP.POP.TOTL",                  # Population
+    "pop_growth" = "SP.POP.GROW",           # Population growth
+    "capital_formation" = "NE.GDI.TOTL.ZS", # Gross capital formation (% GDP)
+    "gdp_percap" = "NY.GDP.PCAP.CD",        # GDP per capita
+    "RD_percap" = "GB.XPD.RSDV.GD.ZS",      # R&D per capita
+    "educ_level" = "SE.SEC.CUAT.LO.ZS",     # % pop reachiing second. educ. level
+    "educ_spending" = "SE.XPD.TOTL.GD.ZS",  # Education spending (%GDP)
+    "nb_researchers" = "SP.POP.SCIE.RD.P6", # Nb researchers per million inhab.
+    "debt" = "GC.DOD.TOTL.GD.ZS",           # Central gov. debt (% of GDP)
+    "gdp" = "NY.GDP.MKTP.CD"                # Gross Domestic Product (GDP)
+  ), 
+  extra = TRUE,
+  start = 1960,
+  end = 2024) |>
+  mutate(across(everything(), as.vector)) |>
+  select(-status, -lending, -iso2c, -iso3c) |>  
+  filter(region != "Aggregates", income != "Aggregates") |>
+  arrange(country, year) |>
+  group_by(country) |>
+  mutate(across(everything(), impute)) |>
+  mutate(gdp_growth = gdp_percap/dplyr::lag(gdp_percap) - 1, .before = "region") |>   
+  ungroup() |>
+  filter(lastupdated == max(lastupdated)) |>
+  arrange(country, year)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-10-python
+#| warning: false
+#| eval: false
+
+indicators = {"labor": "SL.TLF.TOTL.IN", "savings_rate": "NY.GDS.TOTL.ZS",
+              "inflation": "FP.CPI.TOTL.ZG", "trade": "NE.TRD.GNFS.ZS",
+              "pop": "SP.POP.TOTL", "pop_growth": "SP.POP.GROW",
+              "capital_formation": "NE.GDI.TOTL.ZS", "gdp_percap": "NY.GDP.PCAP.CD",
+              "RD_percap": "GB.XPD.RSDV.GD.ZS", "educ_level": "SE.SEC.CUAT.LO.ZS",
+              "educ_spending": "SE.XPD.TOTL.GD.ZS", "nb_researchers": "SP.POP.SCIE.RD.P6",
+              "debt": "GC.DOD.TOTL.GD.ZS", "gdp": "NY.GDP.MKTP.CD"}
+wb_raw = pd.DataFrame({"year": np.arange(1960, 2025)})
+for name, indicator in indicators.items():
+    response = requests.get(f"https://api.worldbank.org/v2/country/USA/indicator/{indicator}",
+                            params={"format": "json", "date": "1960:2024", "per_page": 100},
+                            timeout=120)
+    response.raise_for_status()
+    observations = response.json()[1]
+    values = pd.DataFrame({"year": int(row["date"]), name: row["value"]}
+                           for row in observations)
+    wb_raw = wb_raw.merge(values, on="year", how="left")
+wb_raw = wb_raw.sort_values("year")
+wb_raw[list(indicators)] = wb_raw[list(indicators)].ffill(limit=6)
+wb_raw["country"] = "United States"
+wb_raw["gdp_growth"] = wb_raw["gdp_percap"].pct_change(fill_method=None)
+````
+
+:::
+
+The saved US extract comes from the original World Bank download and covers 1960 to 2024.
+The original preparation carries missing observations forward for at most six years.
+Here, `gdp_growth` measures growth in nominal GDP per capita in current US dollars.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: world-bank-snapshot-r
+#| warning: false
+#| message: false
+
+wb_raw <- read_csv("data/4_advanced_models_world_bank_us.csv", show_col_types = FALSE)
+head(wb_raw |> select(country, year, gdp_growth, inflation, pop_growth))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: world-bank-snapshot-python
+#| warning: false
+
+wb_raw = pd.read_csv("data/4_advanced_models_world_bank_us.csv")
+print(wb_raw[["country", "year", "gdp_growth", "inflation", "pop_growth"]].head())
+````
+
+:::
+
+
+Ok, let's focus on the US for simplicity. Taking into account other countries would mean/imply a Panel VAR.  
+To lighten the output (which can be heavy), we only focus on 3 variables. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-11-r
+#| warning: false
+#| message: false
+
+wb_us <- wb_raw |> 
+  filter(country == "United States") |>
+  select(gdp_growth, inflation, pop_growth) |>
+  na.omit()
+fit_VAR <- VAR(wb_us, p = 1) 
+fit_VAR |> summary()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-11-python
+#| warning: false
+
+wb_us = (wb_raw.loc[wb_raw["country"].eq("United States"),
+                    ["gdp_growth", "inflation", "pop_growth"]].dropna())
+fit_VAR = VAR(wb_us.to_numpy()).fit(1, trend="c")
+print("Equation order:", wb_us.columns.tolist())
+print(fit_VAR.summary())
+````
+
+:::
+
+Then, onto **forecasting**!
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-12-r
+#| warning: false
+#| message: false
+
+predict(fit_VAR, n.ahead = 3)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-12-python
+#| warning: false
+
+var_point, var_lower, var_upper = fit_VAR.forecast_interval(
+    wb_us.to_numpy()[-fit_VAR.k_ar:], steps=3, alpha=0.05)
+for column, name in enumerate(wb_us.columns):
+    print(name)
+    print(pd.DataFrame({"horizon": [1, 2, 3], "forecast": var_point[:, column],
+                        "lower_95": var_lower[:, column], "upper_95": var_upper[:, column]})
+          .to_string(index=False))
+````
+
+:::
+
+Another potential package/function is {`dynlm`}, with [documentation](https://www.jstatsoft.org/article/view/v036i12) and [tutorial for VAR](https://www.econometrics-with-r.org/16.1-vector-autoregressions.html). 
+
+
+# A primer on prediction
+
+## Training/testing & co
+
+The key idea is **backtest**: you have to put yourself in the shoes of someone living in the past. By this we mean, without knowledge of the future. To do this, you need to consider a loop that spans different dates in the past. At each point in time $t$ you:
+
+1. extract the data available at time $t$;   
+2. build a predictive model;   
+3. make some prediction based on the currently available data;    
+4. evaluate the accuracy of the prediction thanks to the (future) realized values.   
+
+A simplified diagram below.   
+
+![](images/backtest.png){width=600}
+
+
+## Some code
+
+Even though it's ugly, we will resort to loops.   
+Below, we focus on the simple case of a unique series (bitcoin) and a simple model (ARMA), but this can be applied to much more complex situations and models.   
+In the code below, we
+
+1. build predictions;     
+2. derive the corresponding errors;    
+3. implement a trading strategy (we buy if returns are predicted to be positive and short sell otheriwse). 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-13-r
+#| warning: false
+#| message: false
+
+btc <- coin_hist |>
+  filter(name == "Bitcoin", lubridate::wday(date) == 2) |>
+  select(date, close) |> arrange(date) |>
+  mutate(end_date = lead(date), fwd_return = lead(close) / close - 1) |> drop_na()
+buffer <- 100
+tc <- 0.001
+trading_dates <- btc$date[(buffer + 1):nrow(btc)]
+period_end_dates <- btc$end_date[(buffer + 1):nrow(btc)]
+pred <- err <- strat_ret <- numeric(length(trading_dates))
+previous_position <- 0
+for (j in seq_along(trading_dates)) {
+  train <- btc |> filter(date < trading_dates[j])
+  fit <- arima(train$fwd_return, order = c(1, 0, 1), include.mean = TRUE)
+  pred[j] <- as.numeric(predict(fit, n.ahead = 1)$pred[1])
+  realized <- btc |> filter(date == trading_dates[j]) |> pull(fwd_return)
+  err[j] <- realized - pred[j]
+  position <- sign(pred[j])
+  strat_ret[j] <- realized * position - tc * abs(position - previous_position)
+  previous_position <- position
+}
+strat_ret[length(strat_ret)] <- tail(strat_ret, 1) - tc * abs(previous_position)
+c(forecast_weeks = length(pred))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-13-python
+#| warning: false
+
+btc = (coin_hist.loc[coin_hist["name"].eq("Bitcoin") & coin_hist["date"].dt.weekday.eq(0),
+                     ["date", "close"]].sort_values("date").copy())
+btc["end_date"] = btc["date"].shift(-1)
+btc["fwd_return"] = btc["close"].shift(-1) / btc["close"] - 1
+btc = btc.dropna().reset_index(drop=True)
+buffer = 100
+tc = 0.001
+trading_dates = btc["date"].iloc[buffer:].reset_index(drop=True)
+period_end_dates = btc["end_date"].iloc[buffer:].reset_index(drop=True)
+pred = np.empty(len(trading_dates))
+err = np.empty(len(trading_dates))
+strat_ret = np.empty(len(trading_dates))
+previous_position = 0
+for j, current_date in enumerate(trading_dates):
+    train = btc.loc[btc["date"] < current_date, "fwd_return"].to_numpy()
+    fit = ARIMA(train, order=(1, 0, 1), trend="c").fit()
+    pred[j] = fit.forecast(steps=1)[0]
+    realized = btc.loc[btc["date"].eq(current_date), "fwd_return"].iloc[0]
+    err[j] = realized - pred[j]
+    position = np.sign(pred[j])
+    strat_ret[j] = realized * position - tc * abs(position - previous_position)
+    previous_position = position
+strat_ret[-1] -= tc * abs(previous_position)
+print("Forecast weeks:", len(pred))
+````
+
+:::
+
+Let's analyze the outcome. First, the errors...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-14-r
+#| warning: false
+#| message: false
+
+sd(btc$fwd_return[(buffer + 1):nrow(btc)])
+sd(err)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-14-python
+#| warning: false
+
+print("Return SD on test weeks:", np.std(btc["fwd_return"].iloc[buffer:], ddof=1))
+print("Forecast error SD:", np.std(err, ddof=1))
+````
+
+:::
+
+The two standard deviations refer to the same test weeks.   
+Next, onto the strategy. 
+
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-15-r
+#| warning: false
+#| message: false
+
+c(positive_net_weeks = mean(strat_ret > 0),
+  mean_weekly_return = mean(strat_ret), weekly_volatility = sd(strat_ret),
+  annualized_Sharpe = (mean(strat_ret) * 52 - 0.03) / (sqrt(52) * sd(strat_ret)))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-15-python
+#| warning: false
+
+strategy_sd = np.std(strat_ret, ddof=1)
+print(pd.Series({"Positive net weeks": np.mean(strat_ret > 0),
+                 "Mean weekly return": np.mean(strat_ret),
+                 "Weekly volatility": strategy_sd,
+                 "Annualized Sharpe": (52 * np.mean(strat_ret) - 0.03)
+                                      / (np.sqrt(52) * strategy_sd)}))
+````
+
+:::
+
+Let's visualize this...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-16-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+tibble(date = period_end_dates, return = strat_ret) |>
+  mutate(portfolio_value = cumprod(1 + return)) |>
+  ggplot(aes(date, portfolio_value)) + geom_line() + theme_classic() +
+  labs(x = "Week ending", y = "Portfolio value (initial value = 1)")
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-16-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+portfolio_value = np.cumprod(1 + strat_ret)
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(period_end_dates, portfolio_value)
+ax.set(xlabel="Week ending", ylabel="Portfolio value (initial value = 1)")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+A position change costs 0.1% per unit of turnover, including the first entry and final exit.
+The portfolio value is recorded at the end of each holding week.
+
+**NOTE**: in practice **trading costs** are super important.    
+We have assumed that it's possible to short the BTC: not so obvious, but short ETFs do exist.
+
+
+
+## What really matters (in finance)
+
+Models (and people) often focus on loss (objective) functions.    
+In finance, we usually try to forecast returns, hence the loss function is the (root-) **Mean Squared Error**:
+
+$$\text{MSE} = \frac{1}{T} \sum_{t=1}^T (r_t-\tilde{r}_t)^2, $$
+
+where $r_t$ is the realized return and $\tilde{r}_t$ is the model return. Assuming predictions are unbiased $(\mathbb{E}[r_t]=\mathbb{E}[\tilde{r}_t])$, then (after some math...)
+
+$$\text{MSE} = \mathbb{E}[(r_t - \tilde{r}_t)^2]=\mathbb{V}[r_t]+\mathbb{V}[\tilde{r}_t]-2\text{Cov}(r_t, \tilde{r}_t)$$
+
+**Question**: which of these terms matter the most?    
+
+- the **variance of realized returns**: nothing we can do about that.    
+- the **variance of predicted returns**: this enters the variace-bias tradeoff; but it's not super clear what the impact it can have.   
+- the **correlation between predicted and realized returns**: this is the CRUX!!! This measures the accuracy (very similar to the hit ratio!)
+
+
+
+
+# Advanced temporal models
+
+Before we can move towards chronology-based neural networks, we must explain how simple, feed-forward, NNs work.
+
+## (Feedforward) neural networks
+
+A few images help explain how simple NNs work.
+
+First, the **structure**. The network takes an input which is then processed via many multiplications, additions and activations.   
+At the very end, we get the output. It can be a simple number, but could also be more complex (vector, matrix, etc.).  
+
+![](images/NN_scheme.png){width=800 fig-align="center"}
+
+The intermediate **activation** functions are there to break the linearity. A few examples below: 
+
+![](images/activation.png){width=500 fig-align="center"}
+
+
+Next, the **training**. This phase is intended to determine "good" parameter values. Obviously, the "best" parameters would be ideal, but they are out of reach (the problem is too complex). 
+
+The core idea is **gradient descent**: we seek to minimize a loss function (e.g., the MSE) and this depends on the derivative:
+
+![](images/Newton.png){width=600 fig-align="center"}
+
+Now, there is a very interesting process called **backpropagation** that involves lots of computations of derivatives (skipped here):
+
+![](images/backprop.png){width=800 fig-align="center"}
+
+Training searches for weights that reduce the loss; it need not reach a local minimum.  
+But they depend on the **training sample**: whether they work well out-of-sample (on testing sets) is another question.   
+If yes, the model is said to **generalize** well. 
+That's the great quest of machine learning.  
+
+
+::: {.callout-note collapse="false"}
+An important property of NNs is that they are **universal approximators**: Any continuous function $f$ can be **approximated up to arbitrary precision** (on a finite interval) by a single layer perceptron with smooth (bounded continuous) activation function.   
+This is an approximation result; it does not guarantee that training will find suitable weights. 
+:::
+
+
+
+## Recurrent networks
+
+
+Feed-forward have zero memory. How can we bring some in the model?   
+
+![](images/RNN.png){width=600}
+
+Problem: **vanishing gradients**...
+Hence: longer term memory! **LSTM** or **GRU**...
+
+
+::: {.callout-note collapse="false"}
+## Gated recurrent units
+The system of equations is the following
+\begin{align*}
+\tilde{y}_i&=z_i\tilde{y}_{i-1}+ (1-z_i)\tanh \left(\textbf{w}_y'\textbf{x}_i+ b_y+ u_yr_i\tilde{y}_{i-1}\right) \quad \textcolor{red}{\text{output}} \\
+z_i &= \text{sig}(\textbf{w}_z'\textbf{x}_i+b_z+u_z\tilde{y}_{i-1})  \quad \textcolor{red}{\text{`update gate'}} \ \in (0,1)\\
+r_i &= \text{sig}(\textbf{w}_r'\textbf{x}_i+b_r+u_r\tilde{y}_{i-1}) \quad \textcolor{red}{\text{`reset gate'}}  \ \in (0,1)
+\end{align*}
+:::
+
+
+Preparing the data should follow this principle/structure
+
+Sequence 1: [price_day1, price_day2, ..., price_day10] → target: price_day11   
+Sequence 2: [price_day2, price_day3, ..., price_day11] → target: price_day12   
+Sequence 3: [price_day3, price_day4, ..., price_day12] → target: price_day13   
+
+## Example
+
+The optional download code fetches Nvidia prices.
+The worked example uses the saved sample below. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-17-r
+#| warning: false
+#| message: false
+#| eval: false
+
+getSymbols("NVDA", from = "2010-01-01", to = "2025-12-05")
+prices <- Ad(NVDA)
+nvda <- prices / lag(prices) - 1
+nvda <- nvda[-1]
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-17-python
+#| warning: false
+#| eval: false
+
+nvda_prices = yf.download("NVDA", start="2010-01-01", end="2025-12-05",
+                          auto_adjust=False, progress=False)
+if nvda_prices.columns.nlevels > 1:
+    nvda_prices = nvda_prices.xs("NVDA", level=1, axis=1)
+nvda_prices = nvda_prices.reset_index().rename(columns={"Date": "date"})
+````
+
+:::
+
+The saved sample ends on December 4, 2025.
+Adjusted closing prices account for stock splits and dividends.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: nvda-snapshot-r
+#| warning: false
+#| message: false
+
+nvda_prices <- read_csv("data/4_advanced_models_nvda.csv", show_col_types = FALSE)
+prices <- nvda_prices$`Adj Close`
+nvda <- prices[-1] / head(prices, -1) - 1
+nvda_dates <- nvda_prices$date[-1]
+head(tibble(date = nvda_dates, return = nvda))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: nvda-snapshot-python
+#| warning: false
+
+nvda_prices = pd.read_csv("data/4_advanced_models_nvda.csv", parse_dates=["date"])
+returns = nvda_prices["Adj Close"].pct_change(fill_method=None)
+nvda = returns.iloc[1:].to_numpy(dtype="float32")
+nvda_dates = nvda_prices["date"].iloc[1:].reset_index(drop=True)
+print(pd.DataFrame({"date": nvda_dates, "return": nvda}).head())
+````
+
+:::
+
+
+Next, let's prepare and format the inputs/outputs.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-18-r
+#| warning: false
+#| message: false
+
+n <- length(nvda)
+look_back <- 20
+X <- matrix(NA_real_, nrow = n - look_back, ncol = look_back)
+y <- numeric(n - look_back)
+for (i in seq_len(n - look_back)) {
+  X[i, ] <- nvda[i:(i + look_back - 1)]
+  y[i] <- nvda[i + look_back]
+}
+target_dates <- nvda_dates[(look_back + 1):n]
+train_size <- floor(0.8 * nrow(X))
+head(X[, 1:5])
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-18-python
+#| warning: false
+
+n = len(nvda)
+look_back = 20
+X = np.array([nvda[i:i + look_back] for i in range(n - look_back)], dtype="float32")
+y = np.array(nvda[look_back:], dtype="float32")
+target_dates = nvda_dates.iloc[look_back:].reset_index(drop=True)
+train_size = int(np.floor(0.8 * len(X)))
+print(X[:6, :5])
+````
+
+:::
+
+Check the structure of features.     
+Final prep: splitting & shaping
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-19-r
+#| warning: false
+#| message: false
+
+X_train <- X[1:train_size, ]
+y_train <- y[1:train_size]
+X_test <- X[(train_size + 1):nrow(X), ]
+y_test <- y[(train_size + 1):length(y)]
+
+# Reshape for GRU [samples, timesteps, features]
+X_train <- array(X_train, dim = c(nrow(X_train), ncol(X_train), 1))
+X_test <- array(X_test, dim = c(nrow(X_test), ncol(X_test), 1))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-19-python
+#| warning: false
+
+X_train = X[:train_size, :, np.newaxis]
+y_train = y[:train_size]
+X_test = X[train_size:, :, np.newaxis]
+y_test = y[train_size:]
+print("Training shape:", X_train.shape, "Test shape:", X_test.shape)
+````
+
+:::
+
+Now: onto buidling the (simple) model.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-20-r
+#| warning: false
+#| message: false
+
+tensorflow::set_random_seed(42, disable_gpu = FALSE)
+model <- keras_model_sequential() %>%
+  layer_gru(units = 16, input_shape = c(look_back, 1), return_sequences = FALSE) %>%
+  layer_dense(units = 1, activation = "tanh")
+model %>% compile(optimizer = optimizer_adam(learning_rate = 0.001), loss = "mse")
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-20-python
+#| warning: false
+
+keras.utils.set_random_seed(42)
+model = keras.Sequential([
+    keras.layers.Input(shape=(look_back, 1)),
+    keras.layers.GRU(16, return_sequences=False),
+    keras.layers.Dense(1, activation="tanh")])
+model.compile(optimizer=keras.optimizers.Adam(learning_rate=0.001), loss="mse")
+````
+
+:::
+
+**Training**...
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-21-r
+#| warning: false
+#| message: false
+
+fit_ <- model %>% fit(X_train, y_train, epochs = 60, batch_size = 32,
+                        verbose = 0, shuffle = FALSE)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-21-python
+#| warning: false
+
+fit_ = model.fit(X_train, y_train, epochs=60, batch_size=32, verbose=0, shuffle=False)
+````
+
+:::
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-22-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+plot(fit_)
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-22-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(np.arange(1, len(fit_.history["loss"]) + 1), fit_.history["loss"])
+ax.set(xlabel="Epoch", ylabel="Training MSE")
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+
+The curve measures training error.
+We evaluate the forecasts on the held-out dates next.
+
+Predict & evaluate.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-23-r
+#| warning: false
+#| message: false
+
+y_pred <- as.numeric(model %>% predict(X_test, verbose = 0))
+c(MAE = mean(abs(y_test - y_pred)), hit_ratio = mean(y_test * y_pred > 0),
+  correlation = cor(y_test, y_pred))
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-23-python
+#| warning: false
+
+y_pred = model.predict(X_test, verbose=0).ravel()
+print(pd.Series({"MAE": np.mean(np.abs(y_test - y_pred)),
+                 "Hit ratio": np.mean(y_test * y_pred > 0),
+                 "Correlation": np.corrcoef(y_test, y_pred)[0, 1]}))
+````
+
+:::
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-24-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+tibble(date = target_dates[(train_size + 1):length(target_dates)],
+       predicted = y_pred, actual = y_test) |>
+  pivot_longer(-date, values_to = "return", names_to = "type") |>
+  ggplot(aes(date, return, color = type)) + geom_line(linewidth = 0.5) + theme_minimal()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-24-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(target_dates.iloc[train_size:], y_test, label="Actual", linewidth=0.8)
+ax.plot(target_dates.iloc[train_size:], y_pred, label="Predicted", linewidth=0.8)
+ax.set(xlabel="Date", ylabel="Return")
+ax.legend()
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
+Compare the scale of the predictions with the observed returns.
+The correlation alone does not measure the size of the forecast errors.
+
+
+## Code for universal approximation
+
+A first model.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-25-r
+#| warning: false
+#| message: false
+
+tensorflow::set_random_seed(42, disable_gpu = FALSE)
+
+model_ua <- keras_model_sequential()
+model_ua %>%   # This defines the structure of the network, i.e. how layers are organized
+  layer_dense(units = 16, activation = 'sigmoid', input_shape = 1) %>%
+  layer_dense(units = 1) # 
+model_ua %>% keras::compile(                      # Model specification
+  loss = 'mean_squared_error',                  # Loss function
+  optimizer = optimizer_rmsprop(),              # Optimisation method (weight updating)
+  metrics = c('mean_absolute_error')            # Output metric
+)
+summary(model_ua)   
+
+fit_ua <- model_ua %>% 
+  fit(seq(0, 6, by = 0.001) %>% matrix(ncol = 1),              # Training data = x
+      sin(seq(0, 6, by = 0.001)) %>% matrix(ncol = 1),         # Training label = y
+      verbose = 0,
+      epochs = 30, batch_size = 64                             # Training parameters
+  )
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-25-python
+#| warning: false
+
+keras.utils.set_random_seed(42)
+model_ua = keras.Sequential([
+    keras.layers.Input(shape=(1,)),
+    keras.layers.Dense(16, activation="sigmoid"),
+    keras.layers.Dense(1)])
+model_ua.compile(loss="mean_squared_error", optimizer=keras.optimizers.RMSprop(),
+                 metrics=["mean_absolute_error"])
+model_ua.summary()
+ua_x = np.linspace(0, 6, 6001, dtype="float32").reshape(-1, 1)
+fit_ua = model_ua.fit(ua_x, np.sin(ua_x), epochs=30, batch_size=64, verbose=0)
+````
+
+:::
+
+A second model. 
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-26-r
+#| warning: false
+#| message: false
+
+tensorflow::set_random_seed(42, disable_gpu = FALSE)
+model_ua2 <- keras_model_sequential()
+model_ua2 %>%   # This defines the structure of the network, i.e. how layers are organized
+  layer_dense(units = 128, activation = 'sigmoid', input_shape = 1) %>%
+  layer_dense(units = 1) # 
+model_ua2 %>% keras::compile(                     # Model specification
+  loss = 'mean_squared_error',                  # Loss function
+  optimizer = optimizer_rmsprop(),              # Optimisation method (weight updating)
+  metrics = c('mean_absolute_error')            # Output metric
+)
+summary(model_ua2)  
+
+fit_ua2 <- model_ua2 %>% 
+  fit(seq(0, 6, by = 0.0002) %>% matrix(ncol = 1),            # Training data = x
+      sin(seq(0, 6, by = 0.0002)) %>% matrix(ncol = 1),       # Training label = y
+      verbose = 0,
+      epochs = 60, batch_size = 64                            # Training parameters
+  )
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-26-python
+#| warning: false
+
+keras.utils.set_random_seed(42)
+model_ua2 = keras.Sequential([
+    keras.layers.Input(shape=(1,)),
+    keras.layers.Dense(128, activation="sigmoid"),
+    keras.layers.Dense(1)])
+model_ua2.compile(loss="mean_squared_error", optimizer=keras.optimizers.RMSprop(),
+                  metrics=["mean_absolute_error"])
+model_ua2.summary()
+ua_x2 = np.linspace(0, 6, 30001, dtype="float32").reshape(-1, 1)
+fit_ua2 = model_ua2.fit(ua_x2, np.sin(ua_x2), epochs=60, batch_size=64, verbose=0)
+````
+
+:::
+
+The comparisons.
+
+::: {.panel-tabset group="language"}
+
+#### R {.unnumbered .unlisted}
+
+```{r}
+#| label: example-27-r
+#| warning: false
+#| message: false
+#| fig-width: 8
+#| fig-height: 4
+
+ua_grid <- seq(0, 6, by = 0.001)
+tibble(x = ua_grid,
+       `Small model` = as.numeric(predict(model_ua, matrix(ua_grid, ncol = 1), verbose = 0)),
+       `Large model` = as.numeric(predict(model_ua2, matrix(ua_grid, ncol = 1), verbose = 0)),
+       `sin(x)` = sin(ua_grid)) |>
+  pivot_longer(-x, names_to = "model", values_to = "output") |>
+  ggplot(aes(x, output, color = model)) + geom_line() +
+  scale_color_manual(values = c("Large model" = "#3366CC", "Small model" = "#EEAA33",
+                                "sin(x)" = "#000000")) + theme_bw()
+```
+
+#### Python {.unnumbered .unlisted}
+
+````{python}
+#| label: example-27-python
+#| warning: false
+#| fig-width: 8
+#| fig-height: 4
+
+ua_grid = np.linspace(0, 6, 6001, dtype="float32").reshape(-1, 1)
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.plot(ua_grid.ravel(), model_ua.predict(ua_grid, verbose=0).ravel(),
+        label="Small model", color="#EEAA33")
+ax.plot(ua_grid.ravel(), model_ua2.predict(ua_grid, verbose=0).ravel(),
+        label="Large model", color="#3366CC")
+ax.plot(ua_grid.ravel(), np.sin(ua_grid).ravel(), label="sin(x)", color="black")
+ax.set(xlabel="x", ylabel="Output")
+ax.legend()
+fig.tight_layout()
+plt.show()
+````
+
+:::
+
