@@ -21,7 +21,7 @@
   title: Time-series analysis (crash course)
   where: emlyon business school, MSc in Data Science
   links:
-    R & data: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_R_datasets.html
+    R & data: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/1_datasets.html
     Randomness & stationarity: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/2_theory_1.html
     ARMA processes: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/3_theory_2.html
     Advanced models: https://htmlpreview.github.io/?https://github.com/shokru/coqueret.github.io/blob/master/files/misc/time_series/4_advanced_models.html
